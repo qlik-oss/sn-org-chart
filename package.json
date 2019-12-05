@@ -1,0 +1,45 @@
+{
+  "name": "@nebula.js/sn-org-chart",
+  "version": "0.1.0",
+  "description": "",
+  "license": "MIT",
+  "author": {
+    "name": "niekvanstaveren",
+    "email": "niek.vanstaveren@qlik.com"
+  },
+  "keywords": [
+    "qlik",
+    "nebula",
+    "supernova"
+  ],
+  "files": [
+    "dist"
+  ],
+  "engines": {
+    "node": ">=8"
+  },
+  "main": "dist/sn-org-chart.js",
+  "module": "dist/sn-org-chart.esm.js",
+  "scripts": {
+    "build": "nebula build",
+    "lint": "eslint src",
+    "start": "nebula serve",
+    "test:unit": "aw -c aw.config.js",
+    "test:integration": "aw puppet --glob 'test/integration/**/*.spec.js' --chrome.headless true --chrome.slowMo 10"
+  },
+  "peerDependencies": {
+    "@nebula.js/supernova": "0.1.0-alpha.25"
+  },
+  "devDependencies": {
+    "@after-work.js/aw": "6.0.10",
+    "@babel/cli": "7.7.4",
+    "@babel/core": "7.7.4",
+    "@babel/preset-env": "7.7.4",
+    "@nebula.js/cli": "0.1.0-alpha.25",
+    "babel-plugin-istanbul": "5.2.0",
+    "eslint": "5.12.1",
+    "eslint-config-airbnb-base": "13.1.0",
+    "eslint-plugin-import": "2.15.0",
+    "eslint-plugin-mocha": "5.2.1"
+  }
+}
