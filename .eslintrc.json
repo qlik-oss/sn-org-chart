@@ -8,6 +8,7 @@
   },
   "extends": ["airbnb-base"],
   "rules": {
+    "arrow-parens": true,
     "max-len": 0,
     "no-plusplus": 0,
     "no-bitwise": 0,

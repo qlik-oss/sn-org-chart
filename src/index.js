@@ -1,5 +1,6 @@
 import properties from './object-properties';
 import data from './data';
+import renderTree from './tree/render';
 
 export default function supernova(env) {
   return {
@@ -8,14 +9,11 @@ export default function supernova(env) {
       data,
     },
     component: {
-      created() {
-        console.log('created', env);
-      },
       mounted(element) {
-        element.innerHTML = '<div>Hello!</div>'; // eslint-disable-line
+        this.element = element;
       },
-      render({ layout, context }) {
-        console.log('render', layout, context);
+      render({ layout }) {
+        renderTree({ element: this.element, layout, app: this.app, model: this.model });
       },
       resize() {},
       willUnmount() {},

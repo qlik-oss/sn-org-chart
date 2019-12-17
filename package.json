@@ -3,10 +3,7 @@
   "version": "0.1.0",
   "description": "",
   "license": "MIT",
-  "author": {
-    "name": "niekvanstaveren",
-    "email": "niek.vanstaveren@qlik.com"
-  },
+  "author": "QlikTech International AB",
   "keywords": [
     "qlik",
     "nebula",
@@ -37,6 +34,7 @@
     "@babel/preset-env": "7.7.4",
     "@nebula.js/cli": "0.1.0-alpha.25",
     "babel-plugin-istanbul": "5.2.0",
+    "d3": "^5.14.2",
     "eslint": "5.12.1",
     "eslint-config-airbnb-base": "13.1.0",
     "eslint-plugin-import": "2.15.0",

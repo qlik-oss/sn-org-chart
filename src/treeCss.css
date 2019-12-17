@@ -1,0 +1,41 @@
+body {
+  font: 10px sans-serif;
+}
+
+.link {
+  fill: none;
+  stroke: #000;
+  stroke-width: 3;
+}
+
+.border {
+  fill: none;
+  shape-rendering: crispEdges;
+  stroke: #aaa;
+}
+
+.remove {
+  background: black;
+}
+
+.nodeRect {
+  border: 2px solid black;
+  background: transparent;
+}
+
+.nodeReact .text {
+  color: pink;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.bounding {
+  border: 2px solid black;
+}
+
+.orgCard {
+  background: pink;
+  width: 100%;
+  height: 100%;
+  font-size: 40px;
+}
