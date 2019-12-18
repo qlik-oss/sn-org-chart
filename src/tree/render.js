@@ -3,6 +3,13 @@ import card from '../card/card';
 import treeTransform from '../utils/tree-transform';
 import '../treeCss.css';
 
+// Constants for the tree. Might be variables later in property panel
+const nodeSize = { width: 300, height: 100 };
+const halfNodeWidth = nodeSize.width / 2;
+const spaceBetweenNodes = 30;
+const halfSpaceBetweenNodes = spaceBetweenNodes / 2;
+const transitionTime = 500;
+
 // Set previous nodes to know which nodes to remain and which to remove
 let previousNodes = [];
 
@@ -51,7 +58,7 @@ const reRenderTree = ({ svg, activeNode, allNodes, o, width, height }) => {
         })
         // This inserts a transition for the removal of nodes. However it is not in sync with zooming at the moment
         // .transition()
-        // .duration(500)
+        // .duration(transitionTime)
         // .attr('transform', d => {
         //   return `translate(${o.x(d.parent || d) + 150},${o.y(d.parent || d) + 100}) scale(0)`;
         // })
@@ -75,8 +82,8 @@ const reRenderTree = ({ svg, activeNode, allNodes, o, width, height }) => {
   node
     .append('foreignObject')
     .attr('class', 'nodeRect')
-    .attr('width', 300)
-    .attr('height', 100)
+    .attr('width', nodeSize.width)
+    .attr('height', nodeSize.height)
     .attr('x', o.x)
     .attr('y', o.y)
     .attr('id', d => d.data.id)
@@ -95,9 +102,9 @@ const reRenderTree = ({ svg, activeNode, allNodes, o, width, height }) => {
     .attr('class', 'link')
     .attr('id', d => d.data.id)
     .attr('d', function(d) {
-      const self = { x: o.x(d) + 150, y: o.y(d) };
+      const self = { x: o.x(d) + halfNodeWidth, y: o.y(d) };
       if (d.parent) {
-        const parent = { x: o.x(d.parent) + 150, y: o.y(d.parent) + 100 };
+        const parent = { x: o.x(d.parent) + halfNodeWidth, y: o.y(d.parent) + nodeSize.height };
         return (
           'M' +
           self.x +
@@ -124,7 +131,7 @@ const reRenderTree = ({ svg, activeNode, allNodes, o, width, height }) => {
   const xFactor = bBox.width / width;
   svg
     .transition()
-    .duration(500)
+    .duration(transitionTime)
     .attr('transform', `scale(${1 / xFactor}) translate(${-bBox.x} ${-bBox.y})`);
 };
 
@@ -133,7 +140,7 @@ const renderTree = async ({ element, layout, app, model }) => {
   element.innerHTML = '';
   const width = b.width;
   const height = b.height;
-  const center = width / 2 - 150;
+  const center = (width - nodeSize.width) / 2;
 
   // This would allow for different orientations of the tree structure (not needed for now)
   const orientations = {
@@ -141,23 +148,17 @@ const renderTree = async ({ element, layout, app, model }) => {
       size: [width, height],
       x: function(d) {
         // return d.x;
-        d.xActual = d.parent && d.parent.xActual
-          ? d.parent.xActual + 165 + (d.data.childNumber - d.parent.children.length / 2) * 330
-          : center;
+        d.xActual =
+          d.parent && d.parent.xActual
+            ? d.parent.xActual +
+              halfNodeWidth +
+              halfSpaceBetweenNodes +
+              (d.data.childNumber - d.parent.children.length / 2) * (nodeSize.width + spaceBetweenNodes)
+            : center;
         return d.xActual;
-      },
-      xLine: d => {
-        // return d.x;
-        if (!d.parent) {
-          return center;
-        }
-        return center + 150 + (d.data.childNumber - (d.parent.children.length - 1) / 2) * 330;
       },
       y: function(d) {
         return d.y;
-      },
-      yLine: function(d) {
-        return d.depth * 150 + 75;
       },
     },
   };
@@ -177,16 +178,7 @@ const renderTree = async ({ element, layout, app, model }) => {
   svg.each(orientation => {
     const o = orientation.value;
     // Here are the settings for the tree. For instance nodesize can be adjusted
-    const treemap = tree()
-      .size(o.size)
-      .nodeSize([1, 200])
-      .separation((a, b) => {
-        return 400;
-        if (a.children && b.children) {
-          return 400;
-        }
-        return 0;
-      });
+    const treemap = tree().size(o.size);
 
     var nodes = hierarchy(data);
 
