@@ -141,11 +141,10 @@ const renderTree = async ({ element, layout, app, model }) => {
       size: [width, height],
       x: function(d) {
         // return d.x;
-        if (d.parent) {
-          return center + 150 + (d.data.childNumber - d.parent.children.length / 2) * 330;
-        } else {
-          return center;
-        }
+        d.xActual = d.parent && d.parent.xActual
+          ? d.parent.xActual + 165 + (d.data.childNumber - d.parent.children.length / 2) * 330
+          : center;
+        return d.xActual;
       },
       xLine: d => {
         // return d.x;
