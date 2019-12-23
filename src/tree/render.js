@@ -178,7 +178,9 @@ const renderTree = async ({ element, layout, app, model }) => {
   svg.each(orientation => {
     const o = orientation.value;
     // Here are the settings for the tree. For instance nodesize can be adjusted
-    const treemap = tree().size(o.size);
+    const treemap = tree()
+      .size(o.size)
+      .nodeSize([0, 200]);
 
     var nodes = hierarchy(data);
 
