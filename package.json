@@ -9,6 +9,9 @@
     "nebula",
     "supernova"
   ],
+  "publishConfig": {
+    "access": "public"
+  },
   "files": [
     "dist"
   ],
@@ -22,7 +25,8 @@
     "lint": "eslint src",
     "start": "nebula serve",
     "test:unit": "aw -c aw.config.js",
-    "test:integration": "aw puppet --glob 'test/integration/**/*.spec.js' --chrome.headless true --chrome.slowMo 10"
+    "test:integration": "aw puppet --glob 'test/integration/**/*.spec.js' --chrome.headless true --chrome.slowMo 10",
+    "prepublishOnly": "rm -rf dist && npm run build"
   },
   "peerDependencies": {
     "@nebula.js/supernova": "0.1.0-alpha.25"
