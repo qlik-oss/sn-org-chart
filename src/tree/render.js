@@ -78,23 +78,60 @@ const reRenderTree = ({ svg, activeNode, allNodes, o, width, height }) => {
     .attr('class', 'nodeWrapper')
     .attr('id', d => d.data.id);
 
-  // Create the div element for the nodes
-  node
-    .append('foreignObject')
-    .attr('class', 'nodeRect')
-    .attr('width', nodeSize.width)
-    .attr('height', nodeSize.height)
+    node.append('rect')
+    .attr('width', 300)
+    .attr('height', 100)
     .attr('x', o.x)
     .attr('y', o.y)
-    .attr('id', d => d.data.id)
+    .style('fill', 'white')
+    .attr('stroke', 'black')
     .on('click', node => {
       if (node.children) {
         reRenderTree({ svg, allNodes, o, activeNode: node.data.id, width, height });
       }
     })
-    .html(d => {
-      return card(d.data);
-    });
+
+    function wrap() {
+      var self = select(this),
+          textLength = self.node().getComputedTextLength(),
+          text = self.text();
+      while (textLength > 300) {
+          text = text.slice(0, -1);
+          self.text(text + '...');
+          textLength = self.node().getComputedTextLength();
+      }
+    }
+  node.append('text')
+    .text(d => d.data.name)
+    .attr('x', o.x)
+    .attr('y', o.yText)
+    .attr('fill', 'black')
+    .attr('class', 'orgText')
+    .each(wrap)
+    .on('click', node => {
+      if (node.children) {
+        reRenderTree({ svg, allNodes, o, activeNode: node.data.id, width, height });
+      }
+    })
+
+
+  // Create the div element for the nodes
+  // node
+  //   .append('foreignObject')
+  //   .attr('class', 'nodeRect')
+  //   .attr('width', 300)
+  //   .attr('height', 100)
+  //   .attr('x', o.x)
+  //   .attr('y', o.y)
+  //   .attr('id', d => d.data.id)
+  //   .on('click', node => {
+  //     if (node.children) {
+  //       reRenderTree({ svg, allNodes, o, activeNode: node.data.id, width, height });
+  //     }
+  //   })
+  //   .html(d => {
+  //     return card(d.data);
+  //   });
 
   // Create the lines (links) between the nodes
   node
@@ -159,6 +196,13 @@ const renderTree = async ({ element, layout, app, model }) => {
       },
       y: function(d) {
         return d.y;
+      },
+
+      yText: function(d) {
+        return d.y + 50;
+      },
+      yLine: function(d) {
+        return d.depth * 150 + 75;
       },
     },
   };
