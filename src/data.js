@@ -8,7 +8,7 @@ export default {
       },
       measures: {
         min: 0,
-        max: 0,
+        max: 1,
       },
     },
   ],
