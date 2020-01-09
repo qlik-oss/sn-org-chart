@@ -85,7 +85,7 @@ const reRenderTree = ({ svg, activeNode, allNodes, o, width, height }) => {
     .attr('height', 100)
     .attr('x', o.x)
     .attr('y', o.y)
-    .style('fill', 'white')
+    .style('fill', 'pink')
     .attr('stroke', 'black')
     .on('click', node => {
       if (node.children) {
@@ -151,6 +151,7 @@ const reRenderTree = ({ svg, activeNode, allNodes, o, width, height }) => {
     .attr('class', 'link')
     .attr('id', d => d.data.id)
     .attr('d', function(d) {
+
       const self = { x: o.x(d) + halfNodeWidth, y: o.y(d) };
       if (d.parent) {
         const parent = { x: o.x(d.parent) + halfNodeWidth, y: o.y(d.parent) + nodeSize.height };
@@ -176,7 +177,7 @@ const reRenderTree = ({ svg, activeNode, allNodes, o, width, height }) => {
     });
 
   // Zooming and positioning of the tree
-  const bBox = svg._groups[0][0].getBBox(); // document.getElementsByClassName('topG')[0].getBoundingClientRect();
+  const bBox = svg._groups[0][0].getBBox();
 
   //TODO: make this based on height as well
   const xFactor = bBox.width / width;
@@ -211,13 +212,6 @@ const renderTree = async ({ element, layout, app, model }) => {
       y: function(d) {
         return d.y;
       },
-
-      yText: function(d) {
-        return d.y + 50;
-      },
-      yLine: function(d) {
-        return d.depth * 150 + 75;
-      },
     },
   };
 
@@ -232,7 +226,7 @@ const renderTree = async ({ element, layout, app, model }) => {
     .attr('width', width)
     .attr('height', height);
 
-  const svg = svgBox.append('g').attr('class', 'topG')
+  const svg = svgBox.append('g');
   svg.each(orientation => {
     const o = orientation.value;
     // Here are the settings for the tree. For instance nodesize can be adjusted
