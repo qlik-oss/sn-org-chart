@@ -1,7 +1,6 @@
-import { hierarchy, entries, tree, select } from 'd3';
-import card from '../card/card';
-import treeTransform from '../utils/tree-transform';
+import { entries, hierarchy, select, tree } from 'd3';
 import '../treeCss.css';
+import treeTransform from '../utils/tree-transform';
 
 // Constants for the tree. Might be variables later in property panel
 const nodeSize = { width: 300, height: 100 };
@@ -9,6 +8,8 @@ const halfNodeWidth = nodeSize.width / 2;
 const spaceBetweenNodes = 30;
 const halfSpaceBetweenNodes = spaceBetweenNodes / 2;
 const transitionTime = 500;
+const maxTextLength = 15;  // Needs to change if we change node width
+const lineSeparation = 40;
 
 // Set previous nodes to know which nodes to remain and which to remove
 let previousNodes = [];
@@ -78,7 +79,8 @@ const reRenderTree = ({ svg, activeNode, allNodes, o, width, height }) => {
     .attr('class', 'nodeWrapper')
     .attr('id', d => d.data.id);
 
-    node.append('rect')
+  // Create rectangles
+  node.append('rect')
     .attr('width', 300)
     .attr('height', 100)
     .attr('x', o.x)
@@ -90,57 +92,58 @@ const reRenderTree = ({ svg, activeNode, allNodes, o, width, height }) => {
         reRenderTree({ svg, allNodes, o, activeNode: node.data.id, width, height });
       }
     })
-    function ellipsis() {
-      var self = select(this),
-          textLength = self.node().getComputedTextLength(),
-          text = self.text();
-      while (textLength > 300) {
-          text = text.slice(0, -1);
-          self.text(text + '...');
-          textLength = self.node().getComputedTextLength();
+
+    // IF WE WANT TO ELLIPSIS
+    // function ellipsis() {
+    //   var self = select(this),
+    //       textLength = self.node().getComputedTextLength(),
+    //       text = self.text();
+    //   while (textLength > 300) {
+    //       text = text.slice(0, -1);
+    //       self.text(text + '...');
+    //       textLength = self.node().getComputedTextLength();
+    //   }
+    // }
+
+    // IF WE WANT TO SHRINK TEXT
+    // function shrink() {
+    //   var self = select(this),
+    //       textLength = self.node().getComputedTextLength();
+    //   while (textLength > 300) {
+    //       const currentSize = self.style('font-size').slice(0, -2)
+    //       self.style('font-size', `${currentSize - 2}px`);
+    //       textLength = self.node().getComputedTextLength();
+    //   }
+    // }
+
+    function createLines(text, max) {
+      const lines = [];
+      const regex = new RegExp(".{0,"+max+"}(?:\\s|$)","g");
+
+      let line
+      while ((line = regex.exec(text)) != '') {
+          lines.push(line);
       }
+      return lines;
     }
 
-    function shrink() {
-      var self = select(this),
-          textLength = self.node().getComputedTextLength();
-      while (textLength > 300) {
-          const currentSize = self.style('font-size').slice(0, -2)
-          self.style('font-size', `${currentSize - 2}px`);
-          textLength = self.node().getComputedTextLength();
-      }
-    }
+  // Create text elements
   node.append('text')
-    .text(d => d.data.name)
     .attr('x', o.x)
-    .attr('y', o.yText)
+    .attr('y', o.y)
     .attr('fill', 'black')
     .attr('class', 'orgText')
-    // .style('font-size', '40px')
-    .each(ellipsis)
+    .each(function(d) {
+      const lines = createLines(d.data.name, maxTextLength);
+      for (let i = 0; i < lines.length; i++) {
+          select(this).append("tspan").attr("dy", lineSeparation).attr("x", o.x).text(lines[i]);
+      }
+    })
     .on('click', node => {
       if (node.children) {
         reRenderTree({ svg, allNodes, o, activeNode: node.data.id, width, height });
       }
-    })
-
-  // Create the div element for the nodes
-  // node
-  //   .append('foreignObject')
-  //   .attr('class', 'nodeRect')
-  //   .attr('width', 300)
-  //   .attr('height', 100)
-  //   .attr('x', o.x)
-  //   .attr('y', o.y)
-  //   .attr('id', d => d.data.id)
-  //   .on('click', node => {
-  //     if (node.children) {
-  //       reRenderTree({ svg, allNodes, o, activeNode: node.data.id, width, height });
-  //     }
-  //   })
-  //   .html(d => {
-  //     return card(d.data);
-  //   });
+    });
 
   // Create the lines (links) between the nodes
   node
@@ -173,7 +176,6 @@ const reRenderTree = ({ svg, activeNode, allNodes, o, width, height }) => {
     });
 
   // Zooming and positioning of the tree
-  console.log(svg._groups[0][0]);
   const bBox = svg._groups[0][0].getBBox(); // document.getElementsByClassName('topG')[0].getBoundingClientRect();
 
   //TODO: make this based on height as well
