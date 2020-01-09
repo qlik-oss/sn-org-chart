@@ -39,17 +39,17 @@ const reRenderTree = ({ svg, activeNode, allNodes, o, width, height }) => {
   // Cleanup from previous render
   if (previousNodes.length > 0 && activeNodes._groups[0].length > 0) {
     let removeList = [];
-    for (const node of previousNodes) {
+    previousNodes.forEach(node => {
       if (nodeIdList.indexOf(node.data.id) === -1) {
         removeList.push(node.data.id);
       }
-    }
+    });
     const previousNodesIdList = previousNodes.map(node => node.data.id);
-    for (const node of nodes) {
+    nodes.forEach(node => {
       if (previousNodesIdList.indexOf(node.data.id) === -1) {
         appendNodes.push(node);
       }
-    }
+    });
     if (removeList.length > 0) {
       svg
         .selectAll('g')
@@ -90,8 +90,7 @@ const reRenderTree = ({ svg, activeNode, allNodes, o, width, height }) => {
         reRenderTree({ svg, allNodes, o, activeNode: node.data.id, width, height });
       }
     })
-
-    function wrap() {
+    function ellipsis() {
       var self = select(this),
           textLength = self.node().getComputedTextLength(),
           text = self.text();
@@ -101,19 +100,29 @@ const reRenderTree = ({ svg, activeNode, allNodes, o, width, height }) => {
           textLength = self.node().getComputedTextLength();
       }
     }
+
+    function shrink() {
+      var self = select(this),
+          textLength = self.node().getComputedTextLength();
+      while (textLength > 300) {
+          const currentSize = self.style('font-size').slice(0, -2)
+          self.style('font-size', `${currentSize - 2}px`);
+          textLength = self.node().getComputedTextLength();
+      }
+    }
   node.append('text')
     .text(d => d.data.name)
     .attr('x', o.x)
     .attr('y', o.yText)
     .attr('fill', 'black')
     .attr('class', 'orgText')
-    .each(wrap)
+    // .style('font-size', '40px')
+    .each(ellipsis)
     .on('click', node => {
       if (node.children) {
         reRenderTree({ svg, allNodes, o, activeNode: node.data.id, width, height });
       }
     })
-
 
   // Create the div element for the nodes
   // node
@@ -164,7 +173,10 @@ const reRenderTree = ({ svg, activeNode, allNodes, o, width, height }) => {
     });
 
   // Zooming and positioning of the tree
-  const bBox = svg._groups[0][0].getBBox();
+  console.log(svg._groups[0][0]);
+  const bBox = svg._groups[0][0].getBBox(); // document.getElementsByClassName('topG')[0].getBoundingClientRect();
+
+  //TODO: make this based on height as well
   const xFactor = bBox.width / width;
   svg
     .transition()
@@ -218,7 +230,7 @@ const renderTree = async ({ element, layout, app, model }) => {
     .attr('width', width)
     .attr('height', height);
 
-  const svg = svgBox.append('g');
+  const svg = svgBox.append('g').attr('class', 'topG')
   svg.each(orientation => {
     const o = orientation.value;
     // Here are the settings for the tree. For instance nodesize can be adjusted
