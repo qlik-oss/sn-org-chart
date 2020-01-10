@@ -22,6 +22,7 @@
   "module": "dist/sn-org-chart.esm.js",
   "scripts": {
     "build": "nebula build",
+    "sense": "nebula sense",
     "lint": "eslint src",
     "start": "nebula serve",
     "test:unit": "aw -c aw.config.js",

@@ -32,27 +32,44 @@ function anyCycle(nodes) {
   return false;
 }
 
-const getDataPages = async (layout, app, model) => {
-  let dataPages = layout.qHyperCube && layout.qHyperCube.qDataPages;
+const pageSize = 500;
+const maxPageCount = 10;
+async function fetchPage(dataPages, dataMatrix, model, fullHeight, currentRow) {
+  await model
+    .getHyperCubeData('/qHyperCubeDef', [
+      {
+        qTop: currentRow,
+        qLeft: 0,
+        qWidth: 5,
+        qHeight: pageSize,
+      },
+    ])
+    .then(data => {
+      dataPages.push(data[0]);
+      dataMatrix.push(...data[0].qMatrix);
+      currentRow += data[0].qArea.qHeight;
+    });
 
-  // This should depend on the size of the data you want to fetch. We need all the data to build the tree to multiple iteration might be necessary. Also a maximum should be set!
-  // In object-properties.js we set the size of the data fetch. This should match with the qTop used below (and subsequential itterations)
-  if (layout.qHyperCube.qSize.qcx > 1) {
-    await model
-      .getHyperCubeData('/qHyperCubeDef', [
-        {
-          qTop: 500,
-          qLeft: 0,
-          qWidth: 5,
-          qHeight: 500,
-        },
-      ])
-      .then(data => {
-        // Maybe nicer to create a new variable for this and also do the check on the data in this function
-        dataPages[0].qMatrix = dataPages[0].qMatrix.concat(data[0].qMatrix);
-      });
+  if (fullHeight > currentRow) {
+    await fetchPage(dataPages, dataMatrix, model, fullHeight, currentRow);
   }
-  return dataPages;
+}
+
+const getDataMatrix = async (layout, model) => {
+  let dataPages = layout.qHyperCube && layout.qHyperCube.qDataPages;
+  const fullHeight = layout.qHyperCube.qSize.qcy;
+  const loadedHeight = dataPages[0].qArea.qHeight;
+  const dataMatrix = [...dataPages[0].qMatrix];
+
+  // If there seems to be more data, check if it is already loadad or load it
+  if (fullHeight > loadedHeight && dataPages.length === 1) {
+    await fetchPage(layout.qHyperCube.qDataPages, dataMatrix, model, fullHeight, loadedHeight);
+  } else {
+    dataPages.forEach((page, i) => {
+      i > 0 ? dataMatrix.push(...page.qMatrix) : '';
+    });
+  }
+  return dataMatrix;
 };
 
 export default async function transform({ layout, app, model }) {
@@ -64,15 +81,7 @@ export default async function transform({ layout, app, model }) {
     console.log('two dimensions necessary');
   }
 
-  const dataPages = await getDataPages(layout, app, model);
-  // const dataPages = layout.qHyperCube && layout.qHyperCube.qDataPages;
-  if (!dataPages) {
-    return null;
-  }
-  if (dataPages.length !== 1) {
-    return null;
-  }
-  const matrix = dataPages[0].qMatrix;
+  const matrix = await getDataMatrix(layout, model);
   if (!matrix) {
     return null;
   }
@@ -124,8 +133,17 @@ export default async function transform({ layout, app, model }) {
   }
 
   // Here a fake root node is created when multiple rootnodes exist
-  return {
-    id: null,
+  const rootNode = {
+    id: 'Root',
+    name: 'Root',
     children: rootNodes,
   };
+
+  rootNodes.forEach((node, i) => {
+    node.parentId = 'Root';
+    node.parent = rootNode;
+    node.childNumber = i;
+  });
+
+  return rootNode;
 }
