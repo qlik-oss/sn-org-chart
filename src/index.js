@@ -1,5 +1,6 @@
 import properties from './object-properties';
 import data from './data';
+import ext from './ext';
 import renderTree from './tree/render';
 
 export default function supernova(env) {
@@ -19,5 +20,6 @@ export default function supernova(env) {
       willUnmount() {},
       destroy() {},
     },
+    ext: ext(env),
   };
 }
