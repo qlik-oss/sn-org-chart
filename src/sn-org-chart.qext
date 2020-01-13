@@ -1,0 +1,8 @@
+{
+  "name": "sn-org-chart",
+  "description": "",
+  "author": "QlikTech International AB",
+  "version": "0.1.0",
+  "supernova": true,
+  "type": "visualization"
+}
