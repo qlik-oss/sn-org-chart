@@ -23,7 +23,12 @@ const filterTree = (id, tree) => {
       currentNode.data.id === node.data.id ||
       (currentNode.parent && node.data.id === currentNode.parent.data.id) ||
       (currentNode.parent && node.parent && node.parent.data.id === currentNode.parent.data.id) ||
-      (node.parent && node.parent.data.id === currentNode.data.id)
+      (node.parent && node.parent.data.id === currentNode.data.id) ||
+      (currentNode.parent &&
+        node.parent &&
+        node.parent.parent &&
+        node.parent.parent.data.id === currentNode.parent.data.id &&
+        !node.children)
     );
   });
 };
@@ -147,18 +152,26 @@ const renderTree = async ({ element, layout, app, model }) => {
     'top-to-bottom': {
       size: [width, height],
       x: function(d) {
-        // return d.x;
-        d.xActual =
-          d.parent && d.parent.xActual
-            ? d.parent.xActual +
-              halfNodeWidth +
-              halfSpaceBetweenNodes +
-              (d.data.childNumber - d.parent.children.length / 2) * (nodeSize.width + spaceBetweenNodes)
-            : center;
+        if (d.children) {
+          d.xActual =
+            d.parent && d.parent.xActual
+              ? d.parent.xActual +
+                halfNodeWidth +
+                halfSpaceBetweenNodes +
+                (d.data.childNumber - d.parent.children.length / 2) * (nodeSize.width + spaceBetweenNodes)
+              : center;
+        } else {
+          d.xActual = d.parent && d.parent.xActual ? d.parent.xActual : center;
+        }
         return d.xActual;
       },
       y: function(d) {
-        return d.y;
+        if (d.children) {
+          return d.y;
+        } else {
+          d.yActual = d.y + d.data.childNumber * (nodeSize.height + spaceBetweenNodes);
+          return d.yActual;
+        }
       },
     },
   };

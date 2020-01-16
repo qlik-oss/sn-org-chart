@@ -32,15 +32,16 @@ function anyCycle(nodes) {
   return false;
 }
 
-const pageSize = 500;
-const maxPageCount = 10;
-async function fetchPage(dataPages, dataMatrix, model, fullHeight, currentRow) {
+const pageSize = 1500;
+const maxPageCount = 30;
+async function fetchPage(dataPages, dataMatrix, model, fullHeight, currentRow, callNum) {
+  callNum++;
   await model
     .getHyperCubeData('/qHyperCubeDef', [
       {
         qTop: currentRow,
         qLeft: 0,
-        qWidth: 5,
+        qWidth: 3,
         qHeight: pageSize,
       },
     ])
@@ -49,9 +50,10 @@ async function fetchPage(dataPages, dataMatrix, model, fullHeight, currentRow) {
       dataMatrix.push(...data[0].qMatrix);
       currentRow += data[0].qArea.qHeight;
     });
-
-  if (fullHeight > currentRow) {
-    await fetchPage(dataPages, dataMatrix, model, fullHeight, currentRow);
+  if (callNum >= maxPageCount) {
+    return; // Sanity return for very large data
+  } else if (fullHeight > currentRow) {
+    await fetchPage(dataPages, dataMatrix, model, fullHeight, currentRow, callNum);
   }
 }
 
@@ -63,7 +65,7 @@ const getDataMatrix = async (layout, model) => {
 
   // If there seems to be more data, check if it is already loadad or load it
   if (fullHeight > loadedHeight && dataPages.length === 1) {
-    await fetchPage(layout.qHyperCube.qDataPages, dataMatrix, model, fullHeight, loadedHeight);
+    await fetchPage(layout.qHyperCube.qDataPages, dataMatrix, model, fullHeight, loadedHeight, 0);
   } else {
     dataPages.forEach((page, i) => {
       i > 0 ? dataMatrix.push(...page.qMatrix) : '';
@@ -71,6 +73,35 @@ const getDataMatrix = async (layout, model) => {
   }
   return dataMatrix;
 };
+
+function getAttributIndex(attrsInfo, id) {
+  if (attrsInfo && attrsInfo.length) {
+    let index = false;
+    attrsInfo.forEach((attr, i) => {
+      if (attr.id === id) {
+        index = i;
+      }
+    });
+    return index;
+  }
+  return false;
+}
+
+function getAttribute(attrs, index) {
+  if (index !== false) {
+    return attrs.qValues[index].qText;
+  }
+  return false;
+}
+
+function transformColor(color) {
+  if (color && color.substring(0, 4) === 'ARGB') {
+    // transform the engine output to css
+    const comps = color.substring(5, color.length - 1).split(',');
+    return `rgba(${comps[1]},${comps[2]},${comps[3]},${comps[0]}`;
+  }
+  return color;
+}
 
 export default async function transform({ layout, app, model }) {
   if (!layout.qHyperCube) {
@@ -91,6 +122,11 @@ export default async function transform({ layout, app, model }) {
 
   const nodeMap = {};
   const allNodes = [];
+
+  const colorIndex = getAttributIndex(layout.qHyperCube.qDimensionInfo[0].qAttrExprInfo, 'colorByExpression');
+  const labelIndex = getAttributIndex(layout.qHyperCube.qDimensionInfo[0].qAttrExprInfo, 'labelExpression');
+  const subLabelIndex = getAttributIndex(layout.qHyperCube.qDimensionInfo[0].qAttrExprInfo, 'subLabelExpression');
+
   for (let i = 0; i < matrix.length; ++i) {
     const row = matrix[i];
     const id = getId(row);
@@ -98,10 +134,12 @@ export default async function transform({ layout, app, model }) {
     const node = {
       id,
       parentId,
-      name: (row[2] && row[2].qText) || '',
       children: [],
       elemNo: row[0].qElemNumber,
       details: row[3] ? row[3].qText : '',
+      bgColor: transformColor(getAttribute(row[0].qAttrExps, colorIndex)),
+      label: getAttribute(row[0].qAttrExps, labelIndex),
+      subLabel: getAttribute(row[0].qAttrExps, subLabelIndex),
     };
     nodeMap[id] = node;
     allNodes.push(node);
