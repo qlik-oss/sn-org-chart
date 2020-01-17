@@ -7,7 +7,7 @@ import '../treeCss.css';
 const nodeSize = { width: 300, height: 100 };
 const siblingSpacing = 30;
 const transitionTime = 500;
-const orientation = 'rtl';
+const orientation = 'ttb';
 
 // Set previous nodes to know which nodes to remain and which to remove
 let previousNodes = [];
@@ -25,6 +25,23 @@ const filterTree = (id, tree) => {
       (node.parent && node.parent.data.id === currentNode.data.id)
     );
   });
+};
+
+// TODO: Does not work properly for horizontal trees
+const getBBoxOfNodes = nodes => {
+  const bbox = { left: Infinity, top: Infinity, right: -Infinity, bottom: -Infinity };
+  nodes.forEach(node => {
+    bbox.left = Math.min(node.xActual || node.x, bbox.left);
+    bbox.top = Math.min(node.yActual || node.y, bbox.top);
+    bbox.right = Math.max(node.xActual || node.x, bbox.right);
+    bbox.bottom = Math.max(node.yActual || node.y, bbox.bottom);
+  });
+  return {
+    x: bbox.left,
+    y: bbox.top,
+    width: bbox.right - bbox.left + nodeSize.width,
+    height: bbox.bottom - bbox.top + nodeSize.height,
+  };
 };
 
 const reRenderTree = ({ svg, activeNode, allNodes, o, width, height }) => {
@@ -127,12 +144,16 @@ const reRenderTree = ({ svg, activeNode, allNodes, o, width, height }) => {
     });
 
   // Zooming and positioning of the tree
-  const bBox = svg._groups[0][0].getBBox();
-  const scaleFactor = bBox.width / width > bBox.height / height ? bBox.width / width : bBox.height / height;
+  const bBox = getBBoxOfNodes(nodes);
+  const scaleToWidhth = bBox.width / width > bBox.height / height;
+  const scaleFactor = scaleToWidhth ? bBox.width / width : bBox.height / height;
+  const translation = scaleToWidhth
+    ? `${-bBox.x} ${-bBox.y + (height * scaleFactor - bBox.height) / 2}`
+    : `${-bBox.x + (width * scaleFactor - bBox.width) / 2} ${-bBox.y}`;
   svg
     .transition()
     .duration(transitionTime)
-    .attr('transform', `scale(${1 / scaleFactor}) translate(${-bBox.x} ${-bBox.y})`);
+    .attr('transform', `scale(${1 / scaleFactor}) translate(${translation})`);
 };
 
 const renderTree = async ({ element, layout, app, model }) => {
@@ -140,8 +161,6 @@ const renderTree = async ({ element, layout, app, model }) => {
   element.innerHTML = '';
   const width = b.width;
   const height = b.height;
-  // const widthCenter = (width - nodeSize.width) / 2;
-  // const heightCenter = (width - nodeSize.width) / 2;
 
   // This would allow for different orientations of the tree structure (not needed for now)
   let orientations;
@@ -150,7 +169,6 @@ const renderTree = async ({ element, layout, app, model }) => {
       orientations = {
         'top-to-bottom': {
           depthSpacing: 200,
-          center: (width - nodeSize.width) / 2,
           rootOffset: (width - nodeSize.width) / 2,
           pathOffsetSelf: {
             x: nodeSize.width / 2,
@@ -282,7 +300,7 @@ const renderTree = async ({ element, layout, app, model }) => {
     .attr('height', height);
 
   const svg = svgBox.append('g');
-  svg.each((orientation, i) => {
+  svg.each(orientation => {
     const o = orientation.value;
     // Here are the settings for the tree. For instance nodesize can be adjusted
     const treemap = tree()
