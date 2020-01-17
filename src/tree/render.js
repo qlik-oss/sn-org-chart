@@ -5,10 +5,9 @@ import '../treeCss.css';
 
 // Constants for the tree. Might be variables later in property panel
 const nodeSize = { width: 300, height: 100 };
-const halfNodeWidth = nodeSize.width / 2;
-const spaceBetweenNodes = 30;
-const halfSpaceBetweenNodes = spaceBetweenNodes / 2;
+const siblingSpacing = 30;
 const transitionTime = 500;
+const orientation = 'rtl';
 
 // Set previous nodes to know which nodes to remain and which to remove
 let previousNodes = [];
@@ -84,6 +83,7 @@ const reRenderTree = ({ svg, activeNode, allNodes, o, width, height }) => {
     .attr('class', 'nodeRect')
     .attr('width', nodeSize.width)
     .attr('height', nodeSize.height)
+
     .attr('x', o.x)
     .attr('y', o.y)
     .attr('id', d => d.data.id)
@@ -102,9 +102,9 @@ const reRenderTree = ({ svg, activeNode, allNodes, o, width, height }) => {
     .attr('class', 'link')
     .attr('id', d => d.data.id)
     .attr('d', function(d) {
-      const self = { x: o.x(d) + halfNodeWidth, y: o.y(d) };
       if (d.parent) {
-        const parent = { x: o.x(d.parent) + halfNodeWidth, y: o.y(d.parent) + nodeSize.height };
+        const self = { x: o.x(d) + o.pathOffsetSelf.x, y: o.y(d) + o.pathOffsetSelf.y };
+        const parent = { x: o.x(d.parent) + o.pathOffsetParent.x, y: o.y(d.parent) + o.pathOffsetParent.y };
         return (
           'M' +
           self.x +
@@ -128,11 +128,11 @@ const reRenderTree = ({ svg, activeNode, allNodes, o, width, height }) => {
 
   // Zooming and positioning of the tree
   const bBox = svg._groups[0][0].getBBox();
-  const xFactor = bBox.width / width;
+  const scaleFactor = bBox.width / width > bBox.height / height ? bBox.width / width : bBox.height / height;
   svg
     .transition()
     .duration(transitionTime)
-    .attr('transform', `scale(${1 / xFactor}) translate(${-bBox.x} ${-bBox.y})`);
+    .attr('transform', `scale(${1 / scaleFactor}) translate(${-bBox.x} ${-bBox.y})`);
 };
 
 const renderTree = async ({ element, layout, app, model }) => {
@@ -140,28 +140,135 @@ const renderTree = async ({ element, layout, app, model }) => {
   element.innerHTML = '';
   const width = b.width;
   const height = b.height;
-  const center = (width - nodeSize.width) / 2;
+  // const widthCenter = (width - nodeSize.width) / 2;
+  // const heightCenter = (width - nodeSize.width) / 2;
 
   // This would allow for different orientations of the tree structure (not needed for now)
-  const orientations = {
-    'top-to-bottom': {
-      size: [width, height],
-      x: function(d) {
-        // return d.x;
-        d.xActual =
-          d.parent && d.parent.xActual
-            ? d.parent.xActual +
-              halfNodeWidth +
-              halfSpaceBetweenNodes +
-              (d.data.childNumber - d.parent.children.length / 2) * (nodeSize.width + spaceBetweenNodes)
-            : center;
-        return d.xActual;
-      },
-      y: function(d) {
-        return d.y;
-      },
-    },
-  };
+  let orientations;
+  switch (orientation) {
+    case 'ttb':
+      orientations = {
+        'top-to-bottom': {
+          depthSpacing: 200,
+          center: (width - nodeSize.width) / 2,
+          rootOffset: (width - nodeSize.width) / 2,
+          pathOffsetSelf: {
+            x: nodeSize.width / 2,
+            y: 0,
+          },
+          pathOffsetParent: {
+            x: nodeSize.width / 2,
+            y: nodeSize.height,
+          },
+          x: function(d) {
+            // return d.x;
+            d.xActual =
+              d.parent && d.parent.xActual
+                ? d.parent.xActual +
+                  nodeSize.width / 2 +
+                  siblingSpacing / 2 +
+                  (d.data.childNumber - d.parent.children.length / 2) * (nodeSize.width + siblingSpacing)
+                : 1;
+            return d.xActual;
+          },
+          y: function(d) {
+            return d.y;
+          },
+        },
+      };
+      break;
+    case 'btt':
+      orientations = {
+        'bottom-to-top': {
+          depthSpacing: -200,
+          pathOffsetSelf: {
+            x: nodeSize.width / 2,
+            y: nodeSize.height,
+          },
+          pathOffsetParent: {
+            x: nodeSize.width / 2,
+            y: 0,
+          },
+          x: function(d) {
+            // return d.x;
+            d.xActual =
+              d.parent && d.parent.xActual
+                ? d.parent.xActual +
+                  nodeSize.width / 2 +
+                  siblingSpacing / 2 +
+                  (d.data.childNumber - d.parent.children.length / 2) * (nodeSize.width + siblingSpacing)
+                : 1;
+            return d.xActual;
+          },
+          y: function(d) {
+            return d.y;
+          },
+        },
+      };
+      break;
+    case 'ltr':
+      orientations = {
+        'left-to-right': {
+          depthSpacing: 500,
+          rootOffset: (height - nodeSize.height) / 2,
+          pathOffsetSelf: {
+            x: 0,
+            y: nodeSize.height / 2,
+          },
+          pathOffsetParent: {
+            x: nodeSize.width,
+            y: nodeSize.height / 2,
+          },
+          y: function(d) {
+            // return d.x;
+            d.yActual =
+              d.parent && d.parent.yActual
+                ? d.parent.yActual +
+                  nodeSize.height / 2 +
+                  siblingSpacing / 2 +
+                  (d.data.childNumber - d.parent.children.length / 2) * (nodeSize.height + siblingSpacing)
+                : 1;
+            return d.yActual;
+          },
+          x: function(d) {
+            return d.y;
+          },
+        },
+      };
+      break;
+    case 'rtl':
+      orientations = {
+        'right-to-left': {
+          depthSpacing: -500,
+          rootOffset: (height - nodeSize.height) / 2,
+          pathOffsetSelf: {
+            x: nodeSize.width,
+            y: nodeSize.height / 2,
+          },
+          pathOffsetParent: {
+            x: 0,
+            y: nodeSize.height / 2,
+          },
+          y: function(d) {
+            // return d.x;
+            d.yActual =
+              d.parent && d.parent.yActual
+                ? d.parent.yActual +
+                  nodeSize.height / 2 +
+                  siblingSpacing / 2 +
+                  (d.data.childNumber - d.parent.children.length / 2) * (nodeSize.height + siblingSpacing)
+                : 1;
+            return d.yActual;
+          },
+          x: function(d) {
+            return d.y;
+          },
+        },
+      };
+      break;
+    default:
+      break;
+  }
 
   // Get and transform the data into a tree structure
   const data = await treeTransform({ layout, app, model });
@@ -175,12 +282,12 @@ const renderTree = async ({ element, layout, app, model }) => {
     .attr('height', height);
 
   const svg = svgBox.append('g');
-  svg.each(orientation => {
+  svg.each((orientation, i) => {
     const o = orientation.value;
     // Here are the settings for the tree. For instance nodesize can be adjusted
     const treemap = tree()
-      .size(o.size)
-      .nodeSize([0, 200]);
+      .size([width, height])
+      .nodeSize([0, o.depthSpacing]);
 
     var nodes = hierarchy(data);
 
