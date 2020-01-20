@@ -5,6 +5,7 @@ import '../treeCss.css';
 
 // Constants for the tree. Might be variables later in property panel
 const nodeSize = { width: 300, height: 100 };
+const quarterNodeHeight = nodeSize.height / 4;
 const halfNodeWidth = nodeSize.width / 2;
 const spaceBetweenNodes = 30;
 const halfSpaceBetweenNodes = spaceBetweenNodes / 2;
@@ -105,23 +106,23 @@ const reRenderTree = ({ svg, activeNode, allNodes, o, width, height }) => {
       const self = { x: o.x(d) + halfNodeWidth, y: o.y(d) };
       if (d.parent) {
         const parent = { x: o.x(d.parent) + halfNodeWidth, y: o.y(d.parent) + nodeSize.height };
+        let xrvs = parent.x - self.x < 0 ? -1 : 1;
+        let yrvs = parent.y - self.y < 0 ? -1 : 1;
+        let rdef = 30;
+        let rInitial = Math.abs(parent.x - self.x) / 2 < rdef ? Math.abs(parent.x - self.x) / 2 : rdef;
+        let r = Math.abs(parent.y - self.y) / 2 < rInitial ? Math.abs(parent.y - self.y) / 2 : rInitial;
+        let h = Math.abs(parent.y - self.y) / 2 - r;
+        let w = Math.abs(parent.x - self.x) - r * 2;
+        console.log(rdef, rInitial, r, h, w)
         return (
-          'M' +
-          self.x +
-          ',' +
-          self.y +
-          'C' +
-          self.x +
-          ',' +
-          (self.y + parent.y) / 2 +
-          ' ' +
-          parent.x +
-          ',' +
-          (self.y + d.parent.y) / 2 +
-          ' ' +
-          parent.x +
-          ',' +
-          parent.y
+          `
+          M ${self.x} ${self.y}
+          L ${self.x} ${self.y + h * yrvs}
+          C  ${self.x} ${self.y + h * yrvs + r * yrvs} ${self.x} ${self.y + h * yrvs + r * yrvs} ${self.x + r * xrvs} ${self.y + h * yrvs + r * yrvs}
+          L ${self.x + w * xrvs + r * xrvs} ${self.y + h * yrvs + r * yrvs}
+          C ${parent.x}  ${self.y + h * yrvs + r * yrvs} ${parent.x}  ${self.y + h * yrvs + r * yrvs} ${parent.x} ${parent.y - h * yrvs}
+          L ${parent.x} ${parent.y}
+          `
         );
       }
     });
