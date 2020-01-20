@@ -5,7 +5,6 @@ import '../treeCss.css';
 
 // Constants for the tree. Might be variables later in property panel
 const nodeSize = { width: 300, height: 100 };
-const quarterNodeHeight = nodeSize.height / 4;
 const halfNodeWidth = nodeSize.width / 2;
 const spaceBetweenNodes = 30;
 const halfSpaceBetweenNodes = spaceBetweenNodes / 2;
