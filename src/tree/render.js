@@ -8,6 +8,7 @@ const nodeSize = { width: 300, height: 100 };
 const siblingSpacing = 30;
 const transitionTime = 500;
 const orientation = 'ttb';
+const isVertical = orientation === 'ttb' || orientation === 'btt';
 
 // Set previous nodes to know which nodes to remain and which to remove
 let previousNodes = [];
@@ -120,25 +121,39 @@ const reRenderTree = ({ svg, activeNode, allNodes, o, width, height }) => {
     .attr('id', d => d.data.id)
     .attr('d', function(d) {
       if (d.parent) {
-        const self = { x: o.x(d) + o.pathOffsetSelf.x, y: o.y(d) + o.pathOffsetSelf.y };
-        const parent = { x: o.x(d.parent) + o.pathOffsetParent.x, y: o.y(d.parent) + o.pathOffsetParent.y };
+        // starting at self, ending at parent
+        const start = { x: o.x(d) + o.pathOffsetSelf.x, y: o.y(d) + o.pathOffsetSelf.y };
+        const end = { x: o.x(d.parent) + o.pathOffsetParent.x, y: o.y(d.parent) + o.pathOffsetParent.y };
+        const size = { x: Math.abs(end.x - start.x), y: Math.abs(end.y - start.y) };
+        // factors inverseíng direction of lines and curves
+        const inverse = { x: end.x - start.x < 0 ? -1 : 1, y: end.y - start.y < 0 ? -1 : 1 };
+        // radius of elbow
+        const rDef = 30;
+        const rAbs = Math.min(size.x, size.y) / 2 < rDef ? Math.min(size.x, size.y) : rDef;
+        const r = { x: inverse.x * rAbs, y: inverse.y * rAbs};
+        let l, firstLine, firstCurve, secondCurve;
+
+        if (isVertical) {
+          l = {x: inverse.x * (size.x - rAbs * 2) , y: inverse.y * (size.y / 2 - rAbs)}
+          firstLine = `${start.x} ${start.y + l.y}`;
+          firstCurve = `${start.x} ${start.y + l.y + r.y} ${start.x} ${start.y + l.y + r.y} ${start.x + r.x} ${start.y + l.y + r.y}`;
+          secondCurve = `${end.x}  ${start.y + l.y + r.y} ${end.x}  ${start.y + l.y + r.y} ${end.x} ${end.y - l.y}`;
+        } else {
+          l = {x: inverse.x * (size.x / 2 - rAbs) , y: inverse.y * (size.y - rAbs * 2)}
+          firstLine = `${start.x + l.x} ${start.y}`;
+          firstCurve = `${start.x + l.x + r.x} ${start.y} ${start.x + l.x + r.x} ${start.y} ${start.x + l.x + r.x} ${start.y + r.y}`;
+          secondCurve = `${start.x + l.x + r.x} ${end.y} ${start.x + l.x + r.x} ${end.y} ${end.x - l.x} ${end.y}`;
+        }
+
         return (
-          'M' +
-          self.x +
-          ',' +
-          self.y +
-          'C' +
-          self.x +
-          ',' +
-          (self.y + parent.y) / 2 +
-          ' ' +
-          parent.x +
-          ',' +
-          (self.y + d.parent.y) / 2 +
-          ' ' +
-          parent.x +
-          ',' +
-          parent.y
+          `
+          M ${start.x} ${start.y}
+          L ${firstLine}
+          C ${firstCurve}
+          L ${start.x + l.x + r.x} ${start.y + l.y + r.y}
+          C ${secondCurve}
+          L ${end.x} ${end.y}
+          `
         );
       }
     });
