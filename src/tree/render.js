@@ -1,6 +1,7 @@
 import { hierarchy, entries, tree, select } from 'd3';
 import card from '../card/card';
 import treeTransform from '../utils/tree-transform';
+import selections from '../utils/selections';
 import '../treeCss.css';
 
 // Constants for the tree. Might be variables later in property panel
@@ -28,7 +29,7 @@ const filterTree = (id, tree) => {
   });
 };
 
-const reRenderTree = ({ svg, activeNode, allNodes, o, width, height }) => {
+const reRenderTree = ({ svg, activeNode, allNodes, o, width, height, selectionsAPI }) => {
   const nodes = filterTree(activeNode, allNodes);
 
   const nodeIdList = nodes.map(node => node.data.id);
@@ -96,6 +97,15 @@ const reRenderTree = ({ svg, activeNode, allNodes, o, width, height }) => {
       return card(d.data);
     });
 
+  node
+    .append('circle')
+    .attr('cx', o.x)
+    .attr('cy', o.y)
+    .attr('r', 20)
+    .on('click', node => {
+      selections.select(node, selectionsAPI);
+    });
+
   // Create the lines (links) between the nodes
   node
     .append('path')
@@ -135,7 +145,7 @@ const reRenderTree = ({ svg, activeNode, allNodes, o, width, height }) => {
     .attr('transform', `scale(${1 / xFactor}) translate(${-bBox.x} ${-bBox.y})`);
 };
 
-const renderTree = async ({ element, layout, app, model }) => {
+const renderTree = async ({ element, layout, app, model, selectionsAPI }) => {
   const b = element.getBoundingClientRect();
   element.innerHTML = '';
   const width = b.width;
@@ -187,7 +197,7 @@ const renderTree = async ({ element, layout, app, model }) => {
     // Using the treemap created
     const allNodes = treemap(nodes);
     const activeNode = allNodes.data.id;
-    reRenderTree({ svg, data, allNodes, activeNode, o, width, height, treemap });
+    reRenderTree({ svg, data, allNodes, activeNode, o, width, height, treemap, selectionsAPI });
   });
 };
 
