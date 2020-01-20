@@ -113,7 +113,6 @@ const reRenderTree = ({ svg, activeNode, allNodes, o, width, height }) => {
         let r = Math.abs(parent.y - self.y) / 2 < rInitial ? Math.abs(parent.y - self.y) / 2 : rInitial;
         let h = Math.abs(parent.y - self.y) / 2 - r;
         let w = Math.abs(parent.x - self.x) - r * 2;
-        console.log(rdef, rInitial, r, h, w)
         return (
           `
           M ${self.x} ${self.y}
