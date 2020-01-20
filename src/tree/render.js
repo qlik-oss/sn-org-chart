@@ -129,7 +129,7 @@ const reRenderTree = ({ svg, activeNode, allNodes, o, width, height }) => {
         const inverse = { x: end.x - start.x < 0 ? -1 : 1, y: end.y - start.y < 0 ? -1 : 1 };
         // radius of elbow
         const rDef = 30;
-        const rAbs = Math.min(size.x, size.y) / 2 < rDef ? Math.min(size.x, size.y) : rDef;
+        const rAbs = Math.min(size.x, size.y) / 2 < rDef ? Math.min(size.x, size.y) / 2 : rDef;
         const r = { x: inverse.x * rAbs, y: inverse.y * rAbs};
         let l, firstLine, firstCurve, secondCurve;
 
