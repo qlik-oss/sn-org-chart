@@ -7,7 +7,7 @@ import '../treeCss.css';
 const nodeSize = { width: 300, height: 100 };
 const siblingSpacing = 30;
 const transitionTime = 500;
-const orientation = 'ttb';
+const orientation = 'rtl';
 const isVertical = orientation === 'ttb' || orientation === 'btt';
 
 // Set previous nodes to know which nodes to remain and which to remove
@@ -28,14 +28,20 @@ const filterTree = (id, tree) => {
   });
 };
 
-// TODO: Does not work properly for horizontal trees
 const getBBoxOfNodes = nodes => {
   const bbox = { left: Infinity, top: Infinity, right: -Infinity, bottom: -Infinity };
   nodes.forEach(node => {
-    bbox.left = Math.min(node.xActual || node.x, bbox.left);
-    bbox.top = Math.min(node.yActual || node.y, bbox.top);
-    bbox.right = Math.max(node.xActual || node.x, bbox.right);
-    bbox.bottom = Math.max(node.yActual || node.y, bbox.bottom);
+    if (isVertical) {
+      bbox.left = Math.min(node.xActual, bbox.left);
+      bbox.top = Math.min(node.y, bbox.top);
+      bbox.right = Math.max(node.xActual, bbox.right);
+      bbox.bottom = Math.max(node.y, bbox.bottom);
+    } else {
+      bbox.left = Math.min(node.y, bbox.left);
+      bbox.top = Math.min(node.yActual, bbox.top);
+      bbox.right = Math.max(node.y, bbox.right);
+      bbox.bottom = Math.max(node.yActual, bbox.bottom);
+    }
   });
   return {
     x: bbox.left,
