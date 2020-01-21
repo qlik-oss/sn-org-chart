@@ -107,7 +107,6 @@ const reRenderTree = ({ svg, activeNode, allNodes, o, width, height }) => {
     .attr('class', 'nodeRect')
     .attr('width', nodeSize.width)
     .attr('height', nodeSize.height)
-
     .attr('x', o.x)
     .attr('y', o.y)
     .attr('id', d => d.data.id)
@@ -190,7 +189,6 @@ const renderTree = async ({ element, layout, app, model }) => {
       orientations = {
         'top-to-bottom': {
           depthSpacing: 200,
-          rootOffset: (width - nodeSize.width) / 2,
           pathOffsetSelf: {
             x: nodeSize.width / 2,
             y: 0,
@@ -200,7 +198,6 @@ const renderTree = async ({ element, layout, app, model }) => {
             y: nodeSize.height,
           },
           x: function(d) {
-            // return d.x;
             d.xActual =
               d.parent && d.parent.xActual
                 ? d.parent.xActual +
@@ -229,7 +226,6 @@ const renderTree = async ({ element, layout, app, model }) => {
             y: 0,
           },
           x: function(d) {
-            // return d.x;
             d.xActual =
               d.parent && d.parent.xActual
                 ? d.parent.xActual +
@@ -249,7 +245,6 @@ const renderTree = async ({ element, layout, app, model }) => {
       orientations = {
         'left-to-right': {
           depthSpacing: 500,
-          rootOffset: (height - nodeSize.height) / 2,
           pathOffsetSelf: {
             x: 0,
             y: nodeSize.height / 2,
@@ -259,7 +254,6 @@ const renderTree = async ({ element, layout, app, model }) => {
             y: nodeSize.height / 2,
           },
           y: function(d) {
-            // return d.x;
             d.yActual =
               d.parent && d.parent.yActual
                 ? d.parent.yActual +
@@ -279,7 +273,6 @@ const renderTree = async ({ element, layout, app, model }) => {
       orientations = {
         'right-to-left': {
           depthSpacing: -500,
-          rootOffset: (height - nodeSize.height) / 2,
           pathOffsetSelf: {
             x: nodeSize.width,
             y: nodeSize.height / 2,
@@ -289,7 +282,6 @@ const renderTree = async ({ element, layout, app, model }) => {
             y: nodeSize.height / 2,
           },
           y: function(d) {
-            // return d.x;
             d.yActual =
               d.parent && d.parent.yActual
                 ? d.parent.yActual +
