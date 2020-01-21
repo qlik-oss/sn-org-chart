@@ -5,10 +5,10 @@ import '../treeCss.css';
 
 // Constants for the tree. Might be variables later in property panel
 const nodeSize = { width: 300, height: 100 };
-const halfNodeWidth = nodeSize.width / 2;
-const spaceBetweenNodes = 30;
-const halfSpaceBetweenNodes = spaceBetweenNodes / 2;
+const siblingSpacing = 30;
 const transitionTime = 500;
+const orientation = 'rtl';
+const isVertical = orientation === 'ttb' || orientation === 'btt';
 
 // Set previous nodes to know which nodes to remain and which to remove
 let previousNodes = [];
@@ -28,6 +28,29 @@ const filterTree = (id, tree) => {
   });
 };
 
+const getBBoxOfNodes = nodes => {
+  const bbox = { left: Infinity, top: Infinity, right: -Infinity, bottom: -Infinity };
+  nodes.forEach(node => {
+    if (isVertical) {
+      bbox.left = Math.min(node.xActual, bbox.left);
+      bbox.top = Math.min(node.y, bbox.top);
+      bbox.right = Math.max(node.xActual, bbox.right);
+      bbox.bottom = Math.max(node.y, bbox.bottom);
+    } else {
+      bbox.left = Math.min(node.y, bbox.left);
+      bbox.top = Math.min(node.yActual, bbox.top);
+      bbox.right = Math.max(node.y, bbox.right);
+      bbox.bottom = Math.max(node.yActual, bbox.bottom);
+    }
+  });
+  return {
+    x: bbox.left,
+    y: bbox.top,
+    width: bbox.right - bbox.left + nodeSize.width,
+    height: bbox.bottom - bbox.top + nodeSize.height,
+  };
+};
+
 const reRenderTree = ({ svg, activeNode, allNodes, o, width, height }) => {
   const nodes = filterTree(activeNode, allNodes);
 
@@ -39,17 +62,17 @@ const reRenderTree = ({ svg, activeNode, allNodes, o, width, height }) => {
   // Cleanup from previous render
   if (previousNodes.length > 0 && activeNodes._groups[0].length > 0) {
     let removeList = [];
-    for (const node of previousNodes) {
+    previousNodes.forEach(node => {
       if (nodeIdList.indexOf(node.data.id) === -1) {
         removeList.push(node.data.id);
       }
-    }
+    });
     const previousNodesIdList = previousNodes.map(node => node.data.id);
-    for (const node of nodes) {
+    nodes.forEach(node => {
       if (previousNodesIdList.indexOf(node.data.id) === -1) {
         appendNodes.push(node);
       }
-    }
+    });
     if (removeList.length > 0) {
       svg
         .selectAll('g')
@@ -102,36 +125,55 @@ const reRenderTree = ({ svg, activeNode, allNodes, o, width, height }) => {
     .attr('class', 'link')
     .attr('id', d => d.data.id)
     .attr('d', function(d) {
-      const self = { x: o.x(d) + halfNodeWidth, y: o.y(d) };
       if (d.parent) {
-        const parent = { x: o.x(d.parent) + halfNodeWidth, y: o.y(d.parent) + nodeSize.height };
-        let xrvs = parent.x - self.x < 0 ? -1 : 1;
-        let yrvs = parent.y - self.y < 0 ? -1 : 1;
-        let rdef = 30;
-        let rInitial = Math.abs(parent.x - self.x) / 2 < rdef ? Math.abs(parent.x - self.x) / 2 : rdef;
-        let r = Math.abs(parent.y - self.y) / 2 < rInitial ? Math.abs(parent.y - self.y) / 2 : rInitial;
-        let h = Math.abs(parent.y - self.y) / 2 - r;
-        let w = Math.abs(parent.x - self.x) - r * 2;
+        // starting at self, ending at parent
+        const start = { x: o.x(d) + o.pathOffsetSelf.x, y: o.y(d) + o.pathOffsetSelf.y };
+        const end = { x: o.x(d.parent) + o.pathOffsetParent.x, y: o.y(d.parent) + o.pathOffsetParent.y };
+        const size = { x: Math.abs(end.x - start.x), y: Math.abs(end.y - start.y) };
+        // factors inverseíng direction of lines and curves
+        const inverse = { x: end.x - start.x < 0 ? -1 : 1, y: end.y - start.y < 0 ? -1 : 1 };
+        // radius of elbow
+        const rDef = 30;
+        const rAbs = Math.min(size.x, size.y) / 2 < rDef ? Math.min(size.x, size.y) / 2 : rDef;
+        const r = { x: inverse.x * rAbs, y: inverse.y * rAbs};
+        let l, firstLine, firstCurve, secondCurve;
+
+        if (isVertical) {
+          l = {x: inverse.x * (size.x - rAbs * 2) , y: inverse.y * (size.y / 2 - rAbs)}
+          firstLine = `${start.x} ${start.y + l.y}`;
+          firstCurve = `${start.x} ${start.y + l.y + r.y} ${start.x} ${start.y + l.y + r.y} ${start.x + r.x} ${start.y + l.y + r.y}`;
+          secondCurve = `${end.x}  ${start.y + l.y + r.y} ${end.x}  ${start.y + l.y + r.y} ${end.x} ${end.y - l.y}`;
+        } else {
+          l = {x: inverse.x * (size.x / 2 - rAbs) , y: inverse.y * (size.y - rAbs * 2)}
+          firstLine = `${start.x + l.x} ${start.y}`;
+          firstCurve = `${start.x + l.x + r.x} ${start.y} ${start.x + l.x + r.x} ${start.y} ${start.x + l.x + r.x} ${start.y + r.y}`;
+          secondCurve = `${start.x + l.x + r.x} ${end.y} ${start.x + l.x + r.x} ${end.y} ${end.x - l.x} ${end.y}`;
+        }
+
         return (
           `
-          M ${self.x} ${self.y}
-          L ${self.x} ${self.y + h * yrvs}
-          C  ${self.x} ${self.y + h * yrvs + r * yrvs} ${self.x} ${self.y + h * yrvs + r * yrvs} ${self.x + r * xrvs} ${self.y + h * yrvs + r * yrvs}
-          L ${self.x + w * xrvs + r * xrvs} ${self.y + h * yrvs + r * yrvs}
-          C ${parent.x}  ${self.y + h * yrvs + r * yrvs} ${parent.x}  ${self.y + h * yrvs + r * yrvs} ${parent.x} ${parent.y - h * yrvs}
-          L ${parent.x} ${parent.y}
+          M ${start.x} ${start.y}
+          L ${firstLine}
+          C ${firstCurve}
+          L ${start.x + l.x + r.x} ${start.y + l.y + r.y}
+          C ${secondCurve}
+          L ${end.x} ${end.y}
           `
         );
       }
     });
 
   // Zooming and positioning of the tree
-  const bBox = svg._groups[0][0].getBBox();
-  const xFactor = bBox.width / width;
+  const bBox = getBBoxOfNodes(nodes);
+  const scaleToWidhth = bBox.width / width > bBox.height / height;
+  const scaleFactor = scaleToWidhth ? bBox.width / width : bBox.height / height;
+  const translation = scaleToWidhth
+    ? `${-bBox.x} ${-bBox.y + (height * scaleFactor - bBox.height) / 2}`
+    : `${-bBox.x + (width * scaleFactor - bBox.width) / 2} ${-bBox.y}`;
   svg
     .transition()
     .duration(transitionTime)
-    .attr('transform', `scale(${1 / xFactor}) translate(${-bBox.x} ${-bBox.y})`);
+    .attr('transform', `scale(${1 / scaleFactor}) translate(${translation})`);
 };
 
 const renderTree = async ({ element, layout, app, model }) => {
@@ -139,28 +181,125 @@ const renderTree = async ({ element, layout, app, model }) => {
   element.innerHTML = '';
   const width = b.width;
   const height = b.height;
-  const center = (width - nodeSize.width) / 2;
 
   // This would allow for different orientations of the tree structure (not needed for now)
-  const orientations = {
-    'top-to-bottom': {
-      size: [width, height],
-      x: function(d) {
-        // return d.x;
-        d.xActual =
-          d.parent && d.parent.xActual
-            ? d.parent.xActual +
-              halfNodeWidth +
-              halfSpaceBetweenNodes +
-              (d.data.childNumber - d.parent.children.length / 2) * (nodeSize.width + spaceBetweenNodes)
-            : center;
-        return d.xActual;
-      },
-      y: function(d) {
-        return d.y;
-      },
-    },
-  };
+  let orientations;
+  switch (orientation) {
+    case 'ttb':
+      orientations = {
+        'top-to-bottom': {
+          depthSpacing: 200,
+          pathOffsetSelf: {
+            x: nodeSize.width / 2,
+            y: 0,
+          },
+          pathOffsetParent: {
+            x: nodeSize.width / 2,
+            y: nodeSize.height,
+          },
+          x: function(d) {
+            d.xActual =
+              d.parent && d.parent.xActual
+                ? d.parent.xActual +
+                  nodeSize.width / 2 +
+                  siblingSpacing / 2 +
+                  (d.data.childNumber - d.parent.children.length / 2) * (nodeSize.width + siblingSpacing)
+                : 1;
+            return d.xActual;
+          },
+          y: function(d) {
+            return d.y;
+          },
+        },
+      };
+      break;
+    case 'btt':
+      orientations = {
+        'bottom-to-top': {
+          depthSpacing: -200,
+          pathOffsetSelf: {
+            x: nodeSize.width / 2,
+            y: nodeSize.height,
+          },
+          pathOffsetParent: {
+            x: nodeSize.width / 2,
+            y: 0,
+          },
+          x: function(d) {
+            d.xActual =
+              d.parent && d.parent.xActual
+                ? d.parent.xActual +
+                  nodeSize.width / 2 +
+                  siblingSpacing / 2 +
+                  (d.data.childNumber - d.parent.children.length / 2) * (nodeSize.width + siblingSpacing)
+                : 1;
+            return d.xActual;
+          },
+          y: function(d) {
+            return d.y;
+          },
+        },
+      };
+      break;
+    case 'ltr':
+      orientations = {
+        'left-to-right': {
+          depthSpacing: 500,
+          pathOffsetSelf: {
+            x: 0,
+            y: nodeSize.height / 2,
+          },
+          pathOffsetParent: {
+            x: nodeSize.width,
+            y: nodeSize.height / 2,
+          },
+          y: function(d) {
+            d.yActual =
+              d.parent && d.parent.yActual
+                ? d.parent.yActual +
+                  nodeSize.height / 2 +
+                  siblingSpacing / 2 +
+                  (d.data.childNumber - d.parent.children.length / 2) * (nodeSize.height + siblingSpacing)
+                : 1;
+            return d.yActual;
+          },
+          x: function(d) {
+            return d.y;
+          },
+        },
+      };
+      break;
+    case 'rtl':
+      orientations = {
+        'right-to-left': {
+          depthSpacing: -500,
+          pathOffsetSelf: {
+            x: nodeSize.width,
+            y: nodeSize.height / 2,
+          },
+          pathOffsetParent: {
+            x: 0,
+            y: nodeSize.height / 2,
+          },
+          y: function(d) {
+            d.yActual =
+              d.parent && d.parent.yActual
+                ? d.parent.yActual +
+                  nodeSize.height / 2 +
+                  siblingSpacing / 2 +
+                  (d.data.childNumber - d.parent.children.length / 2) * (nodeSize.height + siblingSpacing)
+                : 1;
+            return d.yActual;
+          },
+          x: function(d) {
+            return d.y;
+          },
+        },
+      };
+      break;
+    default:
+      break;
+  }
 
   // Get and transform the data into a tree structure
   const data = await treeTransform({ layout, app, model });
@@ -178,8 +317,8 @@ const renderTree = async ({ element, layout, app, model }) => {
     const o = orientation.value;
     // Here are the settings for the tree. For instance nodesize can be adjusted
     const treemap = tree()
-      .size(o.size)
-      .nodeSize([0, 200]);
+      .size([width, height])
+      .nodeSize([0, o.depthSpacing]);
 
     var nodes = hierarchy(data);
 
