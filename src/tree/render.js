@@ -62,17 +62,17 @@ const reRenderTree = ({ svg, activeNode, allNodes, o, width, height }) => {
   // Cleanup from previous render
   if (previousNodes.length > 0 && activeNodes._groups[0].length > 0) {
     let removeList = [];
-    for (const node of previousNodes) {
+    previousNodes.forEach(node => {
       if (nodeIdList.indexOf(node.data.id) === -1) {
         removeList.push(node.data.id);
       }
-    }
+    });
     const previousNodesIdList = previousNodes.map(node => node.data.id);
-    for (const node of nodes) {
+    nodes.forEach(node => {
       if (previousNodesIdList.indexOf(node.data.id) === -1) {
         appendNodes.push(node);
       }
-    }
+    });
     if (removeList.length > 0) {
       svg
         .selectAll('g')
