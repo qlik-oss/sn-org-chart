@@ -39,3 +39,8 @@ body {
   height: 100%;
   font-size: 40px;
 }
+
+.orgCard.selected {
+  border: 4px solid black;
+  background: transparent;
+}

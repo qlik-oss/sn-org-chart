@@ -1,3 +1,3 @@
 export default data => {
-  return `<div class="orgCard">${data.name}</div>`;
+  return `<div class="orgCard ${data.selected ? 'selected' : ''}">${data.name}</div>`;
 };

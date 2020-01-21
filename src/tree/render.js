@@ -103,7 +103,8 @@ const reRenderTree = ({ svg, activeNode, allNodes, o, width, height, selectionsA
     .attr('cy', o.y)
     .attr('r', 20)
     .on('click', node => {
-      selections.select(node, selectionsAPI);
+      selections.select(node, selectionsAPI, allNodes);
+      // here we need to update the changed nodes, basically re-render them
     });
 
   // Create the lines (links) between the nodes
