@@ -23,8 +23,8 @@ const filterTree = (id, tree) => {
   return nodes.filter(node => {
     return (
       currentNode.data.id === node.data.id ||
-      (currentNode.parent && node.data.id === currentNode.parent.data.id ||
-      (currentNode.parent && node.parent && node.parent.data.id === currentNode.parent.data.id) && (node.data.childNumber !== undefined && node.data.childNumber < siblingsToShow)) ||
+      (currentNode.parent && node.data.id === currentNode.parent.data.id) ||
+      (currentNode.parent && node.parent && node.parent.data.id === currentNode.parent.data.id && (node.data.childNumber !== undefined && node.data.childNumber < siblingsToShow)) ||
       (node.parent && node.parent.data.id === currentNode.data.id && (node.data.childNumber !== undefined && node.data.childNumber < childrenToShow))
     );
   });
