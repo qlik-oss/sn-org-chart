@@ -7,8 +7,10 @@ import '../treeCss.css';
 const nodeSize = { width: 300, height: 100 };
 const siblingSpacing = 30;
 const transitionTime = 500;
-const orientation = 'rtl';
+const orientation = 'ttb';
 const isVertical = orientation === 'ttb' || orientation === 'btt';
+const siblingsToShow = 11;
+const childrenToShow = 11;
 
 // Set previous nodes to know which nodes to remain and which to remove
 let previousNodes = [];
@@ -21,9 +23,9 @@ const filterTree = (id, tree) => {
   return nodes.filter(node => {
     return (
       currentNode.data.id === node.data.id ||
-      (currentNode.parent && node.data.id === currentNode.parent.data.id) ||
-      (currentNode.parent && node.parent && node.parent.data.id === currentNode.parent.data.id) ||
-      (node.parent && node.parent.data.id === currentNode.data.id)
+      (currentNode.parent && node.data.id === currentNode.parent.data.id ||
+      (currentNode.parent && node.parent && node.parent.data.id === currentNode.parent.data.id) && (node.data.childNumber !== undefined && node.data.childNumber < siblingsToShow)) ||
+      (node.parent && node.parent.data.id === currentNode.data.id && (node.data.childNumber !== undefined && node.data.childNumber < childrenToShow))
     );
   });
 };
@@ -203,7 +205,7 @@ const renderTree = async ({ element, layout, app, model }) => {
                 ? d.parent.xActual +
                   nodeSize.width / 2 +
                   siblingSpacing / 2 +
-                  (d.data.childNumber - d.parent.children.length / 2) * (nodeSize.width + siblingSpacing)
+                  (d.data.childNumber - (d.parent.children.length < childrenToShow ? d.parent.children.length : childrenToShow) / 2) * (nodeSize.width + siblingSpacing)
                 : 1;
             return d.xActual;
           },
@@ -231,7 +233,7 @@ const renderTree = async ({ element, layout, app, model }) => {
                 ? d.parent.xActual +
                   nodeSize.width / 2 +
                   siblingSpacing / 2 +
-                  (d.data.childNumber - d.parent.children.length / 2) * (nodeSize.width + siblingSpacing)
+                  (d.data.childNumber - (d.parent.children.length < childrenToShow ? d.parent.children.length : childrenToShow) / 2) * (nodeSize.width + siblingSpacing)
                 : 1;
             return d.xActual;
           },
@@ -259,7 +261,7 @@ const renderTree = async ({ element, layout, app, model }) => {
                 ? d.parent.yActual +
                   nodeSize.height / 2 +
                   siblingSpacing / 2 +
-                  (d.data.childNumber - d.parent.children.length / 2) * (nodeSize.height + siblingSpacing)
+                  (d.data.childNumber - (d.parent.children.length < childrenToShow ? d.parent.children.length : childrenToShow) / 2) * (nodeSize.height + siblingSpacing)
                 : 1;
             return d.yActual;
           },
@@ -287,7 +289,7 @@ const renderTree = async ({ element, layout, app, model }) => {
                 ? d.parent.yActual +
                   nodeSize.height / 2 +
                   siblingSpacing / 2 +
-                  (d.data.childNumber - d.parent.children.length / 2) * (nodeSize.height + siblingSpacing)
+                  (d.data.childNumber - (d.parent.children.length < childrenToShow ? d.parent.children.length : childrenToShow) / 2) * (nodeSize.height + siblingSpacing)
                 : 1;
             return d.yActual;
           },
