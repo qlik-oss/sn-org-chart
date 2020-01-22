@@ -1,13 +1,15 @@
 import { hierarchy, entries, tree, select } from 'd3';
 import card from '../card/card';
 import treeTransform from '../utils/tree-transform';
+import position from './position';
+import box from './box';
+import path from './path';
 import '../treeCss.css';
 
 // Constants for the tree. Might be variables later in property panel
 const nodeSize = { width: 300, height: 100 };
-const siblingSpacing = 30;
 const transitionTime = 500;
-const orientation = 'rtl';
+const orientation = 'ttb';
 const isVertical = orientation === 'ttb' || orientation === 'btt';
 
 // Set previous nodes to know which nodes to remain and which to remove
@@ -51,7 +53,7 @@ const getBBoxOfNodes = nodes => {
   };
 };
 
-const reRenderTree = ({ svg, activeNode, allNodes, o, width, height }) => {
+const reRenderTree = ({ svg, divBox, activeNode, allNodes, o, width, height }) => {
   const nodes = filterTree(activeNode, allNodes);
 
   const nodeIdList = nodes.map(node => node.data.id);
@@ -86,6 +88,13 @@ const reRenderTree = ({ svg, activeNode, allNodes, o, width, height }) => {
         //   return `translate(${o.x(d.parent || d) + 150},${o.y(d.parent || d) + 100}) scale(0)`;
         // })
         .remove();
+
+      divBox
+        .selectAll('.nodeRect')
+        .filter(data => {
+          return removeList.indexOf(data.data.id) > -1;
+        })
+        .remove();
     }
   } else {
     appendNodes = nodes;
@@ -101,79 +110,30 @@ const reRenderTree = ({ svg, activeNode, allNodes, o, width, height }) => {
     .attr('class', 'nodeWrapper')
     .attr('id', d => d.data.id);
 
-  // Create the div element for the nodes
-  node
-    .append('foreignObject')
-    .attr('class', 'nodeRect')
-    .attr('width', nodeSize.width)
-    .attr('height', nodeSize.height)
-    .attr('x', o.x)
-    .attr('y', o.y)
-    .attr('id', d => d.data.id)
-    .on('click', node => {
-      if (node.children) {
-        reRenderTree({ svg, allNodes, o, activeNode: node.data.id, width, height });
-      }
-    })
-    .html(d => {
-      return card(d.data);
-    });
+  box(divBox, o, nodeSize, appendNodes, id => {
+    reRenderTree({ svg, divBox, allNodes, o, activeNode: id, width, height });
+  });
 
   // Create the lines (links) between the nodes
-  node
-    .append('path')
-    .attr('class', 'link')
-    .attr('id', d => d.data.id)
-    .attr('d', function(d) {
-      if (d.parent) {
-        // starting at self, ending at parent
-        const start = { x: o.x(d) + o.pathOffsetSelf.x, y: o.y(d) + o.pathOffsetSelf.y };
-        const end = { x: o.x(d.parent) + o.pathOffsetParent.x, y: o.y(d.parent) + o.pathOffsetParent.y };
-        const size = { x: Math.abs(end.x - start.x), y: Math.abs(end.y - start.y) };
-        // factors inverseíng direction of lines and curves
-        const inverse = { x: end.x - start.x < 0 ? -1 : 1, y: end.y - start.y < 0 ? -1 : 1 };
-        // radius of elbow
-        const rDef = 30;
-        const rAbs = Math.min(size.x, size.y) / 2 < rDef ? Math.min(size.x, size.y) / 2 : rDef;
-        const r = { x: inverse.x * rAbs, y: inverse.y * rAbs};
-        let l, firstLine, firstCurve, secondCurve;
-
-        if (isVertical) {
-          l = {x: inverse.x * (size.x - rAbs * 2) , y: inverse.y * (size.y / 2 - rAbs)}
-          firstLine = `${start.x} ${start.y + l.y}`;
-          firstCurve = `${start.x} ${start.y + l.y + r.y} ${start.x} ${start.y + l.y + r.y} ${start.x + r.x} ${start.y + l.y + r.y}`;
-          secondCurve = `${end.x}  ${start.y + l.y + r.y} ${end.x}  ${start.y + l.y + r.y} ${end.x} ${end.y - l.y}`;
-        } else {
-          l = {x: inverse.x * (size.x / 2 - rAbs) , y: inverse.y * (size.y - rAbs * 2)}
-          firstLine = `${start.x + l.x} ${start.y}`;
-          firstCurve = `${start.x + l.x + r.x} ${start.y} ${start.x + l.x + r.x} ${start.y} ${start.x + l.x + r.x} ${start.y + r.y}`;
-          secondCurve = `${start.x + l.x + r.x} ${end.y} ${start.x + l.x + r.x} ${end.y} ${end.x - l.x} ${end.y}`;
-        }
-
-        return (
-          `
-          M ${start.x} ${start.y}
-          L ${firstLine}
-          C ${firstCurve}
-          L ${start.x + l.x + r.x} ${start.y + l.y + r.y}
-          C ${secondCurve}
-          L ${end.x} ${end.y}
-          `
-        );
-      }
-    });
+  path(node, o, isVertical);
 
   // Zooming and positioning of the tree
   const bBox = getBBoxOfNodes(nodes);
   const scaleToWidhth = bBox.width / width > bBox.height / height;
   const scaleFactor = scaleToWidhth ? bBox.width / width : bBox.height / height;
   const translation = scaleToWidhth
-    ? `${-bBox.x} ${-bBox.y + (height * scaleFactor - bBox.height) / 2}`
-    : `${-bBox.x + (width * scaleFactor - bBox.width) / 2} ${-bBox.y}`;
-  svg
+    ? `${-bBox.x}px, ${-bBox.y + (height * scaleFactor - bBox.height) / 2}px`
+    : `${-bBox.x + (width * scaleFactor - bBox.width) / 2}px, ${-bBox.y}px`;
+  /*svg
     .transition()
     .duration(transitionTime)
     .attr('transform', `scale(${1 / scaleFactor}) translate(${translation})`);
+*/
+  svg.attr('style', `transform: scale(${1 / scaleFactor}) translate(${translation});`);
+  divBox.attr(
+    'style',
+    `width:${width}px;height:${height}px; transform: scale(${1 / scaleFactor}) translate(${translation});`
+  ); // Make sure it works! move transition to css file
 };
 
 const renderTree = async ({ element, layout, app, model }) => {
@@ -182,124 +142,7 @@ const renderTree = async ({ element, layout, app, model }) => {
   const width = b.width;
   const height = b.height;
 
-  // This would allow for different orientations of the tree structure (not needed for now)
-  let orientations;
-  switch (orientation) {
-    case 'ttb':
-      orientations = {
-        'top-to-bottom': {
-          depthSpacing: 200,
-          pathOffsetSelf: {
-            x: nodeSize.width / 2,
-            y: 0,
-          },
-          pathOffsetParent: {
-            x: nodeSize.width / 2,
-            y: nodeSize.height,
-          },
-          x: function(d) {
-            d.xActual =
-              d.parent && d.parent.xActual
-                ? d.parent.xActual +
-                  nodeSize.width / 2 +
-                  siblingSpacing / 2 +
-                  (d.data.childNumber - d.parent.children.length / 2) * (nodeSize.width + siblingSpacing)
-                : 1;
-            return d.xActual;
-          },
-          y: function(d) {
-            return d.y;
-          },
-        },
-      };
-      break;
-    case 'btt':
-      orientations = {
-        'bottom-to-top': {
-          depthSpacing: -200,
-          pathOffsetSelf: {
-            x: nodeSize.width / 2,
-            y: nodeSize.height,
-          },
-          pathOffsetParent: {
-            x: nodeSize.width / 2,
-            y: 0,
-          },
-          x: function(d) {
-            d.xActual =
-              d.parent && d.parent.xActual
-                ? d.parent.xActual +
-                  nodeSize.width / 2 +
-                  siblingSpacing / 2 +
-                  (d.data.childNumber - d.parent.children.length / 2) * (nodeSize.width + siblingSpacing)
-                : 1;
-            return d.xActual;
-          },
-          y: function(d) {
-            return d.y;
-          },
-        },
-      };
-      break;
-    case 'ltr':
-      orientations = {
-        'left-to-right': {
-          depthSpacing: 500,
-          pathOffsetSelf: {
-            x: 0,
-            y: nodeSize.height / 2,
-          },
-          pathOffsetParent: {
-            x: nodeSize.width,
-            y: nodeSize.height / 2,
-          },
-          y: function(d) {
-            d.yActual =
-              d.parent && d.parent.yActual
-                ? d.parent.yActual +
-                  nodeSize.height / 2 +
-                  siblingSpacing / 2 +
-                  (d.data.childNumber - d.parent.children.length / 2) * (nodeSize.height + siblingSpacing)
-                : 1;
-            return d.yActual;
-          },
-          x: function(d) {
-            return d.y;
-          },
-        },
-      };
-      break;
-    case 'rtl':
-      orientations = {
-        'right-to-left': {
-          depthSpacing: -500,
-          pathOffsetSelf: {
-            x: nodeSize.width,
-            y: nodeSize.height / 2,
-          },
-          pathOffsetParent: {
-            x: 0,
-            y: nodeSize.height / 2,
-          },
-          y: function(d) {
-            d.yActual =
-              d.parent && d.parent.yActual
-                ? d.parent.yActual +
-                  nodeSize.height / 2 +
-                  siblingSpacing / 2 +
-                  (d.data.childNumber - d.parent.children.length / 2) * (nodeSize.height + siblingSpacing)
-                : 1;
-            return d.yActual;
-          },
-          x: function(d) {
-            return d.y;
-          },
-        },
-      };
-      break;
-    default:
-      break;
-  }
+  const orientations = position(orientation, nodeSize);
 
   // Get and transform the data into a tree structure
   const data = await treeTransform({ layout, app, model });
@@ -309,10 +152,18 @@ const renderTree = async ({ element, layout, app, model }) => {
     .data(entries(orientations))
     .enter()
     .append('svg')
+    .attr('style', 'position:absolute')
     .attr('width', width)
     .attr('height', height);
 
-  const svg = svgBox.append('g');
+  const divBox = select(element)
+    .selectAll('div')
+    .data(entries(orientations))
+    .enter()
+    .append('div')
+    .attr('class', 'org-node-holder');
+
+  const svg = svgBox.append('g').attr('class', 'org-path-holder');
   svg.each(orientation => {
     const o = orientation.value;
     // Here are the settings for the tree. For instance nodesize can be adjusted
@@ -325,7 +176,7 @@ const renderTree = async ({ element, layout, app, model }) => {
     // Using the treemap created
     const allNodes = treemap(nodes);
     const activeNode = allNodes.data.id;
-    reRenderTree({ svg, data, allNodes, activeNode, o, width, height, treemap });
+    reRenderTree({ svg, divBox, data, allNodes, activeNode, o, width, height, treemap });
   });
 };
 
