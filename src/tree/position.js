@@ -1,6 +1,42 @@
 const siblingSpacing = 30;
 export default function position(orientation, nodeSize) {
-  // This would allow for different orientations of the tree structure (not needed for now)
+  const hasOnlyLeafs = children => {
+    for (let i = 0; i < children.length; ++i) {
+      console.log(children, i);
+      if (children[i].children.length === 0) {
+        return true;
+      }
+    }
+    return false;
+  };
+
+  const widthTranslation = (d, axis) => {
+    if (d.children.length > 0 && hasOnlyLeafs(d.children)) {
+      d[axis] = d.parent[axis];
+    } else {
+      d[axis] =
+        d.parent && d.parent[axis]
+          ? d.parent[axis] +
+            nodeSize.width / 2 +
+            siblingSpacing / 2 +
+            (d.data.childNumber - d.parent.children.length / 2) * (nodeSize.width + siblingSpacing)
+          : 1;
+    }
+
+    return d[axis];
+  };
+
+  // const depthTranslation = (d, axis) => {
+  //   d[axis] =
+  //     d.parent && d.parent[axis]
+  //       ? d.parent[axis] +
+  //         nodeSize.width / 2 +
+  //         siblingSpacing / 2 +
+  //         (d.data.childNumber - d.parent.children.length / 2) * (nodeSize.width + siblingSpacing)
+  //       : 1;
+  //   return d[axis];
+  // };
+
   let orientations;
   switch (orientation) {
     case 'ttb':
@@ -15,17 +51,7 @@ export default function position(orientation, nodeSize) {
             x: nodeSize.width / 2,
             y: nodeSize.height,
           },
-          x(d) {
-            // eslint-disable-next-line no-param-reassign
-            d.xActual =
-              d.parent && d.parent.xActual
-                ? d.parent.xActual +
-                  nodeSize.width / 2 +
-                  siblingSpacing / 2 +
-                  (d.data.childNumber - d.parent.children.length / 2) * (nodeSize.width + siblingSpacing)
-                : 1;
-            return d.xActual;
-          },
+          x: d => widthTranslation(d, 'xActual'),
           y(d) {
             return d.y;
           },
@@ -44,17 +70,8 @@ export default function position(orientation, nodeSize) {
             x: nodeSize.width / 2,
             y: 0,
           },
-          x(d) {
-            // eslint-disable-next-line no-param-reassign
-            d.xActual =
-              d.parent && d.parent.xActual
-                ? d.parent.xActual +
-                  nodeSize.width / 2 +
-                  siblingSpacing / 2 +
-                  (d.data.childNumber - d.parent.children.length / 2) * (nodeSize.width + siblingSpacing)
-                : 1;
-            return d.xActual;
-          },
+
+          x: d => widthTranslation(d, 'xActual'),
           y(d) {
             return d.y;
           },
@@ -73,17 +90,8 @@ export default function position(orientation, nodeSize) {
             x: nodeSize.width,
             y: nodeSize.height / 2,
           },
-          y(d) {
-            // eslint-disable-next-line no-param-reassign
-            d.yActual =
-              d.parent && d.parent.yActual
-                ? d.parent.yActual +
-                  nodeSize.height / 2 +
-                  siblingSpacing / 2 +
-                  (d.data.childNumber - d.parent.children.length / 2) * (nodeSize.height + siblingSpacing)
-                : 1;
-            return d.yActual;
-          },
+
+          y: d => widthTranslation(d, 'yActual'),
           x(d) {
             return d.y;
           },
@@ -102,17 +110,7 @@ export default function position(orientation, nodeSize) {
             x: 0,
             y: nodeSize.height / 2,
           },
-          y(d) {
-            // eslint-disable-next-line no-param-reassign
-            d.yActual =
-              d.parent && d.parent.yActual
-                ? d.parent.yActual +
-                  nodeSize.height / 2 +
-                  siblingSpacing / 2 +
-                  (d.data.childNumber - d.parent.children.length / 2) * (nodeSize.height + siblingSpacing)
-                : 1;
-            return d.yActual;
-          },
+          y: d => widthTranslation(d, 'yActual'),
           x(d) {
             return d.y;
           },

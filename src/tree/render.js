@@ -7,7 +7,7 @@ import '../treeCss.css';
 
 // Constants for the tree. Might be variables later in property panel
 const nodeSize = { width: 300, height: 100 };
-const orientation = 'ttb';
+const orientation = 'btt';
 const isVertical = orientation === 'ttb' || orientation === 'btt';
 
 // Set previous nodes to know which nodes to remain and which to remove
