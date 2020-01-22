@@ -1,45 +1,45 @@
-const siblingSpacing = 30;
+// const siblingSpacing = 50;
+
 export default function position(orientation, nodeSize) {
-  const hasOnlyLeafs = children => {
+  const nodeMargin = 40;
+  let siblingSpacing;
+  let leafSpacing;
+
+  const isOnlyLeafs = children => {
     for (let i = 0; i < children.length; ++i) {
-      console.log(children, i);
-      if (children[i].children.length === 0) {
-        return true;
+      if (children[i].children !== undefined) {
+        return false;
       }
     }
-    return false;
+    return true;
   };
 
   const widthTranslation = (d, axis) => {
-    if (d.children.length > 0 && hasOnlyLeafs(d.children)) {
+    if (d.parent && isOnlyLeafs(d.parent.children)) {
       d[axis] = d.parent[axis];
     } else {
-      d[axis] =
-        d.parent && d.parent[axis]
-          ? d.parent[axis] +
-            nodeSize.width / 2 +
-            siblingSpacing / 2 +
-            (d.data.childNumber - d.parent.children.length / 2) * (nodeSize.width + siblingSpacing)
-          : 1;
+      d[axis] = d.parent
+        ? d.parent[axis] + siblingSpacing / 2 + (d.data.childNumber - d.parent.children.length / 2) * siblingSpacing
+        : 0;
     }
 
     return d[axis];
   };
 
-  // const depthTranslation = (d, axis) => {
-  //   d[axis] =
-  //     d.parent && d.parent[axis]
-  //       ? d.parent[axis] +
-  //         nodeSize.width / 2 +
-  //         siblingSpacing / 2 +
-  //         (d.data.childNumber - d.parent.children.length / 2) * (nodeSize.width + siblingSpacing)
-  //       : 1;
-  //   return d[axis];
-  // };
+  const depthTranslation = (d, axis) => {
+    if (d.parent && isOnlyLeafs(d.parent.children)) {
+      d[axis] = d.parent[axis] + (d.data.childNumber + 1) * leafSpacing;
+    } else {
+      d[axis] = d.y;
+    }
+    return d[axis];
+  };
 
   let orientations;
   switch (orientation) {
     case 'ttb':
+      siblingSpacing = nodeSize.width + nodeMargin;
+      leafSpacing = nodeSize.height + nodeMargin;
       orientations = {
         'top-to-bottom': {
           depthSpacing: 200,
@@ -52,13 +52,13 @@ export default function position(orientation, nodeSize) {
             y: nodeSize.height,
           },
           x: d => widthTranslation(d, 'xActual'),
-          y(d) {
-            return d.y;
-          },
+          y: d => depthTranslation(d, 'yActual'),
         },
       };
       break;
     case 'btt':
+      siblingSpacing = nodeSize.width + nodeMargin;
+      leafSpacing = nodeSize.height + nodeMargin;
       orientations = {
         'bottom-to-top': {
           depthSpacing: -200,
@@ -72,13 +72,13 @@ export default function position(orientation, nodeSize) {
           },
 
           x: d => widthTranslation(d, 'xActual'),
-          y(d) {
-            return d.y;
-          },
+          y: d => depthTranslation(d, 'yActual'),
         },
       };
       break;
     case 'ltr':
+      siblingSpacing = nodeSize.height + nodeMargin;
+      leafSpacing = nodeSize.width + nodeMargin;
       orientations = {
         'left-to-right': {
           depthSpacing: 500,
@@ -90,15 +90,14 @@ export default function position(orientation, nodeSize) {
             x: nodeSize.width,
             y: nodeSize.height / 2,
           },
-
+          x: d => depthTranslation(d, 'xActual'),
           y: d => widthTranslation(d, 'yActual'),
-          x(d) {
-            return d.y;
-          },
         },
       };
       break;
     case 'rtl':
+      siblingSpacing = nodeSize.height + nodeMargin;
+      leafSpacing = nodeSize.width + nodeMargin;
       orientations = {
         'right-to-left': {
           depthSpacing: -500,
@@ -110,10 +109,8 @@ export default function position(orientation, nodeSize) {
             x: 0,
             y: nodeSize.height / 2,
           },
+          x: d => depthTranslation(d, 'xActual'),
           y: d => widthTranslation(d, 'yActual'),
-          x(d) {
-            return d.y;
-          },
         },
       };
       break;

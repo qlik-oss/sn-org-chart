@@ -7,7 +7,7 @@ import '../treeCss.css';
 
 // Constants for the tree. Might be variables later in property panel
 const nodeSize = { width: 300, height: 100 };
-const orientation = 'btt';
+const orientation = 'ltr';
 const isVertical = orientation === 'ttb' || orientation === 'btt';
 
 // Set previous nodes to know which nodes to remain and which to remove
@@ -37,17 +37,10 @@ const getBBoxOfNodes = nodes => {
     bottom: -Infinity,
   };
   nodes.forEach(node => {
-    if (isVertical) {
-      bbox.left = Math.min(node.xActual, bbox.left);
-      bbox.top = Math.min(node.y, bbox.top);
-      bbox.right = Math.max(node.xActual, bbox.right);
-      bbox.bottom = Math.max(node.y, bbox.bottom);
-    } else {
-      bbox.left = Math.min(node.y, bbox.left);
-      bbox.top = Math.min(node.yActual, bbox.top);
-      bbox.right = Math.max(node.y, bbox.right);
-      bbox.bottom = Math.max(node.yActual, bbox.bottom);
-    }
+    bbox.left = Math.min(node.xActual, bbox.left);
+    bbox.top = Math.min(node.yActual, bbox.top);
+    bbox.right = Math.max(node.xActual, bbox.right);
+    bbox.bottom = Math.max(node.yActual, bbox.bottom);
   });
   return {
     x: bbox.left,
