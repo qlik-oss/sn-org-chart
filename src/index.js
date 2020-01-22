@@ -14,7 +14,11 @@ export default function supernova(env) {
         this.element = element;
       },
       render({ layout }) {
-        renderTree({ element: this.element, layout, app: this.app, model: this.model });
+        renderTree({
+          element: this.element,
+          layout,
+          model: this.model,
+        });
       },
       resize() {},
       willUnmount() {},

@@ -21,6 +21,7 @@ body {
 .nodeRect {
   border: 2px solid black;
   background: transparent;
+  position: absolute;
 }
 
 .nodeReact .text {
@@ -38,4 +39,16 @@ body {
   width: 100%;
   height: 100%;
   font-size: 40px;
+}
+.org-path-holder {
+  transform-origin: 0% 0%;
+  transition-property: all;
+  transition-duration: 0.5s;
+}
+
+.org-node-holder {
+  position: absolute;
+  transform-origin: 0% 0%;
+  transition-property: all;
+  transition-duration: 0.5s;
 }
