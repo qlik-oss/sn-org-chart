@@ -6,6 +6,43 @@ export default function ext(env) {
       items: {
         data: {
           uses: 'data',
+          items: {
+            dimensions: {
+              items: {
+                attributes: {
+                  component: 'attribute-expression-reference',
+                  defaultValue: [],
+                  ref: 'qAttributeExpressions',
+                  items: [
+                    {
+                      component: 'expression',
+                      ref: 'qExpression',
+                      translation: '$Label expression',
+                      defaultValue: '',
+                      id: 'labelExpression',
+                      tid: 'labelExpression',
+                    },
+                    {
+                      component: 'expression',
+                      ref: 'qExpression',
+                      translation: '$Sub label expression',
+                      defaultValue: '',
+                      id: 'subLabelExpression',
+                      tid: 'subLabelExpression',
+                    },
+                    {
+                      component: 'expression',
+                      ref: 'qExpression',
+                      translation: '$Color expression',
+                      defaultValue: '',
+                      id: 'colorByExpression',
+                      tid: 'nodeColorByExpression',
+                    },
+                  ],
+                },
+              },
+            },
+          },
         },
         sorting: {
           uses: 'sorting',

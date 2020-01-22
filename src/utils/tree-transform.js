@@ -1,3 +1,7 @@
+const pageSize = 1500;
+const maxPageCount = 30;
+const attributeIDs = { colorByExpression: 'color', labelExpression: 'label', subLabelExpression: 'subLabel' };
+
 function getId(row) {
   return row[0].qText;
 }
@@ -32,15 +36,13 @@ function anyCycle(nodes) {
   return false;
 }
 
-const pageSize = 500;
-const maxPageCount = 10;
-async function fetchPage(dataPages, dataMatrix, model, fullHeight, currentRow) {
+async function fetchPage(dataPages, dataMatrix, model, fullHeight, currentRow, callNum) {
   await model
     .getHyperCubeData('/qHyperCubeDef', [
       {
         qTop: currentRow,
         qLeft: 0,
-        qWidth: 5,
+        qWidth: 3,
         qHeight: pageSize,
       },
     ])
@@ -50,8 +52,10 @@ async function fetchPage(dataPages, dataMatrix, model, fullHeight, currentRow) {
       currentRow += data[0].qArea.qHeight;
     });
 
-  if (fullHeight > currentRow) {
-    await fetchPage(dataPages, dataMatrix, model, fullHeight, currentRow);
+  if (callNum >= maxPageCount) {
+    return; // Sanity return for very large data
+  } else if (fullHeight > currentRow) {
+    await fetchPage(dataPages, dataMatrix, model, fullHeight, currentRow, callNum++);
   }
 }
 
@@ -63,7 +67,7 @@ const getDataMatrix = async (layout, model) => {
 
   // If there seems to be more data, check if it is already loadad or load it
   if (fullHeight > loadedHeight && dataPages.length === 1) {
-    await fetchPage(layout.qHyperCube.qDataPages, dataMatrix, model, fullHeight, loadedHeight);
+    await fetchPage(layout.qHyperCube.qDataPages, dataMatrix, model, fullHeight, loadedHeight, 0);
   } else {
     dataPages.forEach((page, i) => {
       i > 0 ? dataMatrix.push(...page.qMatrix) : '';
@@ -71,6 +75,40 @@ const getDataMatrix = async (layout, model) => {
   }
   return dataMatrix;
 };
+
+function getAttributIndecies(attrsInfo) {
+  if (attrsInfo && attrsInfo.length) {
+    let indecies = [];
+    attrsInfo.forEach((attr, i) => {
+      if (attributeIDs[attr.id]) {
+        indecies.push({ prop: attributeIDs[attr.id], index: i });
+      }
+    });
+    return indecies;
+  }
+  return [];
+}
+
+function transformColor(color) {
+  if (color && color.substring(0, 4) === 'ARGB') {
+    // transform the engine output to css
+    const comps = color.substring(5, color.length - 1).split(',');
+    return `rgba(${comps[1]},${comps[2]},${comps[3]},${comps[0]}`;
+  }
+  return color;
+}
+
+function getAttributes(indecies, qAttrExps) {
+  const attributes = {};
+  indecies.forEach(attr => {
+    if (attr.prop === 'color') {
+      attributes[attr.prop] = transformColor(qAttrExps.qValues[attr.index].qText);
+    } else {
+      attributes[attr.prop] = qAttrExps.qValues[attr.index].qText;
+    }
+  });
+  return attributes;
+}
 
 export default async function transform({ layout, app, model }) {
   if (!layout.qHyperCube) {
@@ -82,6 +120,8 @@ export default async function transform({ layout, app, model }) {
   }
 
   const matrix = await getDataMatrix(layout, model);
+  const attributeIndecies = getAttributIndecies(layout.qHyperCube.qDimensionInfo[0].qAttrExprInfo);
+
   if (!matrix) {
     return null;
   }
@@ -102,6 +142,7 @@ export default async function transform({ layout, app, model }) {
       children: [],
       elemNo: row[0].qElemNumber,
       details: row[3] ? row[3].qText : '',
+      attributes: getAttributes(attributeIndecies, row[0].qAttrExps),
     };
     nodeMap[id] = node;
     allNodes.push(node);
