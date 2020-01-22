@@ -1,3 +1,1 @@
-export default data => {
-  return `<div class="orgCard">${data.name}</div>`;
-};
+export default (data) => `<div class="orgCard">${data.name}</div>`;

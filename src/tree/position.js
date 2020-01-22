@@ -1,5 +1,4 @@
 const siblingSpacing = 30;
-
 export default function position(orientation, nodeSize) {
   // This would allow for different orientations of the tree structure (not needed for now)
   let orientations;
@@ -16,7 +15,8 @@ export default function position(orientation, nodeSize) {
             x: nodeSize.width / 2,
             y: nodeSize.height,
           },
-          x: function(d) {
+          x(d) {
+            // eslint-disable-next-line no-param-reassign
             d.xActual =
               d.parent && d.parent.xActual
                 ? d.parent.xActual +
@@ -26,7 +26,7 @@ export default function position(orientation, nodeSize) {
                 : 1;
             return d.xActual;
           },
-          y: function(d) {
+          y(d) {
             return d.y;
           },
         },
@@ -44,7 +44,8 @@ export default function position(orientation, nodeSize) {
             x: nodeSize.width / 2,
             y: 0,
           },
-          x: function(d) {
+          x(d) {
+            // eslint-disable-next-line no-param-reassign
             d.xActual =
               d.parent && d.parent.xActual
                 ? d.parent.xActual +
@@ -54,7 +55,7 @@ export default function position(orientation, nodeSize) {
                 : 1;
             return d.xActual;
           },
-          y: function(d) {
+          y(d) {
             return d.y;
           },
         },
@@ -72,7 +73,8 @@ export default function position(orientation, nodeSize) {
             x: nodeSize.width,
             y: nodeSize.height / 2,
           },
-          y: function(d) {
+          y(d) {
+            // eslint-disable-next-line no-param-reassign
             d.yActual =
               d.parent && d.parent.yActual
                 ? d.parent.yActual +
@@ -82,7 +84,7 @@ export default function position(orientation, nodeSize) {
                 : 1;
             return d.yActual;
           },
-          x: function(d) {
+          x(d) {
             return d.y;
           },
         },
@@ -100,7 +102,8 @@ export default function position(orientation, nodeSize) {
             x: 0,
             y: nodeSize.height / 2,
           },
-          y: function(d) {
+          y(d) {
+            // eslint-disable-next-line no-param-reassign
             d.yActual =
               d.parent && d.parent.yActual
                 ? d.parent.yActual +
@@ -110,7 +113,7 @@ export default function position(orientation, nodeSize) {
                 : 1;
             return d.yActual;
           },
-          x: function(d) {
+          x(d) {
             return d.y;
           },
         },

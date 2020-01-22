@@ -1,4 +1,5 @@
 import card from '../card/card';
+
 export default function box(divBox, o, nodeSize, appendNodes, reRender) {
   function getStyle(p) {
     return `width:${nodeSize.width}px;height:${nodeSize.height}px; top:${o.y(p)}px;left:${o.x(p)}px`;
@@ -11,13 +12,11 @@ export default function box(divBox, o, nodeSize, appendNodes, reRender) {
     .append('div')
     .attr('class', 'nodeRect')
     .attr('style', getStyle)
-    .attr('id', d => d.data.id)
-    .on('click', node => {
+    .attr('id', (d) => d.data.id)
+    .on('click', (node) => {
       if (node.children) {
         reRender(node.data.id);
       }
     })
-    .html(d => {
-      return card(d.data);
-    });
+    .html((d) => card(d.data));
 }

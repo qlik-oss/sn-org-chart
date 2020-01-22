@@ -49,18 +49,20 @@ async function fetchPage(dataPages, dataMatrix, model, fullHeight, currentRow, c
     .then(data => {
       dataPages.push(data[0]);
       dataMatrix.push(...data[0].qMatrix);
+      // eslint-disable-next-line no-param-reassign
       currentRow += data[0].qArea.qHeight;
     });
 
   if (callNum >= maxPageCount) {
-    return; // Sanity return for very large data
+    // Sanity return for very large data
   } else if (fullHeight > currentRow) {
+    // eslint-disable-next-line no-param-reassign
     await fetchPage(dataPages, dataMatrix, model, fullHeight, currentRow, callNum++);
   }
 }
 
 const getDataMatrix = async (layout, model) => {
-  let dataPages = layout.qHyperCube && layout.qHyperCube.qDataPages;
+  const dataPages = layout.qHyperCube && layout.qHyperCube.qDataPages;
   const fullHeight = layout.qHyperCube.qSize.qcy;
   const loadedHeight = dataPages[0].qArea.qHeight;
   const dataMatrix = [...dataPages[0].qMatrix];
@@ -78,7 +80,7 @@ const getDataMatrix = async (layout, model) => {
 
 function getAttributIndecies(attrsInfo) {
   if (attrsInfo && attrsInfo.length) {
-    let indecies = [];
+    const indecies = [];
     attrsInfo.forEach((attr, i) => {
       if (attributeIDs[attr.id]) {
         indecies.push({ prop: attributeIDs[attr.id], index: i });
@@ -110,13 +112,12 @@ function getAttributes(indecies, qAttrExps) {
   return attributes;
 }
 
-export default async function transform({ layout, app, model }) {
+export default async function transform({ layout, model }) {
   if (!layout.qHyperCube) {
     throw new Error('Require a hypercube');
   }
   if (layout.qHyperCube.qDimensionInfo.length < 2) {
-    // throw new Error('Require at least two dimensions');
-    console.log('two dimensions necessary');
+    return false; // throw new Error('Require at least two dimensions');
   }
 
   const matrix = await getDataMatrix(layout, model);
@@ -181,8 +182,11 @@ export default async function transform({ layout, app, model }) {
   };
 
   rootNodes.forEach((node, i) => {
+    // eslint-disable-next-line no-param-reassign
     node.parentId = 'Root';
+    // eslint-disable-next-line no-param-reassign
     node.parent = rootNode;
+    // eslint-disable-next-line no-param-reassign
     node.childNumber = i;
   });
 

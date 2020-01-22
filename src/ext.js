@@ -1,4 +1,4 @@
-export default function ext(env) {
+export default function ext(/* env */) {
   return {
     definition: {
       type: 'items',

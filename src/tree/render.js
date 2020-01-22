@@ -1,5 +1,4 @@
 import { hierarchy, entries, tree, select } from 'd3';
-import card from '../card/card';
 import treeTransform from '../utils/tree-transform';
 import position from './position';
 import box from './box';
@@ -8,18 +7,18 @@ import '../treeCss.css';
 
 // Constants for the tree. Might be variables later in property panel
 const nodeSize = { width: 300, height: 100 };
-const transitionTime = 500;
 const orientation = 'ttb';
 const isVertical = orientation === 'ttb' || orientation === 'btt';
 
 // Set previous nodes to know which nodes to remain and which to remove
 let previousNodes = [];
 
-const filterTree = (id, tree) => {
-  const nodes = tree.descendants();
+const filterTree = (id, nodeTree) => {
+  const nodes = nodeTree.descendants();
   const currentNode = nodes.find(node => node.data.id === id);
 
   // Only build the current view (three levels of hiearchy)
+  // eslint-disable-next-line arrow-body-style
   return nodes.filter(node => {
     return (
       currentNode.data.id === node.data.id ||
@@ -31,7 +30,12 @@ const filterTree = (id, tree) => {
 };
 
 const getBBoxOfNodes = nodes => {
-  const bbox = { left: Infinity, top: Infinity, right: -Infinity, bottom: -Infinity };
+  const bbox = {
+    left: Infinity,
+    top: Infinity,
+    right: -Infinity,
+    bottom: -Infinity,
+  };
   nodes.forEach(node => {
     if (isVertical) {
       bbox.left = Math.min(node.xActual, bbox.left);
@@ -63,7 +67,7 @@ const reRenderTree = ({ svg, divBox, activeNode, allNodes, o, width, height }) =
 
   // Cleanup from previous render
   if (previousNodes.length > 0 && activeNodes._groups[0].length > 0) {
-    let removeList = [];
+    const removeList = [];
     previousNodes.forEach(node => {
       if (nodeIdList.indexOf(node.data.id) === -1) {
         removeList.push(node.data.id);
@@ -78,9 +82,7 @@ const reRenderTree = ({ svg, divBox, activeNode, allNodes, o, width, height }) =
     if (removeList.length > 0) {
       svg
         .selectAll('g')
-        .filter(data => {
-          return removeList.indexOf(data.data.id) > -1;
-        })
+        .filter(data => removeList.indexOf(data.data.id) > -1)
         // This inserts a transition for the removal of nodes. However it is not in sync with zooming at the moment
         // .transition()
         // .duration(transitionTime)
@@ -91,9 +93,7 @@ const reRenderTree = ({ svg, divBox, activeNode, allNodes, o, width, height }) =
 
       divBox
         .selectAll('.nodeRect')
-        .filter(data => {
-          return removeList.indexOf(data.data.id) > -1;
-        })
+        .filter(data => removeList.indexOf(data.data.id) > -1)
         .remove();
     }
   } else {
@@ -102,7 +102,7 @@ const reRenderTree = ({ svg, divBox, activeNode, allNodes, o, width, height }) =
   previousNodes = nodes;
 
   // Create the nodes.
-  var node = svg
+  const node = svg
     .selectAll('.node')
     .data(appendNodes)
     .enter()
@@ -111,7 +111,15 @@ const reRenderTree = ({ svg, divBox, activeNode, allNodes, o, width, height }) =
     .attr('id', d => d.data.id);
 
   box(divBox, o, nodeSize, appendNodes, id => {
-    reRenderTree({ svg, divBox, allNodes, o, activeNode: id, width, height });
+    reRenderTree({
+      svg,
+      divBox,
+      allNodes,
+      o,
+      activeNode: id,
+      width,
+      height,
+    });
   });
 
   // Create the lines (links) between the nodes
@@ -124,7 +132,7 @@ const reRenderTree = ({ svg, divBox, activeNode, allNodes, o, width, height }) =
   const translation = scaleToWidhth
     ? `${-bBox.x}px, ${-bBox.y + (height * scaleFactor - bBox.height) / 2}px`
     : `${-bBox.x + (width * scaleFactor - bBox.width) / 2}px, ${-bBox.y}px`;
-  /*svg
+  /* svg
     .transition()
     .duration(transitionTime)
     .attr('transform', `scale(${1 / scaleFactor}) translate(${translation})`);
@@ -132,20 +140,22 @@ const reRenderTree = ({ svg, divBox, activeNode, allNodes, o, width, height }) =
   svg.attr('style', `transform: scale(${1 / scaleFactor}) translate(${translation});`);
   divBox.attr(
     'style',
+    // eslint-disable-next-line comma-dangle
     `width:${width}px;height:${height}px; transform: scale(${1 / scaleFactor}) translate(${translation});`
-  ); // Make sure it works! move transition to css file
+  );
 };
 
-const renderTree = async ({ element, layout, app, model }) => {
+const renderTree = async ({ element, layout, model }) => {
   const b = element.getBoundingClientRect();
+  // eslint-disable-next-line no-param-reassign
   element.innerHTML = '';
-  const width = b.width;
-  const height = b.height;
+  const { width } = b;
+  const { height } = b;
 
   const orientations = position(orientation, nodeSize);
 
   // Get and transform the data into a tree structure
-  const data = await treeTransform({ layout, app, model });
+  const data = await treeTransform({ layout, model });
 
   const svgBox = select(element)
     .selectAll('svg')
@@ -164,19 +174,29 @@ const renderTree = async ({ element, layout, app, model }) => {
     .attr('class', 'org-node-holder');
 
   const svg = svgBox.append('g').attr('class', 'org-path-holder');
-  svg.each(orientation => {
-    const o = orientation.value;
+  svg.each(pos => {
+    const o = pos.value;
     // Here are the settings for the tree. For instance nodesize can be adjusted
     const treemap = tree()
       .size([width, height])
       .nodeSize([0, o.depthSpacing]);
 
-    var nodes = hierarchy(data);
+    const nodes = hierarchy(data);
 
     // Using the treemap created
     const allNodes = treemap(nodes);
     const activeNode = allNodes.data.id;
-    reRenderTree({ svg, divBox, data, allNodes, activeNode, o, width, height, treemap });
+    reRenderTree({
+      svg,
+      divBox,
+      data,
+      allNodes,
+      activeNode,
+      o,
+      width,
+      height,
+      treemap,
+    });
   });
 };
 
