@@ -1,6 +1,6 @@
 import isOnlyLeafs from '../utils/util';
 
-export default function path(node, o, isVertical, nodeSize) {
+export default function path(node, o, isVertical) {
   // Create the lines (links) between the nodes
   node
     .append('path')
@@ -8,7 +8,7 @@ export default function path(node, o, isVertical, nodeSize) {
     .attr('id', d => d.data.id)
     .attr('d', d => {
       if (d.parent) {
-        const halfNode = { x: nodeSize.width / 2, y: nodeSize.height / 2 };
+        const halfNode = { x: o.nodeSize.width / 2, y: o.nodeSize.height / 2 };
         const start = { x: o.x(d) + halfNode.x, y: o.y(d) + halfNode.y };
         const end = { x: o.x(d.parent) + halfNode.x, y: o.y(d.parent) + halfNode.y };
         const size = { x: Math.abs(end.x - start.x), y: Math.abs(end.y - start.y) };
@@ -44,27 +44,27 @@ export default function path(node, o, isVertical, nodeSize) {
 
         const rAbs = Math.min(size.x, size.y) / 2 < rDef ? Math.min(size.x, size.y) / 2 : rDef;
         const r = { x: inverse.x * rAbs, y: inverse.y * rAbs };
-        let l;
+        let dist;
         let firstLine;
         let firstCurve;
         let secondCurve;
         if (isVertical) {
-          l = { x: inverse.x * (size.x - rAbs * 2), y: inverse.y * (size.y / 2 - rAbs) };
-          firstLine = `${start.x} ${start.y + l.y}`;
-          firstCurve = `${start.x} ${start.y + l.y + r.y} ${start.x} ${start.y + l.y + r.y} ${start.x + r.x} ${start.y + l.y + r.y}`;
-          secondCurve = `${end.x}  ${start.y + l.y + r.y} ${end.x}  ${start.y + l.y + r.y} ${end.x} ${end.y - l.y}`;
+          dist = { x: inverse.x * (size.x - rAbs * 2), y: inverse.y * (size.y / 2 - rAbs) };
+          firstLine = `${start.x} ${start.y + dist.y}`;
+          firstCurve = `${start.x} ${start.y + dist.y + r.y} ${start.x} ${start.y + dist.y + r.y} ${start.x + r.x} ${start.y + dist.y + r.y}`;
+          secondCurve = `${end.x}  ${start.y + dist.y + r.y} ${end.x}  ${start.y + dist.y + r.y} ${end.x} ${end.y - dist.y}`;
         } else {
-          l = { x: inverse.x * (size.x / 2 - rAbs), y: inverse.y * (size.y - rAbs * 2) };
-          firstLine = `${start.x + l.x} ${start.y}`;
-          firstCurve = `${start.x + l.x + r.x} ${start.y} ${start.x + l.x + r.x} ${start.y} ${start.x + l.x + r.x} ${start.y + r.y}`;
-          secondCurve = `${start.x + l.x + r.x} ${end.y} ${start.x + l.x + r.x} ${end.y} ${end.x - l.x} ${end.y}`;
+          dist = { x: inverse.x * (size.x / 2 - rAbs), y: inverse.y * (size.y - rAbs * 2) };
+          firstLine = `${start.x + dist.x} ${start.y}`;
+          firstCurve = `${start.x + dist.x + r.x} ${start.y} ${start.x + dist.x + r.x} ${start.y} ${start.x + dist.x + r.x} ${start.y + r.y}`;
+          secondCurve = `${start.x + dist.x + r.x} ${end.y} ${start.x + dist.x + r.x} ${end.y} ${end.x - dist.x} ${end.y}`;
         }
 
         return `
           M ${start.x} ${start.y}
           L ${firstLine}
           C ${firstCurve}
-          L ${start.x + l.x + r.x} ${start.y + l.y + r.y}
+          L ${start.x + dist.x + r.x} ${start.y + dist.y + r.y}
           C ${secondCurve}
           L ${end.x} ${end.y}
           `;

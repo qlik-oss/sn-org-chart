@@ -104,7 +104,7 @@ const reRenderTree = ({ svg, divBox, activeNode, allNodes, o, width, height }) =
     .attr('class', 'nodeWrapper')
     .attr('id', d => d.data.id);
 
-  box(divBox, o, nodeSize, appendNodes, id => {
+  box(divBox, o, appendNodes, id => {
     reRenderTree({
       svg,
       divBox,
@@ -117,7 +117,7 @@ const reRenderTree = ({ svg, divBox, activeNode, allNodes, o, width, height }) =
   });
 
   // Create the lines (links) between the nodes
-  path(node, o, isVertical, nodeSize);
+  path(node, o, isVertical);
 
   // Zooming and positioning of the tree
   const bBox = getBBoxOfNodes(nodes);
