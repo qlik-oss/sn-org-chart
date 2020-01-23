@@ -112,24 +112,7 @@ function getAttributes(indecies, qAttrExps) {
   return attributes;
 }
 
-export default async function transform({ layout, model }) {
-  if (!layout.qHyperCube) {
-    throw new Error('Require a hypercube');
-  }
-  if (layout.qHyperCube.qDimensionInfo.length < 2) {
-    return false; // throw new Error('Require at least two dimensions');
-  }
-
-  const matrix = await getDataMatrix(layout, model);
-  const attributeIndecies = getAttributIndecies(layout.qHyperCube.qDimensionInfo[0].qAttrExprInfo);
-
-  if (!matrix) {
-    return null;
-  }
-  if (matrix.length < 1) {
-    return null;
-  }
-
+export function createNodes(matrix, attributeIndecies) {
   const nodeMap = {};
   const allNodes = [];
   for (let i = 0; i < matrix.length; ++i) {
@@ -191,4 +174,25 @@ export default async function transform({ layout, model }) {
   });
 
   return rootNode;
+}
+
+export default async function transform({ layout, model }) {
+  if (!layout.qHyperCube) {
+    throw new Error('Require a hypercube');
+  }
+  if (layout.qHyperCube.qDimensionInfo.length < 2) {
+    return false; // throw new Error('Require at least two dimensions');
+  }
+
+  const matrix = await getDataMatrix(layout, model);
+  const attributeIndecies = getAttributIndecies(layout.qHyperCube.qDimensionInfo[0].qAttrExprInfo);
+
+  if (!matrix) {
+    return null;
+  }
+  if (matrix.length < 1) {
+    return null;
+  }
+
+  return createNodes(matrix, attributeIndecies);
 }
