@@ -7,7 +7,7 @@ import '../treeCss.css';
 
 // Constants for the tree. Might be variables later in property panel
 const nodeSize = { width: 300, height: 100 };
-const orientation = 'ltr';
+const orientation = 'ttb';
 const isVertical = orientation === 'ttb' || orientation === 'btt';
 
 // Set previous nodes to know which nodes to remain and which to remove
@@ -116,7 +116,7 @@ const reRenderTree = ({ svg, divBox, activeNode, allNodes, o, width, height }) =
   });
 
   // Create the lines (links) between the nodes
-  path(node, o, isVertical);
+  path(node, o, isVertical, nodeSize);
 
   // Zooming and positioning of the tree
   const bBox = getBBoxOfNodes(nodes);

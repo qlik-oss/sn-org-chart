@@ -1,9 +1,9 @@
 // const siblingSpacing = 50;
 
 export default function position(orientation, nodeSize) {
-  const nodeMargin = 40;
+  const nodeMargin = 100;
   let siblingSpacing;
-  let leafSpacing;
+  let depthSpacing;
 
   const isOnlyLeafs = children => {
     for (let i = 0; i < children.length; ++i) {
@@ -16,7 +16,7 @@ export default function position(orientation, nodeSize) {
 
   const widthTranslation = (d, axis) => {
     if (d.parent && isOnlyLeafs(d.parent.children)) {
-      d[axis] = d.parent[axis];
+      d[axis] = d.parent[axis] + nodeMargin / 2;
     } else {
       d[axis] = d.parent
         ? d.parent[axis] + siblingSpacing / 2 + (d.data.childNumber - d.parent.children.length / 2) * siblingSpacing
@@ -28,7 +28,7 @@ export default function position(orientation, nodeSize) {
 
   const depthTranslation = (d, axis) => {
     if (d.parent && isOnlyLeafs(d.parent.children)) {
-      d[axis] = d.parent[axis] + (d.data.childNumber + 1) * leafSpacing;
+      d[axis] = d.parent[axis] + depthSpacing + d.data.childNumber * depthSpacing;
     } else {
       d[axis] = d.y;
     }
@@ -39,18 +39,10 @@ export default function position(orientation, nodeSize) {
   switch (orientation) {
     case 'ttb':
       siblingSpacing = nodeSize.width + nodeMargin;
-      leafSpacing = nodeSize.height + nodeMargin;
+      depthSpacing = nodeSize.height + nodeMargin;
       orientations = {
         'top-to-bottom': {
-          depthSpacing: 200,
-          pathOffsetSelf: {
-            x: nodeSize.width / 2,
-            y: 0,
-          },
-          pathOffsetParent: {
-            x: nodeSize.width / 2,
-            y: nodeSize.height,
-          },
+          depthSpacing,
           x: d => widthTranslation(d, 'xActual'),
           y: d => depthTranslation(d, 'yActual'),
         },
@@ -58,19 +50,10 @@ export default function position(orientation, nodeSize) {
       break;
     case 'btt':
       siblingSpacing = nodeSize.width + nodeMargin;
-      leafSpacing = nodeSize.height + nodeMargin;
+      depthSpacing = -nodeSize.height - nodeMargin;
       orientations = {
         'bottom-to-top': {
-          depthSpacing: -200,
-          pathOffsetSelf: {
-            x: nodeSize.width / 2,
-            y: nodeSize.height,
-          },
-          pathOffsetParent: {
-            x: nodeSize.width / 2,
-            y: 0,
-          },
-
+          depthSpacing,
           x: d => widthTranslation(d, 'xActual'),
           y: d => depthTranslation(d, 'yActual'),
         },
@@ -78,18 +61,10 @@ export default function position(orientation, nodeSize) {
       break;
     case 'ltr':
       siblingSpacing = nodeSize.height + nodeMargin;
-      leafSpacing = nodeSize.width + nodeMargin;
+      depthSpacing = nodeSize.width + nodeMargin;
       orientations = {
         'left-to-right': {
-          depthSpacing: 500,
-          pathOffsetSelf: {
-            x: 0,
-            y: nodeSize.height / 2,
-          },
-          pathOffsetParent: {
-            x: nodeSize.width,
-            y: nodeSize.height / 2,
-          },
+          depthSpacing,
           x: d => depthTranslation(d, 'xActual'),
           y: d => widthTranslation(d, 'yActual'),
         },
@@ -97,18 +72,10 @@ export default function position(orientation, nodeSize) {
       break;
     case 'rtl':
       siblingSpacing = nodeSize.height + nodeMargin;
-      leafSpacing = nodeSize.width + nodeMargin;
+      depthSpacing = -nodeSize.width - nodeMargin;
       orientations = {
         'right-to-left': {
-          depthSpacing: -500,
-          pathOffsetSelf: {
-            x: nodeSize.width,
-            y: nodeSize.height / 2,
-          },
-          pathOffsetParent: {
-            x: 0,
-            y: nodeSize.height / 2,
-          },
+          depthSpacing,
           x: d => depthTranslation(d, 'xActual'),
           y: d => widthTranslation(d, 'yActual'),
         },
