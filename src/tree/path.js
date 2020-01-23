@@ -1,18 +1,11 @@
+import isOnlyLeafs from '../utils/util';
+
 export default function path(node, o, isVertical, nodeSize) {
-  const isOnlyLeafs = children => {
-    for (let i = 0; i < children.length; ++i) {
-      if (children[i].children !== undefined) {
-        return false;
-      }
-    }
-    return true;
-  };
   // Create the lines (links) between the nodes
   node
     .append('path')
     .attr('class', 'link')
     .attr('id', d => d.data.id)
-    .attr('style', 'color:white;')
     .attr('d', d => {
       if (d.parent) {
         const halfNode = { x: nodeSize.width / 2, y: nodeSize.height / 2 };

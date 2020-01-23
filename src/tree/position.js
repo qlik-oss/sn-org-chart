@@ -1,18 +1,9 @@
-// const siblingSpacing = 50;
+import isOnlyLeafs from '../utils/util';
 
 export default function position(orientation, nodeSize) {
   const nodeMargin = 100;
   let siblingSpacing;
   let depthSpacing;
-
-  const isOnlyLeafs = children => {
-    for (let i = 0; i < children.length; ++i) {
-      if (children[i].children !== undefined) {
-        return false;
-      }
-    }
-    return true;
-  };
 
   const widthTranslation = (d, axis) => {
     if (d.parent && isOnlyLeafs(d.parent.children)) {
