@@ -18,38 +18,28 @@ export default function path(node, o, isVertical, nodeSize) {
         if (isOnlyLeafs(d.parent.children)) {
           const halfDepth = o.depthSpacing / 2;
           const r = { x: inverse.x * rDef, y: inverse.y * rDef };
-          let firstLine;
-          let firstCurve;
-          let secondLine;
-          let secondCurve;
-          let thirdLine;
-          let thirdCurve;
           if (isVertical) {
-            firstLine = `${end.x - halfNode.x - r.x} ${start.y}`;
-            firstCurve = `${end.x - halfNode.x} ${start.y} ${end.x - halfNode.x} ${start.y} ${end.x - halfNode.x} ${start.y + r.y}`;
-            secondLine = `${end.x - halfNode.x} ${end.y + halfDepth - r.y}`;
-            secondCurve = `${end.x - halfNode.x} ${end.y + halfDepth} ${end.x - halfNode.x} ${end.y + halfDepth} ${end.x - halfNode.x - r.x} ${end.y + halfDepth}`;
-            thirdLine = `${end.x + r.x} ${end.y + halfDepth}`;
-            thirdCurve = `${end.x} ${end.y + halfDepth} ${end.x} ${end.y + halfDepth} ${end.x} ${end.y + halfDepth + r.y}`;
-          } else {
-            firstLine = `${start.x} ${end.y - halfNode.y - r.y}`;
-            firstCurve = `${start.x} ${end.y - halfNode.y} ${start.x} ${end.y - halfNode.y} ${start.x + r.x} ${end.y - halfNode.y}`;
-            secondLine = `${end.x + halfDepth - r.x} ${end.y - halfNode.y}`;
-            secondCurve = `${end.x + halfDepth} ${end.y - halfNode.y} ${end.x + halfDepth} ${end.y - halfNode.y} ${end.x + halfDepth} ${end.y - halfNode.y - r.y}`;
-            thirdLine = `${end.x + halfDepth} ${end.y + r.y} `;
-            thirdCurve = `${end.x + halfDepth} ${end.y} ${end.x + halfDepth} ${end.y} ${end.x + halfDepth + r.x} ${end.y}`;
-          }
-
-          return `
+            return `
               M ${start.x} ${start.y}
-              L ${firstLine}
-              C ${firstCurve}
-              L ${secondLine}
-              C ${secondCurve}
-              L ${thirdLine}
-              C ${thirdCurve}
+              L ${end.x - halfNode.x - r.x} ${start.y}
+              C ${end.x - halfNode.x} ${start.y} ${end.x - halfNode.x} ${start.y} ${end.x - halfNode.x} ${start.y + r.y}
+              L ${end.x - halfNode.x} ${end.y + halfDepth - r.y}
+              C ${end.x - halfNode.x} ${end.y + halfDepth} ${end.x - halfNode.x} ${end.y + halfDepth} ${end.x - halfNode.x - r.x} ${end.y + halfDepth}
+              L ${end.x + r.x} ${end.y + halfDepth}
+              C ${end.x} ${end.y + halfDepth} ${end.x} ${end.y + halfDepth} ${end.x} ${end.y + halfDepth + r.y}
               L ${end.x} ${end.y}
               `;
+          }
+          return `
+            M ${start.x} ${start.y}
+            L ${start.x} ${end.y - halfNode.y - r.y}
+            C ${start.x} ${end.y - halfNode.y} ${start.x} ${end.y - halfNode.y} ${start.x + r.x} ${end.y - halfNode.y}
+            L ${end.x + halfDepth - r.x} ${end.y - halfNode.y}
+            C ${end.x + halfDepth} ${end.y - halfNode.y} ${end.x + halfDepth} ${end.y - halfNode.y} ${end.x + halfDepth} ${end.y - halfNode.y - r.y}
+            L ${end.x + halfDepth} ${end.y + r.y}
+            C ${end.x + halfDepth} ${end.y} ${end.x + halfDepth} ${end.y} ${end.x + halfDepth + r.x} ${end.y}
+            L ${end.x} ${end.y}
+            `;
         }
 
         const rAbs = Math.min(size.x, size.y) / 2 < rDef ? Math.min(size.x, size.y) / 2 : rDef;
@@ -71,13 +61,13 @@ export default function path(node, o, isVertical, nodeSize) {
         }
 
         return `
-            M ${start.x} ${start.y}
-            L ${firstLine}
-            C ${firstCurve}
-            L ${start.x + l.x + r.x} ${start.y + l.y + r.y}
-            C ${secondCurve}
-            L ${end.x} ${end.y}
-            `;
+          M ${start.x} ${start.y}
+          L ${firstLine}
+          C ${firstCurve}
+          L ${start.x + l.x + r.x} ${start.y + l.y + r.y}
+          C ${secondCurve}
+          L ${end.x} ${end.y}
+          `;
       }
 
       return '';
