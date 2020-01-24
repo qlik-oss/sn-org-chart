@@ -10,14 +10,19 @@
   position: absolute;
 }
 
-.orgCard {
+.org-card {
   width: 100%;
   height: 100%;
   font-size: 100%;
+}
+
+.org-text {
+  padding: 2px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
 .org-path-holder {
   transform-origin: 0% 0%;
   transition-property: all;
