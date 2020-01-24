@@ -21,9 +21,9 @@ const stylingUtils = {
 
     const cardStyling = {
       backgroundColor,
-      label: `white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:24px;color:${labelColor}`,
-      subLabel: `white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:20px;color:${subLabelColor}`,
-      details: `white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:20px;color:${detailsColor}`,
+      label: `font-size:24px;color:${labelColor}`,
+      subLabel: `font-size:20px;color:${subLabelColor}`,
+      details: `font-size:20px;color:${detailsColor}`,
     };
     return cardStyling;
   },
