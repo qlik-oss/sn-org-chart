@@ -8,17 +8,19 @@
   },
   "extends": ["airbnb-base"],
   "rules": {
-    "arrow-parens": 2,
-    "operator-linebreak": 0,
+    "arrow-parens": 0,
+    "comma-dangle": 0,
+    "implicit-arrow-linebreak": 0,
     "max-len": 0,
     "no-plusplus": 0,
     "no-bitwise": 0,
+    "no-param-reassign": 0,
+    "no-restricted-globals": 0,
     "no-unused-expressions": 0,
-    "no-underscore-dangle": 0,
-    "object-shorthand": 0,
     "object-curly-newline": 0,
-    "arrow-parens": 0,
-    "import/no-extraneous-dependencies": [2, { "devDependencies": true }]
+    "operator-linebreak": 0,
+    "import/no-extraneous-dependencies": [2, { "devDependencies": true }],
+    "no-nested-ternary": 0
   },
   "overrides": [
     {

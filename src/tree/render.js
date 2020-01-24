@@ -67,6 +67,7 @@ const reRenderTree = ({ svg, divBox, activeNode, allNodes, o, width, height, car
   const activeNodes = svg.selectAll('.nodeWrapper');
 
   // Cleanup from previous render
+  // eslint-disable-next-line no-underscore-dangle
   if (previousNodes.length > 0 && activeNodes._groups[0].length > 0) {
     const removeList = [];
     previousNodes.forEach(node => {
