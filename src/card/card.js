@@ -1,8 +1,5 @@
 export default (data, cardStyling) => {
-  if (!data.attributes) {
-    return null;
-  }
-  let html = `<div style=${cardStyling.label}>${data.attributes.label}</div>`;
+  let html = `<div style=${cardStyling.label}>${data.attributes.label || data.id}</div>`;
   if (data.attributes.subLabel) {
     html += `<div style=${cardStyling.subLabel}>${data.attributes.subLabel}</div>`;
   }
