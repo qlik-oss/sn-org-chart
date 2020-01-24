@@ -1,3 +1,5 @@
+import propertyResolver from './utils/property-resolver';
+
 export default function ext(/* env */) {
   return {
     definition: {
@@ -33,6 +35,14 @@ export default function ext(/* env */) {
                     {
                       component: 'expression',
                       ref: 'qExpression',
+                      translation: '$Details expression',
+                      defaultValue: '',
+                      id: 'detailsExpression',
+                      tid: 'detailsExpression',
+                    },
+                    {
+                      component: 'expression',
+                      ref: 'qExpression',
                       translation: '$Color expression',
                       defaultValue: '',
                       id: 'colorByExpression',
@@ -49,6 +59,169 @@ export default function ext(/* env */) {
         },
         settings: {
           uses: 'settings',
+          items: {
+            background: {
+              grouped: true,
+              type: 'items',
+              translation: 'properties.presentation',
+              items: {
+                font: {
+                  type: 'items',
+                  grouped: true,
+                  items: {
+                    label: {
+                      type: 'items',
+                      items: {
+                        useColorExpression: {
+                          ref: 'style.label.useColorExpression',
+                          type: 'boolean',
+                          translation: '$label color',
+                          component: 'dropdown',
+                          options: [
+                            {
+                              value: false,
+                              translation: 'properties.colorMode.primary',
+                            },
+                            {
+                              value: true,
+                              translation: 'properties.colorMode.byExpression',
+                            },
+                          ],
+                        },
+                        fontColor: {
+                          ref: 'style.label.color',
+                          type: 'object',
+                          component: 'color-picker',
+                          translation: 'properties.color',
+                          dualOutput: true,
+                          show: data => !propertyResolver.getValue(data, 'style.label.useColorExpression'),
+                        },
+                        colorExpression: {
+                          component: 'string',
+                          type: 'string',
+                          ref: 'style.label.colorExpression',
+                          translation: 'Common.Expression',
+                          expression: 'optional',
+                          show: data => propertyResolver.getValue(data, 'style.label.useColorExpression'),
+                        },
+                      },
+                    },
+                    sublabel: {
+                      type: 'items',
+                      items: {
+                        useColorExpression: {
+                          ref: 'style.subLabel.useColorExpression',
+                          type: 'boolean',
+                          translation: '$Sublabel color',
+                          component: 'dropdown',
+                          options: [
+                            {
+                              value: false,
+                              translation: 'properties.colorMode.primary',
+                            },
+                            {
+                              value: true,
+                              translation: 'properties.colorMode.byExpression',
+                            },
+                          ],
+                        },
+                        fontColor: {
+                          ref: 'style.subLabel.color',
+                          type: 'object',
+                          component: 'color-picker',
+                          translation: 'properties.color',
+                          dualOutput: true,
+                          show: data => !propertyResolver.getValue(data, 'style.subLabel.useColorExpression'),
+                        },
+                        colorExpression: {
+                          component: 'string',
+                          type: 'string',
+                          ref: 'style.subLabel.colorExpression',
+                          translation: 'Common.Expression',
+                          expression: 'optional',
+                          show: data => propertyResolver.getValue(data, 'style.subLabel.useColorExpression'),
+                        },
+                      },
+                    },
+                    details: {
+                      type: 'items',
+                      items: {
+                        useColorExpression: {
+                          ref: 'style.details.useColorExpression',
+                          type: 'boolean',
+                          translation: '$details color',
+                          component: 'dropdown',
+                          options: [
+                            {
+                              value: false,
+                              translation: 'properties.colorMode.primary',
+                            },
+                            {
+                              value: true,
+                              translation: 'properties.colorMode.byExpression',
+                            },
+                          ],
+                        },
+                        fontColor: {
+                          ref: 'style.details.color',
+                          type: 'object',
+                          component: 'color-picker',
+                          translation: 'properties.color',
+                          dualOutput: true,
+                          show: data => !propertyResolver.getValue(data, 'style.details.useColorExpression'),
+                        },
+                        colorExpression: {
+                          component: 'string',
+                          type: 'string',
+                          ref: 'style.details.colorExpression',
+                          translation: 'Common.Expression',
+                          expression: 'optional',
+                          show: data => propertyResolver.getValue(data, 'style.details.useColorExpression'),
+                        },
+                      },
+                    },
+                  },
+                },
+                backgroundColor: {
+                  type: 'items',
+                  items: {
+                    useColorExpression: {
+                      ref: 'style.background.useColorExpression',
+                      type: 'boolean',
+                      translation: 'AppDetails.SheetBackgroundColor',
+                      component: 'dropdown',
+                      options: [
+                        {
+                          value: false,
+                          translation: 'properties.colorMode.primary',
+                        },
+                        {
+                          value: true,
+                          translation: 'properties.colorMode.byExpression',
+                        },
+                      ],
+                    },
+                    colorPicker: {
+                      component: 'color-picker',
+                      type: 'object',
+                      ref: 'style.background.color',
+                      translation: 'properties.color',
+                      dualOutput: true,
+                      show: data => !propertyResolver.getValue(data, 'style.background.useColorExpression'),
+                    },
+                    colorExpression: {
+                      component: 'string',
+                      type: 'string',
+                      ref: 'style.background.colorExpression',
+                      translation: 'Common.Expression',
+                      expression: 'optional',
+                      show: data => propertyResolver.getValue(data, 'style.background.useColorExpression'),
+                    },
+                  },
+                },
+              },
+            },
+          },
         },
       },
     },

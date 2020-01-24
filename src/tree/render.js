@@ -1,5 +1,6 @@
 import { hierarchy, entries, tree, select } from 'd3';
 import treeTransform from '../utils/tree-transform';
+import stylingUtils from '../utils/styling';
 import position from './position';
 import box from './box';
 import path from './path';
@@ -57,7 +58,7 @@ const getBBoxOfNodes = nodes => {
   };
 };
 
-const reRenderTree = ({ svg, divBox, activeNode, allNodes, o, width, height }) => {
+const reRenderTree = ({ svg, divBox, activeNode, allNodes, o, width, height, cardStyling }) => {
   const nodes = filterTree(activeNode, allNodes);
 
   const nodeIdList = nodes.map(node => node.data.id);
@@ -110,16 +111,24 @@ const reRenderTree = ({ svg, divBox, activeNode, allNodes, o, width, height }) =
     .attr('class', 'nodeWrapper')
     .attr('id', d => d.data.id);
 
-  box(divBox, o, nodeSize, appendNodes, id => {
-    reRenderTree({
-      svg,
-      divBox,
-      allNodes,
-      o,
-      activeNode: id,
-      width,
-      height,
-    });
+  box({
+    divBox,
+    o,
+    nodeSize,
+    appendNodes,
+    cardStyling,
+    reRender: id => {
+      reRenderTree({
+        svg,
+        divBox,
+        allNodes,
+        o,
+        activeNode: id,
+        width,
+        height,
+        cardStyling,
+      });
+    },
   });
 
   // Create the lines (links) between the nodes
@@ -145,7 +154,7 @@ const reRenderTree = ({ svg, divBox, activeNode, allNodes, o, width, height }) =
   );
 };
 
-const renderTree = async ({ element, layout, model }) => {
+const renderTree = async ({ element, layout, model, Theme }) => {
   const b = element.getBoundingClientRect();
   // eslint-disable-next-line no-param-reassign
   element.innerHTML = '';
@@ -186,6 +195,10 @@ const renderTree = async ({ element, layout, model }) => {
     // Using the treemap created
     const allNodes = treemap(nodes);
     const activeNode = allNodes.data.id;
+
+    // Get styling the cards
+    const cardStyling = stylingUtils.cardStyling({ Theme, layout });
+
     reRenderTree({
       svg,
       divBox,
@@ -196,6 +209,7 @@ const renderTree = async ({ element, layout, model }) => {
       width,
       height,
       treemap,
+      cardStyling,
     });
   });
 };

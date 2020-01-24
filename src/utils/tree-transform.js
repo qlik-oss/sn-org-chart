@@ -1,6 +1,11 @@
 const pageSize = 1500;
 const maxPageCount = 30;
-const attributeIDs = { colorByExpression: 'color', labelExpression: 'label', subLabelExpression: 'subLabel' };
+const attributeIDs = {
+  colorByExpression: 'color',
+  labelExpression: 'label',
+  subLabelExpression: 'subLabel',
+  detailsExpression: 'details',
+};
 
 function getId(row) {
   return row[0].qText;
