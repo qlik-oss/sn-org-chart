@@ -1,5 +1,5 @@
 import { hierarchy, entries, tree, select } from 'd3';
-import treeTransform from '../utils/tree-transform';
+import treeTransform from '../utils/tree-utils';
 import position from './position';
 import box from './box';
 import path from './path';

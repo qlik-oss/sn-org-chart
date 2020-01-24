@@ -1,4 +1,4 @@
-import isOnlyLeafs from '../utils/util';
+import { areAllLeafs } from '../utils/tree-utils';
 
 export default function path(node, o, isVertical) {
   // Create the lines (links) between the nodes
@@ -15,7 +15,7 @@ export default function path(node, o, isVertical) {
         const inverse = { x: end.x - start.x < 0 ? -1 : 1, y: end.y - start.y < 0 ? -1 : 1 };
         const rDef = 30;
 
-        if (isOnlyLeafs(d.parent.children)) {
+        if (areAllLeafs(d.parent.children)) {
           const halfDepth = o.depthSpacing / 2;
           const r = { x: inverse.x * rDef, y: inverse.y * rDef };
           if (isVertical) {

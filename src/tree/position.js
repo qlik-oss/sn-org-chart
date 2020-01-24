@@ -1,4 +1,4 @@
-import isOnlyLeafs from '../utils/util';
+import { areAllLeafs } from '../utils/tree-utils';
 
 export default function position(orientation, nodeSize) {
   const nodeMargin = 100;
@@ -6,7 +6,7 @@ export default function position(orientation, nodeSize) {
   let depthSpacing;
 
   const widthTranslation = (d, axis) => {
-    if (d.parent && isOnlyLeafs(d.parent.children)) {
+    if (d.parent && areAllLeafs(d.parent.children)) {
       d[axis] = d.parent[axis] + nodeMargin / 2;
     } else {
       d[axis] = d.parent
@@ -18,7 +18,7 @@ export default function position(orientation, nodeSize) {
   };
 
   const depthTranslation = (d, axis) => {
-    if (d.parent && isOnlyLeafs(d.parent.children)) {
+    if (d.parent && areAllLeafs(d.parent.children)) {
       d[axis] = d.parent[axis] + (d.data.childNumber + 1) * depthSpacing;
     } else {
       d[axis] = d.y;

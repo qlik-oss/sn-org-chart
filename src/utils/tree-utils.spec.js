@@ -1,4 +1,4 @@
-import { createNodes } from './tree-transform';
+import { createNodes } from './tree-utils';
 
 describe('Tree transform', () => {
   describe('createNodes', () => {
