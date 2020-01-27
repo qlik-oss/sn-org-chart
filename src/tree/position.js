@@ -5,6 +5,7 @@ export default function position(orientation, nodeSize) {
   let widthSpacing;
   let depthSpacing;
 
+  // TODO: should expose for test, need to pass more arguments...
   const widthTranslation = (d, axis) => {
     if (d.parent && areAllLeafs(d.parent.children)) {
       d[axis] = d.parent[axis] + nodeMargin / 2;

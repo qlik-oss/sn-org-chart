@@ -1,11 +1,23 @@
-import { createNodes } from './tree-utils';
+import { createNodes, areAllLeafs } from './tree-utils';
 
-describe('Tree transform', () => {
+describe('tree-utils', () => {
   describe('createNodes', () => {
     const matrix = [[{ qText: '007', qElemNumber: 0 }, { qText: '-' }]];
     it('should create a tree', () => {
       const node = createNodes(matrix, []);
       expect(node.id).to.equal('007');
+    });
+  });
+
+  describe('areAllLeafs', () => {
+    const children = [{}, {}];
+    it('should return true for array with only leafs', () => {
+      expect(areAllLeafs(children)).to.be.true;
+    });
+
+    it('should return false for array that contains at least one node with children', () => {
+      children[0].children = [{}];
+      expect(areAllLeafs(children)).to.be.false;
     });
   });
   // Tests to add
