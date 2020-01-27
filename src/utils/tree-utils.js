@@ -1,7 +1,12 @@
 import translations from './translations';
 
 const pageSize = 3300;
-const attributeIDs = { colorByExpression: 'color', labelExpression: 'label', subLabelExpression: 'subLabel' };
+const attributeIDs = {
+  colorByExpression: 'color',
+  labelExpression: 'label',
+  subLabelExpression: 'subLabel',
+  detailsExpression: 'details',
+};
 const MAX_DATA = 'max-data-limit';
 const NO_ROOT = 'no_root';
 
