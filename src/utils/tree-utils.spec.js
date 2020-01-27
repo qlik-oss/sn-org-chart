@@ -1,4 +1,4 @@
-import { createNodes } from './tree-transform';
+import { createNodes, areAllLeafs } from './tree-utils';
 
 function generateMatrix(numRows, childCount = 1) {
   const matrix = [];
@@ -8,7 +8,7 @@ function generateMatrix(numRows, childCount = 1) {
   return matrix;
 }
 
-describe('Tree transform', () => {
+describe('tree-utils', () => {
   describe('createNodes', () => {
     it('should create a tree', () => {
       const matrix = [[{ qText: '007', qElemNumber: 0 }, { qText: '-' }]];
@@ -33,6 +33,18 @@ describe('Tree transform', () => {
       const node = createNodes(matrix, []);
       expect(node.warn.length).to.equal(1);
       expect(node.id).to.equal('Root');
+    });
+  });
+
+  describe('areAllLeafs', () => {
+    const children = [{}, {}];
+    it('should return true for array with only leafs', () => {
+      expect(areAllLeafs(children)).to.be.true;
+    });
+
+    it('should return false for array that contains at least one node with children', () => {
+      children[0].children = [{}];
+      expect(areAllLeafs(children)).to.be.false;
     });
   });
   // Tests to add

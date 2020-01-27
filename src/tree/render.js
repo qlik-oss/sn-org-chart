@@ -1,5 +1,5 @@
 import { hierarchy, entries, tree, select } from 'd3';
-import treeTransform from '../utils/tree-transform';
+import treeTransform from '../utils/tree-utils';
 import position from './position';
 import box from './box';
 import path from './path';
@@ -37,17 +37,10 @@ const getBBoxOfNodes = nodes => {
     bottom: -Infinity,
   };
   nodes.forEach(node => {
-    if (isVertical) {
-      bbox.left = Math.min(node.xActual, bbox.left);
-      bbox.top = Math.min(node.y, bbox.top);
-      bbox.right = Math.max(node.xActual, bbox.right);
-      bbox.bottom = Math.max(node.y, bbox.bottom);
-    } else {
-      bbox.left = Math.min(node.y, bbox.left);
-      bbox.top = Math.min(node.yActual, bbox.top);
-      bbox.right = Math.max(node.y, bbox.right);
-      bbox.bottom = Math.max(node.yActual, bbox.bottom);
-    }
+    bbox.left = Math.min(node.xActual, bbox.left);
+    bbox.top = Math.min(node.yActual, bbox.top);
+    bbox.right = Math.max(node.xActual, bbox.right);
+    bbox.bottom = Math.max(node.yActual, bbox.bottom);
   });
   return {
     x: bbox.left,
@@ -111,7 +104,7 @@ const reRenderTree = ({ svg, divBox, activeNode, allNodes, o, width, height }) =
     .attr('class', 'nodeWrapper')
     .attr('id', d => d.data.id);
 
-  box(divBox, o, nodeSize, appendNodes, id => {
+  box(divBox, o, appendNodes, id => {
     reRenderTree({
       svg,
       divBox,

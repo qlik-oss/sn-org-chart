@@ -1,51 +1,88 @@
+import { areAllLeafs } from '../utils/tree-utils';
+
+export function getPoints(d, o, isVertical) {
+  const halfNode = { x: o.nodeSize.width / 2, y: o.nodeSize.height / 2 };
+  const halfDepth = o.depthSpacing / 2;
+  const start = { x: o.x(d) + halfNode.x, y: o.y(d) + halfNode.y };
+  const end = { x: o.x(d.parent) + halfNode.x, y: o.y(d.parent) + halfNode.y };
+  let points;
+
+  if (areAllLeafs(d.parent.children)) {
+    points = isVertical
+      ? [
+        { x: start.x, y: start.y },
+        { x: end.x - halfNode.x, y: start.y },
+        { x: end.x - halfNode.x, y: end.y + halfDepth },
+        { x: end.x, y: end.y + halfDepth },
+        { x: end.x, y: end.y },
+      ]
+      : [
+        { x: start.x, y: start.y },
+        { x: start.x, y: end.y - halfNode.y },
+        { x: end.x + halfDepth, y: end.y - halfNode.y },
+        { x: end.x + halfDepth, y: end.y },
+        { x: end.x, y: end.y },
+      ];
+  } else if (start.x === end.x || start.y === end.y) {
+    points = [
+      { x: start.x, y: start.y },
+      { x: end.x, y: end.y },
+    ];
+  } else {
+    points = isVertical
+      ? [
+        { x: start.x, y: start.y },
+        { x: start.x, y: start.y - halfDepth },
+        { x: end.x, y: start.y - halfDepth },
+        { x: end.x, y: end.y },
+      ]
+      : [
+        { x: start.x, y: start.y },
+        { x: start.x - halfDepth, y: start.y },
+        { x: start.x - halfDepth, y: end.y },
+        { x: end.x, y: end.y },
+      ];
+  }
+  return points;
+}
+
+export function getPath(points) {
+  // gets the path from first to last points, making turns with radius r at intermediate points
+  const r = 30;
+  let pathString = `M ${points[0].x} ${points[0].y}`;
+  let dir = {
+    x: Math.sign(points[1].x - points[0].x),
+    y: Math.sign(points[1].y - points[0].y),
+  };
+
+  for (let i = 1; i < points.length; ++i) {
+    const point = points[i];
+    pathString += ` L ${point.x - dir.x * r} ${point.y - dir.y * r}`;
+    // Don't add curve for last point
+    if (i < points.length - 1) {
+      dir = {
+        x: Math.sign(points[i + 1].x - point.x),
+        y: Math.sign(points[i + 1].y - point.y),
+      };
+      pathString += ` Q ${point.x} ${point.y} ${point.x + dir.x * r} ${point.y + dir.y * r}`;
+    }
+  }
+
+  return pathString;
+}
+
 export default function path(node, o, isVertical) {
   // Create the lines (links) between the nodes
   node
     .append('path')
     .attr('class', 'link')
-    .attr('id', (d) => d.data.id)
-    .attr('d', (d) => {
+    .attr('id', d => d.data.id)
+    .attr('d', d => {
       if (d.parent) {
-        // starting at self, ending at parent
-        const start = { x: o.x(d) + o.pathOffsetSelf.x, y: o.y(d) + o.pathOffsetSelf.y };
-        const end = { x: o.x(d.parent) + o.pathOffsetParent.x, y: o.y(d.parent) + o.pathOffsetParent.y };
-        const size = { x: Math.abs(end.x - start.x), y: Math.abs(end.y - start.y) };
-        // factors inverseíng direction of lines and curves
-        const inverse = { x: end.x - start.x < 0 ? -1 : 1, y: end.y - start.y < 0 ? -1 : 1 };
-        // radius of elbow
-        const rDef = 30;
-        const rAbs = Math.min(size.x, size.y) / 2 < rDef ? Math.min(size.x, size.y) / 2 : rDef;
-        const r = { x: inverse.x * rAbs, y: inverse.y * rAbs };
-        let l;
-        let firstLine;
-        let firstCurve;
-        let secondCurve;
-
-        if (isVertical) {
-          l = { x: inverse.x * (size.x - rAbs * 2), y: inverse.y * (size.y / 2 - rAbs) };
-          firstLine = `${start.x} ${start.y + l.y}`;
-          firstCurve = `${start.x} ${start.y + l.y + r.y} ${start.x} ${start.y + l.y + r.y} ${start.x + r.x} ${start.y
-            + l.y
-            + r.y}`;
-          secondCurve = `${end.x}  ${start.y + l.y + r.y} ${end.x}  ${start.y + l.y + r.y} ${end.x} ${end.y - l.y}`;
-        } else {
-          l = { x: inverse.x * (size.x / 2 - rAbs), y: inverse.y * (size.y - rAbs * 2) };
-          firstLine = `${start.x + l.x} ${start.y}`;
-          firstCurve = `${start.x + l.x + r.x} ${start.y} ${start.x + l.x + r.x} ${start.y} ${start.x
-            + l.x
-            + r.x} ${start.y + r.y}`;
-          secondCurve = `${start.x + l.x + r.x} ${end.y} ${start.x + l.x + r.x} ${end.y} ${end.x - l.x} ${end.y}`;
-        }
-
-        return `
-          M ${start.x} ${start.y}
-          L ${firstLine}
-          C ${firstCurve}
-          L ${start.x + l.x + r.x} ${start.y + l.y + r.y}
-          C ${secondCurve}
-          L ${end.x} ${end.y}
-          `;
+        const points = getPoints(d, o, isVertical);
+        return getPath(points);
       }
+
       return '';
     });
 }

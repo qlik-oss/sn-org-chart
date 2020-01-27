@@ -1,8 +1,8 @@
 import card from '../card/card';
 
-export default function box(divBox, o, nodeSize, appendNodes, reRender) {
+export default function box(divBox, o, appendNodes, reRender) {
   function getStyle(p) {
-    return `width:${nodeSize.width}px;height:${nodeSize.height}px; top:${o.y(p)}px;left:${o.x(p)}px`;
+    return `width:${o.nodeSize.width}px;height:${o.nodeSize.height}px; top:${o.y(p)}px;left:${o.x(p)}px`;
   }
 
   divBox

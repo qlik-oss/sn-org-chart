@@ -1,121 +1,79 @@
-const siblingSpacing = 30;
+import { areAllLeafs } from '../utils/tree-utils';
+
 export default function position(orientation, nodeSize) {
-  // This would allow for different orientations of the tree structure (not needed for now)
+  const nodeMargin = 100;
+  let widthSpacing;
+  let depthSpacing;
+
+  // TODO: should expose for test, need to pass more arguments...
+  const widthTranslation = (d, axis) => {
+    if (d.parent && areAllLeafs(d.parent.children)) {
+      d[axis] = d.parent[axis] + nodeMargin / 2;
+    } else {
+      d[axis] = d.parent
+        ? d.parent[axis] + (d.data.childNumber - (d.parent.children.length - 1) / 2) * widthSpacing
+        : 0;
+    }
+
+    return d[axis];
+  };
+
+  const depthTranslation = (d, axis) => {
+    if (d.parent && areAllLeafs(d.parent.children)) {
+      d[axis] = d.parent[axis] + (d.data.childNumber + 1) * depthSpacing;
+    } else {
+      d[axis] = d.y;
+    }
+    return d[axis];
+  };
+
   let orientations;
   switch (orientation) {
     case 'ttb':
+      widthSpacing = nodeSize.width + nodeMargin;
+      depthSpacing = nodeSize.height + nodeMargin;
       orientations = {
         'top-to-bottom': {
-          depthSpacing: 200,
-          pathOffsetSelf: {
-            x: nodeSize.width / 2,
-            y: 0,
-          },
-          pathOffsetParent: {
-            x: nodeSize.width / 2,
-            y: nodeSize.height,
-          },
-          x(d) {
-            // eslint-disable-next-line no-param-reassign
-            d.xActual =
-              d.parent && d.parent.xActual
-                ? d.parent.xActual +
-                  nodeSize.width / 2 +
-                  siblingSpacing / 2 +
-                  (d.data.childNumber - d.parent.children.length / 2) * (nodeSize.width + siblingSpacing)
-                : 1;
-            return d.xActual;
-          },
-          y(d) {
-            return d.y;
-          },
+          depthSpacing,
+          nodeSize,
+          x: d => widthTranslation(d, 'xActual'),
+          y: d => depthTranslation(d, 'yActual'),
         },
       };
       break;
     case 'btt':
+      widthSpacing = nodeSize.width + nodeMargin;
+      depthSpacing = -nodeSize.height - nodeMargin;
       orientations = {
         'bottom-to-top': {
-          depthSpacing: -200,
-          pathOffsetSelf: {
-            x: nodeSize.width / 2,
-            y: nodeSize.height,
-          },
-          pathOffsetParent: {
-            x: nodeSize.width / 2,
-            y: 0,
-          },
-          x(d) {
-            // eslint-disable-next-line no-param-reassign
-            d.xActual =
-              d.parent && d.parent.xActual
-                ? d.parent.xActual +
-                  nodeSize.width / 2 +
-                  siblingSpacing / 2 +
-                  (d.data.childNumber - d.parent.children.length / 2) * (nodeSize.width + siblingSpacing)
-                : 1;
-            return d.xActual;
-          },
-          y(d) {
-            return d.y;
-          },
+          depthSpacing,
+          nodeSize,
+          x: d => widthTranslation(d, 'xActual'),
+          y: d => depthTranslation(d, 'yActual'),
         },
       };
       break;
     case 'ltr':
+      widthSpacing = nodeSize.height + nodeMargin;
+      depthSpacing = nodeSize.width + nodeMargin;
       orientations = {
         'left-to-right': {
-          depthSpacing: 500,
-          pathOffsetSelf: {
-            x: 0,
-            y: nodeSize.height / 2,
-          },
-          pathOffsetParent: {
-            x: nodeSize.width,
-            y: nodeSize.height / 2,
-          },
-          y(d) {
-            // eslint-disable-next-line no-param-reassign
-            d.yActual =
-              d.parent && d.parent.yActual
-                ? d.parent.yActual +
-                  nodeSize.height / 2 +
-                  siblingSpacing / 2 +
-                  (d.data.childNumber - d.parent.children.length / 2) * (nodeSize.height + siblingSpacing)
-                : 1;
-            return d.yActual;
-          },
-          x(d) {
-            return d.y;
-          },
+          depthSpacing,
+          nodeSize,
+          x: d => depthTranslation(d, 'xActual'),
+          y: d => widthTranslation(d, 'yActual'),
         },
       };
       break;
     case 'rtl':
+      widthSpacing = nodeSize.height + nodeMargin;
+      depthSpacing = -nodeSize.width - nodeMargin;
       orientations = {
         'right-to-left': {
-          depthSpacing: -500,
-          pathOffsetSelf: {
-            x: nodeSize.width,
-            y: nodeSize.height / 2,
-          },
-          pathOffsetParent: {
-            x: 0,
-            y: nodeSize.height / 2,
-          },
-          y(d) {
-            // eslint-disable-next-line no-param-reassign
-            d.yActual =
-              d.parent && d.parent.yActual
-                ? d.parent.yActual +
-                  nodeSize.height / 2 +
-                  siblingSpacing / 2 +
-                  (d.data.childNumber - d.parent.children.length / 2) * (nodeSize.height + siblingSpacing)
-                : 1;
-            return d.yActual;
-          },
-          x(d) {
-            return d.y;
-          },
+          depthSpacing,
+          nodeSize,
+          x: d => depthTranslation(d, 'xActual'),
+          y: d => widthTranslation(d, 'yActual'),
         },
       };
       break;

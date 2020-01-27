@@ -125,6 +125,15 @@ function getAttributes(indecies, qAttrExps) {
   return attributes;
 }
 
+export function areAllLeafs(children) {
+  for (let i = 0; i < children.length; ++i) {
+    if (children[i].children !== undefined) {
+      return false;
+    }
+  }
+  return true;
+}
+
 export function createNodes(matrix, attributeIndecies, status) {
   const nodeMap = {};
   const allNodes = [];
