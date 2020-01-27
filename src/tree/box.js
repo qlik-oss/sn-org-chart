@@ -4,7 +4,7 @@ export default function box({ divBox, o, appendNodes, reRender, cardStyling }) {
   function getStyle(p) {
     return `width:${o.nodeSize.width}px;height:${o.nodeSize.height}px; top:${o.y(p)}px;left:${o.x(
       p
-    )}px;background-color:${cardStyling.backgroundColor};text-align:center;`;
+    )}px;background-color:${cardStyling.backgroundColor || '#e6e6e6'};text-align:center;`;
   }
 
   divBox
@@ -12,7 +12,7 @@ export default function box({ divBox, o, appendNodes, reRender, cardStyling }) {
     .data(appendNodes)
     .enter()
     .append('div')
-    .attr('class', 'nodeRect')
+    .attr('class', 'node-rect')
     .attr('style', getStyle)
     .attr('id', d => d.data.id)
     .on('click', node => {

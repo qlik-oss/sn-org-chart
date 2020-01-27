@@ -87,7 +87,7 @@ const reRenderTree = ({ svg, divBox, activeNode, allNodes, o, width, height, car
         .remove();
 
       divBox
-        .selectAll('.nodeRect')
+        .selectAll('.node-rect')
         .filter(data => removeList.indexOf(data.data.id) > -1)
         .remove();
     }

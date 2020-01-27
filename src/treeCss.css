@@ -1,26 +1,37 @@
 .link {
   fill: none;
-  stroke: #000;
-  stroke-width: 3;
+  stroke: #8c8c8c;
+  stroke-width: 3px;
 }
 
-.nodeRect {
-  border: 2px solid black;
-  background: transparent;
+.node-rect {
+  background: #e6e6e6;
+  border-radius: 2px;
   position: absolute;
 }
 
-.org-card {
-  width: 100%;
-  height: 100%;
-  font-size: 100%;
+.org-card-seperator {
+  border-bottom: 2px solid #8c8c8c;
+}
+
+.org-card-header-only {
+  line-height: 100px;
 }
 
 .org-text {
-  padding: 2px;
+  padding-bottom: 2px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.org-text-header {
+  font-size: 26px;
+  font-weight: bold;
+}
+
+.org-text-subtext {
+  font-size: 22px;
 }
 
 .org-path-holder {
