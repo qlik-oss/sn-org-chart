@@ -1,31 +1,6 @@
 import { areAllLeafs } from '../utils/tree-utils';
 
-export function calculatePath(points, r) {
-  // gets the path from first to last points, making turns with radius r at intermediate points
-  let pathString = `M ${points[0].x} ${points[0].y}`;
-  let dir = {
-    x: Math.sign(points[1].x - points[0].x),
-    y: Math.sign(points[1].y - points[0].y),
-  };
-
-  for (let i = 1; i < points.length; ++i) {
-    const point = points[i];
-    pathString += ` L ${point.x - dir.x * r} ${point.y - dir.y * r}`;
-    // Don't add curve for last point
-    if (i < points.length - 1) {
-      dir = {
-        x: Math.sign(points[i + 1].x - point.x),
-        y: Math.sign(points[i + 1].y - point.y),
-      };
-      pathString += ` Q ${point.x} ${point.y} ${point.x + dir.x * r} ${point.y + dir.y * r}`;
-    }
-  }
-
-  return pathString;
-}
-
-export function getPath(d, o, isVertical) {
-  const r = 30;
+export function getPoints(d, o, isVertical) {
   const halfNode = { x: o.nodeSize.width / 2, y: o.nodeSize.height / 2 };
   const halfDepth = o.depthSpacing / 2;
   const start = { x: o.x(d) + halfNode.x, y: o.y(d) + halfNode.y };
@@ -68,8 +43,32 @@ export function getPath(d, o, isVertical) {
         { x: end.x, y: end.y },
       ];
   }
+  return points;
+}
 
-  return calculatePath(points, r);
+export function getPath(points) {
+  // gets the path from first to last points, making turns with radius r at intermediate points
+  const r = 30;
+  let pathString = `M ${points[0].x} ${points[0].y}`;
+  let dir = {
+    x: Math.sign(points[1].x - points[0].x),
+    y: Math.sign(points[1].y - points[0].y),
+  };
+
+  for (let i = 1; i < points.length; ++i) {
+    const point = points[i];
+    pathString += ` L ${point.x - dir.x * r} ${point.y - dir.y * r}`;
+    // Don't add curve for last point
+    if (i < points.length - 1) {
+      dir = {
+        x: Math.sign(points[i + 1].x - point.x),
+        y: Math.sign(points[i + 1].y - point.y),
+      };
+      pathString += ` Q ${point.x} ${point.y} ${point.x + dir.x * r} ${point.y + dir.y * r}`;
+    }
+  }
+
+  return pathString;
 }
 
 export default function path(node, o, isVertical) {
@@ -80,7 +79,8 @@ export default function path(node, o, isVertical) {
     .attr('id', d => d.data.id)
     .attr('d', d => {
       if (d.parent) {
-        return getPath(d, o, isVertical);
+        const points = getPoints(d, o, isVertical);
+        return getPath(points);
       }
 
       return '';

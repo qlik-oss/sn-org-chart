@@ -1,9 +1,8 @@
-import { calculatePath, getPath } from './path';
+import { getPoints, getPath } from './path';
 
 describe('path', () => {
-  const r = 30;
-
-  describe('calculatePath', () => {
+  describe('getPath', () => {
+    const r = 30;
     const points = [
       { x: 0, y: 0 },
       { x: 100, y: 0 },
@@ -18,32 +17,110 @@ describe('path', () => {
     });
   });
 
-  describe('getPath', () => {
-    let points;
-    // spy on calculatePath
-    const d = {
-      parent: {
-        xActual: 500,
-        yActual: 500
-      },
-      xActual: 0,
-      yActual: 0
-    };
-    const o = {
-      nodeSize: {
+  describe('getPoints', () => {
+    let isVertical;
+    let nodeSize;
+    let parent;
+    let d;
+    let o;
+    let expectedPoints;
+
+    beforeEach(() => {
+      isVertical = true;
+      nodeSize = {
         width: 200,
         height: 100,
-      },
-      depthSpacing: 200,
-      x: d => d.zActual,
-      y: d => d.yActual,
-    };
-
-    it('should create a path', () => {
-      points = {
-        // some points based ont hardcoded values
       };
-      expect(calculatePath).to.have.been.calledWith(points, r);
+      parent = {
+        xActual: 0,
+        yActual: 0,
+        children: [{
+          children: [{}],
+        }],
+      };
+      d = {
+        parent,
+        xActual: 300,
+        yActual: 200,
+      };
+      o = {
+        nodeSize,
+        depthSpacing: nodeSize.height + 100,
+        x: node => node.xActual,
+        y: node => node.yActual,
+      };
+    });
+
+    it('should return points for vertical tree', () => {
+      expectedPoints = [
+        { x: 400, y: 250 },
+        { x: 400, y: 150 },
+        { x: 100, y: 150 },
+        { x: 100, y: 50 }
+      ];
+      const points = getPoints(d, o, isVertical);
+      expect(points).to.deep.equal(expectedPoints);
+    });
+
+    it('should return points for horizontal tree', () => {
+      isVertical = false;
+      o.depthSpacing = nodeSize.width + 100;
+      expectedPoints = [
+        { x: 400, y: 250 },
+        { x: 250, y: 250 },
+        { x: 250, y: 50 },
+        { x: 100, y: 50 }
+      ];
+      const points = getPoints(d, o, isVertical);
+      expect(points).to.deep.equal(expectedPoints);
+    });
+
+    it('should return points for vertical tree w only leafs', () => {
+      parent.children = [{}];
+      expectedPoints = [
+        { x: 400, y: 250 },
+        { x: 0, y: 250 },
+        { x: 0, y: 150 },
+        { x: 100, y: 150 },
+        { x: 100, y: 50 }
+      ];
+      const points = getPoints(d, o, isVertical);
+      expect(points).to.deep.equal(expectedPoints);
+    });
+
+    it('should return points for horizontal tree w only leafs', () => {
+      isVertical = false;
+      o.depthSpacing = nodeSize.width + 100;
+      parent.children = [{}];
+      expectedPoints = [
+        { x: 400, y: 250 },
+        { x: 400, y: 0 },
+        { x: 250, y: 0 },
+        { x: 250, y: 50 },
+        { x: 100, y: 50 }
+      ];
+      const points = getPoints(d, o, isVertical);
+      expect(points).to.deep.equal(expectedPoints);
+    });
+
+    it('should return points for a straight vertical line', () => {
+      d.xActual = 0;
+      expectedPoints = [
+        { x: 100, y: 250 },
+        { x: 100, y: 50 }
+      ];
+      const points = getPoints(d, o, isVertical);
+      expect(points).to.deep.equal(expectedPoints);
+    });
+
+    it('should return points for a straight horizontal line', () => {
+      d.yActual = 0;
+      expectedPoints = [
+        { x: 400, y: 50 },
+        { x: 100, y: 50 }
+      ];
+      const points = getPoints(d, o, isVertical);
+      expect(points).to.deep.equal(expectedPoints);
     });
   });
 });
