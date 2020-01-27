@@ -1,6 +1,9 @@
-const pageSize = 1500;
-const maxPageCount = 30;
+import translations from './translations';
+
+const pageSize = 3300;
 const attributeIDs = { colorByExpression: 'color', labelExpression: 'label', subLabelExpression: 'subLabel' };
+const MAX_DATA = 'max-data-limit';
+const NO_ROOT = 'no_root';
 
 function getId(row) {
   return row[0].qText;
@@ -36,7 +39,7 @@ function anyCycle(nodes) {
   return false;
 }
 
-async function fetchPage(dataPages, dataMatrix, model, fullHeight, currentRow, callNum) {
+async function fetchPage(dataPages, dataMatrix, model, fullHeight, currentRow, callNum, maxCalls) {
   await model
     .getHyperCubeData('/qHyperCubeDef', [
       {
@@ -52,13 +55,14 @@ async function fetchPage(dataPages, dataMatrix, model, fullHeight, currentRow, c
       // eslint-disable-next-line no-param-reassign
       currentRow += data[0].qArea.qHeight;
     });
-
-  if (callNum >= maxPageCount) {
-    // Sanity return for very large data
-  } else if (fullHeight > currentRow) {
-    // eslint-disable-next-line no-param-reassign
-    await fetchPage(dataPages, dataMatrix, model, fullHeight, currentRow, callNum++);
+  if (callNum >= maxCalls) {
+    return MAX_DATA;
   }
+  if (fullHeight > currentRow) {
+    // eslint-disable-next-line no-param-reassign
+    return fetchPage(dataPages, dataMatrix, model, fullHeight, currentRow, callNum + 1, maxCalls);
+  }
+  return '';
 }
 
 const getDataMatrix = async (layout, model) => {
@@ -66,16 +70,25 @@ const getDataMatrix = async (layout, model) => {
   const fullHeight = layout.qHyperCube.qSize.qcy;
   const loadedHeight = dataPages[0].qArea.qHeight;
   const dataMatrix = [...dataPages[0].qMatrix];
+  let status = '';
 
   // If there seems to be more data, check if it is already loadad or load it
   if (fullHeight > loadedHeight && dataPages.length === 1) {
-    await fetchPage(layout.qHyperCube.qDataPages, dataMatrix, model, fullHeight, loadedHeight, 0);
+    status = await fetchPage(
+      layout.qHyperCube.qDataPages,
+      dataMatrix,
+      model,
+      fullHeight,
+      loadedHeight,
+      0,
+      layout.rowLimit / pageSize || 10
+    );
   } else {
     dataPages.forEach((page, i) => {
       i > 0 ? dataMatrix.push(...page.qMatrix) : '';
     });
   }
-  return dataMatrix;
+  return { status, dataMatrix };
 };
 
 function getAttributIndecies(attrsInfo) {
@@ -112,7 +125,7 @@ function getAttributes(indecies, qAttrExps) {
   return attributes;
 }
 
-export function createNodes(matrix, attributeIndecies) {
+export function createNodes(matrix, attributeIndecies, status) {
   const nodeMap = {};
   const allNodes = [];
   for (let i = 0; i < matrix.length; ++i) {
@@ -144,23 +157,32 @@ export function createNodes(matrix, attributeIndecies) {
     }
   }
 
-  // I have not looked at these functions at all. But we need to check the data as well I would say.
-  if (anyCycle(allNodes)) {
-    throw new Error('Cycle detected');
-  }
-
   // We might be able to use the rootnodes lenght as well
   if (rootNodes.length === 0) {
-    throw new Error('No root node');
+    // The only way to have no root noot is to have a single cycle, which means we cannot break it
+    return { error: NO_ROOT, message: translations[NO_ROOT] };
   }
+  const warn = [];
+  if (status === MAX_DATA) {
+    warn.push(translations[MAX_DATA]);
+  }
+  // I have not looked at these functions at all. But we need to check the data as well I would say.
+  if (anyCycle(allNodes)) {
+    warn.push(translations.cycle);
+  }
+
   if (rootNodes.length === 1) {
+    rootNodes[0].warn = warn;
     return rootNodes[0];
   }
 
   // Here a fake root node is created when multiple rootnodes exist
+  warn.push(translations.dummy_warn);
   const rootNode = {
     id: 'Root',
-    name: 'Root',
+    name: translations.dummy,
+    isDummy: true, // Should be rendered in a specific way?
+    warn,
     children: rootNodes,
   };
 
@@ -184,15 +206,15 @@ export default async function transform({ layout, model }) {
     return false; // throw new Error('Require at least two dimensions');
   }
 
-  const matrix = await getDataMatrix(layout, model);
+  const { status, dataMatrix } = await getDataMatrix(layout, model);
   const attributeIndecies = getAttributIndecies(layout.qHyperCube.qDimensionInfo[0].qAttrExprInfo);
 
-  if (!matrix) {
+  if (!dataMatrix) {
     return null;
   }
-  if (matrix.length < 1) {
+  if (dataMatrix.length < 1) {
     return null;
   }
 
-  return createNodes(matrix, attributeIndecies);
+  return createNodes(dataMatrix, attributeIndecies, status);
 }
