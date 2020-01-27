@@ -2,7 +2,7 @@ const artifacts = {
   artifactsPath: 'test/integration/__artifacts__',
 };
 
-describe('should render an', () => {
+describe.skip('should render an', () => {
   const content = '.nebulajs-sn';
   const app = encodeURIComponent(process.env.APP_ID || '/apps/org-chart-test.qvf');
 
