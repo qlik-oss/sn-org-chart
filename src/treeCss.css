@@ -35,3 +35,21 @@
   transition-property: all;
   transition-duration: 0.5s;
 }
+
+.org-warning {
+  position: absolute;
+  bottom: 0px;
+  left: 0px;
+  font-style: italic;
+  font-size: 13px;
+  color: rgb(123, 122, 120);
+}
+
+.org-error {
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  font-size: 1.2em;
+  transform: translate(-50%, -50%);
+}

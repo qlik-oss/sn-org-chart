@@ -1,6 +1,6 @@
 import { hierarchy, entries, tree, select } from 'd3';
-import treeTransform from '../utils/tree-transform';
 import stylingUtils from '../utils/styling';
+import treeTransform from '../utils/tree-utils';
 import position from './position';
 import box from './box';
 import path from './path';
@@ -38,17 +38,10 @@ const getBBoxOfNodes = nodes => {
     bottom: -Infinity,
   };
   nodes.forEach(node => {
-    if (isVertical) {
-      bbox.left = Math.min(node.xActual, bbox.left);
-      bbox.top = Math.min(node.y, bbox.top);
-      bbox.right = Math.max(node.xActual, bbox.right);
-      bbox.bottom = Math.max(node.y, bbox.bottom);
-    } else {
-      bbox.left = Math.min(node.y, bbox.left);
-      bbox.top = Math.min(node.yActual, bbox.top);
-      bbox.right = Math.max(node.y, bbox.right);
-      bbox.bottom = Math.max(node.yActual, bbox.bottom);
-    }
+    bbox.left = Math.min(node.xActual, bbox.left);
+    bbox.top = Math.min(node.yActual, bbox.top);
+    bbox.right = Math.max(node.xActual, bbox.right);
+    bbox.bottom = Math.max(node.yActual, bbox.bottom);
   });
   return {
     x: bbox.left,
@@ -115,7 +108,6 @@ const reRenderTree = ({ svg, divBox, activeNode, allNodes, o, width, height, car
   box({
     divBox,
     o,
-    nodeSize,
     appendNodes,
     cardStyling,
     reRender: id => {
@@ -166,6 +158,21 @@ const renderTree = async ({ element, layout, model, Theme }) => {
 
   // Get and transform the data into a tree structure
   const data = await treeTransform({ layout, model });
+
+  if (data.error) {
+    select(element)
+      .append('div')
+      .attr('class', 'org-error')
+      .html(data.message);
+    return;
+  }
+
+  if (data.warn && data.warn.length) {
+    select(element)
+      .append('span')
+      .attr('class', 'org-warning')
+      .html(`*${data.warn.join(' ')}`);
+  }
 
   const svgBox = select(element)
     .selectAll('svg')

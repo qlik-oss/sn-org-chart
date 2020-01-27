@@ -57,6 +57,30 @@ export default function ext(/* env */) {
         sorting: {
           uses: 'sorting',
         },
+        addOns: {
+          type: 'items',
+          component: 'expandable-items',
+          translation: 'properties.addons',
+          items: {
+            dataHandling: {
+              uses: 'dataHandling',
+              items: {
+                calcCond: {
+                  uses: 'calcCond',
+                },
+                rowLimit: {
+                  type: 'integer',
+                  translation: '$RowLimit',
+                  ref: 'rowLimit',
+                  defaultValue: 30000,
+                  min: 5000,
+                  max: 100000,
+                  show: false,
+                },
+              },
+            },
+          },
+        },
         settings: {
           uses: 'settings',
           items: {
