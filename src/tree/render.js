@@ -151,6 +151,21 @@ const renderTree = async ({ element, layout, model }) => {
   // Get and transform the data into a tree structure
   const data = await treeTransform({ layout, model });
 
+  if (data.error) {
+    select(element)
+      .append('div')
+      .attr('class', 'org-error')
+      .html(data.message);
+    return;
+  }
+
+  if (data.warn && data.warn.length) {
+    select(element)
+      .append('span')
+      .attr('class', 'org-warning')
+      .html(`*${data.warn.join(' ')}`);
+  }
+
   const svgBox = select(element)
     .selectAll('svg')
     .data(entries(orientations))
