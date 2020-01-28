@@ -1,23 +1,18 @@
 import colorUtils from './color-utils';
 
+function getColor(reference, palette) {
+  return reference.useColorExpression
+    ? colorUtils.resolveExpression(reference.colorExpression)
+    : colorUtils.resolveColor(reference.color, palette);
+}
+
 const stylingUtils = {
   cardStyling: ({ Theme, layout }) => {
     const palette = colorUtils.getPalette(Theme);
-    const backgroundColor = layout.style.background.useColorExpression
-      ? colorUtils.resolveExpression(layout.style.background.colorExpression)
-      : colorUtils.resolveColor(layout.style.background.color, palette);
-
-    const labelColor = layout.style.label.useColorExpression
-      ? colorUtils.resolveExpression(layout.style.label.colorExpression)
-      : colorUtils.resolveColor(layout.style.label.color, palette);
-
-    const subLabelColor = layout.style.subLabel.useColorExpression
-      ? colorUtils.resolveExpression(layout.style.subLabel.colorExpression)
-      : colorUtils.resolveColor(layout.style.subLabel.color, palette);
-
-    const detailsColor = layout.style.details.useColorExpression
-      ? colorUtils.resolveExpression(layout.style.details.colorExpression)
-      : colorUtils.resolveColor(layout.style.details.color, palette);
+    const backgroundColor = getColor(layout.style.background, palette);
+    const labelColor = getColor(layout.style.label, palette);
+    const subLabelColor = getColor(layout.style.subLabel, palette);
+    const detailsColor = getColor(layout.style.details, palette);
 
     const cardStyling = {
       backgroundColor,
