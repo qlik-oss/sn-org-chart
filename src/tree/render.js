@@ -152,7 +152,7 @@ const renderTree = async ({ element, layout, model, Theme }) => {
   // eslint-disable-next-line no-param-reassign
   element.innerHTML = '';
   const { width } = b;
-  const { height } = b;
+  let { height } = b;
 
   const orientations = position(orientation, nodeSize);
 
@@ -160,6 +160,7 @@ const renderTree = async ({ element, layout, model, Theme }) => {
   const data = await treeTransform({ layout, model });
 
   if (data.error) {
+    height -= 20;
     select(element)
       .append('div')
       .attr('class', 'org-error')
@@ -168,6 +169,7 @@ const renderTree = async ({ element, layout, model, Theme }) => {
   }
 
   if (data.warn && data.warn.length) {
+    height -= 20;
     select(element)
       .append('span')
       .attr('class', 'org-warning')
