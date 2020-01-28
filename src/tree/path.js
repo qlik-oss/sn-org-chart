@@ -50,20 +50,21 @@ export function getPath(points) {
   // gets the path from first to last points, making turns with radius r at intermediate points
   const r = 30;
   let pathString = `M ${points[0].x} ${points[0].y}`;
-  let dir = {
-    x: Math.sign(points[1].x - points[0].x),
-    y: Math.sign(points[1].y - points[0].y),
-  };
-
+  let dir;
+  function setDir(i) {
+    const delta = { x: points[i].x - points[i - 1].x, y: points[i].y - points[i - 1].y, };
+    dir = {
+      x: ((delta.x > 0) - (delta.x < 0)) || +delta.x,
+      y: ((delta.y > 0) - (delta.y < 0)) || +delta.y,
+    };
+  }
+  setDir(1);
   for (let i = 1; i < points.length; ++i) {
     const point = points[i];
     pathString += ` L ${point.x - dir.x * r} ${point.y - dir.y * r}`;
     // Don't add curve for last point
     if (i < points.length - 1) {
-      dir = {
-        x: Math.sign(points[i + 1].x - point.x),
-        y: Math.sign(points[i + 1].y - point.y),
-      };
+      setDir(i + 1);
       pathString += ` Q ${point.x} ${point.y} ${point.x + dir.x * r} ${point.y + dir.y * r}`;
     }
   }
