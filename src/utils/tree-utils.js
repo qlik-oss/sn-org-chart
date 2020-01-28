@@ -198,6 +198,7 @@ export function createNodes(matrix, attributeIndecies, status) {
     isDummy: true, // Should be rendered in a specific way?
     warn,
     children: rootNodes,
+    attributes: {},
   };
 
   rootNodes.forEach((node, i) => {
