@@ -4,6 +4,7 @@ import position from './position';
 import box from './box';
 import path from './path';
 import '../treeCss.css';
+import stylingUtils from '../utils/styling';
 
 // Constants for the tree. Might be variables later in property panel
 const nodeSize = { width: 300, height: 100 };
@@ -50,7 +51,7 @@ const getBBoxOfNodes = nodes => {
   };
 };
 
-const reRenderTree = ({ svg, divBox, activeNode, allNodes, o, width, height }) => {
+const reRenderTree = ({ svg, divBox, activeNode, allNodes, o, width, height, cardStyling }) => {
   const nodes = filterTree(activeNode, allNodes);
 
   const nodeIdList = nodes.map(node => node.data.id);
@@ -86,7 +87,7 @@ const reRenderTree = ({ svg, divBox, activeNode, allNodes, o, width, height }) =
         .remove();
 
       divBox
-        .selectAll('.nodeRect')
+        .selectAll('.node-rect')
         .filter(data => removeList.indexOf(data.data.id) > -1)
         .remove();
     }
@@ -104,7 +105,7 @@ const reRenderTree = ({ svg, divBox, activeNode, allNodes, o, width, height }) =
     .attr('class', 'nodeWrapper')
     .attr('id', d => d.data.id);
 
-  box(divBox, o, appendNodes, id => {
+  box(divBox, o, appendNodes, cardStyling, id => {
     reRenderTree({
       svg,
       divBox,
@@ -113,6 +114,7 @@ const reRenderTree = ({ svg, divBox, activeNode, allNodes, o, width, height }) =
       activeNode: id,
       width,
       height,
+      cardStyling,
     });
   });
 
@@ -139,12 +141,12 @@ const reRenderTree = ({ svg, divBox, activeNode, allNodes, o, width, height }) =
   );
 };
 
-const renderTree = async ({ element, layout, model }) => {
+const renderTree = async ({ element, layout, model, Theme }) => {
   const b = element.getBoundingClientRect();
   // eslint-disable-next-line no-param-reassign
   element.innerHTML = '';
   const { width } = b;
-  const { height } = b;
+  let { height } = b;
 
   const orientations = position(orientation, nodeSize);
 
@@ -152,6 +154,7 @@ const renderTree = async ({ element, layout, model }) => {
   const data = await treeTransform({ layout, model });
 
   if (data.error) {
+    height -= 20;
     select(element)
       .append('div')
       .attr('class', 'org-error')
@@ -160,6 +163,7 @@ const renderTree = async ({ element, layout, model }) => {
   }
 
   if (data.warn && data.warn.length) {
+    height -= 20;
     select(element)
       .append('span')
       .attr('class', 'org-warning')
@@ -192,6 +196,8 @@ const renderTree = async ({ element, layout, model }) => {
 
     const nodes = hierarchy(data);
 
+    const cardStyling = stylingUtils.cardStyling({ Theme, layout });
+
     // Using the treemap created
     const allNodes = treemap(nodes);
     const activeNode = allNodes.data.id;
@@ -205,6 +211,7 @@ const renderTree = async ({ element, layout, model }) => {
       width,
       height,
       treemap,
+      cardStyling,
     });
   });
 };

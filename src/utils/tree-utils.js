@@ -144,11 +144,10 @@ export function createNodes(matrix, attributeIndecies, status) {
     const node = {
       id,
       parentId,
-      name: (row[2] && row[2].qText) || '',
       children: [],
       elemNo: row[0].qElemNumber,
-      details: row[3] ? row[3].qText : '',
       attributes: getAttributes(attributeIndecies, row[0].qAttrExps),
+      measure: row[2] && row[2].qText,
     };
     nodeMap[id] = node;
     allNodes.push(node);

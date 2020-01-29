@@ -1,8 +1,11 @@
 import card from '../card/card';
 
-export default function box(divBox, o, appendNodes, reRender) {
+export default function box(divBox, o, appendNodes, cardStyling, reRender) {
   function getStyle(p) {
-    return `width:${o.nodeSize.width}px;height:${o.nodeSize.height}px; top:${o.y(p)}px;left:${o.x(p)}px`;
+    if (p.data.id === 'Root') {
+      return `top:${o.y(p) + 80}px;left:${o.x(p) + 140}px`;
+    }
+    return `width:${o.nodeSize.width}px;height:${o.nodeSize.height}px; top:${o.y(p)}px;left:${o.x(p)}px;`;
   }
 
   divBox
@@ -10,13 +13,13 @@ export default function box(divBox, o, appendNodes, reRender) {
     .data(appendNodes)
     .enter()
     .append('div')
-    .attr('class', 'nodeRect')
+    .attr('class', 'node-rect')
     .attr('style', getStyle)
-    .attr('id', (d) => d.data.id)
-    .on('click', (node) => {
+    .attr('id', d => d.data.id)
+    .on('click', node => {
       if (node.children) {
         reRender(node.data.id);
       }
     })
-    .html((d) => card(d.data));
+    .html(d => card(d.data, cardStyling));
 }
