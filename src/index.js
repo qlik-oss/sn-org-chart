@@ -4,6 +4,7 @@ import ext from './ext';
 import renderTree from './tree/render';
 
 export default function supernova(env) {
+  const { Theme } = env;
   return {
     qae: {
       properties,
@@ -18,6 +19,7 @@ export default function supernova(env) {
           element: this.element,
           layout,
           model: this.model,
+          Theme,
         });
       },
       resize() {},

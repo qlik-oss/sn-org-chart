@@ -1,4 +1,4 @@
-import { createNodes, areAllLeafs } from './tree-utils';
+import { createNodes, areAllLeafs } from '../tree-utils';
 
 function generateMatrix(numRows, childCount = 1) {
   const matrix = [];

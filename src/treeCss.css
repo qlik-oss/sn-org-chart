@@ -1,45 +1,48 @@
-body {
-  font: 10px sans-serif;
-}
-
 .link {
   fill: none;
-  stroke: #000;
+  stroke: #8c8c8c;
   stroke-width: 3;
 }
 
-.border {
-  fill: none;
-  shape-rendering: crispEdges;
-  stroke: #aaa;
-}
-
-.remove {
-  background: black;
-}
-
-.nodeRect {
-  border: 2px solid black;
-  background: transparent;
+.node-rect {
   position: absolute;
 }
 
-.nodeReact .text {
-  color: pink;
-  font-size: 20px;
-  font-weight: bold;
+.org-root {
+  background-color: #8c8c8c;
+  width: 20px;
+  height: 20px;
+  border-radius: 20px;
 }
 
-.bounding {
-  border: 2px solid black;
-}
-
-.orgCard {
-  background: pink;
+.org-card-top {
+  height: 5px;
   width: 100%;
-  height: 100%;
-  font-size: 40px;
+  border-radius: 3px 3px 0px 0px;
 }
+
+.org-card-textarea {
+  height: 100%;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-radius: 0px 0px 3px 3px;
+}
+
+.org-card-title {
+  font-size: 26px;
+  font-weight: bold;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.org-card-text {
+  font-size: 20px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .org-path-holder {
   transform-origin: 0% 0%;
   transition-property: all;

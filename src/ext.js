@@ -1,3 +1,11 @@
+import propertyResolver from './utils/property-resolver';
+
+const colorOptions = [
+  { value: 'auto', translation: 'Common.Auto' },
+  { value: 'colorPicker', translation: 'properties.colorMode.primary' },
+  { value: 'byExpression', translation: 'properties.colorMode.byExpression' },
+];
+
 export default function ext(/* env */) {
   return {
     definition: {
@@ -73,6 +81,73 @@ export default function ext(/* env */) {
         },
         settings: {
           uses: 'settings',
+          items: {
+            styling: {
+              grouped: true,
+              translation: 'properties.presentation',
+              type: 'items',
+              items: {
+                backgroundColor: {
+                  type: 'items',
+                  items: {
+                    useColorExpression: {
+                      ref: 'style.backgroundColor.colorType',
+                      type: 'string',
+                      translation: 'AppDetails.SheetBackgroundColor',
+                      component: 'dropdown',
+                      options: colorOptions,
+                    },
+                    colorPicker: {
+                      component: 'color-picker',
+                      type: 'object',
+                      ref: 'style.backgroundColor.color',
+                      translation: 'properties.color',
+                      dualOutput: true,
+                      show: data =>
+                        propertyResolver.getValue(data, 'style.backgroundColor.colorType') === 'colorPicker',
+                    },
+                    colorExpression: {
+                      component: 'string',
+                      type: 'string',
+                      ref: 'style.backgroundColor.colorExpression',
+                      translation: 'Common.Expression',
+                      expression: 'optional',
+                      show: data =>
+                        propertyResolver.getValue(data, 'style.backgroundColor.colorType') === 'byExpression',
+                    },
+                  },
+                },
+                fontColor: {
+                  type: 'items',
+                  items: {
+                    useColorExpression: {
+                      ref: 'style.fontColor.colorType',
+                      type: 'string',
+                      translation: 'AppDetails.SheetFontColor',
+                      component: 'dropdown',
+                      options: colorOptions,
+                    },
+                    colorPicker: {
+                      component: 'color-picker',
+                      type: 'object',
+                      ref: 'style.fontColor.color',
+                      translation: 'properties.color',
+                      dualOutput: true,
+                      show: data => propertyResolver.getValue(data, 'style.fontColor.colorType') === 'colorPicker',
+                    },
+                    colorExpression: {
+                      component: 'string',
+                      type: 'string',
+                      ref: 'style.fontColor.colorExpression',
+                      translation: 'Common.Expression',
+                      expression: 'optional',
+                      show: data => propertyResolver.getValue(data, 'style.fontColor.colorType') === 'byExpression',
+                    },
+                  },
+                },
+              },
+            },
+          },
         },
       },
     },
