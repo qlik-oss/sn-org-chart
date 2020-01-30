@@ -1,5 +1,4 @@
 import { hierarchy, entries, tree, select } from 'd3';
-import treeTransform from '../utils/tree-utils';
 import position from './position';
 import box from './box';
 import path from './path';
@@ -104,7 +103,7 @@ const reRenderTree = ({ svg, divBox, activeNode, allNodes, o, width, height, car
   transform(nodes, nodeSize, width, height, svg, divBox);
 };
 
-const renderTree = async ({ element, layout, model, Theme }) => {
+const renderTree = ({ element, dataTree, layout, Theme }) => {
   const b = element.getBoundingClientRect();
   // eslint-disable-next-line no-param-reassign
   element.innerHTML = '';
@@ -114,7 +113,7 @@ const renderTree = async ({ element, layout, model, Theme }) => {
   const orientations = position(orientation, nodeSize);
 
   // Get and transform the data into a tree structure
-  const data = await treeTransform({ layout, model });
+  const data = dataTree;
 
   if (data.error) {
     height -= 20;
@@ -122,7 +121,7 @@ const renderTree = async ({ element, layout, model, Theme }) => {
       .append('div')
       .attr('class', 'org-error')
       .html(data.message);
-    return;
+    return Promise.resolve();
   }
 
   if (data.warn && data.warn.length) {
@@ -150,31 +149,35 @@ const renderTree = async ({ element, layout, model, Theme }) => {
     .attr('class', 'org-node-holder');
 
   const svg = svgBox.append('g').attr('class', 'org-path-holder');
-  svg.each(pos => {
-    const o = pos.value;
-    // Here are the settings for the tree. For instance nodesize can be adjusted
-    const treemap = tree()
-      .size([width, height])
-      .nodeSize([0, o.depthSpacing]);
 
-    const nodes = hierarchy(data);
+  return new Promise(resolve => {
+    svg.each(pos => {
+      const o = pos.value;
+      // Here are the settings for the tree. For instance nodesize can be adjusted
+      const treemap = tree()
+        .size([width, height])
+        .nodeSize([0, o.depthSpacing]);
 
-    const cardStyling = stylingUtils.cardStyling({ Theme, layout });
+      const nodes = hierarchy(data);
 
-    // Using the treemap created
-    const allNodes = treemap(nodes);
-    const activeNode = allNodes.data.id;
-    reRenderTree({
-      svg,
-      divBox,
-      data,
-      allNodes,
-      activeNode,
-      o,
-      width,
-      height,
-      treemap,
-      cardStyling,
+      const cardStyling = stylingUtils.cardStyling({ Theme, layout });
+
+      // Using the treemap created
+      const allNodes = treemap(nodes);
+      const activeNode = allNodes.data.id;
+      reRenderTree({
+        svg,
+        divBox,
+        data,
+        allNodes,
+        activeNode,
+        o,
+        width,
+        height,
+        treemap,
+        cardStyling,
+      });
+      resolve();
     });
   });
 };
