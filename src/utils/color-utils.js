@@ -101,11 +101,6 @@ const colorUtils = {
       r = parseInt(matches[1], 16);
       g = parseInt(matches[2], 16);
       b = parseInt(matches[3], 16);
-    } else if ((matches = /^#([A-f0-9])([A-f0-9])([A-f0-9])$/i.exec(color))) {
-      // #a5F
-      r = parseInt(matches[1] + matches[1], 16);
-      g = parseInt(matches[2] + matches[2], 16);
-      b = parseInt(matches[3] + matches[3], 16);
     }
     return 0.299 * r + 0.587 * g + 0.114 * b < 125;
   },

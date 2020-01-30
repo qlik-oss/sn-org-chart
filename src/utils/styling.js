@@ -1,6 +1,6 @@
 import colorUtils from './color-utils';
 
-function getColor(reference, palette, defaultColor) {
+export function getColor(reference, palette, defaultColor) {
   let color;
   switch (reference.colorType) {
     case 'byExpression':
