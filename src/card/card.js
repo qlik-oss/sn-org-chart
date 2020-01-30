@@ -1,6 +1,6 @@
 import colorUtils from '../utils/color-utils';
 
-function getBackgroundColor(data, cardStyling) {
+export function getBackgroundColor(data, cardStyling) {
   let color = cardStyling.backgroundColor;
   if (data.attributes && data.attributes.color) {
     const resolvedColor = colorUtils.resolveExpression(data.attributes.color);
@@ -9,7 +9,7 @@ function getBackgroundColor(data, cardStyling) {
   return color;
 }
 
-function getFontColor(cardStyling, backgroundColor) {
+export function getFontColor(cardStyling, backgroundColor) {
   if (cardStyling.fontColor === 'default') {
     return colorUtils.isDarkColor(backgroundColor) ? '#e6e6e6' : '#484848';
   }
@@ -31,6 +31,5 @@ export default (data, cardStyling) => {
   if (data.measure) {
     html += `<div class="org-card-text">${data.measure}</div>`;
   }
-  return `<div class="org-card-top" style="background-color:${topColor};"></div>
-  <div class="org-card-textarea" style="background-color:${backgroundColor};color:${fontColor};">${html}</div>`;
+  return `<div class="org-card-top" style="background-color:${topColor};"></div><div class="org-card-textarea" style="background-color:${backgroundColor};color:${fontColor};">${html}</div>`;
 };
