@@ -5,6 +5,7 @@ import box from './box';
 import path from './path';
 import '../treeCss.css';
 import stylingUtils from '../utils/styling';
+import transform from './transform';
 
 // Constants for the tree. Might be variables later in property panel
 const nodeSize = { width: 300, height: 100 };
@@ -28,27 +29,6 @@ const filterTree = (id, nodeTree) => {
       (node.parent && node.parent.data.id === currentNode.data.id)
     );
   });
-};
-
-const getBBoxOfNodes = nodes => {
-  const bbox = {
-    left: Infinity,
-    top: Infinity,
-    right: -Infinity,
-    bottom: -Infinity,
-  };
-  nodes.forEach(node => {
-    bbox.left = Math.min(node.xActual, bbox.left);
-    bbox.top = Math.min(node.yActual, bbox.top);
-    bbox.right = Math.max(node.xActual, bbox.right);
-    bbox.bottom = Math.max(node.yActual, bbox.bottom);
-  });
-  return {
-    x: bbox.left,
-    y: bbox.top,
-    width: bbox.right - bbox.left + nodeSize.width,
-    height: bbox.bottom - bbox.top + nodeSize.height,
-  };
 };
 
 const reRenderTree = ({ svg, divBox, activeNode, allNodes, o, width, height, cardStyling }) => {
@@ -121,24 +101,7 @@ const reRenderTree = ({ svg, divBox, activeNode, allNodes, o, width, height, car
   // Create the lines (links) between the nodes
   path(node, o, isVertical);
 
-  // Zooming and positioning of the tree
-  const bBox = getBBoxOfNodes(nodes);
-  const scaleToWidhth = bBox.width / width > bBox.height / height;
-  const scaleFactor = scaleToWidhth ? bBox.width / width : bBox.height / height;
-  const translation = scaleToWidhth
-    ? `${-bBox.x}px, ${-bBox.y + (height * scaleFactor - bBox.height) / 2}px`
-    : `${-bBox.x + (width * scaleFactor - bBox.width) / 2}px, ${-bBox.y}px`;
-  /* svg
-    .transition()
-    .duration(transitionTime)
-    .attr('transform', `scale(${1 / scaleFactor}) translate(${translation})`);
-*/
-  svg.attr('style', `transform: scale(${1 / scaleFactor}) translate(${translation});`);
-  divBox.attr(
-    'style',
-    // eslint-disable-next-line comma-dangle
-    `width:${width}px;height:${height}px; transform: scale(${1 / scaleFactor}) translate(${translation});`
-  );
+  transform(nodes, nodeSize, width, height, svg, divBox);
 };
 
 const renderTree = async ({ element, layout, model, Theme }) => {

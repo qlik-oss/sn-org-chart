@@ -43,7 +43,8 @@
   text-overflow: ellipsis;
 }
 
-.org-path-holder {
+/* For css only transitions, does not work in IE11 */
+.org-path-holder:not(.org-disable-transition) {
   transform-origin: 0% 0%;
   transition-property: all;
   transition-duration: 0.5s;
@@ -52,6 +53,9 @@
 .org-node-holder {
   position: absolute;
   transform-origin: 0% 0%;
+}
+
+.org-node-holder:not(.org-disable-transition) {
   transition-property: all;
   transition-duration: 0.5s;
 }
