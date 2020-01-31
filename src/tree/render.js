@@ -12,9 +12,6 @@ const nodeSize = { width: 300, height: 100 };
 const orientation = 'ttb';
 const isVertical = orientation === 'ttb' || orientation === 'btt';
 
-// Set previous nodes to know which nodes to remain and which to remove
-let previousNodes = [];
-
 const filterTree = (id, nodeTree) => {
   const nodes = nodeTree.descendants();
   const currentNode = nodes.find(node => node.data.id === id);
@@ -31,62 +28,33 @@ const filterTree = (id, nodeTree) => {
   });
 };
 
-const reRenderTree = ({ svg, divBox, activeNode, allNodes, o, width, height, cardStyling }) => {
+export const reRenderTree = ({
+  svg,
+  divBox,
+  activeNode,
+  allNodes,
+  o,
+  width,
+  height,
+  cardStyling,
+  callback,
+  storage,
+}) => {
   const nodes = filterTree(activeNode, allNodes);
-
-  const nodeIdList = nodes.map(node => node.data.id);
-  let appendNodes = [];
-
-  const activeNodes = svg.selectAll('.nodeWrapper');
-
-  // Cleanup from previous render
-  // eslint-disable-next-line no-underscore-dangle
-  if (previousNodes.length > 0 && activeNodes._groups[0].length > 0) {
-    const removeList = [];
-    previousNodes.forEach(node => {
-      if (nodeIdList.indexOf(node.data.id) === -1) {
-        removeList.push(node.data.id);
-      }
-    });
-    const previousNodesIdList = previousNodes.map(node => node.data.id);
-    nodes.forEach(node => {
-      if (previousNodesIdList.indexOf(node.data.id) === -1) {
-        appendNodes.push(node);
-      }
-    });
-    if (removeList.length > 0) {
-      svg
-        .selectAll('g')
-        .filter(data => removeList.indexOf(data.data.id) > -1)
-        // This inserts a transition for the removal of nodes. However it is not in sync with zooming at the moment
-        // .transition()
-        // .duration(transitionTime)
-        // .attr('transform', d => {
-        //   return `translate(${o.x(d.parent || d) + 150},${o.y(d.parent || d) + 100}) scale(0)`;
-        // })
-        .remove();
-
-      divBox
-        .selectAll('.node-rect')
-        .filter(data => removeList.indexOf(data.data.id) > -1)
-        .remove();
-    }
-  } else {
-    appendNodes = nodes;
-  }
-  previousNodes = nodes;
+  divBox.selectAll('.nodeRect').remove();
+  svg.selectAll('g').remove();
 
   // Create the nodes.
   const node = svg
     .selectAll('.node')
-    .data(appendNodes)
+    .data(nodes)
     .enter()
     .append('g')
     .attr('class', 'nodeWrapper')
     .attr('id', d => d.data.id);
 
-  box(divBox, o, appendNodes, cardStyling, id => {
-    reRenderTree({
+  box(divBox, o, nodes, cardStyling, id => {
+    callback({
       svg,
       divBox,
       allNodes,
@@ -95,6 +63,8 @@ const reRenderTree = ({ svg, divBox, activeNode, allNodes, o, width, height, car
       width,
       height,
       cardStyling,
+      callback,
+      storage,
     });
   });
 
@@ -104,12 +74,12 @@ const reRenderTree = ({ svg, divBox, activeNode, allNodes, o, width, height, car
   transform(nodes, nodeSize, width, height, svg, divBox);
 };
 
-const renderTree = async ({ element, layout, model, Theme }) => {
+export const renderTree = async ({ element, layout, model, storage, callback, Theme }) => {
   const b = element.getBoundingClientRect();
-  // eslint-disable-next-line no-param-reassign
-  element.innerHTML = '';
   const { width } = b;
   let { height } = b;
+  // eslint-disable-next-line no-param-reassign
+  element.innerHTML = '';
 
   const orientations = position(orientation, nodeSize);
 
@@ -163,11 +133,10 @@ const renderTree = async ({ element, layout, model, Theme }) => {
 
     // Using the treemap created
     const allNodes = treemap(nodes);
-    const activeNode = allNodes.data.id;
+    const activeNode = storage.activeNode || allNodes.data.id;
     reRenderTree({
       svg,
       divBox,
-      data,
       allNodes,
       activeNode,
       o,
@@ -175,8 +144,10 @@ const renderTree = async ({ element, layout, model, Theme }) => {
       height,
       treemap,
       cardStyling,
+      callback,
+      storage,
     });
   });
 };
 
-export default renderTree;
+// export default renderTree;

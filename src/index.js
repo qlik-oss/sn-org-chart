@@ -1,10 +1,15 @@
 import properties from './object-properties';
 import data from './data';
 import ext from './ext';
-import renderTree from './tree/render';
+import { renderTree, reRenderTree } from './tree/render';
 
 export default function supernova(env) {
   const { Theme } = env;
+  const callback = args => {
+    args.storage.activeNode = args.activeNode;
+    reRenderTree(args);
+  };
+
   return {
     qae: {
       properties,
@@ -13,6 +18,7 @@ export default function supernova(env) {
     component: {
       mounted(element) {
         this.element = element;
+        this.storage = {};
       },
       render({ layout }) {
         renderTree({
@@ -20,6 +26,8 @@ export default function supernova(env) {
           layout,
           model: this.model,
           Theme,
+          storage: this.storage,
+          callback,
         });
       },
       resize() {},

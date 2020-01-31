@@ -7,12 +7,15 @@ export default function position(orientation, nodeSize) {
 
   // TODO: should expose for test, need to pass more arguments...
   const widthTranslation = (d, axis) => {
-    if (d.parent && areAllLeafs(d.parent.children)) {
-      d[axis] = d.parent[axis] + nodeMargin / 2;
+    if (d.parent) {
+      if (!d.parent[axis]) {
+        d.parent[axis] = widthTranslation(d.parent, axis);
+      }
+      d[axis] = areAllLeafs(d.parent.children)
+        ? d.parent[axis] + nodeMargin / 2
+        : d.parent[axis] + (d.data.childNumber - (d.parent.children.length - 1) / 2) * widthSpacing;
     } else {
-      d[axis] = d.parent
-        ? d.parent[axis] + (d.data.childNumber - (d.parent.children.length - 1) / 2) * widthSpacing
-        : 0;
+      d[axis] = 0;
     }
 
     return d[axis];
