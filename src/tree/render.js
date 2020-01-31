@@ -41,7 +41,7 @@ export const reRenderTree = ({
   storage,
 }) => {
   const nodes = filterTree(activeNode, allNodes);
-  divBox.selectAll('.nodeRect').remove();
+  divBox.selectAll('.node-rect').remove();
   svg.selectAll('g').remove();
 
   // Create the nodes.

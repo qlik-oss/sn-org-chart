@@ -18,8 +18,8 @@ export function getColor(reference, palette, defaultColor) {
 const stylingUtils = {
   cardStyling: ({ Theme, layout }) => {
     const palette = colorUtils.getPalette(Theme);
-    const backgroundColor = getColor(layout.style.background, palette, '#e6e6e6');
-    const fontColor = getColor(layout.style.label, palette, 'default');
+    const backgroundColor = getColor(layout.style.backgroundColor, palette, '#e6e6e6');
+    const fontColor = getColor(layout.style.fontColor, palette, 'default');
     const cardStyling = {
       backgroundColor,
       fontColor,
