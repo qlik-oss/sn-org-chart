@@ -1,4 +1,4 @@
-import { hierarchy, entries, tree, select } from 'd3';
+import { hierarchy, tree, select } from 'd3';
 import treeTransform from '../utils/tree-utils';
 import position from './position';
 import box from './box';
@@ -103,8 +103,6 @@ export const renderTree = async ({ element, layout, model, storage, callback, Th
       .html(`*${data.warn.join(' ')}`);
   }
 
-  console.log(entries(orientations));
-
   const svgBox = select(element)
     .selectAll('svg')
     .data([{}])
@@ -116,14 +114,12 @@ export const renderTree = async ({ element, layout, model, storage, callback, Th
 
   const divBox = select(element)
     .selectAll('div')
-    // .data(entries(orientations))
     .data([{}])
     .enter()
     .append('div')
     .attr('class', 'org-node-holder');
 
   const svg = svgBox.append('g').attr('class', 'org-path-holder');
-  // svg.eaxch(pos => {
   const o = orientations;
   // Here are the settings for the tree. For instance nodesize can be adjusted
   const treemap = tree()
@@ -150,7 +146,6 @@ export const renderTree = async ({ element, layout, model, storage, callback, Th
     callback,
     storage,
   });
-  // });
 };
 
 // export default renderTree;
