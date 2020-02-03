@@ -1,7 +1,7 @@
 import { useStaleLayout, useEffect, useElement, useModel, useRect, useState, usePromise } from '@nebula.js/supernova';
 import properties from './object-properties';
 import data from './data';
-import ext from './ext';
+import ext from './extension/ext';
 import renderTree from './tree/render';
 import treeTransform from './utils/tree-utils';
 
