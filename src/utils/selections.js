@@ -39,7 +39,14 @@ export default {
         selections.begin('/qHyperCubeDef');
       }
 
-      selections.select({ method: 'selectHyperCubeValues', params: ['/qHyperCubeDef', 0, root.selectionState, false] });
+      if (root.selectionState.length === 0) {
+        selections.clear();
+      } else {
+        selections.select({
+          method: 'selectHyperCubeValues',
+          params: ['/qHyperCubeDef', 0, root.selectionState, false],
+        });
+      }
     }
   },
 };
