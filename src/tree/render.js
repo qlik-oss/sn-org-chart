@@ -4,7 +4,7 @@ import box from './box';
 import path from './path';
 import '../treeCss.css';
 import stylingUtils from '../utils/styling';
-import transform from './transform';
+import transform, { applyTransform } from './transform';
 
 // Constants for the tree. Might be variables later in property panel
 const nodeSize = { width: 300, height: 100 };
@@ -30,7 +30,7 @@ const filterTree = (id, nodeTree) => {
   });
 };
 
-const reRenderTree = ({ svg, divBox, activeNode, allNodes, o, width, height, cardStyling }) => {
+const reRenderTree = ({ element, svg, divBox, activeNode, allNodes, o, width, height, cardStyling }) => {
   const nodes = filterTree(activeNode, allNodes);
 
   const nodeIdList = nodes.map(node => node.data.id);
@@ -100,7 +100,7 @@ const reRenderTree = ({ svg, divBox, activeNode, allNodes, o, width, height, car
   // Create the lines (links) between the nodes
   path(node, o, isVertical);
 
-  transform(nodes, nodeSize, width, height, svg, divBox);
+  transform(element, true, nodes, nodeSize, width, height, svg, divBox);
 };
 
 const renderTree = ({ element, dataTree, layout, Theme }) => {
@@ -137,6 +137,7 @@ const renderTree = ({ element, dataTree, layout, Theme }) => {
     .data(entries(orientations))
     .enter()
     .append('svg')
+    .attr('viewBox', [0, 0, width, height])
     .attr('style', 'position:absolute')
     .attr('width', width)
     .attr('height', height);
@@ -175,6 +176,7 @@ const renderTree = ({ element, dataTree, layout, Theme }) => {
         width,
         height,
         treemap,
+        element,
         cardStyling,
       });
       resolve();

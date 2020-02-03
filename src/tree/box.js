@@ -5,7 +5,7 @@ export default function box(divBox, o, appendNodes, cardStyling, reRender) {
     if (p.data.id === 'Root') {
       return `top:${o.y(p) + 80}px;left:${o.x(p) + 140}px`;
     }
-    return `width:${o.nodeSize.width}px;height:${o.nodeSize.height}px; top:${o.y(p)}px;left:${o.x(p)}px;`;
+    return `top:${o.y(p)}px;left:${o.x(p)}px;`;
   }
 
   divBox
