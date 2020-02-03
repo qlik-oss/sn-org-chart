@@ -103,9 +103,11 @@ export const renderTree = async ({ element, layout, model, storage, callback, Th
       .html(`*${data.warn.join(' ')}`);
   }
 
+  console.log(entries(orientations));
+
   const svgBox = select(element)
     .selectAll('svg')
-    .data(entries(orientations))
+    .data([{}])
     .enter()
     .append('svg')
     .attr('style', 'position:absolute')
@@ -114,40 +116,41 @@ export const renderTree = async ({ element, layout, model, storage, callback, Th
 
   const divBox = select(element)
     .selectAll('div')
-    .data(entries(orientations))
+    // .data(entries(orientations))
+    .data([{}])
     .enter()
     .append('div')
     .attr('class', 'org-node-holder');
 
   const svg = svgBox.append('g').attr('class', 'org-path-holder');
-  svg.each(pos => {
-    const o = pos.value;
-    // Here are the settings for the tree. For instance nodesize can be adjusted
-    const treemap = tree()
-      .size([width, height])
-      .nodeSize([0, o.depthSpacing]);
+  // svg.eaxch(pos => {
+  const o = orientations;
+  // Here are the settings for the tree. For instance nodesize can be adjusted
+  const treemap = tree()
+    .size([width, height])
+    .nodeSize([0, o.depthSpacing]);
 
-    const nodes = hierarchy(data);
+  const nodes = hierarchy(data);
 
-    const cardStyling = stylingUtils.cardStyling({ Theme, layout });
+  const cardStyling = stylingUtils.cardStyling({ Theme, layout });
 
-    // Using the treemap created
-    const allNodes = treemap(nodes);
-    const activeNode = storage.activeNode || allNodes.data.id;
-    reRenderTree({
-      svg,
-      divBox,
-      allNodes,
-      activeNode,
-      o,
-      width,
-      height,
-      treemap,
-      cardStyling,
-      callback,
-      storage,
-    });
+  // Using the treemap created
+  const allNodes = treemap(nodes);
+  const activeNode = storage.activeNode || allNodes.data.id;
+  reRenderTree({
+    svg,
+    divBox,
+    allNodes,
+    activeNode,
+    o,
+    width,
+    height,
+    treemap,
+    cardStyling,
+    callback,
+    storage,
   });
+  // });
 };
 
 // export default renderTree;

@@ -36,48 +36,40 @@ export default function position(orientation, nodeSize) {
       widthSpacing = nodeSize.width + nodeMargin;
       depthSpacing = nodeSize.height + nodeMargin;
       orientations = {
-        'top-to-bottom': {
-          depthSpacing,
-          nodeSize,
-          x: d => widthTranslation(d, 'xActual'),
-          y: d => depthTranslation(d, 'yActual'),
-        },
+        depthSpacing,
+        nodeSize,
+        x: d => widthTranslation(d, 'xActual'),
+        y: d => depthTranslation(d, 'yActual'),
       };
       break;
     case 'btt':
       widthSpacing = nodeSize.width + nodeMargin;
       depthSpacing = -nodeSize.height - nodeMargin;
       orientations = {
-        'bottom-to-top': {
-          depthSpacing,
-          nodeSize,
-          x: d => widthTranslation(d, 'xActual'),
-          y: d => depthTranslation(d, 'yActual'),
-        },
+        depthSpacing,
+        nodeSize,
+        x: d => widthTranslation(d, 'xActual'),
+        y: d => depthTranslation(d, 'yActual'),
       };
       break;
     case 'ltr':
       widthSpacing = nodeSize.height + nodeMargin;
       depthSpacing = nodeSize.width + nodeMargin;
       orientations = {
-        'left-to-right': {
-          depthSpacing,
-          nodeSize,
-          x: d => depthTranslation(d, 'xActual'),
-          y: d => widthTranslation(d, 'yActual'),
-        },
+        depthSpacing,
+        nodeSize,
+        x: d => depthTranslation(d, 'xActual'),
+        y: d => widthTranslation(d, 'yActual'),
       };
       break;
     case 'rtl':
       widthSpacing = nodeSize.height + nodeMargin;
       depthSpacing = -nodeSize.width - nodeMargin;
       orientations = {
-        'right-to-left': {
-          depthSpacing,
-          nodeSize,
-          x: d => depthTranslation(d, 'xActual'),
-          y: d => widthTranslation(d, 'yActual'),
-        },
+        depthSpacing,
+        nodeSize,
+        x: d => depthTranslation(d, 'xActual'),
+        y: d => widthTranslation(d, 'yActual'),
       };
       break;
     default:
