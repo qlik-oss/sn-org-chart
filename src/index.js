@@ -10,6 +10,26 @@ export default function supernova(env) {
       properties,
       data,
     },
+    // This does not work yet.
+    selectionToolbar: {
+      items: [
+        {
+          key: 'linked',
+          label: 'Linked',
+          icon: 'link',
+          activated: false,
+          action() {
+            this.activated = !this.activated;
+          },
+          enabled() {
+            return true;
+          },
+          active() {
+            return this.activated;
+          },
+        },
+      ],
+    },
     component: {
       mounted(element) {
         this.element = element;
@@ -20,6 +40,7 @@ export default function supernova(env) {
           layout,
           model: this.model,
           Theme,
+          selectionsAPI: this.selections,
         });
       },
       resize() {},

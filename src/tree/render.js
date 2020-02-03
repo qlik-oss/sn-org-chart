@@ -31,7 +31,7 @@ const filterTree = (id, nodeTree) => {
   });
 };
 
-const reRenderTree = ({ svg, divBox, activeNode, allNodes, o, width, height, cardStyling }) => {
+const reRenderTree = ({ svg, divBox, activeNode, allNodes, o, width, height, cardStyling, selectionsAPI }) => {
   const nodes = filterTree(activeNode, allNodes);
 
   const nodeIdList = nodes.map(node => node.data.id);
@@ -85,7 +85,7 @@ const reRenderTree = ({ svg, divBox, activeNode, allNodes, o, width, height, car
     .attr('class', 'nodeWrapper')
     .attr('id', d => d.data.id);
 
-  box(divBox, o, appendNodes, cardStyling, id => {
+  box(divBox, o, appendNodes, cardStyling, selectionsAPI, allNodes, id => {
     reRenderTree({
       svg,
       divBox,
@@ -95,6 +95,7 @@ const reRenderTree = ({ svg, divBox, activeNode, allNodes, o, width, height, car
       width,
       height,
       cardStyling,
+      selectionsAPI,
     });
   });
 
@@ -104,7 +105,7 @@ const reRenderTree = ({ svg, divBox, activeNode, allNodes, o, width, height, car
   transform(nodes, nodeSize, width, height, svg, divBox);
 };
 
-const renderTree = async ({ element, layout, model, Theme }) => {
+const renderTree = async ({ element, layout, model, Theme, selectionsAPI }) => {
   const b = element.getBoundingClientRect();
   // eslint-disable-next-line no-param-reassign
   element.innerHTML = '';
@@ -175,6 +176,7 @@ const renderTree = async ({ element, layout, model, Theme }) => {
       height,
       treemap,
       cardStyling,
+      selectionsAPI,
     });
   });
 };

@@ -1,6 +1,7 @@
 import card from '../card/card';
+import selections from '../utils/selections';
 
-export default function box(divBox, o, appendNodes, cardStyling, reRender) {
+export default function box(divBox, o, appendNodes, cardStyling, selectionsAPI, allNodes) {
   function getStyle(p) {
     if (p.data.id === 'Root') {
       return `top:${o.y(p) + 80}px;left:${o.x(p) + 140}px`;
@@ -17,9 +18,8 @@ export default function box(divBox, o, appendNodes, cardStyling, reRender) {
     .attr('style', getStyle)
     .attr('id', d => d.data.id)
     .on('click', node => {
-      if (node.children) {
-        reRender(node.data.id);
-      }
+      // console.log('now selections should start', node.data.id);
+      selections.select(node, selectionsAPI, allNodes, true);
     })
     .html(d => card(d.data, cardStyling));
 }

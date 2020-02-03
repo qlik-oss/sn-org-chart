@@ -1,4 +1,5 @@
-import { createNodes, areAllLeafs } from '../tree-utils';
+import { createNodes, areAllLeafs, getAllTreeElemNo } from '../tree-utils';
+import defaultValues from '../../__tests__/default-orgchart-props';
 
 function generateMatrix(numRows, childCount = 1) {
   const matrix = [];
@@ -51,4 +52,11 @@ describe('tree-utils', () => {
   // should check for cycles and output something
   // should handle orphans
   // should handle multiple roots
+
+  describe('getAllTreeIds', () => {
+    it('should return all ids in tree', () => {
+      const result = getAllTreeElemNo(defaultValues.nodes);
+      expect(result).to.deep.equal([2, 3, 798, 88]);
+    });
+  });
 });

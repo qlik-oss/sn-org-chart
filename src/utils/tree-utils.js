@@ -125,6 +125,20 @@ function getAttributes(indecies, qAttrExps) {
   return attributes;
 }
 
+export function getAllTreeElemNo(node) {
+  const idList = [];
+  const pushChildrenIds = currentNode => {
+    currentNode.children.forEach(child => {
+      idList.push(child.data.elemNo);
+      if (child.children && child.children.length > 0) {
+        pushChildrenIds(child);
+      }
+    });
+  };
+  node.children && pushChildrenIds(node);
+  return idList;
+}
+
 export function areAllLeafs(children) {
   for (let i = 0; i < children.length; ++i) {
     if (children[i].children !== undefined) {
