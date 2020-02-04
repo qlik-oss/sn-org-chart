@@ -1,5 +1,4 @@
 import { hierarchy, tree, select } from 'd3';
-import treeTransform from '../utils/tree-utils';
 import position from './position';
 import box from './box';
 import path from './path';
@@ -28,18 +27,8 @@ const filterTree = (id, nodeTree) => {
   });
 };
 
-export const reRenderTree = ({
-  svg,
-  divBox,
-  activeNode,
-  allNodes,
-  o,
-  width,
-  height,
-  cardStyling,
-  callback,
-  storage,
-}) => {
+export const paintTree = ({ svg, divBox, allNodes, o, width, height, cardStyling, setActiveCallback }, activeNode) => {
+  console.log('paint');
   const nodes = filterTree(activeNode, allNodes);
   divBox.selectAll('.node-rect').remove();
   svg.selectAll('g').remove();
@@ -54,18 +43,7 @@ export const reRenderTree = ({
     .attr('id', d => d.data.id);
 
   box(divBox, o, nodes, cardStyling, id => {
-    callback({
-      svg,
-      divBox,
-      allNodes,
-      o,
-      activeNode: id,
-      width,
-      height,
-      cardStyling,
-      callback,
-      storage,
-    });
+    setActiveCallback(id);
   });
 
   // Create the lines (links) between the nodes
@@ -74,7 +52,7 @@ export const reRenderTree = ({
   transform(nodes, nodeSize, width, height, svg, divBox);
 };
 
-export const renderTree = async ({ element, layout, model, storage, callback, Theme }) => {
+export function preRenderTree({ element, dataTree, layout, Theme }) {
   const b = element.getBoundingClientRect();
   const { width } = b;
   let { height } = b;
@@ -84,7 +62,7 @@ export const renderTree = async ({ element, layout, model, storage, callback, Th
   const orientations = position(orientation, nodeSize);
 
   // Get and transform the data into a tree structure
-  const data = await treeTransform({ layout, model });
+  const data = dataTree;
 
   if (data.error) {
     height -= 20;
@@ -92,7 +70,7 @@ export const renderTree = async ({ element, layout, model, storage, callback, Th
       .append('div')
       .attr('class', 'org-error')
       .html(data.message);
-    return;
+    return {}; // Promise.resolve();
   }
 
   if (data.warn && data.warn.length) {
@@ -132,20 +110,6 @@ export const renderTree = async ({ element, layout, model, storage, callback, Th
 
   // Using the treemap created
   const allNodes = treemap(nodes);
-  const activeNode = storage.activeNode || allNodes.data.id;
-  reRenderTree({
-    svg,
-    divBox,
-    allNodes,
-    activeNode,
-    o,
-    width,
-    height,
-    treemap,
-    cardStyling,
-    callback,
-    storage,
-  });
-};
-
-// export default renderTree;
+  // const activeNode = allNodes.data.id;
+  return { svg, divBox, allNodes, o, width, height, cardStyling };
+}
