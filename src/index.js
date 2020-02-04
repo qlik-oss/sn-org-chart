@@ -1,4 +1,13 @@
-import { useStaleLayout, useEffect, useElement, useModel, useRect, useState, usePromise } from '@nebula.js/supernova';
+import {
+  useStaleLayout,
+  useEffect,
+  useElement,
+  useModel,
+  useRect,
+  useState,
+  usePromise,
+  useTheme,
+} from '@nebula.js/supernova';
 import properties from './object-properties';
 import data from './data';
 import ext from './extension/ext';
@@ -6,7 +15,6 @@ import renderTree from './tree/render';
 import treeTransform from './utils/tree-utils';
 
 export default function supernova(env) {
-  const { Theme } = env;
   return {
     qae: {
       properties,
@@ -20,18 +28,27 @@ export default function supernova(env) {
       const model = useModel();
       const element = useElement();
       const rect = useRect();
+      const Theme = useTheme();
 
       const callRender = () => {
         if (element && dataTree && layout) {
-          return renderTree({
+          /* return */ renderTree({
             element,
             dataTree,
             layout,
             Theme,
           });
         }
-        return Promise.resolve();
+        // return Promise.resolve();
       };
+
+      /*
+       * Basic steps to aim for - function [dependency]
+       * - createElements [element]
+       * - resolveData [layout, model] > dataStruct, styling
+       * - generateTree [dataStruct] -> allNodes, positioning
+       * - render [allNodes, positioning, styling, rect]
+       */
 
       usePromise(() => {
         // Get and transform the data into a tree structure
@@ -43,8 +60,10 @@ export default function supernova(env) {
         return Promise.resolve();
       }, [layout, model]);
 
-      usePromise(callRender, [layout, element, dataTree]);
-
+      // Should avoid dependency on layout -> store that on dataTree instead?
+      // Should move element dependency to preRender function
+      useEffect(callRender, [layout, element, dataTree]);
+      // Should be bundled with dataTree dependency once layout and element has been moved?
       useEffect(callRender, [rect]);
     },
     ext: ext(env),

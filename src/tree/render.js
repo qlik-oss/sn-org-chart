@@ -149,37 +149,39 @@ const renderTree = ({ element, dataTree, layout, Theme }) => {
     .attr('class', 'org-node-holder');
 
   const svg = svgBox.append('g').attr('class', 'org-path-holder');
+  // Promise not needed at this time as the rendering is sync
+  // Is likely needed later when we support printing
+  // return new Promise(resolve => {
+  svg.each(pos => {
+    const o = pos.value;
+    // Here are the settings for the tree. For instance nodesize can be adjusted
+    const treemap = tree()
+      .size([width, height])
+      .nodeSize([0, o.depthSpacing]);
 
-  return new Promise(resolve => {
-    svg.each(pos => {
-      const o = pos.value;
-      // Here are the settings for the tree. For instance nodesize can be adjusted
-      const treemap = tree()
-        .size([width, height])
-        .nodeSize([0, o.depthSpacing]);
+    const nodes = hierarchy(data);
 
-      const nodes = hierarchy(data);
+    const cardStyling = stylingUtils.cardStyling({ Theme, layout });
 
-      const cardStyling = stylingUtils.cardStyling({ Theme, layout });
-
-      // Using the treemap created
-      const allNodes = treemap(nodes);
-      const activeNode = allNodes.data.id;
-      reRenderTree({
-        svg,
-        divBox,
-        data,
-        allNodes,
-        activeNode,
-        o,
-        width,
-        height,
-        treemap,
-        cardStyling,
-      });
-      resolve();
+    // Using the treemap created
+    const allNodes = treemap(nodes);
+    const activeNode = allNodes.data.id;
+    reRenderTree({
+      svg,
+      divBox,
+      data,
+      allNodes,
+      activeNode,
+      o,
+      width,
+      height,
+      treemap,
+      cardStyling,
     });
+    /*   resolve();
+    }); */
   });
+  return true;
 };
 
 export default renderTree;
