@@ -1,5 +1,4 @@
 import { hierarchy, entries, tree, select } from 'd3';
-import treeTransform from '../utils/tree-utils';
 import position from './position';
 import box from './box';
 import path from './path';
@@ -31,7 +30,7 @@ const filterTree = (id, nodeTree) => {
   });
 };
 
-const reRenderTree = ({ svg, divBox, activeNode, allNodes, o, width, height, cardStyling, selectionsAPI }) => {
+const reRenderTree = ({ svg, divBox, activeNode, allNodes, o, width, height, cardStyling, selectionsAPI, linked }) => {
   const nodes = filterTree(activeNode, allNodes);
 
   const nodeIdList = nodes.map(node => node.data.id);
@@ -85,7 +84,7 @@ const reRenderTree = ({ svg, divBox, activeNode, allNodes, o, width, height, car
     .attr('class', 'nodeWrapper')
     .attr('id', d => d.data.id);
 
-  box(divBox, o, appendNodes, cardStyling, selectionsAPI, allNodes, id => {
+  box(divBox, o, appendNodes, cardStyling, selectionsAPI, linked, id => {
     reRenderTree({
       svg,
       divBox,
@@ -96,6 +95,7 @@ const reRenderTree = ({ svg, divBox, activeNode, allNodes, o, width, height, car
       height,
       cardStyling,
       selectionsAPI,
+      linked,
     });
   });
 
@@ -105,7 +105,7 @@ const reRenderTree = ({ svg, divBox, activeNode, allNodes, o, width, height, car
   transform(nodes, nodeSize, width, height, svg, divBox);
 };
 
-const renderTree = async ({ element, layout, model, Theme, selectionsAPI }) => {
+const renderTree = ({ element, dataTree, layout, Theme, selectionsAPI, linked }) => {
   const b = element.getBoundingClientRect();
   // eslint-disable-next-line no-param-reassign
   element.innerHTML = '';
@@ -115,7 +115,7 @@ const renderTree = async ({ element, layout, model, Theme, selectionsAPI }) => {
   const orientations = position(orientation, nodeSize);
 
   // Get and transform the data into a tree structure
-  const data = await treeTransform({ layout, model });
+  const data = dataTree;
 
   if (data.error) {
     height -= 20;
@@ -123,7 +123,7 @@ const renderTree = async ({ element, layout, model, Theme, selectionsAPI }) => {
       .append('div')
       .attr('class', 'org-error')
       .html(data.message);
-    return;
+    return Promise.resolve();
   }
 
   if (data.warn && data.warn.length) {
@@ -151,6 +151,9 @@ const renderTree = async ({ element, layout, model, Theme, selectionsAPI }) => {
     .attr('class', 'org-node-holder');
 
   const svg = svgBox.append('g').attr('class', 'org-path-holder');
+  // Promise not needed at this time as the rendering is sync
+  // Is likely needed later when we support printing
+  // return new Promise(resolve => {
   svg.each(pos => {
     const o = pos.value;
     // Here are the settings for the tree. For instance nodesize can be adjusted
@@ -177,8 +180,12 @@ const renderTree = async ({ element, layout, model, Theme, selectionsAPI }) => {
       treemap,
       cardStyling,
       selectionsAPI,
+      linked,
     });
+    /*   resolve();
+    }); */
   });
+  return true;
 };
 
 export default renderTree;

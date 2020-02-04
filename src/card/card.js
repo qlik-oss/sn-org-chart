@@ -24,12 +24,15 @@ export default (data, cardStyling) => {
   const backgroundColor = getBackgroundColor(data, cardStyling);
   const topColor = colorUtils.getDarkColor(backgroundColor);
   const fontColor = getFontColor(cardStyling, backgroundColor);
-  let html = `<div class="org-card-title">${data.attributes.label || data.id}</div>`;
-  if (data.attributes.subLabel) {
-    html += `<div class="org-card-text">${data.attributes.subLabel}</div>`;
+  const attributes = data.attributes || {};
+  let html = `<div class="org-card-title">${attributes.label || data.id}</div>`;
+  if (attributes.subLabel) {
+    html += `<div class="org-card-text">${attributes.subLabel}</div>`;
   }
   if (data.measure) {
     html += `<div class="org-card-text">${data.measure}</div>`;
   }
-  return `<div class="org-card-top" style="background-color:${topColor};"></div><div class="org-card-textarea" style="background-color:${backgroundColor};color:${fontColor};">${html}</div>`;
+  const topbar = data.selected ? '' : `<div class="org-card-top" style="background-color:${topColor};"></div>`;
+  return `${topbar}<div class="org-card-textarea ${data.selected &&
+    'selected'}" style="background-color:${backgroundColor};color:${fontColor};">${html}</div>`;
 };

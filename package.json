@@ -29,8 +29,9 @@
   "module": "dist/sn-org-chart.esm.js",
   "scripts": {
     "build": "nebula build && shx cp assets/* dist",
+    "sense": "nebula sense --ext ./src/extension/ext-raw.js --meta ./src/extension/meta.json",
     "lint": "eslint src",
-    "start": "nebula serve",
+    "start": "nebula serve --type sn-org-chart",
     "test:unit": "aw -c aw.config.js",
     "test:integration": "aw puppet --glob 'test/integration/**/*.spec.js' --chrome.headless true --chrome.slowMo 10",
     "prepublishOnly": "rm -rf dist && npm run build"
@@ -46,7 +47,7 @@
     ]
   },
   "peerDependencies": {
-    "@nebula.js/supernova": "0.1.0-alpha.25"
+    "@nebula.js/supernova": "0.1.0-alpha.28"
   },
   "devDependencies": {
     "@after-work.js/aw": "6.0.10",
@@ -55,7 +56,7 @@
     "@babel/preset-env": "7.8.3",
     "@commitlint/cli": "8.2.0",
     "@commitlint/config-conventional": "8.2.0",
-    "@nebula.js/cli": "0.1.0-alpha.25",
+    "@nebula.js/cli": "0.1.0-alpha.28",
     "babel-plugin-istanbul": "6.0.0",
     "d3": "^5.15.0",
     "eslint": "6.8.0",

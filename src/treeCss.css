@@ -26,6 +26,17 @@
   padding-left: 5px;
   padding-right: 5px;
   border-radius: 0px 0px 3px 3px;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.org-card-textarea.selected {
+  border: 4px solid black;
+  border-radius: 4px;
 }
 
 .org-card-title {
