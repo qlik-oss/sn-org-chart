@@ -19,6 +19,10 @@ export default {
               attributes: {
                 component: 'attribute-expression-reference',
                 defaultValue: [],
+                show: (dim, handler) => {
+                  const dims = handler.getDimensions();
+                  return dims[0] === dim;
+                },
                 ref: 'qAttributeExpressions',
                 items: [
                   {
