@@ -3,7 +3,6 @@ import position from './position';
 import box from './box';
 import path from './path';
 import '../treeCss.css';
-import stylingUtils from '../utils/styling';
 import transform from './transform';
 
 // Constants for the tree. Might be variables later in property panel
@@ -27,13 +26,12 @@ const filterTree = (id, nodeTree) => {
   });
 };
 
-export const paintTree = ({ svg, divBox, allNodes, o, width, height, cardStyling, setActiveCallback }, activeNode) => {
-  console.log('paint', activeNode);
-  const nodes = filterTree(activeNode, allNodes);
+export const paintTree = ({ objectData, activeNode, styling, setActiveCallback }) => {
+  const { svg, divBox, allNodes, positioning, width, height } = objectData;
   divBox.selectAll('.node-rect').remove();
   svg.selectAll('g').remove();
-
-  // Create the nodes.
+  const nodes = filterTree(activeNode, allNodes);
+  // create the nodes
   const node = svg
     .selectAll('.node')
     .data(nodes)
@@ -41,44 +39,43 @@ export const paintTree = ({ svg, divBox, allNodes, o, width, height, cardStyling
     .append('g')
     .attr('class', 'nodeWrapper')
     .attr('id', d => d.data.id);
-
-  box(divBox, o, nodes, cardStyling, id => {
+  // Create cards
+  box(divBox, positioning, nodes, styling, id => {
     setActiveCallback(id);
   });
-
   // Create the lines (links) between the nodes
-  path(node, o, isVertical);
-
+  path(node, positioning, isVertical);
+  // Scale and translate
   transform(nodes, nodeSize, width, height, svg, divBox);
 };
 
-export function preRenderTree({ element, dataTree, layout, Theme }) {
-  const b = element.getBoundingClientRect();
-  const { width } = b;
-  let { height } = b;
+export const getSize = ({ error, warn }, element) => {
+  const size = element.getBoundingClientRect();
+  if (error || (warn && warn.length)) {
+    size.height -= 20;
+  }
+  return size;
+};
+
+export function preRenderTree(element, dataTree) {
   // eslint-disable-next-line no-param-reassign
   element.innerHTML = '';
+  const positioning = position(orientation, nodeSize);
+  const { width, height } = getSize(dataTree, element);
 
-  const orientations = position(orientation, nodeSize);
-
-  // Get and transform the data into a tree structure
-  const data = dataTree;
-
-  if (data.error) {
-    height -= 20;
+  if (dataTree.error) {
     select(element)
       .append('div')
       .attr('class', 'org-error')
-      .html(data.message);
-    return false; // Promise.resolve();
+      .html(dataTree.message);
+    return false;
   }
 
-  if (data.warn && data.warn.length) {
-    height -= 20;
+  if (dataTree.warn && dataTree.warn.length) {
     select(element)
       .append('span')
       .attr('class', 'org-warning')
-      .html(`*${data.warn.join(' ')}`);
+      .html(`*${dataTree.warn.join(' ')}`);
   }
 
   const svgBox = select(element)
@@ -98,18 +95,11 @@ export function preRenderTree({ element, dataTree, layout, Theme }) {
     .attr('class', 'org-node-holder');
 
   const svg = svgBox.append('g').attr('class', 'org-path-holder');
-  const o = orientations;
   // Here are the settings for the tree. For instance nodesize can be adjusted
   const treemap = tree()
     .size([width, height])
-    .nodeSize([0, o.depthSpacing]);
+    .nodeSize([0, positioning.depthSpacing]);
 
-  const nodes = hierarchy(data);
-
-  const cardStyling = stylingUtils.cardStyling({ Theme, layout });
-
-  // Using the treemap created
-  const allNodes = treemap(nodes);
-  // const activeNode = allNodes.data.id;
-  return { svg, divBox, allNodes, o, width, height, cardStyling };
+  const allNodes = treemap(hierarchy(dataTree));
+  return { svg, divBox, allNodes, positioning, width, height };
 }
