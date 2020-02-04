@@ -33,6 +33,6 @@ export default (data, cardStyling) => {
     html += `<div class="org-card-text">${data.measure}</div>`;
   }
   const topbar = data.selected ? '' : `<div class="org-card-top" style="background-color:${topColor};"></div>`;
-  return `${topbar}<div class="org-card-textarea ${data.selected &&
-    'selected'}" style="background-color:${backgroundColor};color:${fontColor};">${html}</div>`;
+  const selectedClass = data.selected ? ' selected' : '';
+  return `${topbar}<div class="org-card-textarea${selectedClass}" style="background-color:${backgroundColor};color:${fontColor};">${html}</div>`;
 };

@@ -1,5 +1,5 @@
 import {
-  useLayout,
+  useStaleLayout,
   useEffect,
   useElement,
   useModel,
@@ -26,7 +26,7 @@ export default function supernova(env) {
       //  const [focusNodes, setFocusNodes] = useState([]);
       const [dataTree, setDataTree] = useState({});
       //   const [storage, setStorage] = useState({});
-      const layout = useLayout();
+      const layout = useStaleLayout();
       const model = useModel();
       const element = useElement();
       const rect = useRect();
