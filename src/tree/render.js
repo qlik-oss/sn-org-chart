@@ -28,7 +28,7 @@ const filterTree = (id, nodeTree) => {
 };
 
 export const paintTree = ({ svg, divBox, allNodes, o, width, height, cardStyling, setActiveCallback }, activeNode) => {
-  console.log('paint');
+  console.log('paint', activeNode);
   const nodes = filterTree(activeNode, allNodes);
   divBox.selectAll('.node-rect').remove();
   svg.selectAll('g').remove();
@@ -70,7 +70,7 @@ export function preRenderTree({ element, dataTree, layout, Theme }) {
       .append('div')
       .attr('class', 'org-error')
       .html(data.message);
-    return {}; // Promise.resolve();
+    return false; // Promise.resolve();
   }
 
   if (data.warn && data.warn.length) {

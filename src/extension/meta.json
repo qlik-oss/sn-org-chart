@@ -1,0 +1,8 @@
+{
+  "name": "Organizational Chart",
+  "description": "Chart to visualise organisations",
+  "icon": "network",
+  "preview": "preview.png",
+  "author": "QlikTech International AB",
+  "type": "visualization"
+}
