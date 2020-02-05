@@ -37,23 +37,6 @@ export default function supernova(env) {
         setActiveNode(id);
       };
 
-      const callPreRender = () => {
-        if (element && dataTree) {
-          const preRender = preRenderTree(element, dataTree);
-          if (preRender) {
-            const newActiveNode = preRender.allNodes.data.id;
-            setObjectData(preRender);
-            !activeNode && setActiveNode(newActiveNode);
-            paintTree({
-              objectData: preRender,
-              activeNode: activeNode || newActiveNode,
-              styling,
-              setActiveCallback,
-            });
-          }
-        }
-      };
-
       /*
        * Basic steps to aim for - function [dependency]
        * - createElements [element]
@@ -74,12 +57,21 @@ export default function supernova(env) {
       }, [layout, model]);
 
       // This one can split up. Only need to get new height/width when rect is changed
-      useEffect(callPreRender, [element, dataTree, rect.width, rect.height]);
+      useEffect(() => {
+        if (element && dataTree) {
+          const preRender = preRenderTree(element, dataTree);
+          if (preRender) {
+            setObjectData(preRender);
+            !activeNode && setActiveNode(preRender.allNodes.data.id);
+          }
+        }
+      }, [element, dataTree, rect]);
+
       useEffect(() => {
         if (objectData && activeNode && styling) {
           paintTree({ objectData, activeNode, styling, setActiveCallback });
         }
-      }, [activeNode]);
+      }, [activeNode, objectData]);
     },
     ext: ext(env),
   };
