@@ -39,6 +39,10 @@
   border-radius: 4px;
 }
 
+.org-card-textarea.not-selected {
+  opacity: 0.5;
+}
+
 .org-card-title {
   font-size: 26px;
   font-weight: bold;
