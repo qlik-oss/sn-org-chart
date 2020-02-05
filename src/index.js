@@ -11,7 +11,8 @@ import {
 import properties from './object-properties';
 import data from './data';
 import ext from './extension/ext';
-import renderTree from './tree/render';
+import { paintTree, preRenderTree } from './tree/render';
+import stylingUtils from './utils/styling';
 import treeTransform from './utils/tree-utils';
 
 export default function supernova(env) {
@@ -21,25 +22,19 @@ export default function supernova(env) {
       data,
     },
     component: () => {
-      //  const [focusNodes, setFocusNodes] = useState([]);
-      const [dataTree, setDataTree] = useState({});
-      //   const [storage, setStorage] = useState({});
+      const [dataTree, setDataTree] = useState(null);
+      const [objectData, setObjectData] = useState(null);
+      const [styling, setStyling] = useState(null);
+      const [activeNode, setActiveNode] = useState(null);
+      // const [objectSize, setObjectSize] = useState(null);
       const layout = useStaleLayout();
       const model = useModel();
       const element = useElement();
-      const rect = useRect();
+      const rect = useRect()[0];
       const Theme = useTheme();
 
-      const callRender = () => {
-        if (element && dataTree && layout) {
-          /* return */ renderTree({
-            element,
-            dataTree,
-            layout,
-            Theme,
-          });
-        }
-        // return Promise.resolve();
+      const setActiveCallback = id => {
+        setActiveNode(id);
       };
 
       /*
@@ -55,16 +50,28 @@ export default function supernova(env) {
         if (layout && model) {
           return treeTransform({ layout, model }).then(transformed => {
             setDataTree(transformed);
+            setStyling(stylingUtils.cardStyling({ Theme, layout }));
           });
         }
         return Promise.resolve();
       }, [layout, model]);
 
-      // Should avoid dependency on layout -> store that on dataTree instead?
-      // Should move element dependency to preRender function
-      useEffect(callRender, [layout, element, dataTree]);
-      // Should be bundled with dataTree dependency once layout and element has been moved?
-      useEffect(callRender, [rect]);
+      // This one can split up. Only need to get new height/width when rect is changed
+      useEffect(() => {
+        if (element && dataTree) {
+          const preRender = preRenderTree(element, dataTree);
+          if (preRender) {
+            setObjectData(preRender);
+            !activeNode && setActiveNode(preRender.allNodes.data.id);
+          }
+        }
+      }, [element, dataTree, rect]);
+
+      useEffect(() => {
+        if (objectData && activeNode && styling) {
+          paintTree({ objectData, activeNode, styling, setActiveCallback });
+        }
+      }, [activeNode, objectData]);
     },
     ext: ext(env),
   };
