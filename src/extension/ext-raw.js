@@ -44,6 +44,14 @@ export default {
                   {
                     component: 'expression',
                     ref: 'qExpression',
+                    translation: '$Extra label expression',
+                    defaultValue: '',
+                    id: 'extraLabelExpression',
+                    tid: 'extraLabelExpression',
+                  },
+                  {
+                    component: 'expression',
+                    ref: 'qExpression',
                     translation: '$Color expression',
                     defaultValue: '',
                     id: 'colorByExpression',
