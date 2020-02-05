@@ -34,5 +34,6 @@ export default (data, cardStyling) => {
   } else if (attributes.extraLabel) {
     html += `<div class="org-card-text">${attributes.extraLabel}</div>`;
   }
+  html += `<div data-html="true" class="tooltip">${attributes.label || data.id}</br>${attributes.subLabel || ''}</br>${attributes.extraLabel || ''}</br>${data.measure || ''}</div>`;
   return `<div class="org-card-top" style="background-color:${topColor};"></div><div class="org-card-textarea" style="background-color:${backgroundColor};color:${fontColor};">${html}</div>`;
 };
