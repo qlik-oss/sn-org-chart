@@ -1,6 +1,8 @@
+import { event } from 'd3';
+// import { isParentOf } from '../utils/tree-utils';
 import card from '../card/card';
 
-export default function box(divBox, o, appendNodes, cardStyling, reRender) {
+export default function box(divBox, o, appendNodes, cardStyling, activeNode, setActiveCallback) {
   function getStyle(p) {
     if (p.data.id === 'Root') {
       return `top:${o.y(p) + 80}px;left:${o.x(p) + 140}px`;
@@ -16,10 +18,12 @@ export default function box(divBox, o, appendNodes, cardStyling, reRender) {
     .attr('class', 'node-rect')
     .attr('style', getStyle)
     .attr('id', d => d.data.id)
-    .on('click', node => {
-      if (node.children) {
-        reRender(node.data.id);
+    .on('click', d => {
+      if (event.target.classList.contains('org-traverse')) {
+        // const isTopNode = isParentOf(d.data, activeNode.id);
+        const isExpanded = activeNode.id === d.data.id ? !activeNode.isExpanded : true;
+        setActiveCallback({ id: d.data.id, isExpanded });
       }
     })
-    .html(d => card(d.data, cardStyling));
+    .html(d => card(d.data, cardStyling, activeNode));
 }

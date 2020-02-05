@@ -33,8 +33,8 @@ export default function supernova(env) {
       const rect = useRect()[0];
       const Theme = useTheme();
 
-      const setActiveCallback = id => {
-        setActiveNode(id);
+      const setActiveCallback = newNode => {
+        setActiveNode(newNode);
       };
 
       /*
@@ -62,7 +62,7 @@ export default function supernova(env) {
           const preRender = preRenderTree(element, dataTree);
           if (preRender) {
             setObjectData(preRender);
-            !activeNode && setActiveNode(preRender.allNodes.data.id);
+            !activeNode && setActiveNode({ id: preRender.allNodes.data.id, isExpanded: true });
           }
         }
       }, [element, dataTree, rect]);

@@ -6,22 +6,22 @@ import '../treeCss.css';
 import transform from './transform';
 
 // Constants for the tree. Might be variables later in property panel
-const nodeSize = { width: 300, height: 100 };
+const nodeSize = { width: 300, height: 200 };
 const orientation = 'ttb';
 const isVertical = orientation === 'ttb' || orientation === 'btt';
 
-const filterTree = (id, nodeTree) => {
+const filterTree = (activeNode, nodeTree) => {
   const nodes = nodeTree.descendants();
-  const currentNode = nodes.find(node => node.data.id === id);
+  const currentNode = nodes.find(node => node.data.id === activeNode.id);
 
   // Only build the current view (three levels of hiearchy)
   // eslint-disable-next-line arrow-body-style
   return nodes.filter(node => {
     return (
-      currentNode.data.id === node.data.id ||
-      (currentNode.parent && node.data.id === currentNode.parent.data.id) ||
-      (currentNode.parent && node.parent && node.parent.data.id === currentNode.parent.data.id) ||
-      (node.parent && node.parent.data.id === currentNode.data.id)
+      currentNode.data.id === node.data.id || // itself
+      (currentNode.parent && node.data.id === currentNode.parent.data.id) || // parent
+      (currentNode.parent && node.parent && node.parent.data.id === currentNode.parent.data.id) || // siblings
+      (activeNode.isExpanded && node.parent && node.parent.data.id === currentNode.data.id) // children
     );
   });
 };
@@ -40,11 +40,11 @@ export const paintTree = ({ objectData, activeNode, styling, setActiveCallback }
     .attr('class', 'nodeWrapper')
     .attr('id', d => d.data.id);
   // Create cards
-  box(divBox, positioning, nodes, styling, id => {
+  box(divBox, positioning, nodes, styling, activeNode, id => {
     setActiveCallback(id);
   });
   // Create the lines (links) between the nodes
-  path(node, positioning, isVertical);
+  path(node, positioning, isVertical, activeNode);
   // Scale and translate
   transform(nodes, nodeSize, width, height, svg, divBox);
 };
@@ -58,7 +58,6 @@ export const getSize = ({ error, warn }, element) => {
 };
 
 export function preRenderTree(element, dataTree) {
-  // eslint-disable-next-line no-param-reassign
   element.innerHTML = '';
   const positioning = position(orientation, nodeSize);
   const { width, height } = getSize(dataTree, element);

@@ -1,6 +1,7 @@
-import { areAllLeafs } from '../utils/tree-utils';
+import { areAllLeafs, isParentOf } from '../utils/tree-utils';
 
 export function getPoints(d, o, isVertical) {
+  const hasChildren = !!d.children;
   const halfNode = { x: o.nodeSize.width / 2, y: o.nodeSize.height / 2 };
   const halfDepth = o.depthSpacing / 2;
   const start = { x: o.x(d) + halfNode.x, y: o.y(d) + halfNode.y };
@@ -25,13 +26,13 @@ export function getPoints(d, o, isVertical) {
       ];
   } else if (start.x === end.x || start.y === end.y) {
     points = [
-      { x: start.x, y: start.y },
+      { x: start.x, y: hasChildren ? start.y + halfNode.y : start.y },
       { x: end.x, y: end.y },
     ];
   } else {
     points = isVertical
       ? [
-        { x: start.x, y: start.y },
+        { x: start.x, y: hasChildren ? start.y + halfNode.y : start.y },
         { x: start.x, y: start.y - halfDepth },
         { x: end.x, y: start.y - halfDepth },
         { x: end.x, y: end.y },
@@ -48,14 +49,14 @@ export function getPoints(d, o, isVertical) {
 
 export function getPath(points) {
   // gets the path from first to last points, making turns with radius r at intermediate points
-  const r = 30;
+  const r = 10;
   let pathString = `M ${points[0].x} ${points[0].y}`;
   let dir;
   function setDir(i) {
-    const delta = { x: points[i].x - points[i - 1].x, y: points[i].y - points[i - 1].y, };
+    const delta = { x: points[i].x - points[i - 1].x, y: points[i].y - points[i - 1].y };
     dir = {
-      x: ((delta.x > 0) - (delta.x < 0)) || +delta.x,
-      y: ((delta.y > 0) - (delta.y < 0)) || +delta.y,
+      x: (delta.x > 0) - (delta.x < 0) || +delta.x,
+      y: (delta.y > 0) - (delta.y < 0) || +delta.y,
     };
   }
   setDir(1);
@@ -72,7 +73,7 @@ export function getPath(points) {
   return pathString;
 }
 
-export default function path(node, o, isVertical) {
+export default function path(node, o, isVertical, activeId) {
   // Create the lines (links) between the nodes
   node
     .append('path')
@@ -80,6 +81,10 @@ export default function path(node, o, isVertical) {
     .attr('id', d => d.data.id)
     .attr('d', d => {
       if (d.parent) {
+        if (isParentOf(d.data, activeId)) {
+          return '';
+          // TODO: make a special path here for the top node
+        }
         const points = getPoints(d, o, isVertical);
         return getPath(points);
       }
