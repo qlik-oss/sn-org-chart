@@ -1,7 +1,11 @@
 import { getAllTreeElemNo } from './tree-utils';
 
+export const selectionState = {
+  linked: false,
+};
+
 export default {
-  select: (node, selections, linked) => {
+  select: (node, selections) => {
     const resetSelections = () => {
       selections.selectionState = [];
     };
@@ -24,8 +28,7 @@ export default {
       const ind = selections.selectionState.indexOf(node.data.elemNo);
       let linkedIds = [];
 
-      // Not sure if we will use a boolean here. Depends how we can access the linked status
-      if (linked) {
+      if (selectionState.linked) {
         linkedIds = getAllTreeElemNo(node);
       }
       if (ind !== -1) {

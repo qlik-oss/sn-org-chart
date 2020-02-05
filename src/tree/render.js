@@ -29,7 +29,7 @@ const filterTree = (id, nodeTree) => {
   });
 };
 
-export const paintTree = ({ objectData, activeNode, styling, setActiveCallback, selectionsAPI, linked }) => {
+export const paintTree = ({ objectData, activeNode, styling, setActiveCallback, selectionsAPI }) => {
   const { svg, divBox, allNodes, positioning, width, height } = objectData;
   divBox.selectAll('.node-rect').remove();
   svg.selectAll('g').remove();
@@ -43,7 +43,7 @@ export const paintTree = ({ objectData, activeNode, styling, setActiveCallback, 
     .attr('class', 'nodeWrapper')
     .attr('id', d => d.data.id);
   // Create cards
-  box(divBox, positioning, nodes, styling, selectionsAPI, linked, id => {
+  box(divBox, positioning, nodes, styling, selectionsAPI, id => {
     setActiveCallback(id);
   });
   // Create the lines (links) between the nodes

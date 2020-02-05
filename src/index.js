@@ -16,6 +16,7 @@ import ext from './extension/ext';
 import { paintTree, preRenderTree } from './tree/render';
 import stylingUtils from './utils/styling';
 import treeTransform from './utils/tree-utils';
+import { selectionState } from './utils/selections';
 
 export default function supernova(env) {
   return {
@@ -81,6 +82,10 @@ export default function supernova(env) {
        * - generateTree [dataStruct] -> allNodes, positioning
        * - render [allNodes, positioning, styling, rect]
        */
+
+      useEffect(() => {
+        selectionState.linked = linked;
+      }, [linked]);
 
       usePromise(() => {
         // Get and transform the data into a tree structure
