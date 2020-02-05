@@ -31,6 +31,8 @@ export default (data, cardStyling) => {
   }
   if (data.measure) {
     html += `<div class="org-card-text">${data.measure}</div>`;
+  } else if (attributes.extraLabel) {
+    html += `<div class="org-card-text">${attributes.extraLabel}</div>`;
   }
   const topbar = data.selected ? '' : `<div class="org-card-top" style="background-color:${topColor};"></div>`;
   const selectedClass = data.selected ? ' selected' : '';

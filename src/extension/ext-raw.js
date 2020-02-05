@@ -19,6 +19,10 @@ export default {
               attributes: {
                 component: 'attribute-expression-reference',
                 defaultValue: [],
+                show: (dim, handler) => {
+                  const dims = handler.getDimensions();
+                  return dims[0] === dim;
+                },
                 ref: 'qAttributeExpressions',
                 items: [
                   {
@@ -36,6 +40,14 @@ export default {
                     defaultValue: '',
                     id: 'subLabelExpression',
                     tid: 'subLabelExpression',
+                  },
+                  {
+                    component: 'expression',
+                    ref: 'qExpression',
+                    translation: '$Extra label expression',
+                    defaultValue: '',
+                    id: 'extraLabelExpression',
+                    tid: 'extraLabelExpression',
                   },
                   {
                     component: 'expression',

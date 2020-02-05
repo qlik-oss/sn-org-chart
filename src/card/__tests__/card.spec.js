@@ -98,7 +98,25 @@ describe('card', () => {
         )
       );
     });
-
+    it('should return html for node with three labels', () => {
+      data.attributes.label = 'this is the label';
+      data.attributes.subLabel = 'subsub';
+      data.attributes.extraLabel = 'extra';
+      const result = card(data, cardStyling);
+      expect(result).to.equal(
+        getHtml(`<div class="org-card-title">${data.attributes.label}</div><div class="org-card-text">${data.attributes.subLabel}</div><div class="org-card-text">${data.attributes.extraLabel}</div>`)
+      );
+    });
+    it('should return html for node with three labels and measure', () => {
+      data.attributes.label = 'this is the label';
+      data.attributes.subLabel = 'subsub';
+      data.attributes.extraLabel = 'extra';
+      data.measure = 'measure';
+      const result = card(data, cardStyling);
+      expect(result).to.equal(
+        getHtml(`<div class="org-card-title">${data.attributes.label}</div><div class="org-card-text">${data.attributes.subLabel}</div><div class="org-card-text">${data.measure}</div>`)
+      );
+    });
     it('should return html for node with id and measure', () => {
       data.measure = 'measure';
       const result = card(data, cardStyling);

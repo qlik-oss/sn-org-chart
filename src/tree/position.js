@@ -7,12 +7,15 @@ export default function position(orientation, nodeSize) {
 
   // TODO: should expose for test, need to pass more arguments...
   const widthTranslation = (d, axis) => {
-    if (d.parent && areAllLeafs(d.parent.children)) {
-      d[axis] = d.parent[axis] + nodeMargin / 2;
+    if (d.parent) {
+      if (!d.parent[axis]) {
+        d.parent[axis] = widthTranslation(d.parent, axis);
+      }
+      d[axis] = areAllLeafs(d.parent.children)
+        ? d.parent[axis] + nodeMargin / 2
+        : d.parent[axis] + (d.data.childNumber - (d.parent.children.length - 1) / 2) * widthSpacing;
     } else {
-      d[axis] = d.parent
-        ? d.parent[axis] + (d.data.childNumber - (d.parent.children.length - 1) / 2) * widthSpacing
-        : 0;
+      d[axis] = 0;
     }
 
     return d[axis];
@@ -33,48 +36,40 @@ export default function position(orientation, nodeSize) {
       widthSpacing = nodeSize.width + nodeMargin;
       depthSpacing = nodeSize.height + nodeMargin;
       orientations = {
-        'top-to-bottom': {
-          depthSpacing,
-          nodeSize,
-          x: d => widthTranslation(d, 'xActual'),
-          y: d => depthTranslation(d, 'yActual'),
-        },
+        depthSpacing,
+        nodeSize,
+        x: d => widthTranslation(d, 'xActual'),
+        y: d => depthTranslation(d, 'yActual'),
       };
       break;
     case 'btt':
       widthSpacing = nodeSize.width + nodeMargin;
       depthSpacing = -nodeSize.height - nodeMargin;
       orientations = {
-        'bottom-to-top': {
-          depthSpacing,
-          nodeSize,
-          x: d => widthTranslation(d, 'xActual'),
-          y: d => depthTranslation(d, 'yActual'),
-        },
+        depthSpacing,
+        nodeSize,
+        x: d => widthTranslation(d, 'xActual'),
+        y: d => depthTranslation(d, 'yActual'),
       };
       break;
     case 'ltr':
       widthSpacing = nodeSize.height + nodeMargin;
       depthSpacing = nodeSize.width + nodeMargin;
       orientations = {
-        'left-to-right': {
-          depthSpacing,
-          nodeSize,
-          x: d => depthTranslation(d, 'xActual'),
-          y: d => widthTranslation(d, 'yActual'),
-        },
+        depthSpacing,
+        nodeSize,
+        x: d => depthTranslation(d, 'xActual'),
+        y: d => widthTranslation(d, 'yActual'),
       };
       break;
     case 'rtl':
       widthSpacing = nodeSize.height + nodeMargin;
       depthSpacing = -nodeSize.width - nodeMargin;
       orientations = {
-        'right-to-left': {
-          depthSpacing,
-          nodeSize,
-          x: d => depthTranslation(d, 'xActual'),
-          y: d => widthTranslation(d, 'yActual'),
-        },
+        depthSpacing,
+        nodeSize,
+        x: d => depthTranslation(d, 'xActual'),
+        y: d => widthTranslation(d, 'yActual'),
       };
       break;
     default:
