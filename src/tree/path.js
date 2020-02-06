@@ -32,8 +32,8 @@ export function getPoints(d, o, isVertical) {
     points = isVertical
       ? [
         { x: start.x, y: start.y },
-        { x: start.x, y: start.y - halfDepth + 16 },
-        { x: end.x, y: start.y - halfDepth + 16 },
+        { x: start.x, y: start.y - halfDepth },
+        { x: end.x, y: start.y - halfDepth },
         { x: end.x, y: end.y },
       ]
       : [

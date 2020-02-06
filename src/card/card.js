@@ -39,10 +39,5 @@ export default (data, cardStyling, selections) => {
       ? ''
       : `<div class="org-card-top" style="background-color:${topColor};"></div>`;
   const selectedClass = selections.isActive() ? (data.selected ? ' selected' : ' not-selected') : '';
-  return `
-    ${topbar}
-    <div class="org-card-textarea${selectedClass}" style="background-color:${backgroundColor};color:${fontColor};">
-      ${html}
-    </div>
-  `;
+  return `${topbar}<div class="org-card-textarea${selectedClass}" style="background-color:${backgroundColor};color:${fontColor};">${html}</div>`;
 };

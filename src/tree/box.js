@@ -50,15 +50,15 @@ export default function box(divBox, o, nodes, cardStyling, expandedState, setSta
         isExpanded = !isExpanded;
         expandedChildren = [];
       } else if (d.parent === top) { // children
-        // Remove old expanded if not only leaf bracnhes
-        if (d.parent.children.findIndex(sibling => !haveNoChildren(sibling.children)) !== -1) {
-          expandedChildren = [];
-        }
-        // Collapse if already exists is expandedChildren
         if (expandedChildren.includes(d)) {
+          // Collapse if already exists in expandedChildren
           expandedChildren.splice(expandedChildren.indexOf(d), 1);
-        } else {
+        } else if (d.parent.children.findIndex(sibling => !haveNoChildren(sibling.children)) === -1) {
+          // Add this as expanded if possible
           expandedChildren.push(d);
+        } else {
+          // Replace expanded with this one
+          expandedChildren = [d];
         }
       } else { // grand children
         top = d.parent;

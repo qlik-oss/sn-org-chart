@@ -1,4 +1,4 @@
-import { createNodes, areAllLeafs, getAllTreeElemNo } from '../tree-utils';
+import { createNodes, haveNoChildren, getAllTreeElemNo } from '../tree-utils';
 import defaultValues from '../../__tests__/default-orgchart-props';
 
 function generateMatrix(numRows, childCount = 1) {
@@ -37,15 +37,18 @@ describe('tree-utils', () => {
     });
   });
 
-  describe('areAllLeafs', () => {
-    const children = [{}, {}];
+  describe('haveNoChildren', () => {
+    const nodes = [{}, {}];
+    it('should return true for undifined input', () => {
+      expect(haveNoChildren(undefined)).to.be.true;
+    });
     it('should return true for array with only leafs', () => {
-      expect(areAllLeafs(children)).to.be.true;
+      expect(haveNoChildren(nodes)).to.be.true;
     });
 
     it('should return false for array that contains at least one node with children', () => {
-      children[0].children = [{}];
-      expect(areAllLeafs(children)).to.be.false;
+      nodes[0].children = [{}];
+      expect(haveNoChildren(nodes)).to.be.false;
     });
   });
   // Tests to add
