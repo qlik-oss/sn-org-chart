@@ -1,4 +1,4 @@
-import { areAllLeafs } from '../utils/tree-utils';
+import { haveNoChildren } from '../utils/tree-utils';
 
 export function getPoints(d, o, isVertical) {
   const halfNode = { x: o.nodeSize.width / 2, y: o.nodeSize.height / 2 };
@@ -7,7 +7,7 @@ export function getPoints(d, o, isVertical) {
   const end = { x: o.x(d.parent) + halfNode.x, y: o.y(d.parent) + halfNode.y };
   let points;
 
-  if (areAllLeafs(d.parent.children)) {
+  if (haveNoChildren(d.parent.children)) {
     points = isVertical
       ? [
         { x: start.x, y: start.y },

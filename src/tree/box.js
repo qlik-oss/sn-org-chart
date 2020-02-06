@@ -1,5 +1,6 @@
 import card from '../card/card';
 import selections from '../utils/selections';
+import { haveNoChildren } from '../utils/tree-utils';
 
 export const getSign = (d, { top, isExpanded, expandedChildren }) => {
   if ((d === top && isExpanded) ||
@@ -49,7 +50,16 @@ export default function box(divBox, o, nodes, cardStyling, expandedState, setSta
         isExpanded = !isExpanded;
         expandedChildren = [];
       } else if (d.parent === top) { // children
-        expandedChildren = expandedChildren.includes(d) ? [] : [d];
+        // Remove old expanded if not only leaf bracnhes
+        if (d.parent.children.findIndex(sibling => !haveNoChildren(sibling.children)) !== -1) {
+          expandedChildren = [];
+        }
+        // Collapse if already exists is expandedChildren
+        if (expandedChildren.includes(d)) {
+          expandedChildren.splice(expandedChildren.indexOf(d), 1);
+        } else {
+          expandedChildren.push(d);
+        }
       } else { // grand children
         top = d.parent;
         isExpanded = true;

@@ -145,9 +145,12 @@ export function getAllTreeElemNo(node, activate) {
   return idList;
 }
 
-export function areAllLeafs(children) {
-  for (let i = 0; i < children.length; ++i) {
-    if (children[i].children !== undefined) {
+export function haveNoChildren(nodes) {
+  if (!nodes) {
+    return true;
+  }
+  for (let i = 0; i < nodes.length; ++i) {
+    if (nodes[i].children !== undefined) {
       return false;
     }
   }

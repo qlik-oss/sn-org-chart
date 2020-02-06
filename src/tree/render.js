@@ -10,10 +10,15 @@ const nodeSize = { width: 152, height: 64 };
 const orientation = 'ttb';
 const isVertical = orientation === 'ttb' || orientation === 'btt';
 
-const filterTree = ({ top, isExpanded, expandedChildren }, nodeTree) => {
-  let topNode = nodeTree.descendants().find(node => node === top);
+const filterTree = ({ top, isExpanded, expandedChildren }, nodeTree, setStateCallback) => {
+  const topNode = nodeTree.descendants().find(node => node === top);
   if (!topNode) {
-    topNode = nodeTree;
+    setStateCallback({
+      top: nodeTree,
+      isExpanded: true,
+      expandedChildren: [],
+    });
+    return [];
   }
   const subTree = [];
   subTree.push(topNode); // self
@@ -37,7 +42,7 @@ export const paintTree = ({ objectData, expandedState, styling, setStateCallback
   const { svg, divBox, allNodes, positioning, width, height } = objectData;
   divBox.selectAll('.node-rect').remove();
   svg.selectAll('g').remove();
-  const nodes = filterTree(expandedState, allNodes);
+  const nodes = filterTree(expandedState, allNodes, setStateCallback);
   // create the nodes
   const node = svg
     .selectAll('.node')
