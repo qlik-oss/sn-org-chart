@@ -10,11 +10,15 @@ const nodeSize = { width: 152, height: 64 };
 const orientation = 'ttb';
 const isVertical = orientation === 'ttb' || orientation === 'btt';
 
-const filterTree = ({ top, isExpanded, expandedChildren }) => {
+const filterTree = ({ top, isExpanded, expandedChildren }, nodeTree) => {
+  let topNode = nodeTree.descendants().find(node => node === top);
+  if (!topNode) {
+    topNode = nodeTree;
+  }
   const subTree = [];
-  subTree.push(top); // self
-  if (isExpanded) { // children
-    top.children.forEach(child => {
+  subTree.push(topNode); // self
+  if (isExpanded && topNode.children) { // children
+    topNode.children.forEach(child => {
       subTree.push(child);
     });
   }
@@ -29,7 +33,7 @@ const filterTree = ({ top, isExpanded, expandedChildren }) => {
   return subTree;
 };
 
-export const paintTree = ({ objectData, expandedState, styling, setStateCallback }) => {
+export const paintTree = ({ objectData, expandedState, styling, setStateCallback, selectionsAPI }) => {
   const { svg, divBox, allNodes, positioning, width, height } = objectData;
   divBox.selectAll('.node-rect').remove();
   svg.selectAll('g').remove();
@@ -43,7 +47,7 @@ export const paintTree = ({ objectData, expandedState, styling, setStateCallback
     .attr('class', 'nodeWrapper')
     .attr('id', d => d.data.id);
   // Create cards and naviagation buttons
-  box(divBox, positioning, nodes, styling, expandedState, setStateCallback);
+  box(divBox, positioning, nodes, styling, expandedState, setStateCallback, selectionsAPI);
   // Create the lines (links) between the nodes
   path(node, positioning, isVertical, expandedState.top);
   // Scale and translate

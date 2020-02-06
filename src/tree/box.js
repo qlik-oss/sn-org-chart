@@ -1,4 +1,5 @@
 import card from '../card/card';
+import selections from '../utils/selections';
 
 export const getSign = (d, { top, isExpanded, expandedChildren }) => {
   if ((d === top && isExpanded) ||
@@ -9,7 +10,7 @@ export const getSign = (d, { top, isExpanded, expandedChildren }) => {
   return '+';
 };
 
-export default function box(divBox, o, nodes, cardStyling, expandedState, setStateCallback) {
+export default function box(divBox, o, nodes, cardStyling, expandedState, setStateCallback, selectionsAPI) {
   let { top, isExpanded, expandedChildren } = expandedState;
   function getStyle(p) {
     if (p.data.id === 'Root') {
@@ -27,7 +28,12 @@ export default function box(divBox, o, nodes, cardStyling, expandedState, setSta
     .attr('class', 'node-rect')
     .attr('style', getStyle)
     .attr('id', d => d.data.id)
-    .html(d => card(d.data, cardStyling));
+    .on('click', node => {
+      if (node.data.id !== 'Root') {
+        selections.select(node, selectionsAPI);
+      }
+    })
+    .html(d => card(d.data, cardStyling, selectionsAPI));
 
   // expand/collapse
   divBox
