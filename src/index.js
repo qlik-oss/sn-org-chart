@@ -29,13 +29,13 @@ export default function supernova(env) {
       const [objectData, setObjectData] = useState(null);
       const [styling, setStyling] = useState(null);
       const [activeNode, setActiveNode] = useState(null);
+      const [linked, setLinked] = useState(false);
       // const [objectSize, setObjectSize] = useState(null);
       const layout = useStaleLayout();
       const model = useModel();
       const element = useElement();
       const rect = useRect()[0];
       const Theme = useTheme();
-      const [linked, setLinked] = useState(false);
       const selectionsAPI = useSelections();
 
       useAction(
