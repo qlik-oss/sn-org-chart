@@ -62,7 +62,7 @@ export const paintTree = ({ objectData, activeNode, styling, setActiveCallback, 
     .attr('class', 'nodeWrapper')
     .attr('id', d => d.data.id);
   // Create cards
-  box(divBox, positioning, nodes, styling, setActiveCallback);
+  box(divBox, positioning, nodes, styling, setActiveCallback, selectionsAPI);
   // Create the lines (links) between the nodes
   path(node, positioning, isVertical);
   // Scale and translate
