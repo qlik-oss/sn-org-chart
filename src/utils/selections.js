@@ -29,12 +29,13 @@ export default {
       }
 
       const ind = newState.indexOf(node.data.elemNo);
+      const activate = ind === -1;
       let linkedIds = [];
 
       if (selectionState.linked) {
-        linkedIds = getAllTreeElemNo(node);
+        linkedIds = getAllTreeElemNo(node, activate);
       }
-      if (ind !== -1) {
+      if (!activate) {
         newState.splice(ind, 1);
         node.data.selected = false;
         linkedIds.forEach(id => {

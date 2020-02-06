@@ -54,9 +54,16 @@ describe('tree-utils', () => {
   // should handle multiple roots
 
   describe('getAllTreeIds', () => {
-    it('should return all ids in tree', () => {
-      const result = getAllTreeElemNo(defaultValues.nodes);
+    it('should return all ids in tree and activate', () => {
+      const result = getAllTreeElemNo(defaultValues.nodes, true);
       expect(result).to.deep.equal([2, 3, 798, 88]);
+      expect(defaultValues.nodes.children[0].data.selected).to.equal(true);
+    });
+
+    it('should return all ids in tree and de-activate', () => {
+      const result = getAllTreeElemNo(defaultValues.nodes, false);
+      expect(result).to.deep.equal([2, 3, 798, 88]);
+      expect(defaultValues.nodes.children[0].data.selected).to.equal(false);
     });
   });
 });
