@@ -16,7 +16,7 @@ export function getFontColor(cardStyling, backgroundColor) {
   return cardStyling.fontColor;
 }
 
-export default (data, cardStyling) => {
+export default (data, cardStyling, selections) => {
   if (data.id === 'Root') {
     return '<div class="org-root"/>';
   }
@@ -34,5 +34,10 @@ export default (data, cardStyling) => {
   } else if (attributes.extraLabel) {
     html += `<div class="org-card-text">${attributes.extraLabel}</div>`;
   }
-  return `<div class="org-card-top" style="background-color:${topColor};"></div><div class="org-card-textarea" style="background-color:${backgroundColor};color:${fontColor};">${html}</div>`;
+  const topbar =
+    selections.isActive() && data.selected
+      ? ''
+      : `<div class="org-card-top" style="background-color:${topColor};"></div>`;
+  const selectedClass = selections.isActive() ? (data.selected ? ' selected' : ' not-selected') : '';
+  return `${topbar}<div class="org-card-textarea${selectedClass}" style="background-color:${backgroundColor};color:${fontColor};">${html}</div>`;
 };

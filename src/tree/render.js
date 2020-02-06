@@ -12,7 +12,10 @@ const isVertical = orientation === 'ttb' || orientation === 'btt';
 
 const filterTree = (id, nodeTree) => {
   const nodes = nodeTree.descendants();
-  const currentNode = nodes.find(node => node.data.id === id);
+  let currentNode = nodes.find(node => node.data.id === id);
+  if (!currentNode) {
+    currentNode = nodeTree;
+  }
 
   // Only build the current view (three levels of hiearchy)
   // eslint-disable-next-line arrow-body-style
@@ -26,7 +29,7 @@ const filterTree = (id, nodeTree) => {
   });
 };
 
-export const paintTree = ({ objectData, activeNode, styling, setActiveCallback }) => {
+export const paintTree = ({ objectData, activeNode, styling, setActiveCallback, selectionsAPI }) => {
   const { svg, divBox, allNodes, positioning, width, height } = objectData;
   divBox.selectAll('.node-rect').remove();
   svg.selectAll('g').remove();
@@ -40,7 +43,7 @@ export const paintTree = ({ objectData, activeNode, styling, setActiveCallback }
     .attr('class', 'nodeWrapper')
     .attr('id', d => d.data.id);
   // Create cards
-  box(divBox, positioning, nodes, styling, id => {
+  box(divBox, positioning, nodes, styling, selectionsAPI, id => {
     setActiveCallback(id);
   });
   // Create the lines (links) between the nodes

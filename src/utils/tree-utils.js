@@ -1,7 +1,12 @@
 import translations from './translations';
 
 const pageSize = 3300;
-const attributeIDs = { colorByExpression: 'color', labelExpression: 'label', subLabelExpression: 'subLabel', extraLabelExpression: 'extraLabel' };
+const attributeIDs = {
+  colorByExpression: 'color',
+  labelExpression: 'label',
+  subLabelExpression: 'subLabel',
+  extraLabelExpression: 'extraLabel',
+};
 const MAX_DATA = 'max-data-limit';
 const NO_ROOT = 'no_root';
 
@@ -123,6 +128,21 @@ function getAttributes(indecies, qAttrExps) {
     }
   });
   return attributes;
+}
+
+export function getAllTreeElemNo(node, activate) {
+  const idList = [];
+  const pushChildrenIds = currentNode => {
+    currentNode.children.forEach(child => {
+      child.data.selected = activate;
+      idList.push(child.data.elemNo);
+      if (child.children && child.children.length > 0) {
+        pushChildrenIds(child);
+      }
+    });
+  };
+  node.children && pushChildrenIds(node);
+  return idList;
 }
 
 export function areAllLeafs(children) {
