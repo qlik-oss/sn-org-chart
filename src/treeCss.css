@@ -6,18 +6,15 @@
 
 .node-rect {
   position: absolute;
-  display: flex;
-  flex-direction: column;
 }
 
 .org-traverse {
   background-color: white;
   font-size: 36px;
   font-weight: bold;
-  width: 30%;
-  height: 20%;
-  margin-top: auto;
-  align-self: center;
+  height: 100%;
+  width: 100%;
+  border-radius: 0px 0px 3px 3px;
   border: 1px solid #8c8c8c;
 }
 
@@ -35,7 +32,7 @@
 }
 
 .org-card-textarea {
-  height: 50%;
+  height: 100%;
   padding-left: 5px;
   padding-right: 5px;
   border-radius: 0px 0px 3px 3px;

@@ -1,5 +1,4 @@
 import colorUtils from '../utils/color-utils';
-// import { isParentOf } from '../utils/tree-utils';
 
 export function getBackgroundColor(data, cardStyling) {
   let color = cardStyling.backgroundColor;
@@ -36,15 +35,8 @@ export default (data, cardStyling) => {
     html += `<div class="org-card-text">${attributes.extraLabel}</div>`;
   }
 
-  // TODO: use isexpanded
-  // const traverseSign = (activeNode.id === data.id && activeNode.isExpanded) ||
-  //   isParentOf(data, activeNode.id) ? '-' : '+';
-  const traverseBtn = data.children.length
-    ? `<div class="org-traverse">+ ${data.children.length}</div>`
-    : '';
   return `
     <div class="org-card-top" style="background-color:${topColor};"></div>
     <div class="org-card-textarea" style="background-color:${backgroundColor};color:${fontColor};">${html}</div>
-    ${traverseBtn}
   `;
 };

@@ -33,7 +33,7 @@ export default function supernova(env) {
       const rect = useRect()[0];
       const Theme = useTheme();
 
-      const setStateallback = newNode => {
+      const setStateCallback = newNode => {
         setExpandedState(newNode);
       };
 
@@ -73,7 +73,7 @@ export default function supernova(env) {
 
       useEffect(() => {
         if (objectData && expandedState && styling) {
-          paintTree({ objectData, expandedState, styling, setStateallback });
+          paintTree({ objectData, expandedState, styling, setStateCallback });
         }
       }, [expandedState, objectData]);
     },

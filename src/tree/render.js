@@ -6,28 +6,33 @@ import '../treeCss.css';
 import transform from './transform';
 
 // Constants for the tree. Might be variables later in property panel
-const nodeSize = { width: 300, height: 200 };
+const nodeSize = { width: 300, height: 100 };
 const orientation = 'ttb';
 const isVertical = orientation === 'ttb' || orientation === 'btt';
 
 const filterTree = ({ id, isExpanded, expandedChildren }, nodeTree) => {
   const nodes = nodeTree.descendants();
-  // const currentNode = nodes.find(node => node.data.id === id);
+  const topNode = nodes.find(node => node.data.id === id);
+  const subTree = [];
 
-  // Only build the current view (three levels of hiearchy)
-  // eslint-disable-next-line arrow-body-style
-  return nodes.filter(node => {
-    return (
-      node.data.id === id || // itself
-      // (currentNode.parent && node.data.id === currentNode.parent.data.id) || // parent
-      (isExpanded && node.parent && node.parent.data.id === id) || // children
-      // (currentNode.parent && node.parent && node.parent.data.id === currentNode.parent.data.id) || // siblings
-      (node.parent && expandedChildren.includes(node.parent.data.id)) // grand children
-    );
+  subTree.push(topNode); // self
+  if (isExpanded) { // children
+    topNode.children.forEach(child => {
+      subTree.push(child);
+    });
+  }
+  expandedChildren.forEach(child => { // grandchildren
+    if (child.children) {
+      child.children.forEach(grandChild => {
+        subTree.push(grandChild);
+      });
+    }
   });
+
+  return subTree;
 };
 
-export const paintTree = ({ objectData, expandedState, styling, setStateallback }) => {
+export const paintTree = ({ objectData, expandedState, styling, setStateCallback }) => {
   const { svg, divBox, allNodes, positioning, width, height } = objectData;
   divBox.selectAll('.node-rect').remove();
   svg.selectAll('g').remove();
@@ -40,10 +45,8 @@ export const paintTree = ({ objectData, expandedState, styling, setStateallback 
     .append('g')
     .attr('class', 'nodeWrapper')
     .attr('id', d => d.data.id);
-  // Create cards
-  box(divBox, positioning, nodes, styling, expandedState, state => {
-    setStateallback(state);
-  });
+  // Create cards and naviagation buttons
+  box(divBox, positioning, nodes, styling, expandedState, setStateCallback);
   // Create the lines (links) between the nodes
   path(node, positioning, isVertical, expandedState);
   // Scale and translate

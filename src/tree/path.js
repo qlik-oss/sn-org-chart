@@ -1,7 +1,6 @@
 import { areAllLeafs, isParentOf } from '../utils/tree-utils';
 
 export function getPoints(d, o, isVertical) {
-  const hasChildren = !!d.children;
   const halfNode = { x: o.nodeSize.width / 2, y: o.nodeSize.height / 2 };
   const halfDepth = o.depthSpacing / 2;
   const start = { x: o.x(d) + halfNode.x, y: o.y(d) + halfNode.y };
@@ -26,13 +25,13 @@ export function getPoints(d, o, isVertical) {
       ];
   } else if (start.x === end.x || start.y === end.y) {
     points = [
-      { x: start.x, y: hasChildren ? start.y + halfNode.y : start.y },
+      { x: start.x, y: start.y },
       { x: end.x, y: end.y },
     ];
   } else {
     points = isVertical
       ? [
-        { x: start.x, y: hasChildren ? start.y + halfNode.y : start.y },
+        { x: start.x, y: start.y },
         { x: start.x, y: start.y - halfDepth },
         { x: end.x, y: start.y - halfDepth },
         { x: end.x, y: end.y },

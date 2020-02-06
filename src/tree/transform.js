@@ -11,6 +11,7 @@ const getBBoxOfNodes = (nodes, nodeSize) => {
     bbox.right = Math.max(node.xActual, bbox.right);
     bbox.bottom = Math.max(node.yActual, bbox.bottom);
   });
+  // TODO: addapt to traverse buttons below (or we)
   return {
     x: bbox.left,
     y: bbox.top,
