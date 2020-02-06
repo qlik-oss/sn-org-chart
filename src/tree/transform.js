@@ -12,6 +12,14 @@ const getBBoxOfNodes = (nodes, nodeSize) => {
     bbox.bottom = Math.max(node.yActual, bbox.bottom);
   });
   // TODO: addapt to traverse buttons below (or we)
+  if (nodes.length === 1) {
+    return {
+      x: bbox.left - 50,
+      y: bbox.top - 50,
+      width: bbox.right - bbox.left + nodeSize.width + 100,
+      height: bbox.bottom - bbox.top + nodeSize.height + 100,
+    };
+  }
   return {
     x: bbox.left,
     y: bbox.top,
@@ -20,7 +28,7 @@ const getBBoxOfNodes = (nodes, nodeSize) => {
   };
 };
 
-export default function transform(nodes, nodeSize, width, height, svg, divBox) {
+export default function transform(nodes, nodeSize, width, height, svg, divBox, disableTransition) {
   // Zooming and positioning of the tree
   const bBox = getBBoxOfNodes(nodes, nodeSize);
   const scaleToWidhth = bBox.width / width > bBox.height / height;
@@ -42,8 +50,8 @@ export default function transform(nodes, nodeSize, width, height, svg, divBox) {
   } else {
     // Transition using css, does not work in IE11
     svg.attr('style', `transform: scale(${1 / scaleFactor}) translate(${translation});`);
-    divBox.classed('org-disable-transition', false);
-    svg.classed('org-disable-transition', false);
+    divBox.classed('org-disable-transition', disableTransition);
+    svg.classed('org-disable-transition', disableTransition);
   }
 
   divBox.attr(

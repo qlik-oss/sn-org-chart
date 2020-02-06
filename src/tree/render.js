@@ -10,11 +10,11 @@ const nodeSize = { width: 152, height: 64 };
 const orientation = 'ttb';
 const isVertical = orientation === 'ttb' || orientation === 'btt';
 
-const filterTree = ({ top, isExpanded, expandedChildren }, nodeTree, setStateCallback) => {
-  const topNode = nodeTree.descendants().find(node => node === top);
+const filterTree = ({ topId, isExpanded, expandedChildren }, nodeTree, setStateCallback) => {
+  const topNode = topId ? nodeTree.descendants().find(node => node.data.id === topId) : null;
   if (!topNode) {
     setStateCallback({
-      top: nodeTree,
+      topId: nodeTree.data.id,
       isExpanded: true,
       expandedChildren: [],
     });
@@ -22,23 +22,28 @@ const filterTree = ({ top, isExpanded, expandedChildren }, nodeTree, setStateCal
   }
   const subTree = [];
   subTree.push(topNode); // self
-  if (isExpanded && topNode.children) { // children
+  if (isExpanded && topNode.children) {
+    // children
     topNode.children.forEach(child => {
       subTree.push(child);
+      if (child.children && expandedChildren.indexOf(child.data.id) !== -1) {
+        child.children.forEach(grandChild => {
+          subTree.push(grandChild);
+        });
+      }
     });
   }
-  expandedChildren.forEach(child => { // grandchildren
-    if (child.children) {
-      child.children.forEach(grandChild => {
-        subTree.push(grandChild);
-      });
-    }
-  });
-
   return subTree;
 };
 
-export const paintTree = ({ objectData, expandedState, styling, setStateCallback, selectionsAPI }) => {
+export const paintTree = ({
+  objectData,
+  expandedState,
+  styling,
+  setStateCallback,
+  selectionsAPI,
+  disableTransition,
+}) => {
   const { svg, divBox, allNodes, positioning, width, height } = objectData;
   divBox.selectAll('.node-rect').remove();
   svg.selectAll('g').remove();
@@ -54,9 +59,9 @@ export const paintTree = ({ objectData, expandedState, styling, setStateCallback
   // Create cards and naviagation buttons
   box(divBox, positioning, nodes, styling, expandedState, setStateCallback, selectionsAPI);
   // Create the lines (links) between the nodes
-  path(node, positioning, isVertical, expandedState.top);
+  path(node, positioning, isVertical, expandedState.topId);
   // Scale and translate
-  transform(nodes, nodeSize, width, height, svg, divBox);
+  transform(nodes, nodeSize, width, height, svg, divBox, disableTransition);
 };
 
 export const getSize = ({ error, warn }, element) => {

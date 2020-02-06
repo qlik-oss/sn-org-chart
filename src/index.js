@@ -29,6 +29,7 @@ export default function supernova(env) {
       const [styling, setStyling] = useState(null);
       const [expandedState, setExpandedState] = useState(null);
       const [linked, setLinked] = useState(false);
+      const [selState, setSelState] = useState([]);
       // const [objectSize, setObjectSize] = useState(null);
       const layout = useStaleLayout();
       const model = useModel();
@@ -36,6 +37,7 @@ export default function supernova(env) {
       const rect = useRect()[0];
       const Theme = useTheme();
       const selectionsAPI = useSelections();
+      selectionsAPI.refreshSelectionState = setSelState;
 
       useAction(
         () => ({
@@ -93,6 +95,7 @@ export default function supernova(env) {
           return treeTransform({ layout, model }).then(transformed => {
             setDataTree(transformed);
             setStyling(stylingUtils.cardStyling({ Theme, layout }));
+            setExpandedState(null);
           });
         }
         return Promise.resolve();
@@ -104,20 +107,33 @@ export default function supernova(env) {
           const preRender = preRenderTree(element, dataTree);
           if (preRender) {
             setObjectData(preRender);
-            !expandedState && setExpandedState({
-              top: preRender.allNodes,
-              isExpanded: true,
-              expandedChildren: [],
-            });
+            !expandedState &&
+              setExpandedState({
+                topId: preRender.allNodes.data.id,
+                isExpanded: true,
+                expandedChildren: [],
+              });
           }
         }
       }, [element, dataTree, rect]);
-
+      useEffect(() => {
+        if (objectData && expandedState && styling) {
+          paintTree({
+            objectData,
+            expandedState,
+            styling,
+            setStateCallback,
+            selectionsAPI,
+            linked,
+            disableTransition: true, // needs more work,
+          });
+        }
+      }, [objectData]);
       useEffect(() => {
         if (objectData && expandedState && styling) {
           paintTree({ objectData, expandedState, styling, setStateCallback, selectionsAPI, linked });
         }
-      }, [expandedState, objectData, selectionsAPI.selectionState]);
+      }, [expandedState, selState]);
     },
     ext: ext(env),
   };
