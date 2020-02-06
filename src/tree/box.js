@@ -36,7 +36,7 @@ export default function box(divBox, o, nodes, cardStyling, expandedState, setSta
     .enter()
     .append('div')
     .attr('class', 'node-rect')
-    .attr('style', d => `width:80px;height:50px;top:${o.y(d) + 125}px;left:${o.x(d) + 110}px;`)
+    .attr('style', d => `width:52px;height:24px;top:${o.y(d) + 72}px;left:${o.x(d) + 50}px;`)
     .attr('id', d => `${d.data.id}-traverse`)
     .on('click', d => {
       if (d === top) { // top
@@ -61,7 +61,7 @@ export default function box(divBox, o, nodes, cardStyling, expandedState, setSta
     .enter()
     .append('div')
     .attr('class', 'node-rect')
-    .attr('style', d => `width:80px;height:50px;top:${o.y(d) - 100}px;left:${o.x(d) + 110}px;`)
+    .attr('style', d => `width:52px;height:24px;top:${o.y(d) - 40}px;left:${o.x(d) + 50}px;`)
     .attr('id', d => `${d.data.id}-traverse`)
     .on('click', d => {
       top = d.parent;

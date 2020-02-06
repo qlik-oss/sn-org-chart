@@ -1,4 +1,4 @@
-import { areAllLeafs, isParentOf } from '../utils/tree-utils';
+import { areAllLeafs } from '../utils/tree-utils';
 
 export function getPoints(d, o, isVertical) {
   const halfNode = { x: o.nodeSize.width / 2, y: o.nodeSize.height / 2 };
@@ -32,8 +32,8 @@ export function getPoints(d, o, isVertical) {
     points = isVertical
       ? [
         { x: start.x, y: start.y },
-        { x: start.x, y: start.y - halfDepth },
-        { x: end.x, y: start.y - halfDepth },
+        { x: start.x, y: start.y - halfDepth + 16 },
+        { x: end.x, y: start.y - halfDepth + 16 },
         { x: end.x, y: end.y },
       ]
       : [
@@ -48,7 +48,7 @@ export function getPoints(d, o, isVertical) {
 
 export function getPath(points) {
   // gets the path from first to last points, making turns with radius r at intermediate points
-  const r = 10;
+  const r = 4;
   let pathString = `M ${points[0].x} ${points[0].y}`;
   let dir;
   function setDir(i) {
@@ -72,7 +72,7 @@ export function getPath(points) {
   return pathString;
 }
 
-export default function path(node, o, isVertical, activeId) {
+export default function path(node, o, isVertical, top) {
   // Create the lines (links) between the nodes
   node
     .append('path')
@@ -80,7 +80,7 @@ export default function path(node, o, isVertical, activeId) {
     .attr('id', d => d.data.id)
     .attr('d', d => {
       if (d.parent) {
-        if (isParentOf(d.data, activeId)) {
+        if (d === top) {
           return '';
           // TODO: make a special path here for the top node
         }

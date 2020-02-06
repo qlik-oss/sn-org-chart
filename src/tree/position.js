@@ -1,7 +1,7 @@
 import { areAllLeafs } from '../utils/tree-utils';
 
 export default function position(orientation, nodeSize) {
-  const nodeMargin = 100;
+  const nodeMargin = 48;
   let widthSpacing;
   let depthSpacing;
 

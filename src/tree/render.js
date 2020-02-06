@@ -6,7 +6,7 @@ import '../treeCss.css';
 import transform from './transform';
 
 // Constants for the tree. Might be variables later in property panel
-const nodeSize = { width: 300, height: 100 };
+const nodeSize = { width: 152, height: 64 };
 const orientation = 'ttb';
 const isVertical = orientation === 'ttb' || orientation === 'btt';
 
@@ -45,7 +45,7 @@ export const paintTree = ({ objectData, expandedState, styling, setStateCallback
   // Create cards and naviagation buttons
   box(divBox, positioning, nodes, styling, expandedState, setStateCallback);
   // Create the lines (links) between the nodes
-  path(node, positioning, isVertical, expandedState);
+  path(node, positioning, isVertical, expandedState.top);
   // Scale and translate
   transform(nodes, nodeSize, width, height, svg, divBox);
 };
