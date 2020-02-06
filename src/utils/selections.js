@@ -11,6 +11,7 @@ export default {
     };
 
     if (node) {
+      let newState;
       if (node.data.elemNo < 0 && node.data.elemNo !== -3) {
         return;
       }
@@ -19,42 +20,45 @@ export default {
       }
       if (!selections.isActive()) {
         selections.begin('/qHyperCubeDef');
-        resetSelections();
+        newState = [];
         selections.on('deactivated', resetSelections);
         selections.on('canceled', resetSelections);
         selections.on('cleared', resetSelections);
+      } else {
+        newState = selections.selectionState.concat();
       }
 
-      const ind = selections.selectionState.indexOf(node.data.elemNo);
+      const ind = newState.indexOf(node.data.elemNo);
       let linkedIds = [];
 
       if (selectionState.linked) {
         linkedIds = getAllTreeElemNo(node);
       }
       if (ind !== -1) {
-        selections.selectionState.splice(ind, 1);
+        newState.splice(ind, 1);
         node.data.selected = false;
         linkedIds.forEach(id => {
-          selections.selectionState.splice(selections.selectionState.indexOf(id), 1);
+          newState.splice(newState.indexOf(id), 1);
         });
       } else {
-        selections.selectionState.push(node.data.elemNo);
+        newState.push(node.data.elemNo);
         node.data.selected = true;
         linkedIds.forEach(id => {
-          if (selections.selectionState.indexOf(id) === -1) {
-            selections.selectionState.push(id);
+          if (newState.indexOf(id) === -1) {
+            newState.push(id);
           }
         });
       }
 
-      if (selections.selectionState.length === 0) {
+      if (newState.length === 0) {
         selections.clear();
       } else {
         selections.select({
           method: 'selectHyperCubeValues',
-          params: ['/qHyperCubeDef', 0, selections.selectionState, false],
+          params: ['/qHyperCubeDef', 0, newState, false],
         });
       }
+      selections.selectionState = newState;
     }
   },
 };

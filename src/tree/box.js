@@ -22,5 +22,5 @@ export default function box(divBox, o, appendNodes, cardStyling, selectionsAPI) 
         selections.select(node, selectionsAPI);
       }
     })
-    .html(d => card(d.data, cardStyling));
+    .html(d => card(d.data, cardStyling, selectionsAPI));
 }

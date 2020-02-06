@@ -37,6 +37,7 @@ export default function supernova(env) {
       const Theme = useTheme();
       const [linked, setLinked] = useState(false);
       const selectionsAPI = useSelections();
+
       useAction(
         () => ({
           action() {
@@ -113,7 +114,7 @@ export default function supernova(env) {
         if (objectData && activeNode && styling) {
           paintTree({ objectData, activeNode, styling, setActiveCallback, selectionsAPI, linked });
         }
-      }, [activeNode, objectData]);
+      }, [activeNode, objectData, selectionsAPI.selectionState]);
     },
     ext: ext(env),
   };
