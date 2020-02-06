@@ -10,14 +10,11 @@ const nodeSize = { width: 300, height: 100 };
 const orientation = 'ttb';
 const isVertical = orientation === 'ttb' || orientation === 'btt';
 
-const filterTree = ({ id, isExpanded, expandedChildren }, nodeTree) => {
-  const nodes = nodeTree.descendants();
-  const topNode = nodes.find(node => node.data.id === id);
+const filterTree = ({ top, isExpanded, expandedChildren }) => {
   const subTree = [];
-
-  subTree.push(topNode); // self
+  subTree.push(top); // self
   if (isExpanded) { // children
-    topNode.children.forEach(child => {
+    top.children.forEach(child => {
       subTree.push(child);
     });
   }

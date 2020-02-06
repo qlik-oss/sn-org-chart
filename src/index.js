@@ -63,7 +63,7 @@ export default function supernova(env) {
           if (preRender) {
             setObjectData(preRender);
             !expandedState && setExpandedState({
-              id: preRender.allNodes.data.id,
+              top: preRender.allNodes,
               isExpanded: true,
               expandedChildren: [],
             });
