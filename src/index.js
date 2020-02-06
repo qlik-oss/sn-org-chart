@@ -25,7 +25,7 @@ export default function supernova(env) {
       const [dataTree, setDataTree] = useState(null);
       const [objectData, setObjectData] = useState(null);
       const [styling, setStyling] = useState(null);
-      const [activeNode, setActiveNode] = useState(null);
+      const [expandedState, setExpandedState] = useState(null);
       // const [objectSize, setObjectSize] = useState(null);
       const layout = useStaleLayout();
       const model = useModel();
@@ -33,8 +33,8 @@ export default function supernova(env) {
       const rect = useRect()[0];
       const Theme = useTheme();
 
-      const setActiveCallback = newNode => {
-        setActiveNode(newNode);
+      const setStateallback = newNode => {
+        setExpandedState(newNode);
       };
 
       /*
@@ -62,16 +62,20 @@ export default function supernova(env) {
           const preRender = preRenderTree(element, dataTree);
           if (preRender) {
             setObjectData(preRender);
-            !activeNode && setActiveNode({ id: preRender.allNodes.data.id, isExpanded: true });
+            !expandedState && setExpandedState({
+              id: preRender.allNodes.data.id,
+              isExpanded: true,
+              expandedChildren: [],
+            });
           }
         }
       }, [element, dataTree, rect]);
 
       useEffect(() => {
-        if (objectData && activeNode && styling) {
-          paintTree({ objectData, activeNode, styling, setActiveCallback });
+        if (objectData && expandedState && styling) {
+          paintTree({ objectData, expandedState, styling, setStateallback });
         }
-      }, [activeNode, objectData]);
+      }, [expandedState, objectData]);
     },
     ext: ext(env),
   };

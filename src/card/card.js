@@ -1,5 +1,5 @@
 import colorUtils from '../utils/color-utils';
-import { isParentOf } from '../utils/tree-utils';
+// import { isParentOf } from '../utils/tree-utils';
 
 export function getBackgroundColor(data, cardStyling) {
   let color = cardStyling.backgroundColor;
@@ -17,7 +17,7 @@ export function getFontColor(cardStyling, backgroundColor) {
   return cardStyling.fontColor;
 }
 
-export default (data, cardStyling, activeNode) => {
+export default (data, cardStyling) => {
   if (data.id === 'Root') {
     return '<div class="org-root"/>';
   }
@@ -37,10 +37,10 @@ export default (data, cardStyling, activeNode) => {
   }
 
   // TODO: use isexpanded
-  const traverseSign = (activeNode.id === data.id && activeNode.isExpanded) ||
-    isParentOf(data, activeNode.id) ? '-' : '+';
+  // const traverseSign = (activeNode.id === data.id && activeNode.isExpanded) ||
+  //   isParentOf(data, activeNode.id) ? '-' : '+';
   const traverseBtn = data.children.length
-    ? `<div class="org-traverse">${traverseSign} ${data.children.length}</div>`
+    ? `<div class="org-traverse">+ ${data.children.length}</div>`
     : '';
   return `
     <div class="org-card-top" style="background-color:${topColor};"></div>

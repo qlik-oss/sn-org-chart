@@ -10,27 +10,28 @@ const nodeSize = { width: 300, height: 200 };
 const orientation = 'ttb';
 const isVertical = orientation === 'ttb' || orientation === 'btt';
 
-const filterTree = (activeNode, nodeTree) => {
+const filterTree = ({ id, isExpanded, expandedChildren }, nodeTree) => {
   const nodes = nodeTree.descendants();
-  const currentNode = nodes.find(node => node.data.id === activeNode.id);
+  // const currentNode = nodes.find(node => node.data.id === id);
 
   // Only build the current view (three levels of hiearchy)
   // eslint-disable-next-line arrow-body-style
   return nodes.filter(node => {
     return (
-      currentNode.data.id === node.data.id || // itself
-      (currentNode.parent && node.data.id === currentNode.parent.data.id) || // parent
-      (currentNode.parent && node.parent && node.parent.data.id === currentNode.parent.data.id) || // siblings
-      (activeNode.isExpanded && node.parent && node.parent.data.id === currentNode.data.id) // children
+      node.data.id === id || // itself
+      // (currentNode.parent && node.data.id === currentNode.parent.data.id) || // parent
+      (isExpanded && node.parent && node.parent.data.id === id) || // children
+      // (currentNode.parent && node.parent && node.parent.data.id === currentNode.parent.data.id) || // siblings
+      (node.parent && expandedChildren.includes(node.parent.data.id)) // grand children
     );
   });
 };
 
-export const paintTree = ({ objectData, activeNode, styling, setActiveCallback }) => {
+export const paintTree = ({ objectData, expandedState, styling, setStateallback }) => {
   const { svg, divBox, allNodes, positioning, width, height } = objectData;
   divBox.selectAll('.node-rect').remove();
   svg.selectAll('g').remove();
-  const nodes = filterTree(activeNode, allNodes);
+  const nodes = filterTree(expandedState, allNodes);
   // create the nodes
   const node = svg
     .selectAll('.node')
@@ -40,11 +41,11 @@ export const paintTree = ({ objectData, activeNode, styling, setActiveCallback }
     .attr('class', 'nodeWrapper')
     .attr('id', d => d.data.id);
   // Create cards
-  box(divBox, positioning, nodes, styling, activeNode, id => {
-    setActiveCallback(id);
+  box(divBox, positioning, nodes, styling, expandedState, state => {
+    setStateallback(state);
   });
   // Create the lines (links) between the nodes
-  path(node, positioning, isVertical, activeNode);
+  path(node, positioning, isVertical, expandedState);
   // Scale and translate
   transform(nodes, nodeSize, width, height, svg, divBox);
 };
