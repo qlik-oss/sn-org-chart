@@ -1,9 +1,5 @@
 import { getAllTreeElemNo } from './tree-utils';
 
-export const selectionState = {
-  linked: false,
-};
-
 export default {
   select: (node, selections) => {
     const resetSelections = () => {
@@ -32,7 +28,7 @@ export default {
       const activate = ind === -1;
       let linkedIds = [];
 
-      if (selectionState.linked) {
+      if (selections.linked) {
         linkedIds = getAllTreeElemNo(node, activate);
       }
       if (!activate) {
