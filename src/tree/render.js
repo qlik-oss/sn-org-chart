@@ -10,12 +10,31 @@ const nodeSize = { width: 300, height: 100 };
 const orientation = 'ttb';
 const isVertical = orientation === 'ttb' || orientation === 'btt';
 
+const getScrollPos = node => node.data.scrollPos || 0;
+
 const filterTree = (id, nodeTree) => {
   const nodes = nodeTree.descendants();
   let currentNode = nodes.find(node => node.data.id === id);
   if (!currentNode) {
     currentNode = nodeTree;
   }
+  currentNode.data.isExpanded = true;
+
+  const subSet = [];
+  // add current node
+  subSet.push(currentNode);
+  // add parent
+  if (currentNode.parent) {
+    subSet.push(currentNode.parent);
+    currentNode.parent.data.isExpanded = true;
+    // add siblings
+    subSet.push(
+      ...currentNode.parent.children.slice(getScrollPos(currentNode.parent), getScrollPos(currentNode.parent) + 5)
+    );
+  }
+  // add children
+  subSet.push(...currentNode.children.slice(getScrollPos(currentNode), getScrollPos(currentNode) + 5));
+  return subSet;
 
   // Only build the current view (three levels of hiearchy)
   // eslint-disable-next-line arrow-body-style
@@ -43,9 +62,7 @@ export const paintTree = ({ objectData, activeNode, styling, setActiveCallback, 
     .attr('class', 'nodeWrapper')
     .attr('id', d => d.data.id);
   // Create cards
-  box(divBox, positioning, nodes, styling, selectionsAPI, id => {
-    setActiveCallback(id);
-  });
+  box(divBox, positioning, nodes, styling, setActiveCallback);
   // Create the lines (links) between the nodes
   path(node, positioning, isVertical);
   // Scale and translate

@@ -29,6 +29,7 @@ export default function supernova(env) {
       const [styling, setStyling] = useState(null);
       const [activeNode, setActiveNode] = useState(null);
       const [linked, setLinked] = useState(false);
+      const [scrollHash, setScrollHash] = useState(null);
       // const [objectSize, setObjectSize] = useState(null);
       const layout = useStaleLayout();
       const model = useModel();
@@ -71,8 +72,9 @@ export default function supernova(env) {
         };
       }, []);
 
-      const setActiveCallback = id => {
-        setActiveNode(id);
+      const setActiveCallback = (id, scrollHash) => {
+        id && setActiveNode(id);
+        scrollHash && setScrollHash(scrollHash);
       };
 
       /*
@@ -113,7 +115,7 @@ export default function supernova(env) {
         if (objectData && activeNode && styling) {
           paintTree({ objectData, activeNode, styling, setActiveCallback, selectionsAPI, linked });
         }
-      }, [activeNode, objectData, selectionsAPI.selectionState]);
+      }, [activeNode, objectData, selectionsAPI.selectionState, scrollHash]);
     },
     ext: ext(env),
   };

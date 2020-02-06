@@ -164,6 +164,7 @@ export function createNodes(matrix, attributeIndecies, status) {
     const node = {
       id,
       parentId,
+      scrollPos: 0,
       children: [],
       elemNo: row[0].qElemNumber,
       attributes: getAttributes(attributeIndecies, row[0].qAttrExps),

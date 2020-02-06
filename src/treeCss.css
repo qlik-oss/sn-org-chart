@@ -92,3 +92,12 @@
   font-size: 1.2em;
   transform: translate(-50%, -50%);
 }
+
+.more {
+  border: 2px solid #737373;
+  background: #e6e6e6;
+  color: #484848;
+  font-size: 30px;
+  text-align: center;
+  position: absolute;
+}
