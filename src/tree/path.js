@@ -10,19 +10,19 @@ export function getPoints(d, o, isVertical) {
   if (haveNoChildren(d.parent.children)) {
     points = isVertical
       ? [
-          { x: start.x, y: start.y },
-          { x: end.x - halfNode.x, y: start.y },
-          { x: end.x - halfNode.x, y: end.y + halfDepth },
-          { x: end.x, y: end.y + halfDepth },
-          { x: end.x, y: end.y },
-        ]
+        { x: start.x, y: start.y },
+        { x: end.x - halfNode.x, y: start.y },
+        { x: end.x - halfNode.x, y: end.y + halfDepth },
+        { x: end.x, y: end.y + halfDepth },
+        { x: end.x, y: end.y },
+      ]
       : [
-          { x: start.x, y: start.y },
-          { x: start.x, y: end.y - halfNode.y },
-          { x: end.x + halfDepth, y: end.y - halfNode.y },
-          { x: end.x + halfDepth, y: end.y },
-          { x: end.x, y: end.y },
-        ];
+        { x: start.x, y: start.y },
+        { x: start.x, y: end.y - halfNode.y },
+        { x: end.x + halfDepth, y: end.y - halfNode.y },
+        { x: end.x + halfDepth, y: end.y },
+        { x: end.x, y: end.y },
+      ];
   } else if (start.x === end.x || start.y === end.y) {
     points = [
       { x: start.x, y: start.y },
@@ -31,17 +31,17 @@ export function getPoints(d, o, isVertical) {
   } else {
     points = isVertical
       ? [
-          { x: start.x, y: start.y },
-          { x: start.x, y: start.y - halfDepth },
-          { x: end.x, y: start.y - halfDepth },
-          { x: end.x, y: end.y },
-        ]
+        { x: start.x, y: start.y },
+        { x: start.x, y: start.y - halfDepth },
+        { x: end.x, y: start.y - halfDepth },
+        { x: end.x, y: end.y },
+      ]
       : [
-          { x: start.x, y: start.y },
-          { x: start.x - halfDepth, y: start.y },
-          { x: start.x - halfDepth, y: end.y },
-          { x: end.x, y: end.y },
-        ];
+        { x: start.x, y: start.y },
+        { x: start.x - halfDepth, y: start.y },
+        { x: start.x - halfDepth, y: end.y },
+        { x: end.x, y: end.y },
+      ];
   }
   return points;
 }
