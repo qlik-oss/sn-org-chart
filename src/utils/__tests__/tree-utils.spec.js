@@ -56,7 +56,7 @@ describe('tree-utils', () => {
   // should handle orphans
   // should handle multiple roots
 
-  describe('getAllTreeIds', () => {
+  describe('getAllTreeElemNo', () => {
     it('should return all ids in tree and activate', () => {
       const result = getAllTreeElemNo(defaultValues.nodes, true);
       expect(result).to.deep.equal([2, 3, 798, 88]);
