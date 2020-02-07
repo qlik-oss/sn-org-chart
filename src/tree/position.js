@@ -1,6 +1,6 @@
 import { areAllLeafs } from '../utils/tree-utils';
 
-export default function position(orientation, nodeSize) {
+export default function position(orientation, nodeSize, element) {
   const nodeMargin = 100;
   let widthSpacing;
   let depthSpacing;
@@ -14,8 +14,16 @@ export default function position(orientation, nodeSize) {
       d[axis] = areAllLeafs(d.parent.children)
         ? d.parent[axis] + nodeMargin / 2
         : d.parent[axis] + (d.data.childNumber - (d.parent.children.length - 1) / 2) * widthSpacing;
-    } else {
+    } else if (!d.children) {
       d[axis] = 0;
+    } else {
+      // In case of zoom mode we need to have the tree moved to the right from the start
+      const neededWidth = (nodeSize.width + nodeMargin) * d.children.length - nodeMargin;
+      const zoomFactor = neededWidth / element.clientWidth;
+      d[axis] = (element.clientWidth / 2) * zoomFactor - nodeSize.width / 2;
+      if (!d.zoomFactor) {
+        d.zoomFactor = zoomFactor;
+      }
     }
 
     return d[axis];

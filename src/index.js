@@ -16,6 +16,7 @@ import ext from './extension/ext';
 import { paintTree, preRenderTree } from './tree/render';
 import stylingUtils from './utils/styling';
 import treeTransform from './utils/tree-utils';
+import { setZooming } from './tree/transform';
 
 export default function supernova(env) {
   return {
@@ -101,7 +102,7 @@ export default function supernova(env) {
       // This one can split up. Only need to get new height/width when rect is changed
       useEffect(() => {
         if (element && dataTree) {
-          const preRender = preRenderTree(element, dataTree);
+          const preRender = preRenderTree(element, dataTree, layout);
           if (preRender) {
             setObjectData(preRender);
             !activeNode && setActiveNode(preRender.allNodes.data.id);
@@ -114,6 +115,12 @@ export default function supernova(env) {
           paintTree({ objectData, activeNode, styling, setActiveCallback, selectionsAPI, linked });
         }
       }, [activeNode, objectData, selectionsAPI.selectionState]);
+
+      useEffect(() => {
+        if (objectData && layout.zoomMode === 'zoom') {
+          setZooming(objectData);
+        }
+      }, [objectData]);
     },
     ext: ext(env),
   };

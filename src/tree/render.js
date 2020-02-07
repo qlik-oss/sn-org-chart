@@ -30,7 +30,7 @@ const filterTree = (id, nodeTree) => {
 };
 
 export const paintTree = ({ objectData, activeNode, styling, setActiveCallback, selectionsAPI }) => {
-  const { svg, divBox, allNodes, positioning, width, height } = objectData;
+  const { svg, divBox, allNodes, positioning, width, height, zoomMode } = objectData;
   divBox.selectAll('.node-rect').remove();
   svg.selectAll('g').remove();
   const nodes = filterTree(activeNode, allNodes);
@@ -49,7 +49,9 @@ export const paintTree = ({ objectData, activeNode, styling, setActiveCallback, 
   // Create the lines (links) between the nodes
   path(node, positioning, isVertical);
   // Scale and translate
-  transform(nodes, nodeSize, width, height, svg, divBox);
+  if (zoomMode !== 'zoom') {
+    transform(nodes, nodeSize, width, height, svg, divBox);
+  }
 };
 
 export const getSize = ({ error, warn }, element) => {
@@ -60,10 +62,10 @@ export const getSize = ({ error, warn }, element) => {
   return size;
 };
 
-export function preRenderTree(element, dataTree) {
+export function preRenderTree(element, dataTree, layout) {
   // eslint-disable-next-line no-param-reassign
   element.innerHTML = '';
-  const positioning = position(orientation, nodeSize);
+  const positioning = position(orientation, nodeSize, element);
   const { width, height } = getSize(dataTree, element);
 
   if (dataTree.error) {
@@ -104,5 +106,6 @@ export function preRenderTree(element, dataTree) {
     .nodeSize([0, positioning.depthSpacing]);
 
   const allNodes = treemap(hierarchy(dataTree));
-  return { svg, divBox, allNodes, positioning, width, height };
+  const { zoomMode } = layout;
+  return { svg, divBox, allNodes, positioning, width, height, zoomMode, element };
 }

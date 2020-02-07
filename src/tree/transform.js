@@ -1,3 +1,5 @@
+import { select, zoom, event, zoomIdentity } from 'd3';
+
 const getBBoxOfNodes = (nodes, nodeSize) => {
   const bbox = {
     left: Infinity,
@@ -18,6 +20,46 @@ const getBBoxOfNodes = (nodes, nodeSize) => {
     height: bbox.bottom - bbox.top + nodeSize.height,
   };
 };
+
+export function applyTransform(eventTransform, svg, divBox, width, height) {
+  const scaleFactor = eventTransform.k;
+  const translation = `${eventTransform.x}px, ${eventTransform.y}px`;
+
+  svg.attr('transform', eventTransform);
+  divBox.classed('org-disable-transition', true);
+  svg.classed('org-disable-transition', true);
+
+  divBox.attr(
+    'style',
+    `width:${width}px;height:${height}px; transform: translate(${translation}) scale(${scaleFactor})`
+  );
+}
+
+export function setZooming(objectData) {
+  const { svg, divBox, width, height, element, allNodes } = objectData;
+  const scaleFactor = allNodes.zoomFactor;
+
+  const zoomed = () => {
+    applyTransform(
+      zoomIdentity.translate(event.transform.x, event.transform.y).scale(event.transform.k / scaleFactor),
+      svg,
+      divBox,
+      width,
+      height
+    );
+  };
+  select(element).call(
+    zoom()
+      .extent([
+        [0, 0],
+        [width, height],
+      ])
+      .scaleExtent([0.05, 8])
+      .on('zoom', zoomed)
+  );
+
+  applyTransform(zoomIdentity.translate(0, 0).scale(1 / scaleFactor), svg, divBox, width, height);
+}
 
 export default function transform(nodes, nodeSize, width, height, svg, divBox) {
   // Zooming and positioning of the tree
@@ -48,6 +90,6 @@ export default function transform(nodes, nodeSize, width, height, svg, divBox) {
   divBox.attr(
     'style',
     `width:${width}px;height:${height}px;
-  transform: scale(${1 / scaleFactor}) translate(${translation});`
+      transform: scale(${1 / scaleFactor}) translate(${translation});`
   );
 }
