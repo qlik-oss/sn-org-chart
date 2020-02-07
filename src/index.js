@@ -30,7 +30,6 @@ export default function supernova(env) {
       const [expandedState, setExpandedState] = useState(null);
       const [linked, setLinked] = useState(false);
       const [selState, setSelState] = useState([]);
-      // const [objectSize, setObjectSize] = useState(null);
       const layout = useStaleLayout();
       const model = useModel();
       const element = useElement();
@@ -116,24 +115,12 @@ export default function supernova(env) {
           }
         }
       }, [element, dataTree, rect]);
-      useEffect(() => {
-        if (objectData && expandedState && styling) {
-          paintTree({
-            objectData,
-            expandedState,
-            styling,
-            setStateCallback,
-            selectionsAPI,
-            linked,
-            disableTransition: true, // needs more work,
-          });
-        }
-      }, [objectData]);
+
       useEffect(() => {
         if (objectData && expandedState && styling) {
           paintTree({ objectData, expandedState, styling, setStateCallback, selectionsAPI, linked });
         }
-      }, [expandedState, selState]);
+      }, [expandedState, objectData, selState]);
     },
     ext: ext(env),
   };

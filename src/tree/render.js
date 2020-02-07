@@ -42,7 +42,6 @@ export const paintTree = ({
   styling,
   setStateCallback,
   selectionsAPI,
-  disableTransition,
 }) => {
   const { svg, divBox, allNodes, positioning, width, height } = objectData;
   divBox.selectAll('.node-rect').remove();
@@ -61,7 +60,7 @@ export const paintTree = ({
   // Create the lines (links) between the nodes
   path(node, positioning, isVertical, expandedState.topId);
   // Scale and translate
-  transform(nodes, nodeSize, width, height, svg, divBox, disableTransition);
+  transform(nodes, nodeSize, width, height, svg, divBox);
 };
 
 export const getSize = ({ error, warn }, element) => {

@@ -30,9 +30,7 @@ export default (data, cardStyling, selections) => {
     html += `<div class="org-card-text">${attributes.subLabel}</div>`;
   }
   if (data.measure) {
-    html += `<div class="org-card-text">${cardStyling.measureLabel ? cardStyling.measureLabel + ': ' : ''}${
-      data.measure
-    }</div>`;
+    html += `<div class="org-card-text">${data.measure}</div>`;
   } else if (attributes.extraLabel) {
     html += `<div class="org-card-text">${attributes.extraLabel}</div>`;
   }

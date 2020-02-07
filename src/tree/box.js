@@ -60,15 +60,15 @@ export default function box(divBox, o, nodes, cardStyling, expandedState, setSta
           expandedChildren.splice(expandedChildren.indexOf(d.data.id), 1);
         } else if (
           // change this, think it works?
-          haveNoChildren(d.children) &&
+          // haveNoChildren(d.children) &&
           d.parent.children
-            .filter(n => expandedChildren.indexOf(n.data.id) !== -1)
+            // .filter(n => expandedChildren.indexOf(n.data.id) !== -1)
             .every(n => haveNoChildren(n.children))
         ) {
-          // Add this as expanded if possible
+          // Add this node as expanded if possible
           expandedChildren.push(d.data.id);
         } else {
-          // Replace expanded with this one
+          // Replace expanded with this node
           expandedChildren = [d.data.id];
         }
       } else {
