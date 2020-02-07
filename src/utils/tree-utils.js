@@ -157,10 +157,6 @@ export function haveNoChildren(nodes) {
   return true;
 }
 
-export function isParentOf(data, id) {
-  return data.children && data.children.findIndex(child => child.id === id) !== -1;
-}
-
 export function createNodes(matrix, attributeIndecies, status) {
   const nodeMap = {};
   const allNodes = [];
