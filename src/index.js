@@ -124,7 +124,7 @@ export default function supernova(env) {
       }, [expandedState, objectData, selState]);
 
       useEffect(() => {
-        if (objectData && layout.zoomMode === 'zoom') {
+        if (objectData && layout.navigationMode === 'free') {
           setZooming(objectData);
         }
       }, [objectData]);
