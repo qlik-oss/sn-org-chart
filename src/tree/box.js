@@ -35,7 +35,7 @@ export default function box(divBox, o, appendNodes, cardStyling, reRender) {
     .html(d => card(d.data, cardStyling))
     .on('mouseover', d => {
       tooltip
-        .html(`${d.data.attributes.label || ''}<br />${d.data.attributes.subLabel || ''}<br />${d.data.attributes.extraLabel || ''}<br />${d.data.measure || ''}<br />`)
+        .html(`${d.data.attributes.label || ''}<br />${d.data.attributes.subLabel || ''}<br />${d.data.attributes.extraLabel || ''}<br />${d.data.measure || ''}`)
         .attr('style', 'visibility: visible;opacity: 1;')
         .attr('style', () => { getTooltipStyle(d); });
     })

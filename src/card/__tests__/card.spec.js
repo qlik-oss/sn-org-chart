@@ -80,13 +80,13 @@ describe('card', () => {
 
     it('should return html for node with only id', () => {
       const result = card(data, cardStyling);
-      expect(result).to.equal(getHtml(`<div class="org-card-title">${data.id}</div><div data-html="true" class="tooltip">${data.id}</br></br></br></div>`));
+      expect(result).to.equal(getHtml(`<div class="org-card-title">${data.id}</div>`));
     });
 
     it('should return html for node with attribute label', () => {
       data.attributes.label = 'this is the label';
       const result = card(data, cardStyling);
-      expect(result).to.equal(getHtml(`<div class="org-card-title">${data.attributes.label}</div><div data-html="true" class="tooltip">${data.attributes.label}</br></br></br></div>`));
+      expect(result).to.equal(getHtml(`<div class="org-card-title">${data.attributes.label}</div>`));
     });
 
     it('should return html for node with id and subLabel', () => {
@@ -94,7 +94,7 @@ describe('card', () => {
       const result = card(data, cardStyling);
       expect(result).to.equal(
         getHtml(
-          `<div class="org-card-title">${data.id}</div><div class="org-card-text">${data.attributes.subLabel}</div><div data-html="true" class="tooltip">${data.id}</br>${data.attributes.subLabel}</br></br></div>`
+          `<div class="org-card-title">${data.id}</div><div class="org-card-text">${data.attributes.subLabel}</div>`
         )
       );
     });
@@ -104,7 +104,7 @@ describe('card', () => {
       data.attributes.extraLabel = 'extra';
       const result = card(data, cardStyling);
       expect(result).to.equal(
-        getHtml(`<div class="org-card-title">${data.attributes.label}</div><div class="org-card-text">${data.attributes.subLabel}</div><div class="org-card-text">${data.attributes.extraLabel}</div><div data-html="true" class="tooltip">${data.attributes.label}</br>${data.attributes.subLabel}</br>${data.attributes.extraLabel}</br></div>`)
+        getHtml(`<div class="org-card-title">${data.attributes.label}</div><div class="org-card-text">${data.attributes.subLabel}</div><div class="org-card-text">${data.attributes.extraLabel}</div>`)
       );
     });
     it('should return html for node with three labels and measure', () => {
@@ -114,14 +114,14 @@ describe('card', () => {
       data.measure = 'measure';
       const result = card(data, cardStyling);
       expect(result).to.equal(
-        getHtml(`<div class="org-card-title">${data.attributes.label}</div><div class="org-card-text">${data.attributes.subLabel}</div><div class="org-card-text">${data.measure}</div><div data-html="true" class="tooltip">${data.attributes.label}</br>${data.attributes.subLabel}</br>${data.attributes.extraLabel}</br>${data.measure}</div>`)
+        getHtml(`<div class="org-card-title">${data.attributes.label}</div><div class="org-card-text">${data.attributes.subLabel}</div><div class="org-card-text">${data.measure}</div>`)
       );
     });
     it('should return html for node with id and measure', () => {
       data.measure = 'measure';
       const result = card(data, cardStyling);
       expect(result).to.equal(
-        getHtml(`<div class="org-card-title">${data.id}</div><div class="org-card-text">${data.measure}</div><div data-html="true" class="tooltip">${data.id}</br></br></br>${data.measure}</div>`)
+        getHtml(`<div class="org-card-title">${data.id}</div><div class="org-card-text">${data.measure}</div>`)
       );
     });
   });
