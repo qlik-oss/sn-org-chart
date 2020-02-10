@@ -23,6 +23,7 @@ const stylingUtils = {
     const cardStyling = {
       backgroundColor,
       fontColor,
+      navMode: layout.navigationMode || 'regular',
     };
     return cardStyling;
   },

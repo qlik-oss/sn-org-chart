@@ -44,7 +44,7 @@
 }
 
 .org-card-title {
-  font-size: 26px;
+  font-size: 14px;
   font-weight: bold;
   white-space: nowrap;
   overflow: hidden;
@@ -52,7 +52,7 @@
 }
 
 .org-card-text {
-  font-size: 20px;
+  font-size: 11px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -97,7 +97,16 @@
   border: 2px solid #737373;
   background: #e6e6e6;
   color: #484848;
-  font-size: 30px;
+  font-size: 20px;
   text-align: center;
   position: absolute;
+  box-sizing: border-box;
+  height: 24px;
+  line-height: 20px;
+  padding: 0 10px 0 10px;
+  user-select: none;
+  cursor: pointer;
+}
+.more:hover {
+  border: 2px solid #212121;
 }

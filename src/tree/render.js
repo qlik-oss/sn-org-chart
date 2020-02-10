@@ -6,53 +6,63 @@ import '../treeCss.css';
 import transform from './transform';
 
 // Constants for the tree. Might be variables later in property panel
-const nodeSize = { width: 300, height: 100 };
+const nodeSize = { width: 152, height: 64, maxChildren: 5, nodeMargin: 66 };
 const orientation = 'ttb';
 const isVertical = orientation === 'ttb' || orientation === 'btt';
 
 const getScrollPos = node => node.data.scrollPos || 0;
 
-const filterTree = (id, nodeTree) => {
+const filterTree = (id, nodeTree, maxKids) => {
   const nodes = nodeTree.descendants();
+  nodes.forEach(n => {
+    n.data.isExpanded = false;
+  });
   let currentNode = nodes.find(node => node.data.id === id);
   if (!currentNode) {
     currentNode = nodeTree;
+  } else if (
+    maxKids &&
+    currentNode.parent &&
+    (getScrollPos(currentNode.parent) > currentNode.data.childNumber ||
+      getScrollPos(currentNode.parent) + maxKids - 1 < currentNode.data.childNumber)
+  ) {
+    currentNode = currentNode.parent;
   }
   currentNode.data.isExpanded = true;
 
   const subSet = [];
   // add current node
-  subSet.push(currentNode);
+  !currentNode.parent && subSet.push(currentNode);
   // add parent
   if (currentNode.parent) {
     subSet.push(currentNode.parent);
     currentNode.parent.data.isExpanded = true;
     // add siblings
-    subSet.push(
-      ...currentNode.parent.children.slice(getScrollPos(currentNode.parent), getScrollPos(currentNode.parent) + 5)
-    );
+    if (maxKids) {
+      subSet.push(
+        ...currentNode.parent.children.slice(
+          getScrollPos(currentNode.parent),
+          getScrollPos(currentNode.parent, maxKids) + maxKids
+        )
+      );
+    } else {
+      subSet.push(...currentNode.parent.children);
+    }
   }
   // add children
-  subSet.push(...currentNode.children.slice(getScrollPos(currentNode), getScrollPos(currentNode) + 5));
+  if (maxKids) {
+    subSet.push(...currentNode.children.slice(getScrollPos(currentNode), getScrollPos(currentNode) + maxKids));
+  } else {
+    subSet.push(...currentNode.children);
+  }
   return subSet;
-
-  // Only build the current view (three levels of hiearchy)
-  // eslint-disable-next-line arrow-body-style
-  return nodes.filter(node => {
-    return (
-      currentNode.data.id === node.data.id ||
-      (currentNode.parent && node.data.id === currentNode.parent.data.id) ||
-      (currentNode.parent && node.parent && node.parent.data.id === currentNode.parent.data.id) ||
-      (node.parent && node.parent.data.id === currentNode.data.id)
-    );
-  });
 };
 
 export const paintTree = ({ objectData, activeNode, styling, setActiveCallback, selectionsAPI }) => {
   const { svg, divBox, allNodes, positioning, width, height } = objectData;
   divBox.selectAll('.node-rect').remove();
   svg.selectAll('g').remove();
-  const nodes = filterTree(activeNode, allNodes);
+  const nodes = filterTree(activeNode, allNodes, positioning.nodeSize.maxChildren);
   // create the nodes
   const node = svg
     .selectAll('.node')
@@ -66,7 +76,7 @@ export const paintTree = ({ objectData, activeNode, styling, setActiveCallback, 
   // Create the lines (links) between the nodes
   path(node, positioning, isVertical);
   // Scale and translate
-  transform(nodes, nodeSize, width, height, svg, divBox);
+  transform(nodes, positioning.nodeSize, width, height, svg, divBox);
 };
 
 export const getSize = ({ error, warn }, element) => {
@@ -77,11 +87,21 @@ export const getSize = ({ error, warn }, element) => {
   return size;
 };
 
-export function preRenderTree(element, dataTree) {
+export function preRenderTree(element, dataTree, styling = {}) {
   // eslint-disable-next-line no-param-reassign
   element.innerHTML = '';
-  const positioning = position(orientation, nodeSize);
   const { width, height } = getSize(dataTree, element);
+  const localSize = { ...nodeSize };
+  // One and a half full child list minus half a node is the max width of a tree with a given number of simultaneusly displayed children
+  // width = 1.5 * (numChildren * nodeWidth + (numChildred-1) * nodeSpacing) - nodeWidth/2
+  if (styling.navMode === 'scroll') {
+    const childCount =
+      (width + localSize.width / 2 + 1.5 * localSize.nodeMargin) / (1.5 * localSize.width + 1.5 * localSize.nodeMargin);
+    localSize.maxChildren = Math.round(childCount);
+  } else {
+    localSize.maxChildren = null;
+  }
+  const positioning = position(orientation, localSize);
 
   if (dataTree.error) {
     select(element)

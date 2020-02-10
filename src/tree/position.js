@@ -1,7 +1,7 @@
 import { areAllLeafs } from '../utils/tree-utils';
 
 export default function position(orientation, nodeSize) {
-  const nodeMargin = 100;
+  const { nodeMargin } = nodeSize;
   let widthSpacing;
   let depthSpacing;
 
@@ -11,9 +11,17 @@ export default function position(orientation, nodeSize) {
       if (!d.parent[axis]) {
         d.parent[axis] = widthTranslation(d.parent, axis);
       }
-      d[axis] = areAllLeafs(d.parent.children)
-        ? d.parent[axis] + nodeMargin / 2
-        : d.parent[axis] + (d.data.childNumber - (d.parent.children.length - 1) / 2) * widthSpacing;
+      if (nodeSize.maxChildren) {
+        const scrollPos = d.parent.data.scrollPos || 0;
+        const scrolledPos =
+          d.parent[axis] + (d.data.childNumber - scrollPos - (nodeSize.maxChildren - 1) / 2) * widthSpacing;
+
+        d[axis] = areAllLeafs(d.parent.children) ? d.parent[axis] + nodeMargin / 2 : scrolledPos;
+      } else {
+        d[axis] = areAllLeafs(d.parent.children)
+          ? d.parent[axis] + nodeMargin / 2
+          : d.parent[axis] + (d.data.childNumber - (d.parent.children.length - 1) / 2) * widthSpacing;
+      }
     } else {
       d[axis] = 0;
     }
@@ -23,7 +31,13 @@ export default function position(orientation, nodeSize) {
 
   const depthTranslation = (d, axis) => {
     if (d.parent && areAllLeafs(d.parent.children)) {
-      d[axis] = d.parent[axis] + (d.data.childNumber + 1) * depthSpacing;
+      if (nodeSize.maxChildren) {
+        const scrollPos = d.parent.data.scrollPos || 0;
+        const scrolledPos = d.parent[axis] + (d.data.childNumber - scrollPos + 1) * depthSpacing;
+        d[axis] = scrolledPos;
+      } else {
+        d[axis] = d.parent[axis] + (d.data.childNumber + 1) * depthSpacing;
+      }
     } else {
       d[axis] = d.y;
     }

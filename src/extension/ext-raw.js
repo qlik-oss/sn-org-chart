@@ -6,6 +6,12 @@ const colorOptions = [
   { value: 'byExpression', translation: 'properties.colorMode.byExpression' },
 ];
 
+const navigationOptions = [
+  { value: 'regular', translation: '$Unlimited sizing' },
+  { value: 'scroll', translation: '$SCroll thing' },
+  { value: 'free', translation: '$Free pan and zoom' },
+];
+
 export default {
   definition: {
     type: 'items',
@@ -98,13 +104,26 @@ export default {
             translation: 'properties.presentation',
             type: 'items',
             items: {
+              navigation: {
+                type: 'items',
+                items: {
+                  navigtaionMode: {
+                    ref: 'navigationMode',
+                    type: 'string',
+                    translation: '$Navigationmode',
+                    component: 'dropdown',
+                    default: 'scroll',
+                    options: navigationOptions,
+                  },
+                },
+              },
               backgroundColor: {
                 type: 'items',
                 items: {
                   useColorExpression: {
                     ref: 'style.backgroundColor.colorType',
                     type: 'string',
-                    translation: 'AppDetails.SheetBackgroundColor',
+                    translation: 'AppDetails.SheetBackgroundColor', // needs to be uodated
                     component: 'dropdown',
                     options: colorOptions,
                   },

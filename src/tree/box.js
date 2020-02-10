@@ -1,6 +1,5 @@
 import card from '../card/card';
 import selections from '../utils/selections';
-import { event } from 'd3';
 
 export default function box(divBox, o, appendNodes, cardStyling, setActiveCallback, selectionsAPI) {
   function getStyle(p) {
@@ -11,20 +10,27 @@ export default function box(divBox, o, appendNodes, cardStyling, setActiveCallba
   }
 
   function getMoreStyle(node, isRight) {
-    if (!node.children || !node.data.isExpanded) {
+    if (
+      !node.children ||
+      !node.data.isExpanded ||
+      !o.nodeSize.maxChildren ||
+      o.nodeSize.maxChildren > node.children.length
+    ) {
       return 'display:none';
     }
-    if (node.children.length === node.data.scrollPos + 5) {
+    if (!isRight && node.children.length === node.data.scrollPos + o.nodeSize.maxChildren) {
+      return 'display:none';
+    }
+    if (isRight && node.data.scrollPos === 0) {
       return 'display:none';
     }
     if (isRight) {
-      return `width:60px;height:30px; top:${node.yActual}px;left:${node.xActual}px`;
-    } else {
-      return `width:60px;height:30px; top:${node.yActual}px;left:${node.xActual + o.nodeSize.width - 50}px`;
+      return `top:${node.yActual + 65}px;left:${node.xActual}px`;
     }
+    return `top:${node.yActual + 65}px;left:${node.xActual + o.nodeSize.width - 50}px`;
   }
 
-  const node = divBox
+  divBox
     .selectAll('.node')
     .data(appendNodes)
     .enter()
@@ -33,18 +39,16 @@ export default function box(divBox, o, appendNodes, cardStyling, setActiveCallba
     .attr('style', getStyle)
     .attr('id', d => d.data.id)
     .on('click', node => {
-      /*if (node.data.id !== 'Root') {
+      /* if (node.data.id !== 'Root') {
         selections.select(node, selectionsAPI);
-      }*/
+      } */
       if (node.children) {
         setActiveCallback(node.data.id);
       }
     })
     .html(d => card(d.data, cardStyling, selectionsAPI));
 
-  const scrollableNodes = appendNodes.filter(n => {
-    return n.children && n.data.isExpanded;
-  });
+  const scrollableNodes = appendNodes.filter(n => n.children && n.data.isExpanded);
   divBox.selectAll('.more').remove();
   // should filter appendNodes down to viabler ones, then append things
   divBox
@@ -57,7 +61,7 @@ export default function box(divBox, o, appendNodes, cardStyling, setActiveCallba
     .attr('style', p => getMoreStyle(p, true))
     .on('click', node => {
       node.data.scrollPos -= 1;
-      setActiveCallback(null, node.data.scrollPos + ' ' + node.data.id);
+      setActiveCallback(null, `${node.data.scrollPos} ${node.data.id}`);
     })
     .html('<');
 
@@ -71,7 +75,7 @@ export default function box(divBox, o, appendNodes, cardStyling, setActiveCallba
     .attr('style', p => getMoreStyle(p, false))
     .on('click', node => {
       node.data.scrollPos += 1;
-      setActiveCallback(null, node.data.scrollPos + ' ' + node.data.id);
+      setActiveCallback(null, `${node.data.scrollPos} ${node.data.id}`);
     })
     .html('>');
 }
