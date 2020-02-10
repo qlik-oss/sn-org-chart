@@ -1,7 +1,8 @@
 import { haveNoChildren } from '../utils/tree-utils';
+import constants from './size-constants';
 
-export default function position(orientation, nodeSize) {
-  const nodeMargin = 48;
+export default function position(orientation) {
+  const { widthMargin, heightMargin, cardWidth, cardHeight, leafMargin, buttonMargin } = constants;
   let widthSpacing;
   let depthSpacing;
 
@@ -12,7 +13,7 @@ export default function position(orientation, nodeSize) {
         d.parent[axis] = widthTranslation(d.parent, axis);
       }
       d[axis] = haveNoChildren(d.parent.children)
-        ? d.parent[axis] + nodeMargin / 2
+        ? d.parent[axis] + buttonMargin
         : d.parent[axis] + (d.data.childNumber - (d.parent.children.length - 1) / 2) * widthSpacing;
     } else {
       d[axis] = 0;
@@ -23,7 +24,7 @@ export default function position(orientation, nodeSize) {
 
   const depthTranslation = (d, axis) => {
     if (d.parent && haveNoChildren(d.parent.children)) {
-      d[axis] = d.parent[axis] + (d.data.childNumber + 1) * depthSpacing;
+      d[axis] = d.parent[axis] + depthSpacing + d.data.childNumber * (cardHeight + leafMargin);
     } else {
       d[axis] = d.y;
     }
@@ -33,41 +34,41 @@ export default function position(orientation, nodeSize) {
   let orientations;
   switch (orientation) {
     case 'ttb':
-      widthSpacing = nodeSize.width + nodeMargin;
-      depthSpacing = nodeSize.height + nodeMargin;
+      widthSpacing = cardWidth + widthMargin;
+      depthSpacing = cardHeight + heightMargin;
       orientations = {
         depthSpacing,
-        nodeSize,
+        isVertical: true,
         x: d => widthTranslation(d, 'xActual'),
         y: d => depthTranslation(d, 'yActual'),
       };
       break;
     case 'btt':
-      widthSpacing = nodeSize.width + nodeMargin;
-      depthSpacing = -nodeSize.height - nodeMargin;
+      widthSpacing = cardWidth + widthMargin;
+      depthSpacing = -cardHeight - heightMargin;
       orientations = {
         depthSpacing,
-        nodeSize,
+        isVertical: true,
         x: d => widthTranslation(d, 'xActual'),
         y: d => depthTranslation(d, 'yActual'),
       };
       break;
     case 'ltr':
-      widthSpacing = nodeSize.height + nodeMargin;
-      depthSpacing = nodeSize.width + nodeMargin;
+      widthSpacing = cardHeight + heightMargin;
+      depthSpacing = cardWidth + widthMargin;
       orientations = {
         depthSpacing,
-        nodeSize,
+        isVertical: false,
         x: d => depthTranslation(d, 'xActual'),
         y: d => widthTranslation(d, 'yActual'),
       };
       break;
     case 'rtl':
-      widthSpacing = nodeSize.height + nodeMargin;
-      depthSpacing = -nodeSize.width - nodeMargin;
+      widthSpacing = cardHeight + heightMargin;
+      depthSpacing = -cardWidth - widthMargin;
       orientations = {
         depthSpacing,
-        nodeSize,
+        isVertical: false,
         x: d => depthTranslation(d, 'xActual'),
         y: d => widthTranslation(d, 'yActual'),
       };

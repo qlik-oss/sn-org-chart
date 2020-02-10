@@ -1,4 +1,7 @@
-const getBBoxOfNodes = (nodes, nodeSize) => {
+import constants from './size-constants';
+
+const getBBoxOfNodes = (nodes) => {
+  const { cardWidth, cardHeight } = constants;
   const bbox = {
     left: Infinity,
     top: Infinity,
@@ -16,21 +19,21 @@ const getBBoxOfNodes = (nodes, nodeSize) => {
     return {
       x: bbox.left - 50,
       y: bbox.top - 50,
-      width: bbox.right - bbox.left + nodeSize.width + 100,
-      height: bbox.bottom - bbox.top + nodeSize.height + 100,
+      width: bbox.right - bbox.left + cardWidth + 100,
+      height: bbox.bottom - bbox.top + cardHeight + 100,
     };
   }
   return {
     x: bbox.left,
     y: bbox.top,
-    width: bbox.right - bbox.left + nodeSize.width,
-    height: bbox.bottom - bbox.top + nodeSize.height,
+    width: bbox.right - bbox.left + cardWidth,
+    height: bbox.bottom - bbox.top + cardHeight,
   };
 };
 
-export default function transform(nodes, nodeSize, width, height, svg, divBox) {
+export default function transform(nodes, width, height, svg, divBox) {
   // Zooming and positioning of the tree
-  const bBox = getBBoxOfNodes(nodes, nodeSize);
+  const bBox = getBBoxOfNodes(nodes);
   const scaleToWidhth = bBox.width / width > bBox.height / height;
   const scaleFactor = scaleToWidhth ? bBox.width / width : bBox.height / height;
   const translation = scaleToWidhth

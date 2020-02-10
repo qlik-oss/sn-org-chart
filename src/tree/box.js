@@ -1,6 +1,7 @@
 import card from '../card/card';
 import selections from '../utils/selections';
 import { haveNoChildren } from '../utils/tree-utils';
+import constants from './size-constants';
 
 export const getSign = (d, { topId, isExpanded, expandedChildren }) => {
   if (
@@ -46,13 +47,14 @@ export const getNewUpState = (d, isExpanded) => ({
   isExpanded: true,
 });
 
-export default function box(divBox, o, nodes, cardStyling, expandedState, setStateCallback, selectionsAPI) {
+export default function box({ x, y }, divBox, nodes, cardStyling, expandedState, setStateCallback, selectionsAPI) {
+  const { cardWidth, cardHeight, buttonWidth, buttonHeight, buttonMargin, rootDiameter } = constants;
   const { topId, isExpanded } = expandedState;
-  function getStyle(p) {
-    if (p.data.id === 'Root') {
-      return `top:${o.y(p) + 17}px;left:${o.x(p) + 66}px`;
+  function getStyle(d) {
+    if (d.data.id === 'Root') {
+      return `top:${y(d) + cardHeight - rootDiameter}px;left:${x(d) + (cardWidth - rootDiameter) / 2}px`;
     }
-    return `width:${o.nodeSize.width}px;height:${o.nodeSize.height}px; top:${o.y(p)}px;left:${o.x(p)}px;`;
+    return `width:${cardWidth}px;height:${cardHeight}px; top:${y(d)}px;left:${x(d)}px;`;
   }
 
   // cards
@@ -78,7 +80,7 @@ export default function box(divBox, o, nodes, cardStyling, expandedState, setSta
     .enter()
     .append('div')
     .attr('class', 'node-rect')
-    .attr('style', d => `width:52px;height:24px;top:${o.y(d) + 72}px;left:${o.x(d) + 50}px;`)
+    .attr('style', d => `width:${buttonWidth}px;height:${buttonHeight}px;top:${y(d) + cardHeight + buttonMargin}px;left:${x(d) + (cardWidth - buttonWidth) / 2}px;`)
     .attr('id', d => `${d.data.id}-expand`)
     .on('click', d => {
       setStateCallback(getNewState(d, expandedState));
@@ -92,7 +94,7 @@ export default function box(divBox, o, nodes, cardStyling, expandedState, setSta
     .enter()
     .append('div')
     .attr('class', 'node-rect')
-    .attr('style', d => `width:52px;height:24px;top:${o.y(d) - 40}px;left:${o.x(d) + 50}px;`)
+    .attr('style', d => `width:${buttonWidth}px;height:${buttonHeight}px;top:${y(d) - buttonHeight - buttonMargin}px;left:${x(d) + (cardWidth - buttonWidth) / 2}px;`)
     .attr('id', d => `${d.data.id}-up`)
     .on('click', d => {
       setStateCallback(getNewUpState(d, isExpanded));

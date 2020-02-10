@@ -1,14 +1,9 @@
 import { hierarchy, tree, select } from 'd3';
 import position from './position';
 import box from './box';
-import path from './path';
-import '../treeCss.css';
+import createPaths from './path';
 import transform from './transform';
-
-// Constants for the tree. Might be variables later in property panel
-const nodeSize = { width: 152, height: 64 };
-const orientation = 'ttb';
-const isVertical = orientation === 'ttb' || orientation === 'btt';
+import '../treeCss.css';
 
 const filterTree = ({ topId, isExpanded, expandedChildren }, nodeTree, setStateCallback) => {
   const topNode = topId ? nodeTree.descendants().find(node => node.data.id === topId) : null;
@@ -56,11 +51,11 @@ export const paintTree = ({
     .attr('class', 'nodeWrapper')
     .attr('id', d => d.data.id);
   // Create cards and naviagation buttons
-  box(divBox, positioning, nodes, styling, expandedState, setStateCallback, selectionsAPI);
+  box(positioning, divBox, nodes, styling, expandedState, setStateCallback, selectionsAPI);
   // Create the lines (links) between the nodes
-  path(node, positioning, isVertical, expandedState.topId);
+  createPaths(node, positioning, expandedState.topId);
   // Scale and translate
-  transform(nodes, nodeSize, width, height, svg, divBox);
+  transform(nodes, width, height, svg, divBox);
 };
 
 export const getSize = ({ error, warn }, element) => {
@@ -73,7 +68,7 @@ export const getSize = ({ error, warn }, element) => {
 
 export function preRenderTree(element, dataTree) {
   element.innerHTML = '';
-  const positioning = position(orientation, nodeSize);
+  const positioning = position('ttb');
   const { width, height } = getSize(dataTree, element);
 
   if (dataTree.error) {
