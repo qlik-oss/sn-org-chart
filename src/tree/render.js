@@ -37,7 +37,7 @@ const filterTree = ({ topId, isExpanded, expandedChildren }, nodeTree, setStateC
 };
 
 export const paintTree = ({ objectData, expandedState, styling, setStateCallback, selectionsAPI }) => {
-  const { svg, divBox, allNodes, positioning, width, height, zoomMode } = objectData;
+  const { svg, divBox, allNodes, positioning, width, height, navigationMode } = objectData;
   divBox.selectAll('.node-rect').remove();
   svg.selectAll('g').remove();
   const nodes = filterTree(expandedState, allNodes, setStateCallback);
@@ -54,7 +54,7 @@ export const paintTree = ({ objectData, expandedState, styling, setStateCallback
   // Create the lines (links) between the nodes
   path(node, positioning, isVertical, expandedState.topId);
   // Scale and translate
-  if (zoomMode !== 'zoom') {
+  if (navigationMode !== 'free') {
     transform(nodes, nodeSize, width, height, svg, divBox);
   }
 };
@@ -110,6 +110,6 @@ export function preRenderTree(element, dataTree, layout) {
     .nodeSize([0, positioning.depthSpacing]);
 
   const allNodes = treemap(hierarchy(dataTree));
-  const { zoomMode } = layout;
-  return { svg, divBox, allNodes, positioning, width, height, zoomMode, element };
+  const { navigationMode } = layout;
+  return { svg, divBox, allNodes, positioning, width, height, navigationMode, element };
 }
