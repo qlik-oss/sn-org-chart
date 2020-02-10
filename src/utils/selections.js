@@ -56,6 +56,7 @@ export default {
         });
       }
       selections.selectionState = newState;
+      selections.refreshSelectionState(newState);
     }
   },
 };

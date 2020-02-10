@@ -1,6 +1,6 @@
 import { getPoints, getPath } from './path';
 
-describe('path', () => {
+describe.skip('path', () => {
   describe('getPath', () => {
     const r = 30;
     const points = [

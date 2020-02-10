@@ -6,34 +6,47 @@ import '../treeCss.css';
 import transform from './transform';
 
 // Constants for the tree. Might be variables later in property panel
-const nodeSize = { width: 300, height: 100 };
+const nodeSize = { width: 152, height: 64 };
 const orientation = 'ttb';
 const isVertical = orientation === 'ttb' || orientation === 'btt';
 
-const filterTree = (id, nodeTree) => {
-  const nodes = nodeTree.descendants();
-  let currentNode = nodes.find(node => node.data.id === id);
-  if (!currentNode) {
-    currentNode = nodeTree;
+const filterTree = ({ topId, isExpanded, expandedChildren }, nodeTree, setStateCallback) => {
+  const topNode = topId ? nodeTree.descendants().find(node => node.data.id === topId) : null;
+  if (!topNode) {
+    setStateCallback({
+      topId: nodeTree.data.id,
+      isExpanded: true,
+      expandedChildren: [],
+    });
+    return [];
   }
-
-  // Only build the current view (three levels of hiearchy)
-  // eslint-disable-next-line arrow-body-style
-  return nodes.filter(node => {
-    return (
-      currentNode.data.id === node.data.id ||
-      (currentNode.parent && node.data.id === currentNode.parent.data.id) ||
-      (currentNode.parent && node.parent && node.parent.data.id === currentNode.parent.data.id) ||
-      (node.parent && node.parent.data.id === currentNode.data.id)
-    );
-  });
+  const subTree = [];
+  subTree.push(topNode); // self
+  if (isExpanded && topNode.children) {
+    // children
+    topNode.children.forEach(child => {
+      subTree.push(child);
+      if (child.children && expandedChildren.indexOf(child.data.id) !== -1) {
+        child.children.forEach(grandChild => {
+          subTree.push(grandChild);
+        });
+      }
+    });
+  }
+  return subTree;
 };
 
-export const paintTree = ({ objectData, activeNode, styling, setActiveCallback, selectionsAPI }) => {
+export const paintTree = ({
+  objectData,
+  expandedState,
+  styling,
+  setStateCallback,
+  selectionsAPI,
+}) => {
   const { svg, divBox, allNodes, positioning, width, height } = objectData;
   divBox.selectAll('.node-rect').remove();
   svg.selectAll('g').remove();
-  const nodes = filterTree(activeNode, allNodes);
+  const nodes = filterTree(expandedState, allNodes, setStateCallback);
   // create the nodes
   const node = svg
     .selectAll('.node')
@@ -42,12 +55,10 @@ export const paintTree = ({ objectData, activeNode, styling, setActiveCallback, 
     .append('g')
     .attr('class', 'nodeWrapper')
     .attr('id', d => d.data.id);
-  // Create cards
-  box(divBox, positioning, nodes, styling, selectionsAPI, id => {
-    setActiveCallback(id);
-  });
+  // Create cards and naviagation buttons
+  box(divBox, positioning, nodes, styling, expandedState, setStateCallback, selectionsAPI);
   // Create the lines (links) between the nodes
-  path(node, positioning, isVertical);
+  path(node, positioning, isVertical, expandedState.topId);
   // Scale and translate
   transform(nodes, nodeSize, width, height, svg, divBox);
 };
@@ -61,7 +72,6 @@ export const getSize = ({ error, warn }, element) => {
 };
 
 export function preRenderTree(element, dataTree) {
-  // eslint-disable-next-line no-param-reassign
   element.innerHTML = '';
   const positioning = position(orientation, nodeSize);
   const { width, height } = getSize(dataTree, element);
