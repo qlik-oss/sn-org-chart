@@ -28,15 +28,16 @@ export default function supernova(env) {
       const [dataTree, setDataTree] = useState(null);
       const [objectData, setObjectData] = useState(null);
       const [styling, setStyling] = useState(null);
-      const [activeNode, setActiveNode] = useState(null);
+      const [expandedState, setExpandedState] = useState(null);
       const [linked, setLinked] = useState(false);
-      // const [objectSize, setObjectSize] = useState(null);
+      const [selState, setSelState] = useState([]);
       const layout = useStaleLayout();
       const model = useModel();
       const element = useElement();
       const rect = useRect()[0];
       const Theme = useTheme();
       const selectionsAPI = useSelections();
+      selectionsAPI.refreshSelectionState = setSelState;
 
       useAction(
         () => ({
@@ -72,8 +73,8 @@ export default function supernova(env) {
         };
       }, []);
 
-      const setActiveCallback = id => {
-        setActiveNode(id);
+      const setStateCallback = newNode => {
+        setExpandedState(newNode);
       };
 
       /*
@@ -94,6 +95,7 @@ export default function supernova(env) {
           return treeTransform({ layout, model }).then(transformed => {
             setDataTree(transformed);
             setStyling(stylingUtils.cardStyling({ Theme, layout }));
+            setExpandedState(null);
           });
         }
         return Promise.resolve();
@@ -105,16 +107,21 @@ export default function supernova(env) {
           const preRender = preRenderTree(element, dataTree, layout);
           if (preRender) {
             setObjectData(preRender);
-            !activeNode && setActiveNode(preRender.allNodes.data.id);
+            !expandedState &&
+              setExpandedState({
+                topId: preRender.allNodes.data.id,
+                isExpanded: true,
+                expandedChildren: [],
+              });
           }
         }
       }, [element, dataTree, rect]);
 
       useEffect(() => {
-        if (objectData && activeNode && styling) {
-          paintTree({ objectData, activeNode, styling, setActiveCallback, selectionsAPI, linked });
+        if (objectData && expandedState && styling) {
+          paintTree({ objectData, expandedState, styling, setStateCallback, selectionsAPI, linked });
         }
-      }, [activeNode, objectData, selectionsAPI.selectionState]);
+      }, [expandedState, objectData, selState]);
 
       useEffect(() => {
         if (objectData && layout.zoomMode === 'zoom') {

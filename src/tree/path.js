@@ -1,4 +1,4 @@
-import { areAllLeafs } from '../utils/tree-utils';
+import { haveNoChildren } from '../utils/tree-utils';
 
 export function getPoints(d, o, isVertical) {
   const halfNode = { x: o.nodeSize.width / 2, y: o.nodeSize.height / 2 };
@@ -7,7 +7,7 @@ export function getPoints(d, o, isVertical) {
   const end = { x: o.x(d.parent) + halfNode.x, y: o.y(d.parent) + halfNode.y };
   let points;
 
-  if (areAllLeafs(d.parent.children)) {
+  if (haveNoChildren(d.parent.children)) {
     points = isVertical
       ? [
         { x: start.x, y: start.y },
@@ -48,14 +48,14 @@ export function getPoints(d, o, isVertical) {
 
 export function getPath(points) {
   // gets the path from first to last points, making turns with radius r at intermediate points
-  const r = 30;
+  const r = 4;
   let pathString = `M ${points[0].x} ${points[0].y}`;
   let dir;
   function setDir(i) {
-    const delta = { x: points[i].x - points[i - 1].x, y: points[i].y - points[i - 1].y, };
+    const delta = { x: points[i].x - points[i - 1].x, y: points[i].y - points[i - 1].y };
     dir = {
-      x: ((delta.x > 0) - (delta.x < 0)) || +delta.x,
-      y: ((delta.y > 0) - (delta.y < 0)) || +delta.y,
+      x: (delta.x > 0) - (delta.x < 0) || +delta.x,
+      y: (delta.y > 0) - (delta.y < 0) || +delta.y,
     };
   }
   setDir(1);
@@ -72,7 +72,7 @@ export function getPath(points) {
   return pathString;
 }
 
-export default function path(node, o, isVertical) {
+export default function path(node, o, isVertical, topId) {
   // Create the lines (links) between the nodes
   node
     .append('path')
@@ -80,6 +80,10 @@ export default function path(node, o, isVertical) {
     .attr('id', d => d.data.id)
     .attr('d', d => {
       if (d.parent) {
+        if (d.data.id === topId) {
+          return '';
+          // TODO: make a special path here for the top node
+        }
         const points = getPoints(d, o, isVertical);
         return getPath(points);
       }
