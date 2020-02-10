@@ -64,6 +64,7 @@ export function setZooming(objectData) {
         [width, height],
       ])
       .scaleExtent([0.05, 8])
+      .filter(() => true)
       .on('zoom', zoomed)
   );
 
