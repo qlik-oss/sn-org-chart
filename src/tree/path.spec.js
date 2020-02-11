@@ -1,7 +1,7 @@
 import { getPoints, getPath } from './path';
 import constants from './size-constants';
 
-describe('path', () => {
+describe.ip('path', () => {
   describe('getPath', () => {
     const points = [
       { x: 0, y: 0 },
