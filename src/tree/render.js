@@ -29,6 +29,7 @@ const filterTree = (id, nodeTree) => {
 export const paintTree = ({ objectData, activeNode, styling, setActiveCallback }) => {
   const { svg, divBox, allNodes, positioning, width, height } = objectData;
   divBox.selectAll('.node-rect').remove();
+  divBox.selectAll('.tooltip').remove();
   svg.selectAll('g').remove();
   const nodes = filterTree(activeNode, allNodes);
   // create the nodes

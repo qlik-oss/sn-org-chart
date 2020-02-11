@@ -9,10 +9,7 @@ export default function box(divBox, o, appendNodes, cardStyling, reRender) {
   }
 
   function getTooltipStyle(p) {
-    if (p.data.id === 'Root') {
-      return `top:${o.y(p) + 55}px;left:${o.x(p) + 140}px;visibility: visible; opacity: 1;`;
-    }
-    return `width:200px;height:50px; top:${o.y(p) - 25}px;left:${o.x(p)}px;visibility: visible;opacity: 1;`;
+    return `top:${o.y(p) - o.nodeSize.height}px;left:${o.x(p) + o.nodeSize.width / 3}px;visibility: visible;opacity: 0.9;`;
   }
 
   const tooltip = divBox
@@ -36,8 +33,7 @@ export default function box(divBox, o, appendNodes, cardStyling, reRender) {
     .on('mouseover', d => {
       tooltip
         .html(`${d.data.attributes.label || ''}<br />${d.data.attributes.subLabel || ''}<br />${d.data.attributes.extraLabel || ''}<br />${d.data.measure || ''}`)
-        .attr('style', 'visibility: visible;opacity: 1;')
-        .attr('style', () => { getTooltipStyle(d); });
+        .attr('style', () => getTooltipStyle(d));
     })
     .on('mouseout', () => {
       tooltip
