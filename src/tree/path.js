@@ -49,6 +49,7 @@ export function getPoints(d, topId, { depthSpacing, isVertical, x, y }) {
         ]);
     }
   } else if (d.parent) {
+    console.log(d);
     points.push([
       { x: start.x + halfCard.x, y: start.y },
       { x: start.x + halfCard.x, y: start.y - buttonMargin },

@@ -1,7 +1,7 @@
 import { getPoints, getPath } from './path';
 import constants from './size-constants';
 
-describe.ip('path', () => {
+describe('path', () => {
   describe('getPath', () => {
     const points = [
       { x: 0, y: 0 },
@@ -122,6 +122,27 @@ describe.ip('path', () => {
         { x: 100, y: 50 }
       ];
       const points = getPoints(d, positioning, isVertical);
+      expect(points).to.deep.equal(expectedPoints);
+    });
+
+    it('should return points for line to up button', () => {
+      topId = '1';
+      // d.parent = [{}];
+      expectedPoints = [
+        { x: 376, y: 124 },
+        { x: 376, y: 112 }
+      ];
+      const points = getPoints(d, topId, positioning)[0];
+      expect(points).to.deep.equal(expectedPoints);
+    });
+
+    it('should return points for line to expand button', () => {
+      d.children = [{}];
+      expectedPoints = [
+        { x: 376, y: 188 },
+        { x: 376, y: 200 }
+      ];
+      const points = getPoints(d, topId, positioning)[1];
       expect(points).to.deep.equal(expectedPoints);
     });
   });
