@@ -31,6 +31,11 @@ const defaultValues = {
           data: {
             id: '1',
           },
+          children: [{
+            data: {
+              id: '2'
+            }
+          }],
         },
         children: [
           {

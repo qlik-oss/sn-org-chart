@@ -58,6 +58,28 @@ describe('box', () => {
       expectedState.expandedChildren = ['2', '4'];
       expect(getNewState(d, expandedState)).to.deep.equal(expectedState);
     });
+    it('should return state with same id, isExpanded true and added expanded child - even when one sibling has grend children', () => {
+      expandedState.expandedChildren = ['4'];
+      d.children.push({
+        data: {
+          id: '10',
+          elemNo: 99,
+        },
+        parent: {
+          data: {
+            id: '1',
+          },
+          children: [{
+            data: {
+              id: '2',
+            }
+          }],
+        }
+      });
+      d = d.children[2];
+      expectedState.expandedChildren = ['4', '10'];
+      expect(getNewState(d, expandedState)).to.deep.equal(expectedState);
+    });
     it('should return state with same id, isExpanded true and swapped expaneded child', () => {
       d = d.children[1];
       expectedState.expandedChildren = ['4'];

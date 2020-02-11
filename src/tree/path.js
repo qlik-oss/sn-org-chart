@@ -103,7 +103,7 @@ export default function createPaths(node, positioning, topId) {
       let path = '';
       const pointSets = getPoints(d, topId, positioning);
       pointSets.forEach(points => {
-        path += getPath(points);
+        path += getPath(points).slice(0, -1);
       });
 
       return path;

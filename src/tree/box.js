@@ -21,10 +21,13 @@ export const getNewState = (d, { topId, isExpanded, expandedChildren }) => {
     expandedChildren = [];
   } else if (d.parent.data.id === topId) {
     // children
+    const expandedHaveNoChildren = d.parent.children
+      .filter(sibling => expandedChildren.includes(sibling.data.id))
+      .every(n => haveNoChildren(n.children));
     if (expandedChildren.includes(d.data.id)) {
       // Collapse if already exists in expandedChildren
       expandedChildren.splice(expandedChildren.indexOf(d.data.id), 1);
-    } else if (d.parent.children.every(n => haveNoChildren(n.children))) {
+    } else if (haveNoChildren(d.children) && expandedHaveNoChildren) {
       // Add this node as expanded if possible
       expandedChildren.push(d.data.id);
     } else {
