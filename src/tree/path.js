@@ -13,6 +13,7 @@ export function getPoints(d, topId, { depthSpacing, isVertical, x, y }) {
     const end = { x: x(d.parent) + halfCard.x, y: y(d.parent) + cardHeight + buttonMargin + buttonHeight };
 
     if (haveNoChildren(d.parent.children)) {
+      // to leafs
       points.push(isVertical
         ? [
           { x: start.x, y: start.y + halfCard.y },
@@ -29,11 +30,13 @@ export function getPoints(d, topId, { depthSpacing, isVertical, x, y }) {
           { x: end.x, y: end.y },
         ]);
     } else if (start.x === x(d.parent) || start.y === y(d.parent)) {
+      // straight line
       points.push([
         { x: start.x + halfCard.x, y: start.y },
         { x: end.x, y: end.y },
       ]);
     } else {
+      // to nodes with children
       points.push(isVertical
         ? [
           { x: start.x + halfCard.x, y: start.y },
@@ -49,6 +52,7 @@ export function getPoints(d, topId, { depthSpacing, isVertical, x, y }) {
         ]);
     }
   } else if (d.parent) {
+    // to up button
     points.push([
       { x: start.x + halfCard.x, y: start.y },
       { x: start.x + halfCard.x, y: start.y - buttonMargin },
@@ -56,6 +60,7 @@ export function getPoints(d, topId, { depthSpacing, isVertical, x, y }) {
   }
 
   if (d.children) {
+    // to expand button
     points.push([
       { x: start.x + halfCard.x, y: start.y + cardHeight },
       { x: start.x + halfCard.x, y: start.y + cardHeight + buttonMargin },
@@ -94,7 +99,6 @@ export function getPath(points) {
 }
 
 export default function createPaths(node, positioning, topId) {
-  // Create the lines (links) between the nodes
   node
     .append('path')
     .attr('class', 'link')

@@ -18,6 +18,7 @@ describe('path', () => {
   });
 
   describe('getPoints', () => {
+    // TODO: update tests when all directions work
     const { heightMargin, cardHeight } = constants;
     let isVertical;
     let nodeSize;
