@@ -36,7 +36,9 @@ export default function supernova(env) {
       const rect = useRect()[0];
       const Theme = useTheme();
       const selectionsAPI = useSelections();
-      selectionsAPI.refreshSelectionState = setSelState;
+      if (selectionsAPI) {
+        selectionsAPI.refreshSelectionState = setSelState;
+      }
 
       useAction(
         () => ({
@@ -85,12 +87,14 @@ export default function supernova(env) {
        */
 
       useEffect(() => {
-        selectionsAPI.linked = linked;
+        if (selectionsAPI) {
+          selectionsAPI.linked = linked;
+        }
       }, [linked]);
 
       usePromise(() => {
         // Get and transform the data into a tree structure
-        if (layout && model) {
+        if (layout) {
           return treeTransform({ layout, model }).then(transformed => {
             setDataTree(transformed);
             setStyling(stylingUtils.cardStyling({ Theme, layout }));

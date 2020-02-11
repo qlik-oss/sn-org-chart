@@ -78,7 +78,7 @@ const getDataMatrix = async (layout, model) => {
   let status = '';
 
   // If there seems to be more data, check if it is already loadad or load it
-  if (fullHeight > loadedHeight && dataPages.length === 1) {
+  if (fullHeight > loadedHeight && dataPages.length === 1 && model) {
     status = await fetchPage(
       layout.qHyperCube.qDataPages,
       dataMatrix,

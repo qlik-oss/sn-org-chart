@@ -35,9 +35,9 @@ export default (data, cardStyling, selections) => {
     html += `<div class="org-card-text">${attributes.extraLabel}</div>`;
   }
   const topbar =
-    selections.isActive() && data.selected
+    selections && selections.isActive() && data.selected
       ? ''
       : `<div class="org-card-top" style="background-color:${topColor};"></div>`;
-  const selectedClass = selections.isActive() ? (data.selected ? ' selected' : ' not-selected') : '';
+  const selectedClass = selections && selections.isActive() ? (data.selected ? ' selected' : ' not-selected') : '';
   return `${topbar}<div class="org-card-textarea${selectedClass}" style="background-color:${backgroundColor};color:${fontColor};">${html}</div>`;
 };

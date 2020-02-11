@@ -6,7 +6,7 @@ export default {
       selections.selectionState = [];
     };
 
-    if (node) {
+    if (node && selections) {
       let newState;
       if (node.data.elemNo < 0 && node.data.elemNo !== -3) {
         return;
