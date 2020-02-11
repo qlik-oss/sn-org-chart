@@ -1,6 +1,7 @@
 import card from '../card/card';
 import selections from '../utils/selections';
 import { haveNoChildren } from '../utils/tree-utils';
+import constants from './size-constants';
 
 export const getSign = (d, { topId, isExpanded, expandedChildren }) => {
   if (
@@ -20,10 +21,13 @@ export const getNewState = (d, { topId, isExpanded, expandedChildren }) => {
     expandedChildren = [];
   } else if (d.parent.data.id === topId) {
     // children
+    const expandedHaveNoChildren = d.parent.children
+      .filter(sibling => expandedChildren.includes(sibling.data.id))
+      .every(n => haveNoChildren(n.children));
     if (expandedChildren.includes(d.data.id)) {
       // Collapse if already exists in expandedChildren
       expandedChildren.splice(expandedChildren.indexOf(d.data.id), 1);
-    } else if (d.parent.children.every(n => haveNoChildren(n.children))) {
+    } else if (haveNoChildren(d.children) && expandedHaveNoChildren) {
       // Add this node as expanded if possible
       expandedChildren.push(d.data.id);
     } else {
@@ -46,13 +50,14 @@ export const getNewUpState = (d, isExpanded) => ({
   isExpanded: true,
 });
 
-export default function box(divBox, o, nodes, cardStyling, expandedState, setStateCallback, selectionsAPI) {
+export default function box({ x, y }, divBox, nodes, cardStyling, expandedState, setStateCallback, selectionsAPI) {
+  const { cardWidth, cardHeight, buttonWidth, buttonHeight, buttonMargin, rootDiameter } = constants;
   const { topId, isExpanded } = expandedState;
-  function getStyle(p) {
-    if (p.data.id === 'Root') {
-      return `top:${o.y(p) + 17}px;left:${o.x(p) + 66}px`;
+  function getStyle(d) {
+    if (d.data.id === 'Root') {
+      return `top:${y(d) + cardHeight - rootDiameter}px;left:${x(d) + (cardWidth - rootDiameter) / 2}px`;
     }
-    return `width:${o.nodeSize.width}px;height:${o.nodeSize.height}px; top:${o.y(p)}px;left:${o.x(p)}px;`;
+    return `width:${cardWidth}px;height:${cardHeight}px; top:${y(d)}px;left:${x(d)}px;`;
   }
 
   // cards
@@ -78,7 +83,7 @@ export default function box(divBox, o, nodes, cardStyling, expandedState, setSta
     .enter()
     .append('div')
     .attr('class', 'node-rect')
-    .attr('style', d => `width:52px;height:24px;top:${o.y(d) + 72}px;left:${o.x(d) + 50}px;`)
+    .attr('style', d => `width:${buttonWidth}px;height:${buttonHeight}px;top:${y(d) + cardHeight + buttonMargin}px;left:${x(d) + (cardWidth - buttonWidth) / 2}px;`)
     .attr('id', d => `${d.data.id}-expand`)
     .on('click', d => {
       setStateCallback(getNewState(d, expandedState));
@@ -92,7 +97,7 @@ export default function box(divBox, o, nodes, cardStyling, expandedState, setSta
     .enter()
     .append('div')
     .attr('class', 'node-rect')
-    .attr('style', d => `width:52px;height:24px;top:${o.y(d) - 40}px;left:${o.x(d) + 50}px;`)
+    .attr('style', d => `width:${buttonWidth}px;height:${buttonHeight}px;top:${y(d) - buttonHeight - buttonMargin}px;left:${x(d) + (cardWidth - buttonWidth) / 2}px;`)
     .attr('id', d => `${d.data.id}-up`)
     .on('click', d => {
       setStateCallback(getNewUpState(d, isExpanded));
