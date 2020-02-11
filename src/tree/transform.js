@@ -1,7 +1,7 @@
 import constants from './size-constants';
 
 const getBBoxOfNodes = (nodes) => {
-  const { cardWidth, cardHeight } = constants;
+  const { cardWidth, cardHeight, buttonHeight, buttonMargin } = constants;
   const bbox = {
     left: Infinity,
     top: Infinity,
@@ -14,20 +14,11 @@ const getBBoxOfNodes = (nodes) => {
     bbox.right = Math.max(node.xActual, bbox.right);
     bbox.bottom = Math.max(node.yActual, bbox.bottom);
   });
-  // TODO: addapt to traverse buttons below (or we)
-  if (nodes.length === 1) {
-    return {
-      x: bbox.left - 50,
-      y: bbox.top - 50,
-      width: bbox.right - bbox.left + cardWidth + 100,
-      height: bbox.bottom - bbox.top + cardHeight + 100,
-    };
-  }
   return {
     x: bbox.left,
-    y: bbox.top,
+    y: bbox.top - buttonHeight - buttonMargin,
     width: bbox.right - bbox.left + cardWidth,
-    height: bbox.bottom - bbox.top + cardHeight,
+    height: bbox.bottom - bbox.top + cardHeight + (buttonHeight + buttonMargin) * 2,
   };
 };
 
