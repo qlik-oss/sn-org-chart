@@ -9,6 +9,9 @@ import {
   useTheme,
   useSelections,
   useAction,
+  useOptions,
+  useImperativeHandle,
+  // onTakeSnapshot,
 } from '@nebula.js/supernova';
 import properties from './object-properties';
 import data from './data';
@@ -36,6 +39,9 @@ export default function supernova(env) {
       const rect = useRect()[0];
       const Theme = useTheme();
       const selectionsAPI = useSelections();
+      const options = useOptions();
+      const [opts] = useState(options);
+      // const [viewState] = useState(opts.viewState);
       if (selectionsAPI) {
         selectionsAPI.refreshSelectionState = setSelState;
       }
@@ -98,7 +104,12 @@ export default function supernova(env) {
           return treeTransform({ layout, model }).then(transformed => {
             setDataTree(transformed);
             setStyling(stylingUtils.cardStyling({ Theme, layout }));
-            setExpandedState(null);
+            const { viewState } = opts;
+            if (viewState && viewState.expandedState) {
+              setExpandedState(viewState.expandedState);
+            } else {
+              setExpandedState(null);
+            }
           });
         }
         return Promise.resolve();
@@ -124,7 +135,26 @@ export default function supernova(env) {
         if (objectData && expandedState && styling) {
           paintTree({ objectData, expandedState, styling, setStateCallback, selectionsAPI, linked });
         }
-      }, [expandedState, objectData, selState]);
+      }, [expandedState, objectData, selState, opts]);
+
+      // onTakeSnapshot(layout => {
+      //   // TODO: clone layout and add view state stuff to it
+
+      //   // eslint-disable-next-line no-console
+      //   console.log(`onTakeSnapshot layout: ${layout}`);
+      //   // layout.viewState = 'abc';
+      // });
+
+      useImperativeHandle(
+        () => ({
+          getViewState() {
+            return {
+              expandedState,
+            };
+          },
+        }),
+        [expandedState]
+      );
     },
     ext: ext(env),
   };
