@@ -57,7 +57,8 @@ export default function box(
   cardStyling,
   expandedState,
   setStateCallback,
-  selectionsAPI,
+  selectionState,
+  sel,
   allowInteractions
 ) {
   const { cardWidth, cardHeight, buttonWidth, buttonHeight, buttonMargin, rootDiameter } = constants;
@@ -71,27 +72,27 @@ export default function box(
 
   // cards
   divBox
-    .selectAll('.node')
+    .selectAll('.sn-org-nodes')
     .data(nodes)
     .enter()
     .append('div')
-    .attr('class', 'node-rect')
+    .attr('class', 'sn-org-card')
     .attr('style', getStyle)
     .attr('id', d => d.data.id)
     .on('click', node => {
       if (allowInteractions && node.data.id !== 'Root') {
-        selections.select(node, selectionsAPI);
+        selections.select(node, sel, selectionState);
       }
     })
-    .html(d => card(d.data, cardStyling, selectionsAPI));
+    .html(d => card(d.data, cardStyling, sel, selectionState));
 
   // expand/collapse
   divBox
-    .selectAll('.node')
-    .data(nodes.filter(node => !!node.children))
+    .selectAll('.sn-org-nodes')
+    .data(nodes.filter(node => !!node.children && node.data.id !== 'Root'))
     .enter()
     .append('div')
-    .attr('class', 'node-rect')
+    .attr('class', 'sn-org-traverse')
     .attr(
       'style',
       d =>
@@ -104,15 +105,15 @@ export default function box(
         setStateCallback(getNewState(d, expandedState));
       }
     })
-    .html(d => `<div class="org-traverse"> ${getSign(d, expandedState)} ${d.data.children.length}</div>`);
+    .html(d => `${getSign(d, expandedState)} ${d.data.children.length}`);
 
   // go up
   divBox
-    .selectAll('.node')
+    .selectAll('.sn-org-nodes')
     .data(nodes.filter(node => node.data.id === topId && node.parent))
     .enter()
     .append('div')
-    .attr('class', 'node-rect')
+    .attr('class', 'sn-org-traverse')
     .attr(
       'style',
       d =>
@@ -125,5 +126,5 @@ export default function box(
         setStateCallback(getNewUpState(d, isExpanded));
       }
     })
-    .html('<div class="org-traverse">↑</div>');
+    .html('↑');
 }
