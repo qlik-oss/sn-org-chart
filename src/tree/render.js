@@ -31,7 +31,8 @@ export const paintTree = ({
   selectionState,
   useTransitions,
 }) => {
-  const { svg, divBox, allNodes, positioning, width, height, navigationMode } = objectData;
+  const { svg, divBox, allNodes, positioning, width, height } = objectData;
+  const { navigationMode } = allNodes.data;
   divBox.selectAll('*').remove();
   svg.selectAll('*').remove();
   // filter the nodes the nodes
@@ -58,10 +59,10 @@ export const getSize = ({ error, warn }, element) => {
   return size;
 };
 
-export function preRenderTree(element, dataTree, layout) {
+export function preRenderTree(element, dataTree) {
   element.innerHTML = '';
   element.className = 'sn-org-chart';
-  const positioning = position('ttb');
+  const positioning = position('ttb', element);
   const { width, height } = getSize(dataTree, element);
 
   if (dataTree.error) {
@@ -102,6 +103,5 @@ export function preRenderTree(element, dataTree, layout) {
     .nodeSize([0, positioning.depthSpacing]);
 
   const allNodes = treemap(hierarchy(dataTree));
-  const { navigationMode } = layout;
-  return { svg, divBox, allNodes, positioning, width, height, navigationMode, element };
+  return { svg, divBox, allNodes, positioning, width, height, element };
 }
