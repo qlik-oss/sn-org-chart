@@ -1,25 +1,11 @@
 import { hierarchy, tree, select } from 'd3';
 import position from './position';
 import box from './box';
-import path from './path';
-import '../treeCss.css';
+import createPaths from './path';
 import transform from './transform';
 
-// Constants for the tree. Might be variables later in property panel
-const nodeSize = { width: 152, height: 64 };
-const orientation = 'ttb';
-const isVertical = orientation === 'ttb' || orientation === 'btt';
-
-const filterTree = ({ topId, isExpanded, expandedChildren }, nodeTree, setStateCallback) => {
-  const topNode = topId ? nodeTree.descendants().find(node => node.data.id === topId) : null;
-  if (!topNode) {
-    setStateCallback({
-      topId: nodeTree.data.id,
-      isExpanded: true,
-      expandedChildren: [],
-    });
-    return [];
-  }
+const filterTree = ({ topId, isExpanded, expandedChildren }, nodeTree) => {
+  const topNode = nodeTree.descendants().find(node => node.data.id === topId) || nodeTree;
   const subTree = [];
   subTree.push(topNode); // self
   if (isExpanded && topNode.children) {
@@ -36,26 +22,31 @@ const filterTree = ({ topId, isExpanded, expandedChildren }, nodeTree, setStateC
   return subTree;
 };
 
-export const paintTree = ({ objectData, expandedState, styling, setStateCallback, selectionsAPI }) => {
+export const paintTree = ({
+  objectData,
+  expandedState,
+  styling,
+  setStateCallback,
+  selections,
+  selectionState,
+  useTransitions,
+}) => {
   const { svg, divBox, allNodes, positioning, width, height, navigationMode } = objectData;
-  divBox.selectAll('.node-rect').remove();
-  svg.selectAll('g').remove();
+  divBox.selectAll('*').remove();
+  svg.selectAll('*').remove();
+  // filter the nodes the nodes
   const nodes = filterTree(expandedState, allNodes, setStateCallback);
-  // create the nodes
-  const node = svg
-    .selectAll('.node')
-    .data(nodes)
-    .enter()
-    .append('g')
-    .attr('class', 'nodeWrapper')
-    .attr('id', d => d.data.id);
   // Create cards and naviagation buttons
-  box(divBox, positioning, nodes, styling, expandedState, setStateCallback, selectionsAPI);
+  box(positioning, divBox, nodes, styling, expandedState, setStateCallback, selectionState, selections);
   // Create the lines (links) between the nodes
-  path(node, positioning, isVertical, expandedState.topId);
+  const node = svg
+    .selectAll('.sn-org-paths')
+    .data(nodes)
+    .enter();
+  createPaths(node, positioning, expandedState.topId);
   // Scale and translate
   if (navigationMode !== 'free') {
-    transform(nodes, nodeSize, width, height, svg, divBox);
+    transform(nodes, width, height, svg, divBox, useTransitions);
   }
 };
 
@@ -69,13 +60,14 @@ export const getSize = ({ error, warn }, element) => {
 
 export function preRenderTree(element, dataTree, layout) {
   element.innerHTML = '';
-  const positioning = position(orientation, nodeSize, element);
+  element.className = 'sn-org-chart';
+  const positioning = position('ttb');
   const { width, height } = getSize(dataTree, element);
 
   if (dataTree.error) {
     select(element)
       .append('div')
-      .attr('class', 'org-error')
+      .attr('class', 'sn-org-error')
       .html(dataTree.message);
     return false;
   }
@@ -83,7 +75,7 @@ export function preRenderTree(element, dataTree, layout) {
   if (dataTree.warn && dataTree.warn.length) {
     select(element)
       .append('span')
-      .attr('class', 'org-warning')
+      .attr('class', 'sn-org-warning')
       .html(`*${dataTree.warn.join(' ')}`);
   }
 
@@ -92,7 +84,7 @@ export function preRenderTree(element, dataTree, layout) {
     .data([{}])
     .enter()
     .append('svg')
-    .attr('style', 'position:absolute')
+    .attr('class', 'sn-org-svg')
     .attr('width', width)
     .attr('height', height);
 
@@ -101,9 +93,9 @@ export function preRenderTree(element, dataTree, layout) {
     .data([{}])
     .enter()
     .append('div')
-    .attr('class', 'org-node-holder');
+    .attr('class', 'sn-org-nodes');
 
-  const svg = svgBox.append('g').attr('class', 'org-path-holder');
+  const svg = svgBox.append('g').attr('class', 'sn-org-paths');
   // Here are the settings for the tree. For instance nodesize can be adjusted
   const treemap = tree()
     .size([width, height])

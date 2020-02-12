@@ -1,6 +1,8 @@
 import { select, zoom, event, zoomIdentity } from 'd3';
+import constants from './size-constants';
 
-const getBBoxOfNodes = (nodes, nodeSize) => {
+const getBBoxOfNodes = nodes => {
+  const { cardWidth, cardHeight, buttonHeight, buttonMargin } = constants;
   const bbox = {
     left: Infinity,
     top: Infinity,
@@ -13,20 +15,11 @@ const getBBoxOfNodes = (nodes, nodeSize) => {
     bbox.right = Math.max(node.xActual, bbox.right);
     bbox.bottom = Math.max(node.yActual, bbox.bottom);
   });
-  // TODO: addapt to traverse buttons below (or we)
-  if (nodes.length === 1) {
-    return {
-      x: bbox.left - 50,
-      y: bbox.top - 50,
-      width: bbox.right - bbox.left + nodeSize.width + 100,
-      height: bbox.bottom - bbox.top + nodeSize.height + 100,
-    };
-  }
   return {
     x: bbox.left,
-    y: bbox.top,
-    width: bbox.right - bbox.left + nodeSize.width,
-    height: bbox.bottom - bbox.top + nodeSize.height,
+    y: bbox.top - buttonHeight - buttonMargin,
+    width: bbox.right - bbox.left + cardWidth,
+    height: bbox.bottom - bbox.top + cardHeight + (buttonHeight + buttonMargin) * 2,
   };
 };
 
@@ -73,9 +66,9 @@ export function setZooming(objectData) {
   applyTransform(zoomIdentity.translate(0, 0).scale(1 / scaleFactor), svg, divBox, width, height);
 }
 
-export default function transform(nodes, nodeSize, width, height, svg, divBox) {
+export default function transform(nodes, width, height, svg, divBox, useTransitions) {
   // Zooming and positioning of the tree
-  const bBox = getBBoxOfNodes(nodes, nodeSize);
+  const bBox = getBBoxOfNodes(nodes);
   const scaleToWidhth = bBox.width / width > bBox.height / height;
   const scaleFactor = scaleToWidhth ? bBox.width / width : bBox.height / height;
   const translation = scaleToWidhth
@@ -95,8 +88,8 @@ export default function transform(nodes, nodeSize, width, height, svg, divBox) {
   } else {
     // Transition using css, does not work in IE11
     svg.attr('style', `transform: scale(${1 / scaleFactor}) translate(${translation});`);
-    divBox.classed('org-disable-transition', false);
-    svg.classed('org-disable-transition', false);
+    divBox.classed('org-disable-transition', !useTransitions);
+    svg.classed('org-disable-transition', !useTransitions);
   }
 
   divBox.attr(
