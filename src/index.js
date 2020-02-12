@@ -11,7 +11,6 @@ import {
   useAction,
   useOptions,
   useImperativeHandle,
-  // onTakeSnapshot,
 } from '@nebula.js/supernova';
 import properties from './object-properties';
 import data from './data';
@@ -41,7 +40,6 @@ export default function supernova(env) {
       const selectionsAPI = useSelections();
       const options = useOptions();
       const [opts] = useState(options);
-      // const [viewState] = useState(opts.viewState);
       if (selectionsAPI) {
         selectionsAPI.refreshSelectionState = setSelState;
       }
@@ -80,8 +78,9 @@ export default function supernova(env) {
         };
       }, []);
 
-      const setStateCallback = newNode => {
-        setExpandedState(newNode);
+      const setStateCallback = newState => {
+        newState.useTransitions = true;
+        setExpandedState(newState);
       };
 
       /*
@@ -133,17 +132,22 @@ export default function supernova(env) {
 
       useEffect(() => {
         if (objectData && expandedState && styling) {
-          paintTree({ objectData, expandedState, styling, setStateCallback, selectionsAPI, linked });
+          paintTree({ objectData, expandedState, styling, setStateCallback, selectionsAPI });
         }
-      }, [expandedState, objectData, selState, opts]);
+      }, [objectData, selState]);
 
-      // onTakeSnapshot(layout => {
-      //   // TODO: clone layout and add view state stuff to it
-
-      //   // eslint-disable-next-line no-console
-      //   console.log(`onTakeSnapshot layout: ${layout}`);
-      //   // layout.viewState = 'abc';
-      // });
+      useEffect(() => {
+        if (objectData && expandedState && styling) {
+          paintTree({
+            objectData,
+            expandedState,
+            styling,
+            setStateCallback,
+            selectionsAPI,
+            useTransitions: expandedState.useTransitions,
+          });
+        }
+      }, [expandedState]);
 
       useImperativeHandle(
         () => ({

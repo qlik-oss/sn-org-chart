@@ -5,16 +5,8 @@ import createPaths from './path';
 import transform from './transform';
 import '../treeCss.css';
 
-const filterTree = ({ topId, isExpanded, expandedChildren }, nodeTree, setStateCallback) => {
-  const topNode = topId ? nodeTree.descendants().find(node => node.data.id === topId) : null;
-  if (!topNode) {
-    setStateCallback({
-      topId: nodeTree.data.id,
-      isExpanded: true,
-      expandedChildren: [],
-    });
-    return [];
-  }
+const filterTree = ({ topId, isExpanded, expandedChildren }, nodeTree) => {
+  const topNode = nodeTree.descendants().find(node => node.data.id === topId) || nodeTree;
   const subTree = [];
   subTree.push(topNode); // self
   if (isExpanded && topNode.children) {
@@ -31,13 +23,7 @@ const filterTree = ({ topId, isExpanded, expandedChildren }, nodeTree, setStateC
   return subTree;
 };
 
-export const paintTree = ({
-  objectData,
-  expandedState,
-  styling,
-  setStateCallback,
-  selectionsAPI,
-}) => {
+export const paintTree = ({ objectData, expandedState, styling, setStateCallback, selectionsAPI, useTransitions }) => {
   const { svg, divBox, allNodes, positioning, width, height } = objectData;
   divBox.selectAll('.node-rect').remove();
   svg.selectAll('g').remove();
@@ -55,7 +41,7 @@ export const paintTree = ({
   // Create the lines (links) between the nodes
   createPaths(node, positioning, expandedState.topId);
   // Scale and translate
-  transform(nodes, width, height, svg, divBox);
+  transform(nodes, width, height, svg, divBox, useTransitions);
 };
 
 export const getSize = ({ error, warn }, element) => {
