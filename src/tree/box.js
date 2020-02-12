@@ -58,7 +58,7 @@ export default function box(
   expandedState,
   setStateCallback,
   selectionsAPI,
-  inEdit
+  allowInteractions
 ) {
   const { cardWidth, cardHeight, buttonWidth, buttonHeight, buttonMargin, rootDiameter } = constants;
   const { topId, isExpanded } = expandedState;
@@ -79,7 +79,7 @@ export default function box(
     .attr('style', getStyle)
     .attr('id', d => d.data.id)
     .on('click', node => {
-      if (!inEdit && node.data.id !== 'Root') {
+      if (allowInteractions && node.data.id !== 'Root') {
         selections.select(node, selectionsAPI);
       }
     })
@@ -100,7 +100,7 @@ export default function box(
     )
     .attr('id', d => `${d.data.id}-expand`)
     .on('click', d => {
-      if (!inEdit) {
+      if (allowInteractions) {
         setStateCallback(getNewState(d, expandedState));
       }
     })
@@ -121,7 +121,7 @@ export default function box(
     )
     .attr('id', d => `${d.data.id}-up`)
     .on('click', d => {
-      if (!inEdit) {
+      if (allowInteractions) {
         setStateCallback(getNewUpState(d, isExpanded));
       }
     })

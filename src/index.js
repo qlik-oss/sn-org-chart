@@ -37,7 +37,7 @@ export default function supernova(env) {
       const rect = useRect()[0];
       const Theme = useTheme();
       const selectionsAPI = useSelections();
-      const inEdit = useConstraints().passive;
+      const constraints = useConstraints();
 
       if (selectionsAPI) {
         selectionsAPI.refreshSelectionState = setSelState;
@@ -125,11 +125,12 @@ export default function supernova(env) {
 
       useEffect(() => {
         if (objectData && expandedState && styling) {
-          paintTree({ objectData, expandedState, styling, setStateCallback, selectionsAPI, inEdit });
+          paintTree({ objectData, expandedState, styling, setStateCallback, selectionsAPI, constraints });
         }
       }, [objectData, selState]);
 
       useEffect(() => {
+        console.log(constraints);
         if (objectData && expandedState && styling) {
           paintTree({
             objectData,
@@ -137,7 +138,7 @@ export default function supernova(env) {
             styling,
             setStateCallback,
             selectionsAPI,
-            inEdit,
+            constraints,
             useTransitions: expandedState.useTransitions,
           });
         }

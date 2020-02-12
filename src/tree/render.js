@@ -29,7 +29,7 @@ export const paintTree = ({
   styling,
   setStateCallback,
   selectionsAPI,
-  inEdit,
+  constraints,
   useTransitions,
 }) => {
   const { svg, divBox, allNodes, positioning, width, height } = objectData;
@@ -45,7 +45,7 @@ export const paintTree = ({
     .attr('class', 'nodeWrapper')
     .attr('id', d => d.data.id);
   // Create cards and naviagation buttons
-  box(positioning, divBox, nodes, styling, expandedState, setStateCallback, selectionsAPI, inEdit);
+  box(positioning, divBox, nodes, styling, expandedState, setStateCallback, selectionsAPI, !constraints.active);
   // Create the lines (links) between the nodes
   createPaths(node, positioning, expandedState.topId);
   // Scale and translate
