@@ -14,7 +14,11 @@ export default {
       data: {
         uses: 'data',
         items: {
+          measures: {
+            disabledRef: '',
+          },
           dimensions: {
+            disabledRef: '',
             items: {
               attributes: {
                 component: 'attribute-expression-reference',

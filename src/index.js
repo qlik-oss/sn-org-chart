@@ -75,12 +75,14 @@ export default function supernova(env) {
       useEffect(() => {
         const addKeyPress = event => {
           if (event.key === 'Shift') {
+            selections.linked = true;
             setLinked(true);
           }
         };
 
         const removeKeyPress = event => {
           if (event.key === 'Shift') {
+            selections.linked = false;
             setLinked(false);
           }
         };
