@@ -27,7 +27,7 @@ const filterTree = (id, nodeTree) => {
 };
 
 export const paintTree = ({ objectData, activeNode, styling, setActiveCallback }) => {
-  const { svg, divBox, allNodes, positioning, width, height } = objectData;
+  const { svg, divBox, allNodes, positioning, width, height, tooltip } = objectData;
   divBox.selectAll('.node-rect').remove();
   divBox.selectAll('.tooltip').remove();
   svg.selectAll('g').remove();
@@ -41,7 +41,7 @@ export const paintTree = ({ objectData, activeNode, styling, setActiveCallback }
     .attr('class', 'nodeWrapper')
     .attr('id', d => d.data.id);
   // Create cards
-  box(divBox, positioning, nodes, styling, id => {
+  box(divBox, tooltip, positioning, nodes, styling, id => {
     setActiveCallback(id);
   });
   // Create the lines (links) between the nodes
@@ -95,6 +95,13 @@ export function preRenderTree(element, dataTree) {
     .append('div')
     .attr('class', 'org-node-holder');
 
+  const tooltip = select(element)
+    .selectAll('.tooltip')
+    .data([{}])
+    .enter()
+    .append('div')
+    .attr('class', 'tooltip');
+
   const svg = svgBox.append('g').attr('class', 'org-path-holder');
   // Here are the settings for the tree. For instance nodesize can be adjusted
   const treemap = tree()
@@ -102,5 +109,5 @@ export function preRenderTree(element, dataTree) {
     .nodeSize([0, positioning.depthSpacing]);
 
   const allNodes = treemap(hierarchy(dataTree));
-  return { svg, divBox, allNodes, positioning, width, height };
+  return { svg, divBox, allNodes, positioning, width, height, tooltip };
 }

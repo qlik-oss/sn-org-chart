@@ -1,6 +1,6 @@
 import card from '../card/card';
 
-export default function box(divBox, o, appendNodes, cardStyling, reRender) {
+export default function box(divBox, tooltip, o, appendNodes, cardStyling, reRender) {
   function getStyle(p) {
     if (p.data.id === 'Root') {
       return `top:${o.y(p) + 80}px;left:${o.x(p) + 140}px`;
@@ -11,10 +11,6 @@ export default function box(divBox, o, appendNodes, cardStyling, reRender) {
   function getTooltipStyle(p) {
     return `top:${o.y(p) - o.nodeSize.height}px;left:${o.x(p) + o.nodeSize.width / 3}px;visibility: visible;opacity: 0.9;`;
   }
-
-  const tooltip = divBox
-    .append('div')
-    .attr('class', 'tooltip');
 
   divBox
     .selectAll('.node')
