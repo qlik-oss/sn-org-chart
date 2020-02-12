@@ -16,6 +16,10 @@ import ext from './extension/ext';
 import { paintTree, preRenderTree } from './tree/render';
 import stylingUtils from './utils/styling';
 import treeTransform from './utils/tree-utils';
+import './styles/treeCss.less';
+import './styles/paths.less';
+import './styles/warnings.less';
+import './styles/nodes.less';
 
 export default function supernova(env) {
   return {

@@ -62,11 +62,11 @@ export default function box({ x, y }, divBox, nodes, cardStyling, expandedState,
 
   // cards
   divBox
-    .selectAll('.node')
+    .selectAll('.sn-org-nodes')
     .data(nodes)
     .enter()
     .append('div')
-    .attr('class', 'node-rect')
+    .attr('class', 'sn-org-card')
     .attr('style', getStyle)
     .attr('id', d => d.data.id)
     .on('click', node => {
@@ -78,29 +78,39 @@ export default function box({ x, y }, divBox, nodes, cardStyling, expandedState,
 
   // expand/collapse
   divBox
-    .selectAll('.node')
+    .selectAll('.sn-org-nodes')
     .data(nodes.filter(node => !!node.children))
     .enter()
     .append('div')
-    .attr('class', 'node-rect')
-    .attr('style', d => `width:${buttonWidth}px;height:${buttonHeight}px;top:${y(d) + cardHeight + buttonMargin}px;left:${x(d) + (cardWidth - buttonWidth) / 2}px;`)
+    .attr('class', 'sn-org-traverse')
+    .attr(
+      'style',
+      d =>
+        `width:${buttonWidth}px;height:${buttonHeight}px;top:${y(d) + cardHeight + buttonMargin}px;left:${x(d) +
+          (cardWidth - buttonWidth) / 2}px;`
+    )
     .attr('id', d => `${d.data.id}-expand`)
     .on('click', d => {
       setStateCallback(getNewState(d, expandedState));
     })
-    .html(d => `<div class="org-traverse"> ${getSign(d, expandedState)} ${d.data.children.length}</div>`);
+    .html(d => `${getSign(d, expandedState)} ${d.data.children.length}`);
 
   // go up
   divBox
-    .selectAll('.node')
+    .selectAll('.sn-org-nodes')
     .data(nodes.filter(node => node.data.id === topId && node.parent))
     .enter()
     .append('div')
-    .attr('class', 'node-rect')
-    .attr('style', d => `width:${buttonWidth}px;height:${buttonHeight}px;top:${y(d) - buttonHeight - buttonMargin}px;left:${x(d) + (cardWidth - buttonWidth) / 2}px;`)
+    .attr('class', 'sn-org-traverse')
+    .attr(
+      'style',
+      d =>
+        `width:${buttonWidth}px;height:${buttonHeight}px;top:${y(d) - buttonHeight - buttonMargin}px;left:${x(d) +
+          (cardWidth - buttonWidth) / 2}px;`
+    )
     .attr('id', d => `${d.data.id}-up`)
     .on('click', d => {
       setStateCallback(getNewUpState(d, isExpanded));
     })
-    .html('<div class="org-traverse">↑</div>');
+    .html('↑');
 }

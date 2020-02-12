@@ -3,7 +3,6 @@ import position from './position';
 import box from './box';
 import createPaths from './path';
 import transform from './transform';
-import '../treeCss.css';
 
 const filterTree = ({ topId, isExpanded, expandedChildren }, nodeTree) => {
   const topNode = nodeTree.descendants().find(node => node.data.id === topId) || nodeTree;
@@ -25,20 +24,17 @@ const filterTree = ({ topId, isExpanded, expandedChildren }, nodeTree) => {
 
 export const paintTree = ({ objectData, expandedState, styling, setStateCallback, selectionsAPI, useTransitions }) => {
   const { svg, divBox, allNodes, positioning, width, height } = objectData;
-  divBox.selectAll('.node-rect').remove();
-  svg.selectAll('g').remove();
+  divBox.selectAll('*').remove();
+  svg.selectAll('*').remove();
+  // filter the nodes the nodes
   const nodes = filterTree(expandedState, allNodes, setStateCallback);
-  // create the nodes
-  const node = svg
-    .selectAll('.node')
-    .data(nodes)
-    .enter()
-    .append('g')
-    .attr('class', 'nodeWrapper')
-    .attr('id', d => d.data.id);
   // Create cards and naviagation buttons
   box(positioning, divBox, nodes, styling, expandedState, setStateCallback, selectionsAPI);
   // Create the lines (links) between the nodes
+  const node = svg
+    .selectAll('.sn-org-paths')
+    .data(nodes)
+    .enter();
   createPaths(node, positioning, expandedState.topId);
   // Scale and translate
   transform(nodes, width, height, svg, divBox, useTransitions);
@@ -54,13 +50,14 @@ export const getSize = ({ error, warn }, element) => {
 
 export function preRenderTree(element, dataTree) {
   element.innerHTML = '';
+  element.className = 'sn-org-chart';
   const positioning = position('ttb');
   const { width, height } = getSize(dataTree, element);
 
   if (dataTree.error) {
     select(element)
       .append('div')
-      .attr('class', 'org-error')
+      .attr('class', 'sn-org-error')
       .html(dataTree.message);
     return false;
   }
@@ -68,7 +65,7 @@ export function preRenderTree(element, dataTree) {
   if (dataTree.warn && dataTree.warn.length) {
     select(element)
       .append('span')
-      .attr('class', 'org-warning')
+      .attr('class', 'sn-org-warning')
       .html(`*${dataTree.warn.join(' ')}`);
   }
 
@@ -77,7 +74,7 @@ export function preRenderTree(element, dataTree) {
     .data([{}])
     .enter()
     .append('svg')
-    .attr('style', 'position:absolute')
+    .attr('class', 'sn-org-svg')
     .attr('width', width)
     .attr('height', height);
 
@@ -86,9 +83,9 @@ export function preRenderTree(element, dataTree) {
     .data([{}])
     .enter()
     .append('div')
-    .attr('class', 'org-node-holder');
+    .attr('class', 'sn-org-nodes');
 
-  const svg = svgBox.append('g').attr('class', 'org-path-holder');
+  const svg = svgBox.append('g').attr('class', 'sn-org-paths');
   // Here are the settings for the tree. For instance nodesize can be adjusted
   const treemap = tree()
     .size([width, height])

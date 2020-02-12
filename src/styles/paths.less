@@ -1,0 +1,17 @@
+.sn-org-chart {
+  .sn-org-svg {
+    position: absolute;
+
+    .sn-org-link {
+      fill: none;
+      stroke: #8c8c8c;
+      stroke-width: 1;
+    }
+    /* For css only transitions, does not work in IE11 */
+    .sn-org-paths:not(.org-disable-transition) {
+      transform-origin: 0% 0%;
+      transition-property: all;
+      transition-duration: 0.5s;
+    }
+  }
+}
