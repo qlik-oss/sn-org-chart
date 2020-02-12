@@ -63,7 +63,7 @@ export function getPoints(d, topId, { depthSpacing, isVertical, x, y }) {
     ]);
   }
 
-  if (d.children) {
+  if (d.children && d.data.id !== 'Root') {
     // to expand button
     points.push([
       { x: start.x + halfCard.x, y: start.y + cardHeight },

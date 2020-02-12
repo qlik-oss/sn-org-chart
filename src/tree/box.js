@@ -65,7 +65,8 @@ export default function box(
   const { topId, isExpanded } = expandedState;
   function getStyle(d) {
     if (d.data.id === 'Root') {
-      return `top:${y(d) + cardHeight - rootDiameter}px;left:${x(d) + (cardWidth - rootDiameter) / 2}px`;
+      return `top:${y(d) + cardHeight + buttonMargin + buttonHeight - rootDiameter}px;left:${x(d) +
+        (cardWidth - rootDiameter) / 2}px`;
     }
     return `width:${cardWidth}px;height:${cardHeight}px; top:${y(d)}px;left:${x(d)}px;`;
   }
