@@ -14,21 +14,23 @@ export function getPoints(d, topId, { depthSpacing, isVertical, x, y }) {
 
     if (haveNoChildren(d.parent.children)) {
       // to leafs
-      points.push(isVertical
-        ? [
-          { x: start.x, y: start.y + halfCard.y },
-          { x: end.x - halfCard.x, y: start.y + halfCard.y },
-          { x: end.x - halfCard.x, y: end.y + buttonMargin },
-          { x: end.x, y: end.y + buttonMargin },
-          { x: end.x, y: end.y },
-        ]
-        : [
-          { x: start.x, y: start.y },
-          { x: start.x, y: end.y - halfCard.y },
-          { x: end.x + halfDepth, y: end.y - halfCard.y },
-          { x: end.x + halfDepth, y: end.y },
-          { x: end.x, y: end.y },
-        ]);
+      points.push(
+        isVertical
+          ? [
+            { x: start.x, y: start.y + halfCard.y },
+            { x: end.x - halfCard.x, y: start.y + halfCard.y },
+            { x: end.x - halfCard.x, y: end.y + buttonMargin },
+            { x: end.x, y: end.y + buttonMargin },
+            { x: end.x, y: end.y },
+          ]
+          : [
+            { x: start.x, y: start.y },
+            { x: start.x, y: end.y - halfCard.y },
+            { x: end.x + halfDepth, y: end.y - halfCard.y },
+            { x: end.x + halfDepth, y: end.y },
+            { x: end.x, y: end.y },
+          ]
+      );
     } else if (start.x === x(d.parent) || start.y === y(d.parent)) {
       // straight line
       points.push([
@@ -37,19 +39,21 @@ export function getPoints(d, topId, { depthSpacing, isVertical, x, y }) {
       ]);
     } else {
       // to nodes with children
-      points.push(isVertical
-        ? [
-          { x: start.x + halfCard.x, y: start.y },
-          { x: start.x + halfCard.x, y: start.y - buttonMargin },
-          { x: end.x, y: start.y - buttonMargin },
-          { x: end.x, y: end.y },
-        ]
-        : [
-          { x: start.x, y: start.y },
-          { x: start.x - buttonMargin, y: start.y },
-          { x: start.x - buttonMargin, y: end.y },
-          { x: end.x, y: end.y },
-        ]);
+      points.push(
+        isVertical
+          ? [
+            { x: start.x + halfCard.x, y: start.y },
+            { x: start.x + halfCard.x, y: start.y - buttonMargin },
+            { x: end.x, y: start.y - buttonMargin },
+            { x: end.x, y: end.y },
+          ]
+          : [
+            { x: start.x, y: start.y },
+            { x: start.x - buttonMargin, y: start.y },
+            { x: start.x - buttonMargin, y: end.y },
+            { x: end.x, y: end.y },
+          ]
+      );
     }
   } else if (d.parent) {
     // to up button
@@ -101,7 +105,7 @@ export function getPath(points) {
 export default function createPaths(node, positioning, topId) {
   node
     .append('path')
-    .attr('class', 'link')
+    .attr('class', 'sn-org-link')
     .attr('id', d => d.data.id)
     .attr('d', d => {
       let path = '';

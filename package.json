@@ -47,7 +47,7 @@
     ]
   },
   "peerDependencies": {
-    "@nebula.js/supernova": "0.1.0-alpha.29"
+    "@nebula.js/supernova": "0.1.0-alpha.30"
   },
   "devDependencies": {
     "@after-work.js/aw": "6.0.10",
@@ -56,7 +56,7 @@
     "@babel/preset-env": "7.8.4",
     "@commitlint/cli": "8.3.5",
     "@commitlint/config-conventional": "8.3.4",
-    "@nebula.js/cli": "0.1.0-alpha.29",
+    "@nebula.js/cli": "0.1.0-alpha.30",
     "babel-plugin-istanbul": "6.0.0",
     "d3": "^5.15.0",
     "eslint": "6.8.0",
@@ -66,6 +66,7 @@
     "husky": "4.2.1",
     "lint-staged": "10.0.7",
     "mocha-junit-reporter": "1.23.3",
-    "shx": "^0.3.2"
+    "shx": "^0.3.2",
+    "less": "^3.11.1"
   }
 }
