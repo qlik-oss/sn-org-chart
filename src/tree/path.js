@@ -105,7 +105,7 @@ export function getPath(points) {
 export default function createPaths(node, positioning, topId) {
   node
     .append('path')
-    .attr('class', 'sn-org-link')
+    .attr('class', 'sn-org-path')
     .attr('id', d => d.data.id)
     .attr('d', d => {
       let path = '';
