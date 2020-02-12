@@ -74,8 +74,9 @@ export default function supernova(env) {
         };
       }, []);
 
-      const setStateCallback = newNode => {
-        setExpandedState(newNode);
+      const setStateCallback = newState => {
+        newState.useTransitions = true;
+        setExpandedState(newState);
       };
 
       /*
@@ -98,7 +99,6 @@ export default function supernova(env) {
           return treeTransform({ layout, model }).then(transformed => {
             setDataTree(transformed);
             setStyling(stylingUtils.cardStyling({ Theme, layout }));
-            setExpandedState(null);
           });
         }
         return Promise.resolve();
@@ -122,9 +122,22 @@ export default function supernova(env) {
 
       useEffect(() => {
         if (objectData && expandedState && styling) {
-          paintTree({ objectData, expandedState, styling, setStateCallback, selectionsAPI, linked });
+          paintTree({ objectData, expandedState, styling, setStateCallback, selectionsAPI });
         }
-      }, [expandedState, objectData, selState]);
+      }, [objectData, selState]);
+
+      useEffect(() => {
+        if (objectData && expandedState && styling) {
+          paintTree({
+            objectData,
+            expandedState,
+            styling,
+            setStateCallback,
+            selectionsAPI,
+            useTransitions: expandedState.useTransitions,
+          });
+        }
+      }, [expandedState]);
     },
     ext: ext(env),
   };

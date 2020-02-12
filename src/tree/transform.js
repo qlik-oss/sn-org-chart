@@ -1,6 +1,6 @@
 import constants from './size-constants';
 
-const getBBoxOfNodes = (nodes) => {
+const getBBoxOfNodes = nodes => {
   const { cardWidth, cardHeight, buttonHeight, buttonMargin } = constants;
   const bbox = {
     left: Infinity,
@@ -22,7 +22,7 @@ const getBBoxOfNodes = (nodes) => {
   };
 };
 
-export default function transform(nodes, width, height, svg, divBox) {
+export default function transform(nodes, width, height, svg, divBox, useTransitions) {
   // Zooming and positioning of the tree
   const bBox = getBBoxOfNodes(nodes);
   const scaleToWidhth = bBox.width / width > bBox.height / height;
@@ -44,8 +44,8 @@ export default function transform(nodes, width, height, svg, divBox) {
   } else {
     // Transition using css, does not work in IE11
     svg.attr('style', `transform: scale(${1 / scaleFactor}) translate(${translation});`);
-    divBox.classed('org-disable-transition', false);
-    svg.classed('org-disable-transition', false);
+    divBox.classed('org-disable-transition', !useTransitions);
+    svg.classed('org-disable-transition', !useTransitions);
   }
 
   divBox.attr(
