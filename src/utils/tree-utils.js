@@ -157,7 +157,7 @@ export function haveNoChildren(nodes) {
   return true;
 }
 
-export function createNodes(matrix, attributeIndecies, status) {
+export function createNodes(matrix, attributeIndecies, status, navigationMode) {
   const nodeMap = {};
   const allNodes = [];
   for (let i = 0; i < matrix.length; ++i) {
@@ -204,6 +204,7 @@ export function createNodes(matrix, attributeIndecies, status) {
 
   if (rootNodes.length === 1) {
     rootNodes[0].warn = warn;
+    rootNodes[0].navigationMode = navigationMode;
     return rootNodes[0];
   }
 
@@ -215,6 +216,7 @@ export function createNodes(matrix, attributeIndecies, status) {
     isDummy: true, // Should be rendered in a specific way?
     warn,
     children: rootNodes,
+    navigationMode,
   };
 
   rootNodes.forEach((node, i) => {
@@ -247,5 +249,5 @@ export default async function transform({ layout, model }) {
     return null;
   }
 
-  return createNodes(dataMatrix, attributeIndecies, status);
+  return createNodes(dataMatrix, attributeIndecies, status, layout.navigationMode);
 }

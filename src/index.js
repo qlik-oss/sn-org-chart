@@ -121,7 +121,7 @@ export default function supernova(env) {
       // This one can split up. Only need to get new height/width when rect is changed
       useEffect(() => {
         if (element && dataTree) {
-          const preRender = preRenderTree(element, dataTree, layout);
+          const preRender = preRenderTree(element, dataTree);
           if (preRender) {
             setObjectData(preRender);
             !expandedState &&
