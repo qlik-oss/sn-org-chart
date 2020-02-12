@@ -23,7 +23,15 @@ const filterTree = ({ topId, isExpanded, expandedChildren }, nodeTree) => {
   return subTree;
 };
 
-export const paintTree = ({ objectData, expandedState, styling, setStateCallback, selectionsAPI, useTransitions }) => {
+export const paintTree = ({
+  objectData,
+  expandedState,
+  styling,
+  setStateCallback,
+  selectionsAPI,
+  inEdit,
+  useTransitions,
+}) => {
   const { svg, divBox, allNodes, positioning, width, height } = objectData;
   divBox.selectAll('.node-rect').remove();
   svg.selectAll('g').remove();
@@ -37,7 +45,7 @@ export const paintTree = ({ objectData, expandedState, styling, setStateCallback
     .attr('class', 'nodeWrapper')
     .attr('id', d => d.data.id);
   // Create cards and naviagation buttons
-  box(positioning, divBox, nodes, styling, expandedState, setStateCallback, selectionsAPI);
+  box(positioning, divBox, nodes, styling, expandedState, setStateCallback, selectionsAPI, inEdit);
   // Create the lines (links) between the nodes
   createPaths(node, positioning, expandedState.topId);
   // Scale and translate

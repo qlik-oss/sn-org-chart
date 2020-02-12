@@ -9,6 +9,7 @@ import {
   useTheme,
   useSelections,
   useAction,
+  useConstraints,
 } from '@nebula.js/supernova';
 import properties from './object-properties';
 import data from './data';
@@ -36,6 +37,8 @@ export default function supernova(env) {
       const rect = useRect()[0];
       const Theme = useTheme();
       const selectionsAPI = useSelections();
+      const inEdit = useConstraints().passive;
+
       if (selectionsAPI) {
         selectionsAPI.refreshSelectionState = setSelState;
       }
@@ -122,11 +125,14 @@ export default function supernova(env) {
 
       useEffect(() => {
         if (objectData && expandedState && styling) {
-          paintTree({ objectData, expandedState, styling, setStateCallback, selectionsAPI });
+          paintTree({ objectData, expandedState, styling, setStateCallback, selectionsAPI, inEdit });
         }
       }, [objectData, selState]);
 
       useEffect(() => {
+        // console.log('env', env);
+        // console.log('constr', constraints);
+
         if (objectData && expandedState && styling) {
           paintTree({
             objectData,
@@ -134,6 +140,7 @@ export default function supernova(env) {
             styling,
             setStateCallback,
             selectionsAPI,
+            inEdit,
             useTransitions: expandedState.useTransitions,
           });
         }

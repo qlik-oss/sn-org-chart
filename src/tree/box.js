@@ -50,7 +50,16 @@ export const getNewUpState = (d, isExpanded) => ({
   isExpanded: true,
 });
 
-export default function box({ x, y }, divBox, nodes, cardStyling, expandedState, setStateCallback, selectionsAPI) {
+export default function box(
+  { x, y },
+  divBox,
+  nodes,
+  cardStyling,
+  expandedState,
+  setStateCallback,
+  selectionsAPI,
+  inEdit
+) {
   const { cardWidth, cardHeight, buttonWidth, buttonHeight, buttonMargin, rootDiameter } = constants;
   const { topId, isExpanded } = expandedState;
   function getStyle(d) {
@@ -70,7 +79,7 @@ export default function box({ x, y }, divBox, nodes, cardStyling, expandedState,
     .attr('style', getStyle)
     .attr('id', d => d.data.id)
     .on('click', node => {
-      if (node.data.id !== 'Root') {
+      if (!inEdit && node.data.id !== 'Root') {
         selections.select(node, selectionsAPI);
       }
     })
@@ -83,10 +92,17 @@ export default function box({ x, y }, divBox, nodes, cardStyling, expandedState,
     .enter()
     .append('div')
     .attr('class', 'node-rect')
-    .attr('style', d => `width:${buttonWidth}px;height:${buttonHeight}px;top:${y(d) + cardHeight + buttonMargin}px;left:${x(d) + (cardWidth - buttonWidth) / 2}px;`)
+    .attr(
+      'style',
+      d =>
+        `width:${buttonWidth}px;height:${buttonHeight}px;top:${y(d) + cardHeight + buttonMargin}px;left:${x(d) +
+          (cardWidth - buttonWidth) / 2}px;`
+    )
     .attr('id', d => `${d.data.id}-expand`)
     .on('click', d => {
-      setStateCallback(getNewState(d, expandedState));
+      if (!inEdit) {
+        setStateCallback(getNewState(d, expandedState));
+      }
     })
     .html(d => `<div class="org-traverse"> ${getSign(d, expandedState)} ${d.data.children.length}</div>`);
 
@@ -97,10 +113,17 @@ export default function box({ x, y }, divBox, nodes, cardStyling, expandedState,
     .enter()
     .append('div')
     .attr('class', 'node-rect')
-    .attr('style', d => `width:${buttonWidth}px;height:${buttonHeight}px;top:${y(d) - buttonHeight - buttonMargin}px;left:${x(d) + (cardWidth - buttonWidth) / 2}px;`)
+    .attr(
+      'style',
+      d =>
+        `width:${buttonWidth}px;height:${buttonHeight}px;top:${y(d) - buttonHeight - buttonMargin}px;left:${x(d) +
+          (cardWidth - buttonWidth) / 2}px;`
+    )
     .attr('id', d => `${d.data.id}-up`)
     .on('click', d => {
-      setStateCallback(getNewUpState(d, isExpanded));
+      if (!inEdit) {
+        setStateCallback(getNewUpState(d, isExpanded));
+      }
     })
     .html('<div class="org-traverse">↑</div>');
 }
