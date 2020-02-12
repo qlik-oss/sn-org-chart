@@ -130,7 +130,6 @@ export default function supernova(env) {
       }, [objectData, selState]);
 
       useEffect(() => {
-        console.log(constraints);
         if (objectData && expandedState && styling) {
           paintTree({
             objectData,
