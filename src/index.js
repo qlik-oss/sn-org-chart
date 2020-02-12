@@ -3,7 +3,6 @@ import {
   useEffect,
   useElement,
   useModel,
-  useRect,
   useState,
   usePromise,
   useTheme,
@@ -34,7 +33,6 @@ export default function supernova(env) {
       const layout = useStaleLayout();
       const model = useModel();
       const element = useElement();
-      const rect = useRect()[0];
       const Theme = useTheme();
       const selectionsAPI = useSelections();
       selectionsAPI.refreshSelectionState = setSelState;
@@ -115,7 +113,7 @@ export default function supernova(env) {
               });
           }
         }
-      }, [element, dataTree, rect]);
+      }, [element, dataTree]);
 
       useEffect(() => {
         if (objectData && expandedState && styling) {

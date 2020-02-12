@@ -46,7 +46,9 @@ export function applyTransform(eventTransform, svg, divBox, width, height) {
 
 export function setZooming(objectData) {
   const { svg, divBox, width, height, element, allNodes } = objectData;
-  const scaleFactor = allNodes.zoomFactor;
+  const maxZoom = 6;
+  const minZoom = 0.2;
+  const scaleFactor = Math.max(Math.min(maxZoom, allNodes.zoomFactor), minZoom);
 
   const zoomed = () => {
     applyTransform(
@@ -57,13 +59,14 @@ export function setZooming(objectData) {
       height
     );
   };
+
   select(element).call(
     zoom()
       .extent([
         [0, 0],
         [width, height],
       ])
-      .scaleExtent([0.05, 8])
+      .scaleExtent([minZoom, maxZoom])
       .on('zoom', zoomed)
   );
 

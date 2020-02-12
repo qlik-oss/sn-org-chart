@@ -6,11 +6,12 @@ const colorOptions = [
   { value: 'byExpression', translation: 'properties.colorMode.byExpression' },
 ];
 
-const navigationOptions = [
-  { value: 'regular', translation: '$Unlimited sizing' },
-  { value: 'scroll', translation: '$SCroll thing' },
-  { value: 'free', translation: '$Free pan and zoom' },
-];
+// Navigation options only needed when adding new option
+// const navigationOptions = [
+//   { value: 'regular', translation: '$Unlimited sizing' },
+//   { value: 'scroll', translation: '$SCroll thing' },
+//   { value: 'free', translation: '$Free pan and zoom' },
+// ];
 
 export default {
   definition: {
@@ -107,19 +108,19 @@ export default {
               backgroundColor: {
                 type: 'items',
                 items: {
-                  navigation: {
-                    type: 'items',
-                    items: {
-                      navigtaionMode: {
-                        ref: 'navigationMode',
-                        type: 'string',
-                        translation: '$Navigationmode',
-                        component: 'dropdown',
-                        default: 'scroll',
-                        options: navigationOptions,
-                      },
-                    },
-                  },
+                  // Dropdown for navigation options. Should only be activated when adding new options
+                  // navigation: {
+                  //   type: 'items',
+                  //   items: {
+                  //     navigtaionMode: {
+                  //       ref: 'navigationMode',
+                  //       type: 'string',
+                  //       translation: '$Navigationmode',
+                  //       component: 'dropdown',
+                  //       options: navigationOptions,
+                  //     },
+                  //   },
+                  // },
                   useColorExpression: {
                     ref: 'style.backgroundColor.colorType',
                     type: 'string',

@@ -15,7 +15,7 @@ export default function position(orientation, nodeSize, element) {
         ? d.parent[axis] + nodeMargin / 2
         : d.parent[axis] + (d.data.childNumber - (d.parent.children.length - 1) / 2) * widthSpacing;
     } else if (!d.children) {
-      d[axis] = 0;
+      d[axis] = (element.clientWidth - nodeSize.width) / 2;
     } else {
       // In case of zoom mode we need to have the tree moved to the right from the start
       const neededWidth = (nodeSize.width + nodeMargin) * d.children.length - nodeMargin;
