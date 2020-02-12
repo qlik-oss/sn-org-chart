@@ -50,7 +50,16 @@ export const getNewUpState = (d, isExpanded) => ({
   isExpanded: true,
 });
 
-export default function box({ x, y }, divBox, nodes, cardStyling, expandedState, setStateCallback, selectionsAPI) {
+export default function box(
+  { x, y },
+  divBox,
+  nodes,
+  cardStyling,
+  expandedState,
+  setStateCallback,
+  selectionState,
+  sel
+) {
   const { cardWidth, cardHeight, buttonWidth, buttonHeight, buttonMargin, rootDiameter } = constants;
   const { topId, isExpanded } = expandedState;
   function getStyle(d) {
@@ -71,10 +80,10 @@ export default function box({ x, y }, divBox, nodes, cardStyling, expandedState,
     .attr('id', d => d.data.id)
     .on('click', node => {
       if (node.data.id !== 'Root') {
-        selections.select(node, selectionsAPI);
+        selections.select(node, sel, selectionState);
       }
     })
-    .html(d => card(d.data, cardStyling, selectionsAPI));
+    .html(d => card(d.data, cardStyling, sel, selectionState));
 
   // expand/collapse
   divBox

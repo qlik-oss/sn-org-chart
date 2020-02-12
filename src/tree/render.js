@@ -22,14 +22,22 @@ const filterTree = ({ topId, isExpanded, expandedChildren }, nodeTree) => {
   return subTree;
 };
 
-export const paintTree = ({ objectData, expandedState, styling, setStateCallback, selectionsAPI, useTransitions }) => {
+export const paintTree = ({
+  objectData,
+  expandedState,
+  styling,
+  setStateCallback,
+  selections,
+  selectionState,
+  useTransitions,
+}) => {
   const { svg, divBox, allNodes, positioning, width, height } = objectData;
   divBox.selectAll('*').remove();
   svg.selectAll('*').remove();
   // filter the nodes the nodes
   const nodes = filterTree(expandedState, allNodes, setStateCallback);
   // Create cards and naviagation buttons
-  box(positioning, divBox, nodes, styling, expandedState, setStateCallback, selectionsAPI);
+  box(positioning, divBox, nodes, styling, expandedState, setStateCallback, selectionState, selections);
   // Create the lines (links) between the nodes
   const node = svg
     .selectAll('.sn-org-paths')

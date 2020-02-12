@@ -16,11 +16,13 @@ export function getFontColor(cardStyling, backgroundColor) {
   return cardStyling.fontColor;
 }
 
-export default (data, cardStyling, selections) => {
+export default (data, cardStyling, sel, selectionState) => {
+  const selections = sel.api;
   if (data.id === 'Root') {
     return '<div class="sn-org-root"/>';
   }
 
+  const isSelected = selections && selections.isActive() && selectionState.indexOf(data.elemNo) !== -1;
   const backgroundColor = getBackgroundColor(data, cardStyling);
   const topColor = colorUtils.getDarkColor(backgroundColor);
   const fontColor = getFontColor(cardStyling, backgroundColor);
@@ -34,10 +36,7 @@ export default (data, cardStyling, selections) => {
   } else if (attributes.extraLabel) {
     html += `<div class="sn-org-card-label">${attributes.extraLabel}</div>`;
   }
-  const topbar =
-    selections && selections.isActive() && data.selected
-      ? ''
-      : `<div class="sn-org-card-top" style="background-color:${topColor};"></div>`;
-  const selectedClass = selections && selections.isActive() ? (data.selected ? ' selected' : ' not-selected') : '';
+  const topbar = isSelected ? '' : `<div class="sn-org-card-top" style="background-color:${topColor};"></div>`;
+  const selectedClass = selections && selections.isActive() ? (isSelected ? ' selected' : ' not-selected') : '';
   return `${topbar}<div class="sn-org-card-text${selectedClass}" style="background-color:${backgroundColor};color:${fontColor};">${html}</div>`;
 };

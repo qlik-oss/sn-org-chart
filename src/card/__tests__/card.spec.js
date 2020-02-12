@@ -75,9 +75,10 @@ describe('card', () => {
       data = {
         id: 'someId',
         attributes: {},
+        elemNo: 5,
       };
       cardStyling = { backgroundColor: '#e6e6e6', fontColor: 'default' };
-      selections = { isActive: () => false };
+      selections = { api: { isActive: () => false } };
     });
 
     it('should return html for root node', () => {
@@ -140,8 +141,8 @@ describe('card', () => {
     it('should return html for selected node in active state', () => {
       data.measure = 'measure';
       data.selected = true;
-      selections = { isActive: () => true };
-      const result = card(data, cardStyling, selections);
+      selections = { api: { isActive: () => true } };
+      const result = card(data, cardStyling, selections, [data.elemNo]);
       expect(result).to.equal(
         getHtml(
           `<div class="sn-org-card-title">${data.id}</div><div class="sn-org-card-label">${data.measure}</div>`,
@@ -153,8 +154,8 @@ describe('card', () => {
     it('should return html for not selected node in active state', () => {
       data.measure = 'measure';
       data.selected = false;
-      selections = { isActive: () => true };
-      const result = card(data, cardStyling, selections);
+      selections = { api: { isActive: () => true } };
+      const result = card(data, cardStyling, selections, [7]);
       expect(result).to.equal(
         getHtml(
           `<div class="sn-org-card-title">${data.id}</div><div class="sn-org-card-label">${data.measure}</div>`,
