@@ -17,16 +17,16 @@ describe('box', () => {
       };
     });
     it('should return - when d is the top node and is expanded', () => {
-      expect(getSign(d, expandedState)).to.equal('-');
+      expect(getSign(d, expandedState, [])).to.equal('-');
     });
     it('should return - when d is the child of the top node and is expanded', () => {
       d = d.children[0];
       expandedState.expandedChildren.push('2');
-      expect(getSign(d, expandedState)).to.equal('-');
+      expect(getSign(d, expandedState, [])).to.equal('-');
     });
     it('should return + not expanded', () => {
       expandedState.isExpanded = false;
-      expect(getSign(d, expandedState)).to.equal('+');
+      expect(getSign(d, expandedState, [])).to.equal('+');
     });
   });
 
@@ -46,17 +46,17 @@ describe('box', () => {
     });
     it('should return state with same id, toggled isExpanded and no expanded children', () => {
       expectedState.isExpanded = false;
-      expect(getNewState(d, expandedState)).to.deep.equal(expectedState);
+      expect(getNewState(d, expandedState, [])).to.deep.equal(expectedState);
     });
     it('should return state with same id, isExpanded true and no expanded children', () => {
       d = d.children[0];
-      expect(getNewState(d, expandedState)).to.deep.equal(expectedState);
+      expect(getNewState(d, expandedState, [])).to.deep.equal(expectedState);
     });
     it('should return state with same id, isExpanded true and added expanded child', () => {
       d = d.children[1];
       d.parent.children[0].children = undefined;
       expectedState.expandedChildren = ['2', '4'];
-      expect(getNewState(d, expandedState)).to.deep.equal(expectedState);
+      expect(getNewState(d, expandedState, [])).to.deep.equal(expectedState);
     });
     it('should return state with same id, isExpanded true and added expanded child - even when one sibling has grend children', () => {
       expandedState.expandedChildren = ['4'];
@@ -69,27 +69,29 @@ describe('box', () => {
           data: {
             id: '1',
           },
-          children: [{
-            data: {
-              id: '2',
-            }
-          }],
-        }
+          children: [
+            {
+              data: {
+                id: '2',
+              },
+            },
+          ],
+        },
       });
       d = d.children[2];
       expectedState.expandedChildren = ['4', '10'];
-      expect(getNewState(d, expandedState)).to.deep.equal(expectedState);
+      expect(getNewState(d, expandedState, [])).to.deep.equal(expectedState);
     });
     it('should return state with same id, isExpanded true and swapped expaneded child', () => {
       d = d.children[1];
       expectedState.expandedChildren = ['4'];
-      expect(getNewState(d, expandedState)).to.deep.equal(expectedState);
+      expect(getNewState(d, expandedState, [])).to.deep.equal(expectedState);
     });
     it('should return state with new id, isExpanded true and clicked node as expanded', () => {
       d = d.children[0].children[0];
       expectedState.topId = '2';
       expectedState.expandedChildren = ['3'];
-      expect(getNewState(d, expandedState)).to.deep.equal(expectedState);
+      expect(getNewState(d, expandedState, [])).to.deep.equal(expectedState);
     });
   });
 
