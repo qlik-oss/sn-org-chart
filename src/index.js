@@ -167,9 +167,9 @@ export default function supernova(env) {
 
       useEffect(() => {
         if (objectData && layout.navigationMode === 'free') {
-          setZooming(objectData);
+          setZooming(objectData, constraints);
         }
-      }, [objectData]);
+      }, [objectData, constraints]);
 
       useImperativeHandle(
         () => ({
