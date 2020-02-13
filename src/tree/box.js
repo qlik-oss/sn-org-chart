@@ -70,10 +70,9 @@ export default function box(
     .data(nodes.filter(node => node.parent && node.parent.data.id === 'Root'))
     .enter()
     .append('div')
-    .attr('class', 'sn-org-card')
+    .attr('class', 'sn-org-root')
     .attr('style', d => `top:${y(d) - rootDiameter - buttonMargin}px;left:${x(d) + (cardWidth - rootDiameter) / 2}px`)
-    .attr('id', d => d.data.id)
-    .html('<div class="sn-org-root"/>');
+    .attr('id', d => d.data.id);
 
   // cards
   divBox
