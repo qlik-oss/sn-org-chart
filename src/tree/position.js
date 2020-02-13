@@ -12,7 +12,7 @@ export default function position(orientation, element) {
       if (!d.parent[axis]) {
         d.parent[axis] = widthTranslation(d.parent, axis);
       }
-      d[axis] = haveNoChildren(d.parent.children)
+      d[axis] = d.parent.data.id !== 'Root' && haveNoChildren(d.parent.children)
         ? d.parent[axis] + buttonMargin
         : d.parent[axis] + (d.data.childNumber - (d.parent.children.length - 1) / 2) * widthSpacing;
     } else if (!d.children) {
@@ -31,7 +31,7 @@ export default function position(orientation, element) {
   };
 
   const depthTranslation = (d, axis) => {
-    if (d.parent && haveNoChildren(d.parent.children)) {
+    if (d.parent && d.parent.data.id !== 'Root' && haveNoChildren(d.parent.children)) {
       d[axis] = d.parent[axis] + depthSpacing + d.data.childNumber * (cardHeight + leafMargin);
     } else {
       d[axis] = d.y;

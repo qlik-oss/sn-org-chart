@@ -19,7 +19,7 @@ export function getFontColor(cardStyling, backgroundColor) {
 export default (data, cardStyling, sel, selectionState) => {
   const selections = sel.api;
   if (data.id === 'Root') {
-    return '<div class="sn-org-root"/>';
+    return '';
   }
 
   const isSelected = selections && selections.isActive() && selectionState.indexOf(data.elemNo) !== -1;
