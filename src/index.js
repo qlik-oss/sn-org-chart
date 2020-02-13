@@ -6,7 +6,6 @@ import {
   useState,
   usePromise,
   useTheme,
-  useRect,
   useSelections,
   useAction,
 } from '@nebula.js/supernova';
@@ -35,7 +34,6 @@ export default function supernova(env) {
       const [expandedState, setExpandedState] = useState(null);
       const [linked, setLinked] = useState(false);
       const [selectionState, setSelectionState] = useState([]);
-      const [rect] = useRect();
       const layout = useStaleLayout();
       const model = useModel();
       const element = useElement();
@@ -158,15 +156,6 @@ export default function supernova(env) {
           setZooming(objectData);
         }
       }, [objectData]);
-
-      useEffect(() => {
-        if (objectData) {
-          // eslint-disable-next-line no-underscore-dangle
-          const svgElement = objectData.svgBox._groups[0][0];
-          svgElement.setAttribute('width', element.clientWidth);
-          svgElement.setAttribute('height', element.clientHeight);
-        }
-      }, [rect]);
     },
     ext: ext(env),
   };

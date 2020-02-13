@@ -86,8 +86,8 @@ export function preRenderTree(element, dataTree) {
     .enter()
     .append('svg')
     .attr('class', 'sn-org-svg')
-    .attr('width', width)
-    .attr('height', height);
+    .attr('width', '100%')
+    .attr('height', '100%');
 
   const divBox = select(element)
     .selectAll('div')
@@ -103,5 +103,5 @@ export function preRenderTree(element, dataTree) {
     .nodeSize([0, positioning.depthSpacing]);
 
   const allNodes = treemap(hierarchy(dataTree));
-  return { svg, divBox, allNodes, positioning, width, height, element, svgBox };
+  return { svg, divBox, allNodes, positioning, width, height, element };
 }
