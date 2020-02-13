@@ -7,7 +7,6 @@ import transform from './transform';
 const filterTree = ({ topId, isExpanded, expandedChildren }, nodeTree) => {
   const topNode = nodeTree.descendants().find(node => node.data.id === topId) || nodeTree;
   const subTree = [];
-  subTree.push(topNode); // self
   if (isExpanded && topNode.children) {
     // children
     topNode.children.forEach(child => {
@@ -23,9 +22,13 @@ const filterTree = ({ topId, isExpanded, expandedChildren }, nodeTree) => {
   if (nodeTree.data.navigationMode === 'free' && topNode.parent) {
     const ancestors = topNode.parent.ancestors();
     ancestors.forEach(ancestor => {
-      subTree.push(ancestor);
       subTree.push(...ancestor.children);
+      if (!ancestor.parent) {
+        subTree.push(ancestor);
+      }
     });
+  } else {
+    subTree.push(topNode); // self
   }
   return subTree;
 };
