@@ -3,7 +3,7 @@ const artifacts = {
 };
 
 describe('should render', () => {
-  const content = '.nebulajs-sn';
+  const content = '.sn-org-chart';
   const app = encodeURIComponent(process.env.APP_ID || '/apps/org-chart-test.qvf');
   describe.skip('from app', () => {
     before(async () => {
@@ -19,7 +19,7 @@ describe('should render', () => {
   });
   describe('from snapshot', () => {
     before(async () => {
-      await page.goto(`${process.testServer.url}/render//?snapshot=basic`);
+      await page.goto(`${process.testServer.url}/render/?snapshot=basic`);
       await page.waitForSelector(content, { visible: true });
     });
 
