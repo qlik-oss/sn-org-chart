@@ -8,6 +8,8 @@ import {
   useTheme,
   useSelections,
   useAction,
+  useOptions,
+  useImperativeHandle,
   useConstraints,
 } from '@nebula.js/supernova';
 import properties from './object-properties';
@@ -39,6 +41,8 @@ export default function supernova(env) {
       const model = useModel();
       const element = useElement();
       const Theme = useTheme();
+      const options = useOptions();
+      const [opts] = useState(options);
       const selectionsAPI = useSelections();
       const constraints = useConstraints();
       const [selections] = useState({ api: selectionsAPI, setState: setSelectionState, linked: false });
@@ -111,15 +115,22 @@ export default function supernova(env) {
 
       usePromise(() => {
         // Get and transform the data into a tree structure
-        if (layout) {
-          return treeTransform({ layout, model }).then(transformed => {
-            setDataTree(transformed);
-            setStyling(stylingUtils.cardStyling({ Theme, layout }));
-            setExpandedState(null);
-            setSelectionState([]);
-          });
+        if (!layout) {
+          return Promise.resolve();
         }
-        return Promise.resolve();
+        return treeTransform({ layout, model }).then(transformed => {
+          setDataTree(transformed);
+          setStyling(stylingUtils.cardStyling({ Theme, layout }));
+          setSelectionState([]);
+          const { viewState } = opts;
+          if (viewState && viewState.expandedState) {
+            setExpandedState(viewState.expandedState);
+          } else {
+            setExpandedState(null);
+          }
+          // Resolving the promise to indicate readiness for printing
+          return Promise.resolve();
+        });
       }, [layout, model]);
 
       // This one can split up. Only need to get new height/width when rect is changed
@@ -159,6 +170,17 @@ export default function supernova(env) {
           setZooming(objectData);
         }
       }, [objectData]);
+
+      useImperativeHandle(
+        () => ({
+          getViewState() {
+            return {
+              expandedState,
+            };
+          },
+        }),
+        [expandedState]
+      );
     },
     ext: ext(env),
   };
