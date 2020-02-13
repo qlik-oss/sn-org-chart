@@ -63,22 +63,25 @@ export default function box(
 ) {
   const { cardWidth, cardHeight, buttonWidth, buttonHeight, buttonMargin, rootDiameter } = constants;
   const { topId, isExpanded } = expandedState;
-  function getStyle(d) {
-    if (d.data.id === 'Root') {
-      return `top:${y(d) + cardHeight + buttonMargin + buttonHeight - rootDiameter}px;left:${x(d) +
-        (cardWidth - rootDiameter) / 2}px`;
-    }
-    return `width:${cardWidth}px;height:${cardHeight}px; top:${y(d)}px;left:${x(d)}px;`;
-  }
+
+  // dummy root
+  divBox
+    .selectAll('.sn-org-nodes')
+    .data(nodes.filter(node => node.parent && node.parent.data.id === 'Root'))
+    .enter()
+    .append('div')
+    .attr('class', 'sn-org-root')
+    .attr('style', d => `top:${y(d) - rootDiameter - buttonMargin}px;left:${x(d) + (cardWidth - rootDiameter) / 2}px`)
+    .attr('id', d => d.data.id);
 
   // cards
   divBox
     .selectAll('.sn-org-nodes')
-    .data(nodes)
+    .data(nodes.filter(node => node.data.id !== 'Root'))
     .enter()
     .append('div')
     .attr('class', 'sn-org-card')
-    .attr('style', getStyle)
+    .attr('style', d => `width:${cardWidth}px;height:${cardHeight}px; top:${y(d)}px;left:${x(d)}px;`)
     .attr('id', d => d.data.id)
     .on('click', node => {
       if (allowInteractions && node.data.id !== 'Root') {

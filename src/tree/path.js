@@ -8,7 +8,7 @@ export function getPoints(d, topId, { depthSpacing, isVertical, x, y }) {
   const halfCard = { x: cardWidth / 2, y: cardHeight / 2 };
   const start = { x: x(d), y: y(d) };
 
-  if (d.parent && d.data.id !== topId) {
+  if (d.parent && d.parent.data.id !== 'Root' && d.data.id !== topId) {
     const halfDepth = depthSpacing / 2;
     const end = { x: x(d.parent) + halfCard.x, y: y(d.parent) + cardHeight + buttonMargin + buttonHeight };
 
@@ -56,7 +56,7 @@ export function getPoints(d, topId, { depthSpacing, isVertical, x, y }) {
       );
     }
   } else if (d.parent) {
-    // to up button
+    // to up button or dummy root
     points.push([
       { x: start.x + halfCard.x, y: start.y },
       { x: start.x + halfCard.x, y: start.y - buttonMargin },
