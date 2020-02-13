@@ -58,13 +58,15 @@ export default function box(
   expandedState,
   setStateCallback,
   selectionState,
-  sel
+  sel,
+  allowInteractions
 ) {
   const { cardWidth, cardHeight, buttonWidth, buttonHeight, buttonMargin, rootDiameter } = constants;
   const { topId, isExpanded } = expandedState;
   function getStyle(d) {
     if (d.data.id === 'Root') {
-      return `top:${y(d) + cardHeight - rootDiameter}px;left:${x(d) + (cardWidth - rootDiameter) / 2}px`;
+      return `top:${y(d) + cardHeight + buttonMargin + buttonHeight - rootDiameter}px;left:${x(d) +
+        (cardWidth - rootDiameter) / 2}px`;
     }
     return `width:${cardWidth}px;height:${cardHeight}px; top:${y(d)}px;left:${x(d)}px;`;
   }
@@ -79,7 +81,7 @@ export default function box(
     .attr('style', getStyle)
     .attr('id', d => d.data.id)
     .on('click', node => {
-      if (node.data.id !== 'Root') {
+      if (allowInteractions && node.data.id !== 'Root') {
         selections.select(node, sel, selectionState);
       }
     })
@@ -88,7 +90,7 @@ export default function box(
   // expand/collapse
   divBox
     .selectAll('.sn-org-nodes')
-    .data(nodes.filter(node => !!node.children))
+    .data(nodes.filter(node => !!node.children && node.data.id !== 'Root'))
     .enter()
     .append('div')
     .attr('class', 'sn-org-traverse')
@@ -100,7 +102,9 @@ export default function box(
     )
     .attr('id', d => `${d.data.id}-expand`)
     .on('click', d => {
-      setStateCallback(getNewState(d, expandedState));
+      if (allowInteractions) {
+        setStateCallback(getNewState(d, expandedState));
+      }
     })
     .html(d => `${getSign(d, expandedState)} ${d.data.children.length}`);
 
@@ -119,7 +123,9 @@ export default function box(
     )
     .attr('id', d => `${d.data.id}-up`)
     .on('click', d => {
-      setStateCallback(getNewUpState(d, isExpanded));
+      if (allowInteractions) {
+        setStateCallback(getNewUpState(d, isExpanded));
+      }
     })
     .html('↑');
 }

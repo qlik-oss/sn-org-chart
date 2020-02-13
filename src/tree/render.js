@@ -29,6 +29,7 @@ export const paintTree = ({
   setStateCallback,
   selections,
   selectionState,
+  constraints,
   useTransitions,
 }) => {
   const { svg, divBox, allNodes, positioning, width, height } = objectData;
@@ -38,7 +39,17 @@ export const paintTree = ({
   // filter the nodes the nodes
   const nodes = filterTree(expandedState, allNodes, setStateCallback);
   // Create cards and naviagation buttons
-  box(positioning, divBox, nodes, styling, expandedState, setStateCallback, selectionState, selections);
+  box(
+    positioning,
+    divBox,
+    nodes,
+    styling,
+    expandedState,
+    setStateCallback,
+    selectionState,
+    selections,
+    !constraints.active
+  );
   // Create the lines (links) between the nodes
   const node = svg
     .selectAll('.sn-org-paths')
@@ -86,8 +97,8 @@ export function preRenderTree(element, dataTree) {
     .enter()
     .append('svg')
     .attr('class', 'sn-org-svg')
-    .attr('width', width)
-    .attr('height', height);
+    .attr('width', '100%')
+    .attr('height', '100%');
 
   const divBox = select(element)
     .selectAll('div')
