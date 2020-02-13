@@ -8,6 +8,7 @@ import {
   useTheme,
   useSelections,
   useAction,
+  useConstraints,
 } from '@nebula.js/supernova';
 import properties from './object-properties';
 import data from './data';
@@ -39,6 +40,7 @@ export default function supernova(env) {
       const element = useElement();
       const Theme = useTheme();
       const selectionsAPI = useSelections();
+      const constraints = useConstraints();
       const [selections] = useState({ api: selectionsAPI, setState: setSelectionState, linked: false });
 
       const resetSelections = () => {
@@ -146,6 +148,7 @@ export default function supernova(env) {
             setStateCallback,
             selections,
             selectionState,
+            constraints,
             useTransitions: expandedState.useTransitions,
           });
         }
