@@ -23,6 +23,10 @@ const properties = {
    */
   footnote: '',
   /**
+   * @type {'regular'|'scroll'|'free'}
+   */
+  navigationMode: 'free',
+  /**
    * @type {object}
    */
   style: {

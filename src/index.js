@@ -3,7 +3,6 @@ import {
   useEffect,
   useElement,
   useModel,
-  useRect,
   useState,
   usePromise,
   useTheme,
@@ -16,6 +15,7 @@ import ext from './extension/ext';
 import { paintTree, preRenderTree } from './tree/render';
 import stylingUtils from './utils/styling';
 import treeTransform from './utils/tree-utils';
+import { setZooming } from './tree/transform';
 import './styles/treeCss.less';
 import './styles/paths.less';
 import './styles/warnings.less';
@@ -37,7 +37,6 @@ export default function supernova(env) {
       const layout = useStaleLayout();
       const model = useModel();
       const element = useElement();
-      const rect = useRect()[0];
       const Theme = useTheme();
       const selectionsAPI = useSelections();
       const [selections] = useState({ api: selectionsAPI, setState: setSelectionState, linked: false });
@@ -136,7 +135,7 @@ export default function supernova(env) {
               });
           }
         }
-      }, [element, dataTree, rect]);
+      }, [element, dataTree]);
 
       useEffect(() => {
         if (objectData && expandedState && styling) {
@@ -151,6 +150,12 @@ export default function supernova(env) {
           });
         }
       }, [expandedState, objectData, selectionState]);
+
+      useEffect(() => {
+        if (objectData && layout.navigationMode === 'free') {
+          setZooming(objectData);
+        }
+      }, [objectData]);
     },
     ext: ext(env),
   };

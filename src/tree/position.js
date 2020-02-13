@@ -1,7 +1,7 @@
 import { haveNoChildren } from '../utils/tree-utils';
 import constants from './size-constants';
 
-export default function position(orientation) {
+export default function position(orientation, element) {
   const { widthMargin, heightMargin, cardWidth, cardHeight, leafMargin, buttonMargin } = constants;
   let widthSpacing;
   let depthSpacing;
@@ -15,8 +15,16 @@ export default function position(orientation) {
       d[axis] = haveNoChildren(d.parent.children)
         ? d.parent[axis] + buttonMargin
         : d.parent[axis] + (d.data.childNumber - (d.parent.children.length - 1) / 2) * widthSpacing;
+    } else if (!d.children) {
+      d[axis] = (element.clientWidth - cardWidth) / 2;
     } else {
-      d[axis] = 0;
+      // In case of zoom mode we need to have the tree moved to the right from the start
+      const neededWidth = (cardWidth + widthMargin) * d.children.length - widthMargin;
+      const zoomFactor = neededWidth / element.clientWidth;
+      d[axis] = (element.clientWidth / 2) * zoomFactor - cardWidth / 2;
+      if (!d.zoomFactor) {
+        d.zoomFactor = zoomFactor;
+      }
     }
 
     return d[axis];

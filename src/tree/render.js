@@ -32,6 +32,7 @@ export const paintTree = ({
   useTransitions,
 }) => {
   const { svg, divBox, allNodes, positioning, width, height } = objectData;
+  const { navigationMode } = allNodes.data;
   divBox.selectAll('*').remove();
   svg.selectAll('*').remove();
   // filter the nodes the nodes
@@ -45,7 +46,9 @@ export const paintTree = ({
     .enter();
   createPaths(node, positioning, expandedState.topId);
   // Scale and translate
-  transform(nodes, width, height, svg, divBox, useTransitions);
+  if (navigationMode !== 'free') {
+    transform(nodes, width, height, svg, divBox, useTransitions);
+  }
 };
 
 export const getSize = ({ error, warn }, element) => {
@@ -59,7 +62,7 @@ export const getSize = ({ error, warn }, element) => {
 export function preRenderTree(element, dataTree) {
   element.innerHTML = '';
   element.className = 'sn-org-chart';
-  const positioning = position('ttb');
+  const positioning = position('ttb', element);
   const { width, height } = getSize(dataTree, element);
 
   if (dataTree.error) {
@@ -100,5 +103,5 @@ export function preRenderTree(element, dataTree) {
     .nodeSize([0, positioning.depthSpacing]);
 
   const allNodes = treemap(hierarchy(dataTree));
-  return { svg, divBox, allNodes, positioning, width, height };
+  return { svg, divBox, allNodes, positioning, width, height, element };
 }
