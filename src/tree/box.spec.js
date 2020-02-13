@@ -28,6 +28,11 @@ describe('box', () => {
       expandedState.isExpanded = false;
       expect(getSign(d, expandedState, [])).to.equal('+');
     });
+    it('should return - not expanded when in ancestor IDs', () => {
+      expandedState.isExpanded = false;
+      d = { data: { id: '1982' } };
+      expect(getSign(d, expandedState, ['1982'])).to.equal('-');
+    });
   });
 
   describe('getNewState', () => {
@@ -92,6 +97,18 @@ describe('box', () => {
       expectedState.topId = '2';
       expectedState.expandedChildren = ['3'];
       expect(getNewState(d, expandedState, [])).to.deep.equal(expectedState);
+    });
+    it('should return ancestor state', () => {
+      expectedState.topId = '777';
+      expectedState.isExpanded = false;
+      d = { data: { id: '777' } };
+      expect(getNewState(d, expandedState, ['777'])).to.deep.equal(expectedState);
+    });
+
+    it('should return parent of ancestor state', () => {
+      expectedState.topId = '888';
+      d = { data: { id: '777' }, parent: { data: { id: '888' } } };
+      expect(getNewState(d, expandedState, ['777', '888'])).to.deep.equal(expectedState);
     });
   });
 

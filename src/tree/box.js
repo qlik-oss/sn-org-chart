@@ -22,8 +22,8 @@ export const getNewState = (d, { topId, isExpanded, expandedChildren }, ancestor
     expandedChildren = [];
   } else if (ancestorIds.includes(d.data.id)) {
     // ancestors
-    topId = d.data.id;
-    isExpanded = false;
+    topId = d.parent ? d.parent.data.id : d.data.id;
+    isExpanded = !!d.parent;
     expandedChildren = [];
   } else if (d.parent.data.id === topId) {
     // children
