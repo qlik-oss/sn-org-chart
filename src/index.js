@@ -47,13 +47,18 @@ export default function supernova(env) {
       };
       useEffect(() => {
         selections.api = selectionsAPI;
-        selections.api.on('canceled', resetSelections);
-        selections.api.on('cleared', resetSelections);
+        if (selections.api) {
+          selections.api.on('deactivated', resetSelections);
+          selections.api.on('canceled', resetSelections);
+          selections.api.on('cleared', resetSelections);
+        }
         // Return function called on unmount
         return () => {
-          selections.api.removeListener('deactivated', resetSelections);
-          selections.api.removeListener('canceled', resetSelections);
-          selections.api.removeListener('cleared', resetSelections);
+          if (selections.api) {
+            selections.api.removeListener('deactivated', resetSelections);
+            selections.api.removeListener('canceled', resetSelections);
+            selections.api.removeListener('cleared', resetSelections);
+          }
         };
       }, [selectionsAPI]);
 
