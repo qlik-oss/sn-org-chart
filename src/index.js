@@ -99,19 +99,21 @@ export default function supernova(env) {
 
       usePromise(() => {
         // Get and transform the data into a tree structure
-        if (layout) {
-          return treeTransform({ layout, model }).then(transformed => {
-            setDataTree(transformed);
-            setStyling(stylingUtils.cardStyling({ Theme, layout }));
-            const { viewState } = opts;
-            if (viewState && viewState.expandedState) {
-              setExpandedState(viewState.expandedState);
-            } else {
-              setExpandedState(null);
-            }
-          });
+        if (!layout) {
+          return Promise.resolve();
         }
-        return Promise.resolve();
+        return treeTransform({ layout, model }).then(transformed => {
+          setDataTree(transformed);
+          setStyling(stylingUtils.cardStyling({ Theme, layout }));
+          const { viewState } = opts;
+          if (viewState && viewState.expandedState) {
+            setExpandedState(viewState.expandedState);
+          } else {
+            setExpandedState(null);
+          }
+          // Resolving the promise to indicate readiness for printing
+          return Promise.resolve();
+        });
       }, [layout, model]);
 
       // This one can split up. Only need to get new height/width when rect is changed
