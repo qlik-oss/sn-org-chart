@@ -81,12 +81,6 @@ describe('card', () => {
       selections = { api: { isActive: () => false } };
     });
 
-    it('should return html for root node', () => {
-      data.id = 'Root';
-      const result = card(data, cardStyling, selections);
-      expect(result).to.equal('<div class="sn-org-root"/>');
-    });
-
     it('should return html for node with only id', () => {
       const result = card(data, cardStyling, selections);
       expect(result).to.equal(getHtml(`<div class="sn-org-card-title">${data.id}</div>`));

@@ -78,7 +78,7 @@ export default function box(
   // cards
   divBox
     .selectAll('.sn-org-nodes')
-    .data(nodes)
+    .data(nodes.filter(node => node.parent && node.data.id !== 'Root'))
     .enter()
     .append('div')
     .attr('class', 'sn-org-card')
