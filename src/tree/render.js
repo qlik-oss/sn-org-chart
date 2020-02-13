@@ -19,6 +19,14 @@ const filterTree = ({ topId, isExpanded, expandedChildren }, nodeTree) => {
       }
     });
   }
+
+  if (nodeTree.data.navigationMode === 'free' && topNode.parent) {
+    const ancestors = topNode.parent.ancestors();
+    ancestors.forEach(ancestor => {
+      subTree.push(ancestor);
+      subTree.push(...ancestor.children);
+    });
+  }
   return subTree;
 };
 
@@ -37,7 +45,7 @@ export const paintTree = ({
   divBox.selectAll('*').remove();
   svg.selectAll('*').remove();
   // filter the nodes the nodes
-  const nodes = filterTree(expandedState, allNodes, setStateCallback);
+  const nodes = filterTree(expandedState, allNodes);
   // Create cards and naviagation buttons
   box(
     positioning,
@@ -48,7 +56,8 @@ export const paintTree = ({
     setStateCallback,
     selectionState,
     selections,
-    !constraints.active
+    !constraints.active,
+    navigationMode
   );
   // Create the lines (links) between the nodes
   const node = svg
