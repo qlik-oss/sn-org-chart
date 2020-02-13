@@ -1,7 +1,12 @@
 import translations from './translations';
 
 const pageSize = 3300;
-const attributeIDs = { colorByExpression: 'color', labelExpression: 'label', subLabelExpression: 'subLabel', extraLabelExpression: 'extraLabel' };
+const attributeIDs = {
+  colorByExpression: 'color',
+  labelExpression: 'label',
+  subLabelExpression: 'subLabel',
+  extraLabelExpression: 'extraLabel',
+};
 const MAX_DATA = 'max-data-limit';
 const NO_ROOT = 'no_root';
 
@@ -73,7 +78,7 @@ const getDataMatrix = async (layout, model) => {
   let status = '';
 
   // If there seems to be more data, check if it is already loadad or load it
-  if (fullHeight > loadedHeight && dataPages.length === 1) {
+  if (fullHeight > loadedHeight && dataPages.length === 1 && model) {
     status = await fetchPage(
       layout.qHyperCube.qDataPages,
       dataMatrix,
@@ -125,16 +130,34 @@ function getAttributes(indecies, qAttrExps) {
   return attributes;
 }
 
-export function areAllLeafs(children) {
-  for (let i = 0; i < children.length; ++i) {
-    if (children[i].children !== undefined) {
+export function getAllTreeElemNo(node, activate) {
+  const idList = [];
+  const pushChildrenIds = currentNode => {
+    currentNode.children.forEach(child => {
+      child.data.selected = activate;
+      idList.push(child.data.elemNo);
+      if (child.children && child.children.length > 0) {
+        pushChildrenIds(child);
+      }
+    });
+  };
+  node.children && pushChildrenIds(node);
+  return idList;
+}
+
+export function haveNoChildren(nodes) {
+  if (!nodes) {
+    return true;
+  }
+  for (let i = 0; i < nodes.length; ++i) {
+    if (nodes[i].children !== undefined) {
       return false;
     }
   }
   return true;
 }
 
-export function createNodes(matrix, attributeIndecies, status) {
+export function createNodes(matrix, attributeIndecies, status, navigationMode) {
   const nodeMap = {};
   const allNodes = [];
   for (let i = 0; i < matrix.length; ++i) {
@@ -181,6 +204,7 @@ export function createNodes(matrix, attributeIndecies, status) {
 
   if (rootNodes.length === 1) {
     rootNodes[0].warn = warn;
+    rootNodes[0].navigationMode = navigationMode;
     return rootNodes[0];
   }
 
@@ -192,6 +216,7 @@ export function createNodes(matrix, attributeIndecies, status) {
     isDummy: true, // Should be rendered in a specific way?
     warn,
     children: rootNodes,
+    navigationMode,
   };
 
   rootNodes.forEach((node, i) => {
@@ -224,5 +249,5 @@ export default async function transform({ layout, model }) {
     return null;
   }
 
-  return createNodes(dataMatrix, attributeIndecies, status);
+  return createNodes(dataMatrix, attributeIndecies, status, layout.navigationMode);
 }

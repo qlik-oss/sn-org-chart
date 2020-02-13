@@ -1,53 +1,54 @@
 import { hierarchy, tree, select } from 'd3';
 import position from './position';
 import box from './box';
-import path from './path';
-import '../treeCss.css';
+import createPaths from './path';
 import transform from './transform';
 
-// Constants for the tree. Might be variables later in property panel
-const nodeSize = { width: 300, height: 100 };
-const orientation = 'ttb';
-const isVertical = orientation === 'ttb' || orientation === 'btt';
-
-const filterTree = (id, nodeTree) => {
-  const nodes = nodeTree.descendants();
-  const currentNode = nodes.find(node => node.data.id === id);
-
-  // Only build the current view (three levels of hiearchy)
-  // eslint-disable-next-line arrow-body-style
-  return nodes.filter(node => {
-    return (
-      currentNode.data.id === node.data.id ||
-      (currentNode.parent && node.data.id === currentNode.parent.data.id) ||
-      (currentNode.parent && node.parent && node.parent.data.id === currentNode.parent.data.id) ||
-      (node.parent && node.parent.data.id === currentNode.data.id)
-    );
-  });
+const filterTree = ({ topId, isExpanded, expandedChildren }, nodeTree) => {
+  const topNode = nodeTree.descendants().find(node => node.data.id === topId) || nodeTree;
+  const subTree = [];
+  subTree.push(topNode); // self
+  if (isExpanded && topNode.children) {
+    // children
+    topNode.children.forEach(child => {
+      subTree.push(child);
+      if (child.children && expandedChildren.indexOf(child.data.id) !== -1) {
+        child.children.forEach(grandChild => {
+          subTree.push(grandChild);
+        });
+      }
+    });
+  }
+  return subTree;
 };
 
-export const paintTree = ({ objectData, activeNode, styling, setActiveCallback }) => {
+export const paintTree = ({
+  objectData,
+  expandedState,
+  styling,
+  setStateCallback,
+  selections,
+  selectionState,
+  useTransitions,
+}) => {
   const { svg, divBox, allNodes, positioning, width, height, tooltip } = objectData;
-  divBox.selectAll('.node-rect').remove();
-  divBox.selectAll('.tooltip').remove();
-  svg.selectAll('g').remove();
-  const nodes = filterTree(activeNode, allNodes);
-  // create the nodes
-  const node = svg
-    .selectAll('.node')
-    .data(nodes)
-    .enter()
-    .append('g')
-    .attr('class', 'nodeWrapper')
-    .attr('id', d => d.data.id);
-  // Create cards
-  box(divBox, tooltip, positioning, nodes, styling, id => {
-    setActiveCallback(id);
-  });
+  const { navigationMode } = allNodes.data;
+  divBox.selectAll('*').remove();
+  svg.selectAll('*').remove();
+  // filter the nodes the nodes
+  const nodes = filterTree(expandedState, allNodes, setStateCallback);
+  // Create cards and naviagation buttons
+  box(positioning, divBox, tooltip, nodes, styling, expandedState, setStateCallback, selectionState, selections);
   // Create the lines (links) between the nodes
-  path(node, positioning, isVertical);
+  const node = svg
+    .selectAll('.sn-org-paths')
+    .data(nodes)
+    .enter();
+  createPaths(node, positioning, expandedState.topId);
   // Scale and translate
-  transform(nodes, nodeSize, width, height, svg, divBox);
+  if (navigationMode !== 'free') {
+    transform(nodes, width, height, svg, divBox, useTransitions);
+  }
 };
 
 export const getSize = ({ error, warn }, element) => {
@@ -59,15 +60,15 @@ export const getSize = ({ error, warn }, element) => {
 };
 
 export function preRenderTree(element, dataTree) {
-  // eslint-disable-next-line no-param-reassign
   element.innerHTML = '';
-  const positioning = position(orientation, nodeSize);
+  element.className = 'sn-org-chart';
+  const positioning = position('ttb', element);
   const { width, height } = getSize(dataTree, element);
 
   if (dataTree.error) {
     select(element)
       .append('div')
-      .attr('class', 'org-error')
+      .attr('class', 'sn-org-error')
       .html(dataTree.message);
     return false;
   }
@@ -75,7 +76,7 @@ export function preRenderTree(element, dataTree) {
   if (dataTree.warn && dataTree.warn.length) {
     select(element)
       .append('span')
-      .attr('class', 'org-warning')
+      .attr('class', 'sn-org-warning')
       .html(`*${dataTree.warn.join(' ')}`);
   }
 
@@ -84,7 +85,7 @@ export function preRenderTree(element, dataTree) {
     .data([{}])
     .enter()
     .append('svg')
-    .attr('style', 'position:absolute')
+    .attr('class', 'sn-org-svg')
     .attr('width', width)
     .attr('height', height);
 
@@ -93,21 +94,21 @@ export function preRenderTree(element, dataTree) {
     .data([{}])
     .enter()
     .append('div')
-    .attr('class', 'org-node-holder');
+    .attr('class', 'sn-org-nodes');
 
   const tooltip = select(element)
-    .selectAll('.tooltip')
+    .selectAll('.sn-org-tooltip')
     .data([{}])
     .enter()
     .append('div')
-    .attr('class', 'tooltip');
+    .attr('class', 'sn-org-tooltip');
 
-  const svg = svgBox.append('g').attr('class', 'org-path-holder');
+  const svg = svgBox.append('g').attr('class', 'sn-org-paths');
   // Here are the settings for the tree. For instance nodesize can be adjusted
   const treemap = tree()
     .size([width, height])
     .nodeSize([0, positioning.depthSpacing]);
 
   const allNodes = treemap(hierarchy(dataTree));
-  return { svg, divBox, allNodes, positioning, width, height, tooltip };
+  return { svg, divBox, allNodes, positioning, width, height, element, tooltip };
 }

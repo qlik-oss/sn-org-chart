@@ -1,4 +1,5 @@
-import { createNodes, areAllLeafs } from '../tree-utils';
+import { createNodes, haveNoChildren, getAllTreeElemNo } from '../tree-utils';
+import defaultValues from '../../__tests__/default-orgchart-props';
 
 function generateMatrix(numRows, childCount = 1) {
   const matrix = [];
@@ -36,19 +37,36 @@ describe('tree-utils', () => {
     });
   });
 
-  describe('areAllLeafs', () => {
-    const children = [{}, {}];
+  describe('haveNoChildren', () => {
+    const nodes = [{}, {}];
+    it('should return true for undifined input', () => {
+      expect(haveNoChildren(undefined)).to.be.true;
+    });
     it('should return true for array with only leafs', () => {
-      expect(areAllLeafs(children)).to.be.true;
+      expect(haveNoChildren(nodes)).to.be.true;
     });
 
     it('should return false for array that contains at least one node with children', () => {
-      children[0].children = [{}];
-      expect(areAllLeafs(children)).to.be.false;
+      nodes[0].children = [{}];
+      expect(haveNoChildren(nodes)).to.be.false;
     });
   });
   // Tests to add
   // should check for cycles and output something
   // should handle orphans
   // should handle multiple roots
+
+  describe('getAllTreeElemNo', () => {
+    it('should return all ids in tree and activate', () => {
+      const result = getAllTreeElemNo(defaultValues.nodes, true);
+      expect(result).to.deep.equal([2, 3, 798, 88]);
+      expect(defaultValues.nodes.children[0].data.selected).to.equal(true);
+    });
+
+    it('should return all ids in tree and de-activate', () => {
+      const result = getAllTreeElemNo(defaultValues.nodes, false);
+      expect(result).to.deep.equal([2, 3, 798, 88]);
+      expect(defaultValues.nodes.children[0].data.selected).to.equal(false);
+    });
+  });
 });

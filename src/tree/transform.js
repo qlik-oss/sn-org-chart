@@ -1,4 +1,8 @@
-const getBBoxOfNodes = (nodes, nodeSize) => {
+import { select, zoom, event, zoomIdentity } from 'd3';
+import constants from './size-constants';
+
+const getBBoxOfNodes = nodes => {
+  const { cardWidth, cardHeight, buttonHeight, buttonMargin } = constants;
   const bbox = {
     left: Infinity,
     top: Infinity,
@@ -13,15 +17,58 @@ const getBBoxOfNodes = (nodes, nodeSize) => {
   });
   return {
     x: bbox.left,
-    y: bbox.top,
-    width: bbox.right - bbox.left + nodeSize.width,
-    height: bbox.bottom - bbox.top + nodeSize.height,
+    y: bbox.top - buttonHeight - buttonMargin,
+    width: bbox.right - bbox.left + cardWidth,
+    height: bbox.bottom - bbox.top + cardHeight + (buttonHeight + buttonMargin) * 2,
   };
 };
 
-export default function transform(nodes, nodeSize, width, height, svg, divBox) {
+export function applyTransform(eventTransform, svg, divBox, width, height) {
+  const scaleFactor = eventTransform.k;
+  const translation = `${eventTransform.x}px, ${eventTransform.y}px`;
+
+  svg.attr('transform', eventTransform);
+  divBox.classed('org-disable-transition', true);
+  svg.classed('org-disable-transition', true);
+
+  divBox.attr(
+    'style',
+    `width:${width}px;height:${height}px; transform: translate(${translation}) scale(${scaleFactor})`
+  );
+}
+
+export function setZooming(objectData) {
+  const { svg, divBox, width, height, element, allNodes } = objectData;
+  const maxZoom = 6;
+  const minZoom = 0.2;
+  const scaleFactor = Math.max(Math.min(maxZoom, allNodes.zoomFactor), minZoom);
+
+  const zoomed = () => {
+    applyTransform(
+      zoomIdentity.translate(event.transform.x, event.transform.y).scale(event.transform.k / scaleFactor),
+      svg,
+      divBox,
+      width,
+      height
+    );
+  };
+
+  select(element).call(
+    zoom()
+      .extent([
+        [0, 0],
+        [width, height],
+      ])
+      .scaleExtent([minZoom, maxZoom])
+      .on('zoom', zoomed)
+  );
+
+  applyTransform(zoomIdentity.translate(0, 0).scale(1 / scaleFactor), svg, divBox, width, height);
+}
+
+export default function transform(nodes, width, height, svg, divBox, useTransitions) {
   // Zooming and positioning of the tree
-  const bBox = getBBoxOfNodes(nodes, nodeSize);
+  const bBox = getBBoxOfNodes(nodes);
   const scaleToWidhth = bBox.width / width > bBox.height / height;
   const scaleFactor = scaleToWidhth ? bBox.width / width : bBox.height / height;
   const translation = scaleToWidhth
@@ -41,13 +88,13 @@ export default function transform(nodes, nodeSize, width, height, svg, divBox) {
   } else {
     // Transition using css, does not work in IE11
     svg.attr('style', `transform: scale(${1 / scaleFactor}) translate(${translation});`);
-    divBox.classed('org-disable-transition', false);
-    svg.classed('org-disable-transition', false);
+    divBox.classed('org-disable-transition', !useTransitions);
+    svg.classed('org-disable-transition', !useTransitions);
   }
 
   divBox.attr(
     'style',
     `width:${width}px;height:${height}px;
-  transform: scale(${1 / scaleFactor}) translate(${translation});`
+      transform: scale(${1 / scaleFactor}) translate(${translation});`
   );
 }
