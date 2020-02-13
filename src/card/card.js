@@ -18,10 +18,6 @@ export function getFontColor(cardStyling, backgroundColor) {
 
 export default (data, cardStyling, sel, selectionState) => {
   const selections = sel.api;
-  if (data.id === 'Root') {
-    return '';
-  }
-
   const isSelected = selections && selections.isActive() && selectionState.indexOf(data.elemNo) !== -1;
   const backgroundColor = getBackgroundColor(data, cardStyling);
   const topColor = colorUtils.getDarkColor(backgroundColor);
