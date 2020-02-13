@@ -1,3 +1,4 @@
+import { select, zoom, event, zoomIdentity } from 'd3';
 import constants from './size-constants';
 
 const getBBoxOfNodes = nodes => {
@@ -21,6 +22,49 @@ const getBBoxOfNodes = nodes => {
     height: bbox.bottom - bbox.top + cardHeight + (buttonHeight + buttonMargin) * 2,
   };
 };
+
+export function applyTransform(eventTransform, svg, divBox, width, height) {
+  const scaleFactor = eventTransform.k;
+  const translation = `${eventTransform.x}px, ${eventTransform.y}px`;
+
+  svg.attr('transform', eventTransform);
+  divBox.classed('org-disable-transition', true);
+  svg.classed('org-disable-transition', true);
+
+  divBox.attr(
+    'style',
+    `width:${width}px;height:${height}px; transform: translate(${translation}) scale(${scaleFactor})`
+  );
+}
+
+export function setZooming(objectData) {
+  const { svg, divBox, width, height, element, allNodes } = objectData;
+  const maxZoom = 6;
+  const minZoom = 0.2;
+  const scaleFactor = Math.max(Math.min(maxZoom, allNodes.zoomFactor), minZoom);
+
+  const zoomed = () => {
+    applyTransform(
+      zoomIdentity.translate(event.transform.x, event.transform.y).scale(event.transform.k / scaleFactor),
+      svg,
+      divBox,
+      width,
+      height
+    );
+  };
+
+  select(element).call(
+    zoom()
+      .extent([
+        [0, 0],
+        [width, height],
+      ])
+      .scaleExtent([minZoom, maxZoom])
+      .on('zoom', zoomed)
+  );
+
+  applyTransform(zoomIdentity.translate(0, 0).scale(1 / scaleFactor), svg, divBox, width, height);
+}
 
 export default function transform(nodes, width, height, svg, divBox, useTransitions) {
   // Zooming and positioning of the tree
@@ -51,6 +95,6 @@ export default function transform(nodes, width, height, svg, divBox, useTransiti
   divBox.attr(
     'style',
     `width:${width}px;height:${height}px;
-  transform: scale(${1 / scaleFactor}) translate(${translation});`
+      transform: scale(${1 / scaleFactor}) translate(${translation});`
   );
 }
