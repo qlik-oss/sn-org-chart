@@ -103,5 +103,5 @@ export function preRenderTree(element, dataTree) {
     .nodeSize([0, positioning.depthSpacing]);
 
   const allNodes = treemap(hierarchy(dataTree));
-  return { svg, divBox, allNodes, positioning, width, height, element };
+  return { svg, divBox, allNodes, positioning, width, height, element, svgBox };
 }
