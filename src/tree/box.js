@@ -121,7 +121,7 @@ export default function box(
     .html(d => `${getSign(d, expandedState, ancestorIds)} ${d.data.children.length}`);
 
   // go up
-  if (navigationMode === 'free') {
+  if (navigationMode !== 'free') {
     divBox
       .selectAll('.sn-org-nodes')
       .data(nodes.filter(node => node.data.id === topId && node.parent))
