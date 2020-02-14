@@ -71,7 +71,9 @@ export default function box(
   }
 
   function getTooltipStyle(d) {
-    return `top:${y(d) - cardHeight}px;left:${x(d) + cardWidth / 3}px;visibility: visible;opacity: 0.9;`;
+    const halfCardWidth = cardWidth / 2;
+    const halfTooltipWidth = 240 / 2;
+    return `top:${(y(d)) * sel.zoom.zoom + sel.zoom.y - 85}px;left:${x(d) * sel.zoom.zoom + sel.zoom.x - (halfTooltipWidth - (halfCardWidth * sel.zoom.zoom))}px;visibility: visible;opacity: 0.9;`;
   }
 
   // cards
@@ -89,12 +91,17 @@ export default function box(
       }
     })
     .html(d => card(d.data, cardStyling, sel, selectionState))
-    .on('mouseover', d => {
+    .on('mouseenter', d => {
       tooltip
         .html(`${d.data.attributes.label || d.data.id}<br />${d.data.attributes.subLabel || ''}<br />${d.data.attributes.extraLabel || ''}<br />${d.data.measure || ''}`)
         .attr('style', () => getTooltipStyle(d));
     })
-    .on('mouseout', () => {
+    .on('mouseleave', () => {
+      tooltip
+        .html('')
+        .attr('style', 'visibility: hidden;opacity: 0;');
+    })
+    .on('mousedown', () => {
       tooltip
         .html('')
         .attr('style', 'visibility: hidden;opacity: 0;');

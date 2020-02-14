@@ -37,13 +37,18 @@ export function applyTransform(eventTransform, svg, divBox, width, height) {
   );
 }
 
-export function setZooming(objectData) {
+export function setZooming(objectData, settingZoom) {
   const { svg, divBox, width, height, element, allNodes } = objectData;
   const maxZoom = 6;
   const minZoom = 0.2;
   const scaleFactor = Math.max(Math.min(maxZoom, allNodes.zoomFactor), minZoom);
 
   const zoomed = () => {
+    settingZoom({
+      zoom: event.transform.k / scaleFactor,
+      x: event.transform.x,
+      y: event.transform.y,
+    });
     applyTransform(
       zoomIdentity.translate(event.transform.x, event.transform.y).scale(event.transform.k / scaleFactor),
       svg,
@@ -62,7 +67,11 @@ export function setZooming(objectData) {
       .scaleExtent([minZoom, maxZoom])
       .on('zoom', zoomed)
   );
-
+  settingZoom({
+    zoom: 1 / scaleFactor,
+    x: 0,
+    y: 0,
+  });
   applyTransform(zoomIdentity.translate(0, 0).scale(1 / scaleFactor), svg, divBox, width, height);
 }
 

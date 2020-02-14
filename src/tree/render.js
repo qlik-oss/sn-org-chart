@@ -29,7 +29,7 @@ export const paintTree = ({
   setStateCallback,
   selections,
   selectionState,
-  useTransitions,
+  useTransitions
 }) => {
   const { svg, divBox, allNodes, positioning, width, height, tooltip } = objectData;
   const { navigationMode } = allNodes.data;

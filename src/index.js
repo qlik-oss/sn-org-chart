@@ -34,12 +34,13 @@ export default function supernova(env) {
       const [expandedState, setExpandedState] = useState(null);
       const [linked, setLinked] = useState(false);
       const [selectionState, setSelectionState] = useState([]);
+      const [zoomState, setZoomState] = useState(null);
       const layout = useStaleLayout();
       const model = useModel();
       const element = useElement();
       const Theme = useTheme();
       const selectionsAPI = useSelections();
-      const [selections] = useState({ api: selectionsAPI, setState: setSelectionState, linked: false });
+      const [selections] = useState({ api: selectionsAPI, setState: setSelectionState, linked: false, zoom: {} });
 
       const resetSelections = () => {
         setSelectionState([]);
@@ -55,6 +56,10 @@ export default function supernova(env) {
           selections.api.removeListener('cleared', resetSelections);
         };
       }, [selectionsAPI]);
+
+      useEffect(() => {
+        selections.zoom = zoomState;
+      }, [zoomState]);
 
       useAction(
         () => ({
@@ -146,14 +151,14 @@ export default function supernova(env) {
             setStateCallback,
             selections,
             selectionState,
-            useTransitions: expandedState.useTransitions,
+            useTransitions: expandedState.useTransitions
           });
         }
       }, [expandedState, objectData, selectionState]);
 
       useEffect(() => {
         if (objectData && layout.navigationMode === 'free') {
-          setZooming(objectData);
+          setZooming(objectData, setZoomState);
         }
       }, [objectData]);
     },
