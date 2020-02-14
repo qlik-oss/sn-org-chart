@@ -165,11 +165,11 @@ export default function supernova(env) {
             useTransitions: expandedState.useTransitions,
           });
         }
-      }, [expandedState, objectData, selectionState]);
+      }, [expandedState, objectData, selectionState, constraints]);
 
       useEffect(() => {
         if (objectData && layout.navigationMode === 'free') {
-          setZooming(objectData, constraints);
+          setZooming(objectData, !constraints.active);
         }
       }, [objectData, constraints]);
 

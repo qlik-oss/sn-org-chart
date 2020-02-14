@@ -37,14 +37,14 @@ export function applyTransform(eventTransform, svg, divBox, width, height) {
   );
 }
 
-export function setZooming(objectData, constraints) {
+export function setZooming(objectData, allowInteractions) {
   const { svg, divBox, width, height, element, allNodes } = objectData;
   const maxZoom = 6;
   const minZoom = 0.2;
   const scaleFactor = Math.max(Math.min(maxZoom, allNodes.zoomFactor), minZoom);
 
   const zoomed = () => {
-    if (constraints.active) {
+    if (allowInteractions) {
       applyTransform(
         zoomIdentity.translate(event.transform.x, event.transform.y).scale(event.transform.k / scaleFactor),
         svg,
