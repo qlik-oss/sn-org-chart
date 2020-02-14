@@ -8,6 +8,7 @@ import {
   useTheme,
   useSelections,
   useAction,
+  onTakeSnapshot,
   useOptions,
   useImperativeHandle,
   useConstraints,
@@ -18,6 +19,7 @@ import ext from './extension/ext';
 import { paintTree, preRenderTree } from './tree/render';
 import stylingUtils from './utils/styling';
 import treeTransform from './utils/tree-utils';
+import viewStateUtil from './utils/viewstate-utils';
 import { setZooming } from './tree/transform';
 import './styles/treeCss.less';
 import './styles/paths.less';
@@ -51,6 +53,9 @@ export default function supernova(env) {
         setSelectionState([]);
       };
       useEffect(() => {
+        if (!selections.api) {
+          return () => {};
+        }
         selections.api = selectionsAPI;
         selections.api.on('canceled', resetSelections);
         selections.api.on('cleared', resetSelections);
@@ -119,15 +124,12 @@ export default function supernova(env) {
           return Promise.resolve();
         }
         return treeTransform({ layout, model }).then(transformed => {
+          const viewState = viewStateUtil.getViewState(opts, layout);
+          const expState = viewState && viewState.expandedState ? viewState.expandedState : null;
           setDataTree(transformed);
           setStyling(stylingUtils.cardStyling({ Theme, layout }));
           setSelectionState([]);
-          const { viewState } = opts;
-          if (viewState && viewState.expandedState) {
-            setExpandedState(viewState.expandedState);
-          } else {
-            setExpandedState(null);
-          }
+          setExpandedState(expState);
           // Resolving the promise to indicate readiness for printing
           return Promise.resolve();
         });
@@ -163,24 +165,31 @@ export default function supernova(env) {
             useTransitions: expandedState.useTransitions,
           });
         }
-      }, [expandedState, objectData, selectionState]);
+      }, [expandedState, objectData, selectionState, constraints]);
 
       useEffect(() => {
         if (objectData && layout.navigationMode === 'free') {
-          setZooming(objectData);
+          setZooming(objectData, !constraints.active);
         }
-      }, [objectData]);
+      }, [objectData, constraints]);
 
-      useImperativeHandle(
-        () => ({
-          getViewState() {
-            return {
-              expandedState,
-            };
-          },
-        }),
-        [expandedState]
-      );
+      const createViewState = () => {
+        const vs = {
+          expandedState,
+        };
+        vs.expandedState.useTransitions = false;
+        return vs;
+      };
+
+      onTakeSnapshot(snapshotLayout => {
+        snapshotLayout.viewState = createViewState();
+      });
+
+      useImperativeHandle(() => ({
+        getViewState() {
+          return createViewState();
+        },
+      }));
     },
     ext: ext(env),
   };
