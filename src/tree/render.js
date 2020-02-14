@@ -4,7 +4,7 @@ import box from './box';
 import createPaths from './path';
 import transform from './transform';
 
-const filterTree = ({ topId, isExpanded, expandedChildren }, nodeTree) => {
+export const filterTree = ({ topId, isExpanded, expandedChildren }, nodeTree) => {
   const topNode = nodeTree.descendants().find(node => node.data.id === topId) || nodeTree;
   const subTree = [];
   if (isExpanded && topNode.children) {
@@ -22,13 +22,13 @@ const filterTree = ({ topId, isExpanded, expandedChildren }, nodeTree) => {
   if (nodeTree.data.navigationMode === 'free' && topNode.parent) {
     const ancestors = topNode.parent.ancestors();
     ancestors.forEach(ancestor => {
-      subTree.push(...ancestor.children);
+      subTree.unshift(...ancestor.children);
       if (!ancestor.parent) {
-        subTree.push(ancestor);
+        subTree.unshift(ancestor);
       }
     });
   } else {
-    subTree.push(topNode); // self
+    subTree.unshift(topNode); // self
   }
   return subTree;
 };
