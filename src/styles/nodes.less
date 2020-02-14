@@ -2,6 +2,12 @@
   .sn-org-nodes {
     position: absolute;
     transform-origin: 0% 0%;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 
     &:not(.org-disable-transition) {
       transition-property: all;
@@ -19,15 +25,16 @@
       line-height: 24px;
     }
 
+    .sn-org-root {
+      position: absolute;
+      background-color: #8c8c8c;
+      width: 20px;
+      height: 20px;
+      border-radius: 20px;
+    }
+
     .sn-org-card {
       position: absolute;
-      .sn-org-root {
-        background-color: #8c8c8c;
-        width: 20px;
-        height: 20px;
-        border-radius: 20px;
-      }
-
       .sn-org-card-top {
         height: 4px;
         width: 100%;
@@ -38,12 +45,6 @@
         padding-left: 5px;
         padding-right: 5px;
         border-radius: 0px 0px 3px 3px;
-        -webkit-touch-callout: none;
-        -webkit-user-select: none;
-        -khtml-user-select: none;
-        -moz-user-select: none;
-        -ms-user-select: none;
-        user-select: none;
         &.selected {
           border: 4px solid black;
           border-radius: 4px;

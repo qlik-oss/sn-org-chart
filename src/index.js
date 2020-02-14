@@ -8,6 +8,10 @@ import {
   useTheme,
   useSelections,
   useAction,
+  onTakeSnapshot,
+  useOptions,
+  useImperativeHandle,
+  useConstraints,
 } from '@nebula.js/supernova';
 import properties from './object-properties';
 import data from './data';
@@ -15,6 +19,7 @@ import ext from './extension/ext';
 import { paintTree, preRenderTree } from './tree/render';
 import stylingUtils from './utils/styling';
 import treeTransform from './utils/tree-utils';
+import viewStateUtil from './utils/viewstate-utils';
 import { setZooming } from './tree/transform';
 import './styles/treeCss.less';
 import './styles/paths.less';
@@ -39,13 +44,19 @@ export default function supernova(env) {
       const model = useModel();
       const element = useElement();
       const Theme = useTheme();
+      const options = useOptions();
+      const [opts] = useState(options);
       const selectionsAPI = useSelections();
+      const constraints = useConstraints();
       const [selections] = useState({ api: selectionsAPI, setState: setSelectionState, linked: false, zoom: {} });
 
       const resetSelections = () => {
         setSelectionState([]);
       };
       useEffect(() => {
+        if (!selections.api) {
+          return () => {};
+        }
         selections.api = selectionsAPI;
         selections.api.on('canceled', resetSelections);
         selections.api.on('cleared', resetSelections);
@@ -114,15 +125,19 @@ export default function supernova(env) {
 
       usePromise(() => {
         // Get and transform the data into a tree structure
-        if (layout) {
-          return treeTransform({ layout, model }).then(transformed => {
-            setDataTree(transformed);
-            setStyling(stylingUtils.cardStyling({ Theme, layout }));
-            setExpandedState(null);
-            setSelectionState([]);
-          });
+        if (!layout) {
+          return Promise.resolve();
         }
-        return Promise.resolve();
+        return treeTransform({ layout, model }).then(transformed => {
+          const viewState = viewStateUtil.getViewState(opts, layout);
+          const expState = viewState && viewState.expandedState ? viewState.expandedState : null;
+          setDataTree(transformed);
+          setStyling(stylingUtils.cardStyling({ Theme, layout }));
+          setSelectionState([]);
+          setExpandedState(expState);
+          // Resolving the promise to indicate readiness for printing
+          return Promise.resolve();
+        });
       }, [layout, model]);
 
       // This one can split up. Only need to get new height/width when rect is changed
@@ -151,16 +166,35 @@ export default function supernova(env) {
             setStateCallback,
             selections,
             selectionState,
-            useTransitions: expandedState.useTransitions
+            constraints,
+            useTransitions: expandedState.useTransitions,
           });
         }
-      }, [expandedState, objectData, selectionState]);
+      }, [expandedState, objectData, selectionState, constraints]);
 
       useEffect(() => {
         if (objectData && layout.navigationMode === 'free') {
-          setZooming(objectData, setZoomState);
+          setZooming(objectData, setZoomState, !constraints.active);
         }
-      }, [objectData]);
+      }, [objectData, constraints]);
+
+      const createViewState = () => {
+        const vs = {
+          expandedState,
+        };
+        vs.expandedState.useTransitions = false;
+        return vs;
+      };
+
+      onTakeSnapshot(snapshotLayout => {
+        snapshotLayout.viewState = createViewState();
+      });
+
+      useImperativeHandle(() => ({
+        getViewState() {
+          return createViewState();
+        },
+      }));
     },
     ext: ext(env),
   };

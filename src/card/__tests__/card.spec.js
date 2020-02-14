@@ -81,12 +81,6 @@ describe('card', () => {
       selections = { api: { isActive: () => false } };
     });
 
-    it('should return html for root node', () => {
-      data.id = 'Root';
-      const result = card(data, cardStyling, selections);
-      expect(result).to.equal('<div class="sn-org-root"/>');
-    });
-
     it('should return html for node with only id', () => {
       const result = card(data, cardStyling, selections);
       expect(result).to.equal(getHtml(`<div class="sn-org-card-title">${data.id}</div>`));
@@ -94,8 +88,8 @@ describe('card', () => {
 
     it('should return html for node with attribute label', () => {
       data.attributes.label = 'this is the label';
-      const result = card(data, cardStyling);
-      expect(result).to.equal(getHtml(`<div class="org-card-title">${data.attributes.label}</div>`));
+      const result = card(data, cardStyling, selections);
+      expect(result).to.equal(getHtml(`<div class="sn-org-card-title">${data.attributes.label}</div>`));
     });
 
     it('should return html for node with id and subLabel', () => {

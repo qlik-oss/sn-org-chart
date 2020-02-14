@@ -31,6 +31,9 @@ describe('path', () => {
     beforeEach(() => {
       topId = '0';
       parent = {
+        data: {
+          id: '0',
+        },
         xActual: 0,
         yActual: 0,
         children: [{
@@ -128,7 +131,6 @@ describe('path', () => {
 
     it('should return points for line to up button', () => {
       topId = '1';
-      // d.parent = [{}];
       expectedPoints = [
         { x: 376, y: 124 },
         { x: 376, y: 112 }
@@ -144,6 +146,17 @@ describe('path', () => {
         { x: 376, y: 200 }
       ];
       const points = getPoints(d, topId, positioning)[1];
+      expect(points).to.deep.equal(expectedPoints);
+    });
+
+    it('should return points for line to dummy', () => {
+      topId = 'Root';
+      d.parent.data.id = 'Root';
+      expectedPoints = [
+        { x: 376, y: 124 },
+        { x: 376, y: 112 }
+      ];
+      const points = getPoints(d, topId, positioning)[0];
       expect(points).to.deep.equal(expectedPoints);
     });
   });
