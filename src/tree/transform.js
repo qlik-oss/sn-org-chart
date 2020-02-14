@@ -44,15 +44,13 @@ export function setZooming(objectData, allowInteractions) {
   const scaleFactor = Math.max(Math.min(maxZoom, allNodes.zoomFactor), minZoom);
 
   const zoomed = () => {
-    if (allowInteractions) {
-      applyTransform(
-        zoomIdentity.translate(event.transform.x, event.transform.y).scale(event.transform.k / scaleFactor),
-        svg,
-        divBox,
-        width,
-        height
-      );
-    }
+    applyTransform(
+      zoomIdentity.translate(event.transform.x, event.transform.y).scale(event.transform.k / scaleFactor),
+      svg,
+      divBox,
+      width,
+      height
+    );
   };
 
   select(element).call(
@@ -61,6 +59,7 @@ export function setZooming(objectData, allowInteractions) {
         [0, 0],
         [width, height],
       ])
+      .filter(allowInteractions)
       .scaleExtent([minZoom, maxZoom])
       .on('zoom', zoomed)
   );
