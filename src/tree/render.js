@@ -48,7 +48,7 @@ export const paintTree = ({
     setStateCallback,
     selectionState,
     selections,
-    !constraints.active
+    !constraints.active,
   );
   // Create the lines (links) between the nodes
   const node = svg

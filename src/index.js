@@ -165,13 +165,13 @@ export default function supernova(env) {
             useTransitions: expandedState.useTransitions,
           });
         }
-      }, [expandedState, objectData, selectionState]);
+      }, [expandedState, objectData, selectionState, constraints]);
 
       useEffect(() => {
         if (objectData && layout.navigationMode === 'free') {
-          setZooming(objectData);
+          setZooming(objectData, !constraints.active);
         }
-      }, [objectData]);
+      }, [objectData, constraints]);
 
       const createViewState = () => {
         const vs = {
