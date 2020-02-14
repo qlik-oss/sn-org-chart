@@ -88,8 +88,13 @@ export function preRenderTree(element, dataTree) {
   const positioning = position('ttb', element);
   const { width, height } = getSize(dataTree, element);
 
+  const zoomWrapper = select(element)
+    .append('span')
+    .attr('class', 'sn-org-zoomwrapper')
+    .node();
+
   if (dataTree.error) {
-    select(element)
+    select(zoomWrapper)
       .append('div')
       .attr('class', 'sn-org-error')
       .html(dataTree.message);
@@ -97,13 +102,13 @@ export function preRenderTree(element, dataTree) {
   }
 
   if (dataTree.warn && dataTree.warn.length) {
-    select(element)
+    select(zoomWrapper)
       .append('span')
       .attr('class', 'sn-org-warning')
       .html(`*${dataTree.warn.join(' ')}`);
   }
 
-  const svgBox = select(element)
+  const svgBox = select(zoomWrapper)
     .selectAll('svg')
     .data([{}])
     .enter()
@@ -112,7 +117,7 @@ export function preRenderTree(element, dataTree) {
     .attr('width', '100%')
     .attr('height', '100%');
 
-  const divBox = select(element)
+  const divBox = select(zoomWrapper)
     .selectAll('div')
     .data([{}])
     .enter()
@@ -126,5 +131,5 @@ export function preRenderTree(element, dataTree) {
     .nodeSize([0, positioning.depthSpacing]);
 
   const allNodes = treemap(hierarchy(dataTree));
-  return { svg, divBox, allNodes, positioning, width, height, element };
+  return { svg, divBox, allNodes, positioning, width, height, element, zoomWrapper };
 }
