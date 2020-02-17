@@ -67,12 +67,14 @@ export default function box(
   selectionState,
   sel,
   allowInteractions,
+  allowTooltips,
   navigationMode
 ) {
   const { cardWidth, cardHeight, buttonWidth, buttonHeight, buttonMargin, rootDiameter, tooltipWidth, tooltipHeight } = constants;
   const { topId, isExpanded } = expandedState;
   const topNode = nodes.find(node => node.data.id === topId);
   const ancestorIds = topNode.parent ? topNode.parent.ancestors().map(anc => anc.data.id) : [];
+  let timeout;
 
   // dummy root
   divBox
@@ -106,18 +108,28 @@ export default function box(
     })
     .html(d => card(d.data, cardStyling, sel, selectionState))
     .on('mouseenter', d => {
-      if (allowInteractions) {
-        tooltip
-          .html(`${d.data.attributes.label || d.data.id}<br />${d.data.attributes.subLabel || ''}<br />${d.data.attributes.extraLabel || ''}<br />${d.data.measure || ''}`)
-          .attr('style', () => getTooltipStyle(d));
+      if (allowTooltips) {
+        timeout = setTimeout(() => {
+          tooltip
+            .html(`${d.data.attributes.label || d.data.id}<br />${d.data.attributes.subLabel || ''}<br />${d.data.attributes.extraLabel || ''}<br />${d.data.measure || ''}`)
+            .attr('style', () => getTooltipStyle(d));
+        }, 250);
       }
     })
     .on('mouseleave', () => {
+      clearTimeout(timeout);
+      tooltip
+        .html('')
+        .attr('style', 'visibility: hidden;opacity: 0;');
+    })
+    .on('mouseout', () => {
+      clearTimeout(timeout);
       tooltip
         .html('')
         .attr('style', 'visibility: hidden;opacity: 0;');
     })
     .on('mousedown', () => {
+      clearTimeout(timeout);
       tooltip
         .html('')
         .attr('style', 'visibility: hidden;opacity: 0;');

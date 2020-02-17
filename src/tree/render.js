@@ -61,6 +61,7 @@ export const paintTree = ({
     selectionState,
     selections,
     !constraints.active,
+    !constraints.passive,
     navigationMode
   );
   // Create the lines (links) between the nodes
