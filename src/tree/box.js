@@ -121,18 +121,6 @@ export default function box(
       tooltip
         .html('')
         .attr('style', 'visibility: hidden;opacity: 0;');
-    })
-    .on('mouseout', () => {
-      clearTimeout(timeout);
-      tooltip
-        .html('')
-        .attr('style', 'visibility: hidden;opacity: 0;');
-    })
-    .on('mousedown', () => {
-      clearTimeout(timeout);
-      tooltip
-        .html('')
-        .attr('style', 'visibility: hidden;opacity: 0;');
     });
 
   // expand/collapse
