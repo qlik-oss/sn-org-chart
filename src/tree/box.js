@@ -97,9 +97,11 @@ export default function box(
     })
     .html(d => card(d.data, cardStyling, sel, selectionState))
     .on('mouseenter', d => {
-      tooltip
-        .html(`${d.data.attributes.label || d.data.id}<br />${d.data.attributes.subLabel || ''}<br />${d.data.attributes.extraLabel || ''}<br />${d.data.measure || ''}`)
-        .attr('style', () => getTooltipStyle(d));
+      if (allowInteractions) {
+        tooltip
+          .html(`${d.data.attributes.label || d.data.id}<br />${d.data.attributes.subLabel || ''}<br />${d.data.attributes.extraLabel || ''}<br />${d.data.measure || ''}`)
+          .attr('style', () => getTooltipStyle(d));
+      }
     })
     .on('mouseleave', () => {
       tooltip
