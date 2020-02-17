@@ -12,6 +12,8 @@ const constants = {
   buttonHeight,
   rootDiameter: 20,
   r: 4,
+  tooltipWidth: 240,
+  tooltipHeight: 60,
 };
 
 export default constants;

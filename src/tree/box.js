@@ -62,7 +62,7 @@ export default function box(
   sel,
   allowInteractions
 ) {
-  const { cardWidth, cardHeight, buttonWidth, buttonHeight, buttonMargin, rootDiameter } = constants;
+  const { cardWidth, cardHeight, buttonWidth, buttonHeight, buttonMargin, rootDiameter, tooltipWidth, tooltipHeight } = constants;
   const { topId, isExpanded } = expandedState;
 
   // dummy root
@@ -77,8 +77,8 @@ export default function box(
 
   function getTooltipStyle(d) {
     const halfCardWidth = cardWidth / 2;
-    const halfTooltipWidth = 240 / 2;
-    return `top:${(y(d)) * sel.zoom.zoom + sel.zoom.y - 85}px;left:${x(d) * sel.zoom.zoom + sel.zoom.x - (halfTooltipWidth - (halfCardWidth * sel.zoom.zoom))}px;visibility: visible;opacity: 0.9;`;
+    const halfTooltipWidth = tooltipWidth / 2;
+    return `top:${(y(d)) * sel.transform.zoom + sel.transform.y - tooltipHeight - 25}px;left:${x(d) * sel.transform.zoom + sel.transform.x - (halfTooltipWidth - (halfCardWidth * sel.transform.zoom))}px;visibility: visible;opacity: 0.9;`;
   }
 
   // cards
