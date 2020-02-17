@@ -20,9 +20,13 @@ const stylingUtils = {
     const palette = colorUtils.getPalette(Theme);
     const backgroundColor = getColor(layout.style.backgroundColor, palette, '#e6e6e6');
     const fontColor = getColor(layout.style.fontColor, palette, 'default');
+    const measureLabel = layout.qHyperCube.qMeasureInfo.length
+      ? layout.qHyperCube.qMeasureInfo[0].qFallbackTitle
+      : null;
     const cardStyling = {
       backgroundColor,
       fontColor,
+      measureLabel,
     };
     return cardStyling;
   },
