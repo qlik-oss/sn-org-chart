@@ -3,10 +3,11 @@ import selections from '../utils/selections';
 import { haveNoChildren } from '../utils/tree-utils';
 import constants from './size-constants';
 
-export const getSign = (d, { topId, isExpanded, expandedChildren }) => {
+export const getSign = (d, { topId, isExpanded, expandedChildren }, ancestorIds) => {
   if (
     (d.data.id === topId && isExpanded) ||
-    (d.parent && d.parent.data.id === topId && expandedChildren.includes(d.data.id))
+    (d.parent && d.parent.data.id === topId && expandedChildren.includes(d.data.id)) ||
+    ancestorIds.includes(d.data.id)
   ) {
     return '-';
   }
@@ -14,10 +15,15 @@ export const getSign = (d, { topId, isExpanded, expandedChildren }) => {
   return '+';
 };
 
-export const getNewState = (d, { topId, isExpanded, expandedChildren }) => {
+export const getNewState = (d, { topId, isExpanded, expandedChildren }, ancestorIds) => {
   if (d.data.id === topId) {
     // top
     isExpanded = !isExpanded;
+    expandedChildren = [];
+  } else if (ancestorIds.includes(d.data.id)) {
+    // ancestors
+    topId = d.parent ? d.parent.data.id : d.data.id;
+    isExpanded = !!d.parent;
     expandedChildren = [];
   } else if (d.parent.data.id === topId) {
     // children
@@ -60,10 +66,13 @@ export default function box(
   setStateCallback,
   selectionState,
   sel,
-  allowInteractions
+  allowInteractions,
+  navigationMode
 ) {
   const { cardWidth, cardHeight, buttonWidth, buttonHeight, buttonMargin, rootDiameter, tooltipWidth, tooltipHeight } = constants;
   const { topId, isExpanded } = expandedState;
+  const topNode = nodes.find(node => node.data.id === topId);
+  const ancestorIds = topNode.parent ? topNode.parent.ancestors().map(anc => anc.data.id) : [];
 
   // dummy root
   divBox
@@ -130,29 +139,31 @@ export default function box(
     .attr('id', d => `${d.data.id}-expand`)
     .on('click', d => {
       if (allowInteractions) {
-        setStateCallback(getNewState(d, expandedState));
+        setStateCallback(getNewState(d, expandedState, ancestorIds));
       }
     })
-    .html(d => `${getSign(d, expandedState)} ${d.data.children.length}`);
+    .html(d => `${getSign(d, expandedState, ancestorIds)} ${d.data.children.length}`);
 
   // go up
-  divBox
-    .selectAll('.sn-org-nodes')
-    .data(nodes.filter(node => node.data.id === topId && node.parent))
-    .enter()
-    .append('div')
-    .attr('class', 'sn-org-traverse')
-    .attr(
-      'style',
-      d =>
-        `width:${buttonWidth}px;height:${buttonHeight}px;top:${y(d) - buttonHeight - buttonMargin}px;left:${x(d) +
-          (cardWidth - buttonWidth) / 2}px;`
-    )
-    .attr('id', d => `${d.data.id}-up`)
-    .on('click', d => {
-      if (allowInteractions) {
-        setStateCallback(getNewUpState(d, isExpanded));
-      }
-    })
-    .html('↑');
+  if (navigationMode !== 'free') {
+    divBox
+      .selectAll('.sn-org-nodes')
+      .data(nodes.filter(node => node.data.id === topId && node.parent))
+      .enter()
+      .append('div')
+      .attr('class', 'sn-org-traverse')
+      .attr(
+        'style',
+        d =>
+          `width:${buttonWidth}px;height:${buttonHeight}px;top:${y(d) - buttonHeight - buttonMargin}px;left:${x(d) +
+            (cardWidth - buttonWidth) / 2}px;`
+      )
+      .attr('id', d => `${d.data.id}-up`)
+      .on('click', d => {
+        if (allowInteractions) {
+          setStateCallback(getNewUpState(d, isExpanded));
+        }
+      })
+      .html('↑');
+  }
 }

@@ -38,7 +38,7 @@ export function applyTransform(eventTransform, svg, divBox, width, height) {
 }
 
 export function setZooming(objectData, settingZoom, allowInteractions) {
-  const { svg, divBox, width, height, element, allNodes } = objectData;
+  const { svg, divBox, width, height, allNodes, zoomWrapper } = objectData;
   const maxZoom = 6;
   const minZoom = 0.2;
   const scaleFactor = Math.max(Math.min(maxZoom, allNodes.zoomFactor), minZoom);
@@ -58,14 +58,14 @@ export function setZooming(objectData, settingZoom, allowInteractions) {
     );
   };
 
-  select(element).call(
+  select(zoomWrapper).call(
     zoom()
       .extent([
         [0, 0],
         [width, height],
       ])
       .filter(allowInteractions)
-      .scaleExtent([minZoom, maxZoom])
+      .scaleExtent([minZoom * scaleFactor, maxZoom * scaleFactor])
       .on('zoom', zoomed)
   );
   settingZoom({

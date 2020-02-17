@@ -12,11 +12,13 @@ export default function position(orientation, element) {
       if (!d.parent[axis]) {
         d.parent[axis] = widthTranslation(d.parent, axis);
       }
-      d[axis] = d.parent.data.id !== 'Root' && haveNoChildren(d.parent.children)
-        ? d.parent[axis] + buttonMargin
-        : d.parent[axis] + (d.data.childNumber - (d.parent.children.length - 1) / 2) * widthSpacing;
+      d[axis] =
+        d.parent.data.id !== 'Root' && haveNoChildren(d.parent.children)
+          ? d.parent[axis] + buttonMargin
+          : d.parent[axis] + (d.data.childNumber - (d.parent.children.length - 1) / 2) * widthSpacing;
     } else if (!d.children) {
       d[axis] = (element.clientWidth - cardWidth) / 2;
+      d.zoomFactor = 1;
     } else {
       // In case of zoom mode we need to have the tree moved to the right from the start
       const neededWidth = (cardWidth + widthMargin) * d.children.length - widthMargin;
