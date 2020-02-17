@@ -48,34 +48,34 @@ export default function supernova(env) {
       const [opts] = useState(options);
       const selectionsAPI = useSelections();
       const constraints = useConstraints();
-      const [selectionsAndZoom] = useState({ api: selectionsAPI, setState: setSelectionState, linked: false, transform: {} });
+      const [selectionsAndTransform] = useState({ api: selectionsAPI, setState: setSelectionState, linked: false, transform: {} });
 
       const resetSelections = () => {
         setSelectionState([]);
       };
       useEffect(() => {
-        if (!selectionsAndZoom.api) {
+        if (!selectionsAndTransform.api) {
           return () => {};
         }
-        selectionsAndZoom.api = selectionsAPI;
-        selectionsAndZoom.api.on('canceled', resetSelections);
-        selectionsAndZoom.api.on('cleared', resetSelections);
+        selectionsAndTransform.api = selectionsAPI;
+        selectionsAndTransform.api.on('canceled', resetSelections);
+        selectionsAndTransform.api.on('cleared', resetSelections);
         // Return function called on unmount
         return () => {
-          selectionsAndZoom.api.removeListener('deactivated', resetSelections);
-          selectionsAndZoom.api.removeListener('canceled', resetSelections);
-          selectionsAndZoom.api.removeListener('cleared', resetSelections);
+          selectionsAndTransform.api.removeListener('deactivated', resetSelections);
+          selectionsAndTransform.api.removeListener('canceled', resetSelections);
+          selectionsAndTransform.api.removeListener('cleared', resetSelections);
         };
       }, [selectionsAPI]);
 
       useEffect(() => {
-        selectionsAndZoom.transform = zoomState;
+        selectionsAndTransform.transform = zoomState;
       }, [zoomState]);
 
       useAction(
         () => ({
           action() {
-            selectionsAndZoom.linked = !linked;
+            selectionsAndTransform.linked = !linked;
             setLinked(!linked);
           },
           icon: {
@@ -90,14 +90,14 @@ export default function supernova(env) {
       useEffect(() => {
         const addKeyPress = event => {
           if (event.key === 'Shift') {
-            selectionsAndZoom.linked = true;
+            selectionsAndTransform.linked = true;
             setLinked(true);
           }
         };
 
         const removeKeyPress = event => {
           if (event.key === 'Shift') {
-            selectionsAndZoom.linked = false;
+            selectionsAndTransform.linked = false;
             setLinked(false);
           }
         };
@@ -164,7 +164,7 @@ export default function supernova(env) {
             expandedState,
             styling,
             setStateCallback,
-            selections: selectionsAndZoom,
+            selections: selectionsAndTransform,
             selectionState,
             constraints,
             useTransitions: expandedState.useTransitions,
