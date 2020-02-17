@@ -13,7 +13,7 @@ const constants = {
   rootDiameter: 20,
   r: 4,
   tooltipWidth: 240,
-  tooltipHeight: 60,
+  tooltipHeight: 85,
 };
 
 export default constants;

@@ -87,7 +87,7 @@ export default function box(
   function getTooltipStyle(d) {
     const halfCardWidth = cardWidth / 2;
     const halfTooltipWidth = tooltipWidth / 2;
-    return `top:${(y(d)) * sel.transform.zoom + sel.transform.y - tooltipHeight - 25}px;left:${x(d) * sel.transform.zoom + sel.transform.x - (halfTooltipWidth - (halfCardWidth * sel.transform.zoom))}px;visibility: visible;opacity: 0.9;`;
+    return `top:${(y(d)) * sel.transform.zoom + sel.transform.y - tooltipHeight}px;left:${x(d) * sel.transform.zoom + sel.transform.x - (halfTooltipWidth - (halfCardWidth * sel.transform.zoom))}px;visibility: visible;opacity: 0.9;`;
   }
 
   // cards
