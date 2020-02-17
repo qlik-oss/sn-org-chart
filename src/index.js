@@ -12,6 +12,7 @@ import {
   useOptions,
   useImperativeHandle,
   useConstraints,
+  useTranslator,
 } from '@nebula.js/supernova';
 import properties from './object-properties';
 import data from './data';
@@ -21,6 +22,7 @@ import stylingUtils from './utils/styling';
 import treeTransform from './utils/tree-utils';
 import viewStateUtil from './utils/viewstate-utils';
 import { setZooming } from './tree/transform';
+import autoRegister from './locale/translations';
 import './styles/tooltip.less';
 import './styles/paths.less';
 import './styles/warnings.less';
@@ -48,7 +50,14 @@ export default function supernova(env) {
       const [opts] = useState(options);
       const selectionsAPI = useSelections();
       const constraints = useConstraints();
-      const [selectionsAndTransform] = useState({ api: selectionsAPI, setState: setSelectionState, linked: false, transform: {} });
+      const [selectionsAndTransform] = useState({
+        api: selectionsAPI,
+        setState: setSelectionState,
+        linked: false,
+        transform: {},
+      });
+
+      const translator = useTranslator();
 
       const resetSelections = () => {
         setSelectionState([]);
@@ -135,7 +144,8 @@ export default function supernova(env) {
         if (!layout) {
           return Promise.resolve();
         }
-        return treeTransform({ layout, model }).then(transformed => {
+        autoRegister(translator);
+        return treeTransform({ layout, model, translator }).then(transformed => {
           const viewState = viewStateUtil.getViewState(opts, layout);
           const expState = viewState && viewState.expandedState ? viewState.expandedState : null;
           setDataTree(transformed);
@@ -145,7 +155,7 @@ export default function supernova(env) {
           // Resolving the promise to indicate readiness for printing
           return Promise.resolve();
         });
-      }, [layout, model]);
+      }, [layout, model, translator]);
 
       // This one can split up. Only need to get new height/width when rect is changed
       useEffect(() => {

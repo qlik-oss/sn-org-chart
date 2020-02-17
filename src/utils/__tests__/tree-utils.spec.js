@@ -9,29 +9,31 @@ function generateMatrix(numRows, childCount = 1) {
   return matrix;
 }
 
+const translator = { get: d => d };
+
 describe('tree-utils', () => {
   describe('createNodes', () => {
     it('should create a tree', () => {
       const matrix = [[{ qText: '007', qElemNumber: 0 }, { qText: '-' }]];
-      const node = createNodes(matrix, []);
+      const node = createNodes(matrix, [], null, null, translator);
       expect(node.id).to.equal('007');
     });
     it('should detect all cycles', () => {
       const matrix = generateMatrix(10, 2);
       matrix[0][1].qText = '1';
-      const node = createNodes(matrix, []);
+      const node = createNodes(matrix, [], null, null, translator);
       expect(node.error).to.equal('no_root');
     });
     it('should detect isolate cycles', () => {
       const matrix = generateMatrix(10, 2);
       matrix[1][1].qText = '5';
-      const node = createNodes(matrix, []);
+      const node = createNodes(matrix, [], null, null, translator);
       expect(node.warn.length).to.equal(1);
     });
     it('should generate a dummy root', () => {
       const matrix = generateMatrix(10, 2);
       matrix[1][1].qText = '-';
-      const node = createNodes(matrix, []);
+      const node = createNodes(matrix, [], null, null, translator);
       expect(node.warn.length).to.equal(1);
       expect(node.id).to.equal('Root');
     });
