@@ -27,6 +27,9 @@ export default {
           dimensions: {
             disabledRef: '',
             items: {
+              dimensionLimits: {
+                show: false,
+              },
               attributes: {
                 component: 'attribute-expression-reference',
                 defaultValue: [],
