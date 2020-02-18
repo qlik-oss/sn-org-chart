@@ -41,6 +41,7 @@ export const paintTree = ({
   selectionsAndTransform,
   selectionState,
   useTransitions,
+  element,
 }) => {
   const { svg, divBox, allNodes, positioning, width, height, tooltip } = objectData;
   const { navigationMode } = allNodes.data;
@@ -60,7 +61,7 @@ export const paintTree = ({
     selectionState,
     selectionsAndTransform,
     navigationMode,
-    height
+    element
   );
   // Create the lines (links) between the nodes
   const node = svg

@@ -67,7 +67,7 @@ export default function box(
   selectionState,
   selectionsAndTransform,
   navigationMode,
-  height
+  element
 ) {
   const {
     cardWidth,
@@ -98,7 +98,7 @@ export default function box(
   function getTooltipStyle(d) {
     const halfCardWidth = cardWidth / 2;
     const halfTooltipWidth = tooltipWidth / 2;
-    return `bottom:${height -
+    return `bottom:${element.clientHeight -
       (y(d) * selectionsAndTransform.transform.zoom + selectionsAndTransform.transform.y - tooltipPadding)}px;left:${x(
       d
     ) *

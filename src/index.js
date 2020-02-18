@@ -185,6 +185,7 @@ export default function supernova(env) {
             selectionsAndTransform,
             selectionState,
             useTransitions: expandedState.useTransitions,
+            element,
           });
         }
       }, [expandedState, objectData, selectionState]);
