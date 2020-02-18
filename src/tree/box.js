@@ -110,7 +110,7 @@ export default function box(
     })
     .html(d => card(d.data, cardStyling, sel, selectionState))
     .on('mouseenter', d => {
-      if (allowTooltips && tooltipOpen === -1) {
+      if (allowTooltips && tooltipOpen === -1 && event.buttons === 0) {
         tooltipOpen = setTimeout(() => {
           tooltip
             .html(`${d.data.attributes.label || d.data.id}<br />${d.data.attributes.subLabel || ''}<br />${d.data.attributes.extraLabel || ''}<br />${d.data.measure || ''}`)
@@ -125,6 +125,14 @@ export default function box(
       }
     })
     .on('mouseleave', () => {
+      clearTimeout(tooltipOpen);
+      tooltipOpen = -1;
+      clearTimeout(tooltipClose);
+      tooltip
+        .html('')
+        .attr('style', 'visibility: hidden;opacity: 0;');
+    })
+    .on('mousedown', () => {
       clearTimeout(tooltipOpen);
       tooltipOpen = -1;
       clearTimeout(tooltipClose);
