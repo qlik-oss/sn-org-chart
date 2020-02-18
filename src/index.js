@@ -55,6 +55,7 @@ export default function supernova(env) {
         setState: setSelectionState,
         linked: false,
         transform: {},
+        constraints,
       });
 
       const translator = useTranslator();
@@ -80,6 +81,10 @@ export default function supernova(env) {
       useEffect(() => {
         selectionsAndTransform.transform = transform;
       }, [transform]);
+
+      useEffect(() => {
+        selectionsAndTransform.constraints = constraints;
+      }, [constraints]);
 
       useAction(
         () => ({
@@ -144,14 +149,15 @@ export default function supernova(env) {
         if (!layout) {
           return Promise.resolve();
         }
+        const viewState = viewStateUtil.getViewState(opts, layout);
+        viewState && viewState.expandedState && setExpandedState(viewState.expandedState);
+        viewState && viewState.transform && setTransform(viewState.transform);
+
         autoRegister(translator);
         return treeTransform({ layout, model, translator }).then(transformed => {
-          const viewState = viewStateUtil.getViewState(opts, layout);
-          const expState = viewState && viewState.expandedState ? viewState.expandedState : null;
           setDataTree(transformed);
           setStyling(stylingUtils.cardStyling({ Theme, layout }));
           setSelectionState([]);
-          setExpandedState(expState);
           // Resolving the promise to indicate readiness for printing
           return Promise.resolve();
         });
@@ -181,23 +187,30 @@ export default function supernova(env) {
             expandedState,
             styling,
             setStateCallback,
-            selections: selectionsAndTransform,
+            selectionsAndTransform,
             selectionState,
-            constraints,
             useTransitions: expandedState.useTransitions,
+            element,
           });
         }
-      }, [expandedState, objectData, selectionState, constraints]);
+      }, [expandedState, objectData, selectionState]);
 
       useEffect(() => {
         if (objectData && layout.navigationMode === 'free') {
-          setZooming(objectData, setTransform, !constraints.active);
+          const viewState = viewStateUtil.getViewState(opts, layout);
+          setZooming({
+            objectData,
+            setTransform,
+            transformState: (viewState && viewState.transform) || {},
+            selectionsAndTransform,
+          });
         }
-      }, [objectData, constraints]);
+      }, [objectData]);
 
       const createViewState = () => {
         const vs = {
           expandedState,
+          transform,
         };
         vs.expandedState.useTransitions = false;
         return vs;
