@@ -175,14 +175,17 @@ export function createNodes(matrix, attributeIndecies, status, navigationMode, t
   }
 
   const rootNodes = [];
+  let maxNodeWarning = false;
   for (let i = 0; i < allNodes.length; ++i) {
     const node = allNodes[i];
     const parentNode = nodeMap[node.parentId];
     node.parent = parentNode;
     if (parentNode) {
-      parentNode.children.push({ childNumber: parentNode.children.length, ...node });
+      parentNode.children.length > 100
+        ? (maxNodeWarning = true)
+        : parentNode.children.push({ childNumber: parentNode.children.length, ...node });
     } else {
-      rootNodes.push(node);
+      rootNodes.length > 100 ? (maxNodeWarning = true) : rootNodes.push(node);
     }
   }
 
@@ -194,6 +197,10 @@ export function createNodes(matrix, attributeIndecies, status, navigationMode, t
   const warn = [];
   if (status === MAX_DATA) {
     warn.push(translator.get('Object.OrgChart.MaxData'));
+  }
+  // Only show a maximum of children.
+  if (maxNodeWarning) {
+    warn.push(translator.get('Object.OrgChart.MaxChildren'));
   }
   // I have not looked at these functions at all. But we need to check the data as well I would say.
   if (anyCycle(allNodes)) {
