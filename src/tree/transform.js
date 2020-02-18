@@ -37,7 +37,7 @@ export function applyTransform(eventTransform, svg, divBox, width, height) {
   );
 }
 
-export function setZooming({ objectData, setTransform, transformState, allowInteractions }) {
+export function setZooming({ objectData, setTransform, transformState, selections }) {
   const { svg, divBox, width, height, zoomWrapper, allNodes } = objectData;
   const { x = 0, y = 0 } = transformState;
   const maxZoom = 6;
@@ -62,7 +62,7 @@ export function setZooming({ objectData, setTransform, transformState, allowInte
         [0, 0],
         [width, height],
       ])
-      .filter(allowInteractions)
+      .filter(() => !selections.constraints.active)
       .scaleExtent([minZoom * scaleFactor, maxZoom * scaleFactor])
       .on('zoom', zoomed)
   );

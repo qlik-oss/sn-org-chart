@@ -48,7 +48,7 @@ export default function supernova(env) {
       const [opts] = useState(options);
       const selectionsAPI = useSelections();
       const constraints = useConstraints();
-      const [selections] = useState({ api: selectionsAPI, setState: setSelectionState, linked: false });
+      const [selections] = useState({ api: selectionsAPI, setState: setSelectionState, linked: false, constraints });
 
       const resetSelections = () => {
         setSelectionState([]);
@@ -111,6 +111,10 @@ export default function supernova(env) {
         setExpandedState(newState);
       };
 
+      useEffect(() => {
+        selections.constraints = constraints;
+      }, [constraints]);
+
       /*
        * Basic steps to aim for - function [dependency]
        * - createElements [element]
@@ -152,7 +156,7 @@ export default function supernova(env) {
               });
           }
         }
-      }, [element, dataTree, constraints]);
+      }, [element, dataTree]);
 
       useEffect(() => {
         if (objectData && expandedState && styling) {
@@ -163,11 +167,10 @@ export default function supernova(env) {
             setStateCallback,
             selections,
             selectionState,
-            constraints,
             useTransitions: expandedState.useTransitions,
           });
         }
-      }, [expandedState, objectData, selectionState, constraints]);
+      }, [expandedState, objectData, selectionState]);
 
       useEffect(() => {
         if (objectData && layout.navigationMode === 'free') {
@@ -176,10 +179,10 @@ export default function supernova(env) {
             objectData,
             setTransform,
             transformState: (viewState && viewState.transform) || {},
-            allowInteractions: !constraints.active,
+            selections,
           });
         }
-      }, [objectData, constraints]);
+      }, [objectData]);
 
       const createViewState = () => {
         const vs = {

@@ -40,7 +40,6 @@ export const paintTree = ({
   setStateCallback,
   selections,
   selectionState,
-  constraints,
   useTransitions,
 }) => {
   const { svg, divBox, allNodes, positioning, width, height } = objectData;
@@ -50,18 +49,7 @@ export const paintTree = ({
   // filter the nodes the nodes
   const nodes = filterTree(expandedState, allNodes);
   // Create cards and naviagation buttons
-  box(
-    positioning,
-    divBox,
-    nodes,
-    styling,
-    expandedState,
-    setStateCallback,
-    selectionState,
-    selections,
-    !constraints.active,
-    navigationMode
-  );
+  box(positioning, divBox, nodes, styling, expandedState, setStateCallback, selectionState, selections, navigationMode);
   // Create the lines (links) between the nodes
   const node = svg
     .selectAll('.sn-org-paths')
