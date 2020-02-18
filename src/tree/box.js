@@ -166,6 +166,9 @@ export default function box(
           (cardWidth - buttonWidth) / 2}px;`
     )
     .attr('id', d => `${d.data.id}-expand`)
+    .on('mouseenter', () => {
+      if (!selectionsAndTransform.constraints.active) event.target.style.cursor = 'pointer';
+    })
     .on('click', d => {
       if (!selectionsAndTransform.constraints.active) {
         setStateCallback(getNewState(d, expandedState, ancestorIds));
