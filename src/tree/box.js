@@ -68,9 +68,10 @@ export default function box(
   sel,
   allowInteractions,
   allowTooltips,
-  navigationMode
+  navigationMode,
+  containerHeight
 ) {
-  const { cardWidth, cardHeight, buttonWidth, buttonHeight, buttonMargin, rootDiameter, tooltipWidth, tooltipHeight } = constants;
+  const { cardWidth, cardHeight, buttonWidth, buttonHeight, buttonMargin, rootDiameter, tooltipWidth, tooltipPadding } = constants;
   const { topId, isExpanded } = expandedState;
   const topNode = nodes.find(node => node.data.id === topId);
   const ancestorIds = topNode.parent ? topNode.parent.ancestors().map(anc => anc.data.id) : [];
@@ -90,7 +91,7 @@ export default function box(
   function getTooltipStyle(d) {
     const halfCardWidth = cardWidth / 2;
     const halfTooltipWidth = tooltipWidth / 2;
-    return `top:${(y(d)) * sel.transform.zoom + sel.transform.y - tooltipHeight}px;left:${x(d) * sel.transform.zoom + sel.transform.x - (halfTooltipWidth - (halfCardWidth * sel.transform.zoom))}px;visibility: visible;opacity: 0.9;`;
+    return `bottom:${containerHeight - ((y(d)) * sel.transform.zoom + sel.transform.y - tooltipPadding)}px;left:${x(d) * sel.transform.zoom + sel.transform.x - (halfTooltipWidth - (halfCardWidth * sel.transform.zoom))}px;visibility: visible;opacity: 0.9;`;
   }
 
   // cards
@@ -124,14 +125,6 @@ export default function box(
       }
     })
     .on('mouseleave', () => {
-      clearTimeout(tooltipOpen);
-      tooltipOpen = -1;
-      clearTimeout(tooltipClose);
-      tooltip
-        .html('')
-        .attr('style', 'visibility: hidden;opacity: 0;');
-    })
-    .on('mouseout', () => {
       clearTimeout(tooltipOpen);
       tooltipOpen = -1;
       clearTimeout(tooltipClose);

@@ -62,7 +62,8 @@ export const paintTree = ({
     selections,
     !constraints.active,
     !constraints.passive,
-    navigationMode
+    navigationMode,
+    height
   );
   // Create the lines (links) between the nodes
   const node = svg
