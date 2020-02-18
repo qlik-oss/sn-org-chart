@@ -43,6 +43,7 @@ export function setZooming(objectData, settingZoom, allowInteractions) {
   const minZoom = 0.2;
   const scaleFactor = Math.max(Math.min(maxZoom, allNodes.zoomFactor), minZoom);
 
+  // sends otherwise captured mouse event to handle context menu correctly in sense
   const bubbleEvent = () => {
     const newEvent = document.createEvent('MouseEvents');
     newEvent.initEvent('mousedown', true, false);
