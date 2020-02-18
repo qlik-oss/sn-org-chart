@@ -113,7 +113,7 @@ export default function box(
       if (allowTooltips && tooltipOpen === -1 && event.buttons === 0) {
         tooltipOpen = setTimeout(() => {
           tooltip
-            .html(`${d.data.attributes.label || d.data.id}<br />${d.data.attributes.subLabel || ''}<br />${d.data.attributes.extraLabel || ''}<br />${d.data.measure || ''}`)
+            .html(`${d.data.attributes.label || d.data.id}<br />${d.data.attributes.subLabel ? `${d.data.attributes.subLabel}<br />` : ''}${d.data.attributes.extraLabel ? `${d.data.attributes.extraLabel}<br />` : ''}${d.data.measure || ''}`)
             .attr('style', () => getTooltipStyle(d));
           tooltipOpen = -1;
         }, 250);
