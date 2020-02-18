@@ -81,7 +81,7 @@ export default function box(
   } = constants;
   const { topId, isExpanded } = expandedState;
   const topNode = nodes.find(node => node.data.id === topId);
-  const ancestorIds = topNode.parent ? topNode.parent.ancestors().map(anc => anc.data.id) : [];
+  const ancestorIds = topNode && topNode.parent ? topNode.parent.ancestors().map(anc => anc.data.id) : [];
   let tooltipOpen = -1;
   let tooltipClose = -1;
 
