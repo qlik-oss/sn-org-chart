@@ -78,11 +78,12 @@ export const paintTree = ({
 };
 
 export const getSize = ({ error, warn }, element) => {
-  const size = element.getBoundingClientRect();
+  // eslint-disable-next-line prefer-const
+  let { width, height } = element.getBoundingClientRect();
   if (error || (warn && warn.length)) {
-    size.height -= 20;
+    height -= 20;
   }
-  return size;
+  return { width, height };
 };
 
 export function preRenderTree(element, dataTree) {
@@ -134,9 +135,7 @@ export function preRenderTree(element, dataTree) {
     .append('div')
     .attr('class', 'sn-org-tooltip')
     .on('mousedown', () => {
-      tooltip
-        .html('')
-        .attr('style', 'visibility: hidden;opacity: 0;');
+      tooltip.html('').attr('style', 'visibility: hidden;opacity: 0;');
     });
 
   const svg = svgBox.append('g').attr('class', 'sn-org-paths');
