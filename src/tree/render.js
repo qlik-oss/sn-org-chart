@@ -4,17 +4,8 @@ import box from './box';
 import createPaths from './path';
 import transform from './transform';
 
-export const filterTree = ({ topId, isExpanded, expandedChildren }, nodeTree, setExpandedState) => {
-  let topNode = nodeTree.descendants().find(node => node.data.id === topId);
-  if (!topNode) {
-    topNode = nodeTree;
-    setExpandedState({
-      topId: nodeTree.data.id,
-      isExpanded: true,
-      expandedChildren: [],
-      useTransitions: false,
-    });
-  }
+export const filterTree = ({ topId, isExpanded, expandedChildren }, nodeTree) => {
+  const topNode = nodeTree.descendants().find(node => node.data.id === topId) || nodeTree;
   const subTree = [];
   if (isExpanded && topNode.children) {
     // children
@@ -51,14 +42,13 @@ export const paintTree = ({
   selectionState,
   useTransitions,
   element,
-  setExpandedState,
 }) => {
   const { svg, divBox, allNodes, positioning, width, height, tooltip } = objectData;
   const { navigationMode } = allNodes.data;
   divBox.selectAll('*').remove();
   svg.selectAll('*').remove();
   // filter the nodes the nodes
-  const nodes = filterTree(expandedState, allNodes, setExpandedState);
+  const nodes = filterTree(expandedState, allNodes);
   // Create cards and naviagation buttons
   box(
     positioning,
