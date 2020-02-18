@@ -7,6 +7,7 @@ export default {
   'Object.OrgChart.DummyWarn': 'The data contains multiple root nodes.',
   'Object.OrgChart.CycleWarning': 'Data contains circular references, nodes are omitted.',
   'Object.OrgChart.MissingRoot': 'No root node, check your data for circular references.',
+  'Object.OrgChart.MaxChildren': 'Maximum of children reached only showing 100 child nodes.',
   'Object.OrgChart.LabelExpression': 'Label expression',
   'Object.OrgChart.SubLabelExpression': 'Sub-label expression',
   'Object.OrgChart.ExtraLabelExpression': 'Extra-label expression',
