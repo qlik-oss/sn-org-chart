@@ -43,7 +43,7 @@ export const paintTree = ({
   constraints,
   useTransitions,
 }) => {
-  const { svg, divBox, allNodes, positioning, width, height } = objectData;
+  const { svg, divBox, allNodes, positioning, width, height, tooltip } = objectData;
   const { navigationMode } = allNodes.data;
   divBox.selectAll('*').remove();
   svg.selectAll('*').remove();
@@ -53,6 +53,7 @@ export const paintTree = ({
   box(
     positioning,
     divBox,
+    tooltip,
     nodes,
     styling,
     expandedState,
@@ -60,7 +61,9 @@ export const paintTree = ({
     selectionState,
     selections,
     !constraints.active,
-    navigationMode
+    !constraints.passive,
+    navigationMode,
+    height
   );
   // Create the lines (links) between the nodes
   const node = svg
@@ -124,6 +127,18 @@ export function preRenderTree(element, dataTree) {
     .append('div')
     .attr('class', 'sn-org-nodes');
 
+  const tooltip = select(element)
+    .selectAll('.sn-org-tooltip')
+    .data([{}])
+    .enter()
+    .append('div')
+    .attr('class', 'sn-org-tooltip')
+    .on('mousedown', () => {
+      tooltip
+        .html('')
+        .attr('style', 'visibility: hidden;opacity: 0;');
+    });
+
   const svg = svgBox.append('g').attr('class', 'sn-org-paths');
   // Here are the settings for the tree. For instance nodesize can be adjusted
   const treemap = tree()
@@ -131,5 +146,5 @@ export function preRenderTree(element, dataTree) {
     .nodeSize([0, positioning.depthSpacing]);
 
   const allNodes = treemap(hierarchy(dataTree));
-  return { svg, divBox, allNodes, positioning, width, height, element, zoomWrapper };
+  return { svg, divBox, allNodes, positioning, width, height, element, tooltip, zoomWrapper };
 }

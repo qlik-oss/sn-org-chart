@@ -21,7 +21,7 @@ import stylingUtils from './utils/styling';
 import treeTransform from './utils/tree-utils';
 import viewStateUtil from './utils/viewstate-utils';
 import { setZooming } from './tree/transform';
-import './styles/treeCss.less';
+import './styles/tooltip.less';
 import './styles/paths.less';
 import './styles/warnings.less';
 import './styles/nodes.less';
@@ -39,6 +39,7 @@ export default function supernova(env) {
       const [expandedState, setExpandedState] = useState(null);
       const [linked, setLinked] = useState(false);
       const [selectionState, setSelectionState] = useState([]);
+      const [transform, setTransform] = useState(null);
       const layout = useStaleLayout();
       const model = useModel();
       const element = useElement();
@@ -47,30 +48,34 @@ export default function supernova(env) {
       const [opts] = useState(options);
       const selectionsAPI = useSelections();
       const constraints = useConstraints();
-      const [selections] = useState({ api: selectionsAPI, setState: setSelectionState, linked: false });
+      const [selectionsAndTransform] = useState({ api: selectionsAPI, setState: setSelectionState, linked: false, transform: {} });
 
       const resetSelections = () => {
         setSelectionState([]);
       };
       useEffect(() => {
-        if (!selections.api) {
+        if (!selectionsAndTransform.api) {
           return () => {};
         }
-        selections.api = selectionsAPI;
-        selections.api.on('canceled', resetSelections);
-        selections.api.on('cleared', resetSelections);
+        selectionsAndTransform.api = selectionsAPI;
+        selectionsAndTransform.api.on('canceled', resetSelections);
+        selectionsAndTransform.api.on('cleared', resetSelections);
         // Return function called on unmount
         return () => {
-          selections.api.removeListener('deactivated', resetSelections);
-          selections.api.removeListener('canceled', resetSelections);
-          selections.api.removeListener('cleared', resetSelections);
+          selectionsAndTransform.api.removeListener('deactivated', resetSelections);
+          selectionsAndTransform.api.removeListener('canceled', resetSelections);
+          selectionsAndTransform.api.removeListener('cleared', resetSelections);
         };
       }, [selectionsAPI]);
+
+      useEffect(() => {
+        selectionsAndTransform.transform = transform;
+      }, [transform]);
 
       useAction(
         () => ({
           action() {
-            selections.linked = !linked;
+            selectionsAndTransform.linked = !linked;
             setLinked(!linked);
           },
           icon: {
@@ -92,14 +97,14 @@ export default function supernova(env) {
       useEffect(() => {
         const addKeyPress = event => {
           if (event.key === 'Shift') {
-            selections.linked = true;
+            selectionsAndTransform.linked = true;
             setLinked(true);
           }
         };
 
         const removeKeyPress = event => {
           if (event.key === 'Shift') {
-            selections.linked = false;
+            selectionsAndTransform.linked = false;
             setLinked(false);
           }
         };
@@ -166,7 +171,7 @@ export default function supernova(env) {
             expandedState,
             styling,
             setStateCallback,
-            selections,
+            selections: selectionsAndTransform,
             selectionState,
             constraints,
             useTransitions: expandedState.useTransitions,
@@ -176,7 +181,7 @@ export default function supernova(env) {
 
       useEffect(() => {
         if (objectData && layout.navigationMode === 'free') {
-          setZooming(objectData, !constraints.active);
+          setZooming(objectData, setTransform, !constraints.active);
         }
       }, [objectData, constraints]);
 
