@@ -74,7 +74,8 @@ export default function box(
   const { topId, isExpanded } = expandedState;
   const topNode = nodes.find(node => node.data.id === topId);
   const ancestorIds = topNode.parent ? topNode.parent.ancestors().map(anc => anc.data.id) : [];
-  let timeout;
+  let tooltipOpen = -1;
+  let tooltipClose = -1;
 
   // dummy root
   divBox
@@ -108,16 +109,32 @@ export default function box(
     })
     .html(d => card(d.data, cardStyling, sel, selectionState))
     .on('mouseenter', d => {
-      if (allowTooltips) {
-        timeout = setTimeout(() => {
+      if (allowTooltips && tooltipOpen === -1) {
+        tooltipOpen = setTimeout(() => {
           tooltip
             .html(`${d.data.attributes.label || d.data.id}<br />${d.data.attributes.subLabel || ''}<br />${d.data.attributes.extraLabel || ''}<br />${d.data.measure || ''}`)
             .attr('style', () => getTooltipStyle(d));
+          tooltipOpen = -1;
         }, 250);
+        tooltipClose = setTimeout(() => {
+          tooltip
+            .html('')
+            .attr('style', 'visibility: hidden;opacity: 0;');
+        }, 7000);
       }
     })
     .on('mouseleave', () => {
-      clearTimeout(timeout);
+      clearTimeout(tooltipOpen);
+      tooltipOpen = -1;
+      clearTimeout(tooltipClose);
+      tooltip
+        .html('')
+        .attr('style', 'visibility: hidden;opacity: 0;');
+    })
+    .on('mouseout', () => {
+      clearTimeout(tooltipOpen);
+      tooltipOpen = -1;
+      clearTimeout(tooltipClose);
       tooltip
         .html('')
         .attr('style', 'visibility: hidden;opacity: 0;');

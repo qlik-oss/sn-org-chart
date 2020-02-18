@@ -21,7 +21,7 @@ import stylingUtils from './utils/styling';
 import treeTransform from './utils/tree-utils';
 import viewStateUtil from './utils/viewstate-utils';
 import { setZooming } from './tree/transform';
-import './styles/treeCss.less';
+import './styles/tooltip.less';
 import './styles/paths.less';
 import './styles/warnings.less';
 import './styles/nodes.less';
@@ -39,7 +39,7 @@ export default function supernova(env) {
       const [expandedState, setExpandedState] = useState(null);
       const [linked, setLinked] = useState(false);
       const [selectionState, setSelectionState] = useState([]);
-      const [zoomState, setZoomState] = useState(null);
+      const [transform, setTransform] = useState(null);
       const layout = useStaleLayout();
       const model = useModel();
       const element = useElement();
@@ -69,8 +69,8 @@ export default function supernova(env) {
       }, [selectionsAPI]);
 
       useEffect(() => {
-        selectionsAndTransform.transform = zoomState;
-      }, [zoomState]);
+        selectionsAndTransform.transform = transform;
+      }, [transform]);
 
       useAction(
         () => ({
@@ -174,7 +174,7 @@ export default function supernova(env) {
 
       useEffect(() => {
         if (objectData && layout.navigationMode === 'free') {
-          setZooming(objectData, setZoomState, !constraints.active);
+          setZooming(objectData, setTransform, !constraints.active);
         }
       }, [objectData, constraints]);
 

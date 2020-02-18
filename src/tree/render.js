@@ -131,7 +131,12 @@ export function preRenderTree(element, dataTree) {
     .data([{}])
     .enter()
     .append('div')
-    .attr('class', 'sn-org-tooltip');
+    .attr('class', 'sn-org-tooltip')
+    .on('mousedown', () => {
+      tooltip
+        .html('')
+        .attr('style', 'visibility: hidden;opacity: 0;');
+    });
 
   const svg = svgBox.append('g').attr('class', 'sn-org-paths');
   // Here are the settings for the tree. For instance nodesize can be adjusted
