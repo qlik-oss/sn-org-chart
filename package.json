@@ -47,7 +47,7 @@
     ]
   },
   "peerDependencies": {
-    "@nebula.js/supernova": "0.1.0-alpha.31"
+    "@nebula.js/supernova": "^0.1.0-alpha.31"
   },
   "devDependencies": {
     "@after-work.js/aw": "6.0.11",
