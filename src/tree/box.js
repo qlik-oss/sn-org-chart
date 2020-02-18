@@ -65,16 +65,23 @@ export default function box(
   expandedState,
   setStateCallback,
   selectionState,
-  sel,
-  allowInteractions,
-  allowTooltips,
+  selectionsAndTransform,
   navigationMode,
-  containerHeight
+  element
 ) {
-  const { cardWidth, cardHeight, buttonWidth, buttonHeight, buttonMargin, rootDiameter, tooltipWidth, tooltipPadding } = constants;
+  const {
+    cardWidth,
+    cardHeight,
+    buttonWidth,
+    buttonHeight,
+    buttonMargin,
+    rootDiameter,
+    tooltipWidth,
+    tooltipPadding,
+  } = constants;
   const { topId, isExpanded } = expandedState;
   const topNode = nodes.find(node => node.data.id === topId);
-  const ancestorIds = topNode.parent ? topNode.parent.ancestors().map(anc => anc.data.id) : [];
+  const ancestorIds = topNode && topNode.parent ? topNode.parent.ancestors().map(anc => anc.data.id) : [];
   let tooltipOpen = -1;
   let tooltipClose = -1;
 
@@ -91,7 +98,13 @@ export default function box(
   function getTooltipStyle(d) {
     const halfCardWidth = cardWidth / 2;
     const halfTooltipWidth = tooltipWidth / 2;
-    return `bottom:${containerHeight - ((y(d)) * sel.transform.zoom + sel.transform.y - tooltipPadding)}px;left:${x(d) * sel.transform.zoom + sel.transform.x - (halfTooltipWidth - (halfCardWidth * sel.transform.zoom))}px;visibility: visible;opacity: 0.9;`;
+    return `bottom:${element.clientHeight -
+      (y(d) * selectionsAndTransform.transform.zoom + selectionsAndTransform.transform.y - tooltipPadding)}px;left:${x(
+      d
+    ) *
+      selectionsAndTransform.transform.zoom +
+      selectionsAndTransform.transform.x -
+      (halfTooltipWidth - halfCardWidth * selectionsAndTransform.transform.zoom)}px;visibility: visible;opacity: 0.9;`;
   }
 
   // cards
@@ -104,23 +117,25 @@ export default function box(
     .attr('style', d => `width:${cardWidth}px;height:${cardHeight}px; top:${y(d)}px;left:${x(d)}px;`)
     .attr('id', d => d.data.id)
     .on('click', node => {
-      if (allowInteractions && node.data.id !== 'Root') {
-        selections.select(node, sel, selectionState);
+      if (!selectionsAndTransform.constraints.active && node.data.id !== 'Root') {
+        selections.select(node, selectionsAndTransform, selectionState);
       }
     })
-    .html(d => card(d.data, cardStyling, sel, selectionState))
+    .html(d => card(d.data, cardStyling, selectionsAndTransform, selectionState))
     .on('mouseenter', d => {
-      if (allowTooltips && tooltipOpen === -1 && event.buttons === 0) {
+      if (!selectionsAndTransform.constraints.passive && tooltipOpen === -1 && event.buttons === 0) {
         tooltipOpen = setTimeout(() => {
           tooltip
-            .html(`${d.data.attributes.label || d.data.id}<br />${d.data.attributes.subLabel ? `${d.data.attributes.subLabel}<br />` : ''}${d.data.attributes.extraLabel ? `${d.data.attributes.extraLabel}<br />` : ''}${d.data.measure || ''}`)
+            .html(
+              `${d.data.attributes.label || d.data.id}<br />${
+                d.data.attributes.subLabel ? `${d.data.attributes.subLabel}<br />` : ''
+              }${d.data.attributes.extraLabel ? `${d.data.attributes.extraLabel}<br />` : ''}${d.data.measure || ''}`
+            )
             .attr('style', () => getTooltipStyle(d));
           tooltipOpen = -1;
         }, 250);
         tooltipClose = setTimeout(() => {
-          tooltip
-            .html('')
-            .attr('style', 'visibility: hidden;opacity: 0;');
+          tooltip.html('').attr('style', 'visibility: hidden;opacity: 0;');
         }, 7000);
       }
     })
@@ -128,17 +143,13 @@ export default function box(
       clearTimeout(tooltipOpen);
       tooltipOpen = -1;
       clearTimeout(tooltipClose);
-      tooltip
-        .html('')
-        .attr('style', 'visibility: hidden;opacity: 0;');
+      tooltip.html('').attr('style', 'visibility: hidden;opacity: 0;');
     })
     .on('mousedown', () => {
       clearTimeout(tooltipOpen);
       tooltipOpen = -1;
       clearTimeout(tooltipClose);
-      tooltip
-        .html('')
-        .attr('style', 'visibility: hidden;opacity: 0;');
+      tooltip.html('').attr('style', 'visibility: hidden;opacity: 0;');
     });
 
   // expand/collapse
@@ -156,7 +167,7 @@ export default function box(
     )
     .attr('id', d => `${d.data.id}-expand`)
     .on('click', d => {
-      if (allowInteractions) {
+      if (!selectionsAndTransform.constraints.active) {
         setStateCallback(getNewState(d, expandedState, ancestorIds));
       }
     })
@@ -178,7 +189,7 @@ export default function box(
       )
       .attr('id', d => `${d.data.id}-up`)
       .on('click', d => {
-        if (allowInteractions) {
+        if (!selectionsAndTransform.constraints.active) {
           setStateCallback(getNewUpState(d, isExpanded));
         }
       })

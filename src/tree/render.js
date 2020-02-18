@@ -38,10 +38,10 @@ export const paintTree = ({
   expandedState,
   styling,
   setStateCallback,
-  selections,
+  selectionsAndTransform,
   selectionState,
-  constraints,
   useTransitions,
+  element,
 }) => {
   const { svg, divBox, allNodes, positioning, width, height, tooltip } = objectData;
   const { navigationMode } = allNodes.data;
@@ -59,11 +59,9 @@ export const paintTree = ({
     expandedState,
     setStateCallback,
     selectionState,
-    selections,
-    !constraints.active,
-    !constraints.passive,
+    selectionsAndTransform,
     navigationMode,
-    height
+    element
   );
   // Create the lines (links) between the nodes
   const node = svg
