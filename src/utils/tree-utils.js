@@ -1,5 +1,3 @@
-import translations from './translations';
-
 const pageSize = 3300;
 const attributeIDs = {
   colorByExpression: 'color',
@@ -157,7 +155,7 @@ export function haveNoChildren(nodes) {
   return true;
 }
 
-export function createNodes(matrix, attributeIndecies, status, navigationMode) {
+export function createNodes(matrix, attributeIndecies, status, navigationMode, translator) {
   const nodeMap = {};
   const allNodes = [];
   for (let i = 0; i < matrix.length; ++i) {
@@ -191,15 +189,15 @@ export function createNodes(matrix, attributeIndecies, status, navigationMode) {
   // We might be able to use the rootnodes lenght as well
   if (rootNodes.length === 0) {
     // The only way to have no root noot is to have a single cycle, which means we cannot break it
-    return { error: NO_ROOT, message: translations[NO_ROOT] };
+    return { error: NO_ROOT, message: translator.get('Object.OrgChart.MissingRoot') };
   }
   const warn = [];
   if (status === MAX_DATA) {
-    warn.push(translations[MAX_DATA]);
+    warn.push(translator.get('Object.OrgChart.MaxData'));
   }
   // I have not looked at these functions at all. But we need to check the data as well I would say.
   if (anyCycle(allNodes)) {
-    warn.push(translations.cycle);
+    warn.push(translator.get('Object.OrgChart.CycleWarning'));
   }
 
   if (rootNodes.length === 1) {
@@ -209,10 +207,10 @@ export function createNodes(matrix, attributeIndecies, status, navigationMode) {
   }
 
   // Here a fake root node is created when multiple rootnodes exist
-  warn.push(translations.dummy_warn);
+  warn.push(translator.get('Object.OrgChart.DummyWarn'));
   const rootNode = {
     id: 'Root',
-    name: translations.dummy,
+    name: translator.get('Object.OrgChart.DummyRoot'),
     isDummy: true, // Should be rendered in a specific way?
     warn,
     children: rootNodes,
@@ -231,7 +229,7 @@ export function createNodes(matrix, attributeIndecies, status, navigationMode) {
   return rootNode;
 }
 
-export default async function transform({ layout, model }) {
+export default async function transform({ layout, model, translator }) {
   if (!layout.qHyperCube) {
     throw new Error('Require a hypercube');
   }
@@ -249,5 +247,5 @@ export default async function transform({ layout, model }) {
     return null;
   }
 
-  return createNodes(dataMatrix, attributeIndecies, status, layout.navigationMode);
+  return createNodes(dataMatrix, attributeIndecies, status, layout.navigationMode, translator);
 }

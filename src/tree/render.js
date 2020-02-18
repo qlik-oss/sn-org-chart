@@ -76,11 +76,12 @@ export const paintTree = ({
 };
 
 export const getSize = ({ error, warn }, element) => {
-  const size = element.getBoundingClientRect();
+  // eslint-disable-next-line prefer-const
+  let { width, height } = element.getBoundingClientRect();
   if (error || (warn && warn.length)) {
-    size.height -= 20;
+    height -= 20;
   }
-  return size;
+  return { width, height };
 };
 
 export function preRenderTree(element, dataTree) {

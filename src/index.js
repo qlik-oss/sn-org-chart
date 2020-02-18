@@ -12,6 +12,7 @@ import {
   useOptions,
   useImperativeHandle,
   useConstraints,
+  useTranslator,
 } from '@nebula.js/supernova';
 import properties from './object-properties';
 import data from './data';
@@ -21,6 +22,7 @@ import stylingUtils from './utils/styling';
 import treeTransform from './utils/tree-utils';
 import viewStateUtil from './utils/viewstate-utils';
 import { setZooming } from './tree/transform';
+import autoRegister from './locale/translations';
 import './styles/tooltip.less';
 import './styles/paths.less';
 import './styles/warnings.less';
@@ -55,6 +57,8 @@ export default function supernova(env) {
         transform: {},
         constraints,
       });
+
+      const translator = useTranslator();
 
       const resetSelections = () => {
         setSelectionState([]);
@@ -149,14 +153,15 @@ export default function supernova(env) {
         viewState && viewState.expandedState && setExpandedState(viewState.expandedState);
         viewState && viewState.transform && setTransform(viewState.transform);
 
-        return treeTransform({ layout, model }).then(transformed => {
+        autoRegister(translator);
+        return treeTransform({ layout, model, translator }).then(transformed => {
           setDataTree(transformed);
           setStyling(stylingUtils.cardStyling({ Theme, layout }));
           setSelectionState([]);
           // Resolving the promise to indicate readiness for printing
           return Promise.resolve();
         });
-      }, [layout, model]);
+      }, [layout, model, translator]);
 
       // This one can split up. Only need to get new height/width when rect is changed
       useEffect(() => {

@@ -27,6 +27,9 @@ export default {
           dimensions: {
             disabledRef: '',
             items: {
+              dimensionLimits: {
+                show: false,
+              },
               attributes: {
                 component: 'attribute-expression-reference',
                 defaultValue: [],
@@ -39,7 +42,7 @@ export default {
                   {
                     component: 'expression',
                     ref: 'qExpression',
-                    translation: '$Label expression',
+                    translation: 'Object.OrgChart.LabelExpression',
                     defaultValue: '',
                     id: 'labelExpression',
                     tid: 'labelExpression',
@@ -47,7 +50,7 @@ export default {
                   {
                     component: 'expression',
                     ref: 'qExpression',
-                    translation: '$Sub label expression',
+                    translation: 'Object.OrgChart.SubLabelExpression',
                     defaultValue: '',
                     id: 'subLabelExpression',
                     tid: 'subLabelExpression',
@@ -55,7 +58,7 @@ export default {
                   {
                     component: 'expression',
                     ref: 'qExpression',
-                    translation: '$Extra label expression',
+                    translation: 'Object.OrgChart.ExtraLabelExpression',
                     defaultValue: '',
                     id: 'extraLabelExpression',
                     tid: 'extraLabelExpression',
@@ -63,7 +66,7 @@ export default {
                   {
                     component: 'expression',
                     ref: 'qExpression',
-                    translation: '$Color expression',
+                    translation: 'Object.OrgChart.ColorLabelExpression',
                     defaultValue: '',
                     id: 'colorByExpression',
                     tid: 'nodeColorByExpression',
@@ -128,7 +131,7 @@ export default {
                   useColorExpression: {
                     ref: 'style.backgroundColor.colorType',
                     type: 'string',
-                    translation: 'AppDetails.SheetBackgroundColor',
+                    translation: 'Object.OrgChart.BackgroundColor',
                     component: 'dropdown',
                     options: colorOptions,
                   },
@@ -156,7 +159,7 @@ export default {
                   useColorExpression: {
                     ref: 'style.fontColor.colorType',
                     type: 'string',
-                    translation: 'AppDetails.SheetFontColor',
+                    translation: 'Object.OrgChart.FontColor',
                     component: 'dropdown',
                     options: colorOptions,
                   },
