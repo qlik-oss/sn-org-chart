@@ -89,7 +89,7 @@ describe('card', () => {
     it('should return html for node with attribute label', () => {
       data.attributes.label = 'this is the label';
       const result = card(data, cardStyling, selections);
-      expect(result).to.equal(getHtml('<div class="sn-org-card-title">this is the label</div>'));
+      expect(result).to.equal(getHtml(`<div class="sn-org-card-title">${data.attributes.label}</div>`));
     });
 
     it('should return html for node with id and subLabel', () => {
