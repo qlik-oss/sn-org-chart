@@ -36,17 +36,19 @@ describe('path', () => {
         },
         xActual: 0,
         yActual: 0,
-        children: [{
-          children: [{}],
-        }],
+        children: [
+          {
+            children: [{}],
+          },
+        ],
       };
       d = {
         parent,
         xActual: 300,
         yActual: cardHeight + heightMargin,
         data: {
-          id: '1'
-        }
+          id: '1',
+        },
       };
       positioning = {
         nodeSize,
@@ -59,10 +61,10 @@ describe('path', () => {
 
     it('should return points for vertical tree', () => {
       expectedPoints = [
-        { x: 376, y: 124 },
+        { x: 376, y: 120 },
         { x: 376, y: 112 },
         { x: 76, y: 112 },
-        { x: 76, y: 100 }
+        { x: 76, y: 96 },
       ];
       const points = getPoints(d, topId, positioning)[0];
       expect(points).to.deep.equal(expectedPoints);
@@ -75,7 +77,7 @@ describe('path', () => {
         { x: 400, y: 250 },
         { x: 250, y: 250 },
         { x: 250, y: 50 },
-        { x: 100, y: 50 }
+        { x: 100, y: 50 },
       ];
       const points = getPoints(d, positioning, isVertical);
       expect(points).to.deep.equal(expectedPoints);
@@ -84,11 +86,11 @@ describe('path', () => {
     it('should return points for vertical tree w only leafs', () => {
       parent.children = [{}];
       expectedPoints = [
-        { x: 300, y: 156 },
-        { x: 0, y: 156 },
-        { x: 0, y: 112 },
-        { x: 76, y: 112 },
-        { x: 76, y: 100 }
+        { x: 300, y: 152 },
+        { x: 0, y: 152 },
+        { x: 0, y: 104 },
+        { x: 76, y: 104 },
+        { x: 76, y: 96 },
       ];
       const points = getPoints(d, topId, positioning)[0];
       expect(points).to.deep.equal(expectedPoints);
@@ -103,7 +105,7 @@ describe('path', () => {
         { x: 400, y: 0 },
         { x: 250, y: 0 },
         { x: 250, y: 50 },
-        { x: 100, y: 50 }
+        { x: 100, y: 50 },
       ];
       const points = getPoints(d, positioning, isVertical);
       expect(points).to.deep.equal(expectedPoints);
@@ -112,8 +114,8 @@ describe('path', () => {
     it('should return points for a straight vertical line', () => {
       d.xActual = 0;
       expectedPoints = [
-        { x: 76, y: 124 },
-        { x: 76, y: 100 }
+        { x: 76, y: 120 },
+        { x: 76, y: 96 },
       ];
       const points = getPoints(d, topId, positioning)[0];
       expect(points).to.deep.equal(expectedPoints);
@@ -123,7 +125,7 @@ describe('path', () => {
       d.yActual = 0;
       expectedPoints = [
         { x: 400, y: 50 },
-        { x: 100, y: 50 }
+        { x: 100, y: 50 },
       ];
       const points = getPoints(d, positioning, isVertical);
       expect(points).to.deep.equal(expectedPoints);
@@ -132,8 +134,8 @@ describe('path', () => {
     it('should return points for line to up button', () => {
       topId = '1';
       expectedPoints = [
-        { x: 376, y: 124 },
-        { x: 376, y: 112 }
+        { x: 376, y: 120 },
+        { x: 376, y: 112 },
       ];
       const points = getPoints(d, topId, positioning)[0];
       expect(points).to.deep.equal(expectedPoints);
@@ -142,8 +144,8 @@ describe('path', () => {
     it('should return points for line to expand button', () => {
       d.children = [{}];
       expectedPoints = [
-        { x: 376, y: 188 },
-        { x: 376, y: 200 }
+        { x: 376, y: 184 },
+        { x: 376, y: 192 },
       ];
       const points = getPoints(d, topId, positioning)[1];
       expect(points).to.deep.equal(expectedPoints);
@@ -153,8 +155,8 @@ describe('path', () => {
       topId = 'Root';
       d.parent.data.id = 'Root';
       expectedPoints = [
-        { x: 376, y: 124 },
-        { x: 376, y: 112 }
+        { x: 376, y: 120 },
+        { x: 376, y: 112 },
       ];
       const points = getPoints(d, topId, positioning)[0];
       expect(points).to.deep.equal(expectedPoints);

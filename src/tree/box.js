@@ -74,7 +74,7 @@ export default function box(
     cardHeight,
     buttonWidth,
     buttonHeight,
-    buttonMargin,
+    cardPadding,
     rootDiameter,
     tooltipWidth,
     tooltipPadding,
@@ -92,7 +92,7 @@ export default function box(
     .enter()
     .append('div')
     .attr('class', 'sn-org-root')
-    .attr('style', d => `top:${y(d) - rootDiameter - buttonMargin}px;left:${x(d) + (cardWidth - rootDiameter) / 2}px`)
+    .attr('style', d => `top:${y(d) - rootDiameter - cardPadding}px;left:${x(d) + (cardWidth - rootDiameter) / 2}px`)
     .attr('id', d => d.data.id);
 
   function getTooltipStyle(d) {
@@ -162,7 +162,7 @@ export default function box(
     .attr(
       'style',
       d =>
-        `width:${buttonWidth}px;height:${buttonHeight}px;top:${y(d) + cardHeight + buttonMargin}px;left:${x(d) +
+        `width:${buttonWidth}px;height:${buttonHeight}px;top:${y(d) + cardHeight + cardPadding}px;left:${x(d) +
           (cardWidth - buttonWidth) / 2}px;`
     )
     .attr('id', d => `${d.data.id}-expand`)
@@ -187,7 +187,7 @@ export default function box(
       .attr(
         'style',
         d =>
-          `width:${buttonWidth}px;height:${buttonHeight}px;top:${y(d) - buttonHeight - buttonMargin}px;left:${x(d) +
+          `width:${buttonWidth}px;height:${buttonHeight}px;top:${y(d) - buttonHeight - cardPadding}px;left:${x(d) +
             (cardWidth - buttonWidth) / 2}px;`
       )
       .attr('id', d => `${d.data.id}-up`)
