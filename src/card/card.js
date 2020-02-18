@@ -29,7 +29,7 @@ export default (data, cardStyling, sel, selectionState) => {
   }
   if (data.measure) {
     const measureLabel = cardStyling.measureLabel ? `${cardStyling.measureLabel}: ` : '';
-    html += `<div class="org-card-text">${measureLabel}${data.measure}</div>`;
+    html += `<div class="sn-org-card-label">${measureLabel}${data.measure}</div>`;
   } else if (attributes.extraLabel) {
     html += `<div class="sn-org-card-label">${attributes.extraLabel}</div>`;
   }
