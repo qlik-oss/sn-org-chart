@@ -63,6 +63,7 @@ export default {
                     id: 'extraLabelExpression',
                     tid: 'extraLabelExpression',
                   },
+
                   {
                     component: 'expression',
                     ref: 'qExpression',
@@ -72,6 +73,11 @@ export default {
                     tid: 'nodeColorByExpression',
                   },
                 ],
+              },
+              desc: {
+                component: 'text',
+                translation: 'Object.OrgChart.ExtraLabelDesc',
+                style: 'hint',
               },
             },
           },
