@@ -44,7 +44,7 @@ export const paintTree = ({
   useTransitions,
   element,
 }) => {
-  const { svg, divBox, allNodes, positioning, width, height } = objectData;
+  const { svg, divBox, allNodes, positioning, width, height, tooltip } = objectData;
   const { navigationMode } = allNodes.data;
   divBox.selectAll('*').remove();
   svg.selectAll('*').remove();
@@ -61,7 +61,8 @@ export const paintTree = ({
     selectionState,
     selectionsAndTransform,
     navigationMode,
-    element
+    element,
+    tooltip
   );
   // Create the lines (links) between the nodes
   const node = svg
@@ -111,7 +112,7 @@ export function preRenderTree(element, dataTree) {
     .append('div')
     .attr('class', 'sn-org-nodes');
 
-  createTooltip(element);
+  const tooltip = createTooltip(element);
 
   if (dataTree.error) {
     select(zoomWrapper)
@@ -135,5 +136,5 @@ export function preRenderTree(element, dataTree) {
     .nodeSize([0, positioning.depthSpacing]);
 
   const allNodes = treemap(hierarchy(dataTree));
-  return { svg, divBox, allNodes, positioning, width, height, element, zoomWrapper };
+  return { svg, divBox, allNodes, positioning, width, height, element, zoomWrapper, tooltip };
 }

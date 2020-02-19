@@ -67,7 +67,8 @@ export default function box(
   selectionState,
   selectionsAndTransform,
   navigationMode,
-  element
+  element,
+  tooltip
 ) {
   const { cardWidth, cardHeight, buttonWidth, buttonHeight, buttonMargin, rootDiameter } = constants;
   const { topId, isExpanded } = expandedState;
@@ -101,17 +102,17 @@ export default function box(
     .html(d => card(d.data, cardStyling, selectionsAndTransform, selectionState))
     .on('mouseenter', d => {
       if (!selectionsAndTransform.constraints.active && event.buttons === 0) {
-        openTooltip(d, element.clientHeight, cardStyling, x, y, selectionsAndTransform);
+        openTooltip(tooltip, d, element.clientHeight, cardStyling, x, y, selectionsAndTransform);
       }
     })
     .on('mouseleave', () => {
-      closeTooltip();
+      closeTooltip(tooltip);
     })
     .on('mousedown', () => {
-      closeTooltip();
+      closeTooltip(tooltip);
     })
     .on('wheel', () => {
-      closeTooltip();
+      closeTooltip(tooltip);
     });
 
   // expand/collapse
