@@ -50,7 +50,7 @@ describe('styling', () => {
     };
     it('should return cardStyling', () => {
       const result = stylingUtils.cardStyling({ layout });
-      expect(result).to.deep.equal({ backgroundColor: '#e6e6e6', fontColor: 'default', measureLabel: 'measureLabel' });
+      expect(result).to.deep.equal({ backgroundColor: '#e6e6e6', fontColor: 'default', measureLabel: 'null' });
     });
     it('should return cardStyling with no measureLabel', () => {
       layout.qHyperCube.qMeasureInfo = [];

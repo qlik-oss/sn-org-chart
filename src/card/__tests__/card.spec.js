@@ -82,6 +82,7 @@ describe('card', () => {
     });
 
     it('should return html for node with only id', () => {
+      data.attributes = null;
       const result = card(data, cardStyling, selections);
       expect(result).to.equal(getHtml(`<div class="sn-org-card-title">${data.id}</div>`));
     });
@@ -121,6 +122,19 @@ describe('card', () => {
       expect(result).to.equal(
         getHtml(
           `<div class="sn-org-card-title">${data.attributes.label}</div><div class="sn-org-card-label">${data.attributes.subLabel}</div><div class="sn-org-card-label">${data.measure}</div>`
+        )
+      );
+    });
+    it('should return html for node with three labels and measure with label', () => {
+      data.attributes.label = 'this is the label';
+      data.attributes.subLabel = 'subsub';
+      data.attributes.extraLabel = 'extra';
+      data.measure = 'measure';
+      cardStyling.measureLabel = 'measureLabel';
+      const result = card(data, cardStyling, selections);
+      expect(result).to.equal(
+        getHtml(
+          `<div class="sn-org-card-title">${data.attributes.label}</div><div class="sn-org-card-label">${data.attributes.subLabel}</div><div class="sn-org-card-label">measureLabel: ${data.measure}</div>`
         )
       );
     });
