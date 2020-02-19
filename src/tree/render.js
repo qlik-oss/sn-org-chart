@@ -16,7 +16,7 @@ export const filterTree = ({ topId, isExpanded, expandedChildren }, nodeTree, ex
           child.children.forEach(grandChild => {
             subTree.push(grandChild);
             if (expandedChildren.indexOf(child.data.id) !== -1 && extended && grandChild.children) {
-              child.children.forEach(extendedChild => {
+              grandChild.children.forEach(extendedChild => {
                 subTree.push(extendedChild);
               });
             }
@@ -41,7 +41,7 @@ export const filterTree = ({ topId, isExpanded, expandedChildren }, nodeTree, ex
 };
 
 export const createSnapshotData = (expandedState, allNodes, layout) => {
-  if (layout.snapshotData.dataMatrix) {
+  if (layout.snapshotData && layout.snapshotData.dataMatrix) {
     // Need a check here becuase of free resize in storytelling
     return layout.snapshotData.dataMatrix;
   }

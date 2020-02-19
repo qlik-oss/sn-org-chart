@@ -186,11 +186,11 @@ export function createNodes(matrix, attributeIndecies, status, navigationMode, t
     const parentNode = nodeMap[node.parentId];
     node.parent = parentNode;
     if (parentNode) {
-      parentNode.children.length > 100
+      parentNode.children.length > 98
         ? (maxNodeWarning = true)
         : parentNode.children.push({ childNumber: parentNode.children.length, ...node });
     } else {
-      rootNodes.length > 100 ? (maxNodeWarning = true) : rootNodes.push(node);
+      rootNodes.length > 98 ? (maxNodeWarning = true) : rootNodes.push(node);
     }
   }
 
