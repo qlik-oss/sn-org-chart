@@ -63,22 +63,26 @@ export default function supernova(env) {
         autoRegister(translator);
       }, [translator]);
 
-      const resetSelections = resetLinked => {
-        resetLinked && setLinked(false);
+      const resetSelections = () => {
         setSelectionState([]);
       };
+      const resetSelectionsAndLinked = () => {
+        setLinked(false);
+        setSelectionState([]);
+      };
+
       useEffect(() => {
         if (!selectionsAndTransform.api) {
           return () => {};
         }
         selectionsAndTransform.api = selectionsAPI;
-        selectionsAndTransform.api.on('canceled', () => resetSelections(true));
-        selectionsAndTransform.api.on('confirmed', () => resetSelections(true));
-        selectionsAndTransform.api.on('cleared', () => resetSelections(false));
+        selectionsAndTransform.api.on('canceled', resetSelectionsAndLinked);
+        selectionsAndTransform.api.on('confirmed', resetSelectionsAndLinked);
+        selectionsAndTransform.api.on('cleared', resetSelections);
         // Return function called on unmount
         return () => {
-          selectionsAndTransform.api.removeListener('canceled', resetSelections);
-          selectionsAndTransform.api.removeListener('confirmed', resetSelections);
+          selectionsAndTransform.api.removeListener('canceled', resetSelectionsAndLinked);
+          selectionsAndTransform.api.removeListener('confirmed', resetSelectionsAndLinked);
           selectionsAndTransform.api.removeListener('cleared', resetSelections);
         };
       }, [selectionsAPI]);
