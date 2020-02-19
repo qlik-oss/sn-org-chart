@@ -13,7 +13,6 @@ import {
   useImperativeHandle,
   useConstraints,
   useTranslator,
-  useRect,
 } from '@nebula.js/supernova';
 import properties from './object-properties';
 import data from './data';
@@ -58,8 +57,6 @@ export default function supernova(env) {
         transform: {},
         constraints,
       });
-
-      const rect = useRect();
 
       const translator = useTranslator();
       useEffect(() => {
@@ -216,10 +213,9 @@ export default function supernova(env) {
             setTransform,
             transformState: (viewState && viewState.transform) || {},
             selectionsAndTransform,
-            rect,
           });
         }
-      }, [objectData, rect]);
+      }, [objectData]);
 
       const createViewState = () => {
         const vs = {
@@ -231,8 +227,6 @@ export default function supernova(env) {
       };
 
       onTakeSnapshot(snapshotLayout => {
-        // Need a check here becuase of free resize in storytelling
-
         snapshotLayout.snapshotData.viewState = createViewState();
         snapshotLayout.snapshotData.dataMatrix = createSnapshotData(expandedState, objectData.allNodes, layout);
       });

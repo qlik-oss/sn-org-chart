@@ -42,6 +42,7 @@ export const filterTree = ({ topId, isExpanded, expandedChildren }, nodeTree, ex
 
 export const createSnapshotData = (expandedState, allNodes, layout) => {
   if (layout.snapshotData.dataMatrix) {
+    // Need a check here becuase of free resize in storytelling
     return layout.snapshotData.dataMatrix;
   }
   // filter down to the visible nodes
