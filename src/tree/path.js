@@ -3,14 +3,14 @@ import constants from './size-constants';
 
 export function getPoints(d, topId, { depthSpacing, isVertical, x, y }) {
   // TODO: Generalize to make all directions work, currently on only ttb working
-  const { cardWidth, cardHeight, buttonMargin, buttonHeight } = constants;
+  const { cardWidth, cardHeight, buttonHeight, cardPadding, buttonMargin } = constants;
   const points = [];
   const halfCard = { x: cardWidth / 2, y: cardHeight / 2 };
   const start = { x: x(d), y: y(d) };
 
   if (d.parent && d.parent.data.id !== 'Root' && d.data.id !== topId) {
     const halfDepth = depthSpacing / 2;
-    const end = { x: x(d.parent) + halfCard.x, y: y(d.parent) + cardHeight + buttonMargin + buttonHeight };
+    const end = { x: x(d.parent) + halfCard.x, y: y(d.parent) + cardHeight + cardPadding + buttonHeight };
 
     if (haveNoChildren(d.parent.children)) {
       // to leafs
@@ -43,14 +43,14 @@ export function getPoints(d, topId, { depthSpacing, isVertical, x, y }) {
         isVertical
           ? [
             { x: start.x + halfCard.x, y: start.y },
-            { x: start.x + halfCard.x, y: start.y - buttonMargin },
-            { x: end.x, y: start.y - buttonMargin },
+            { x: start.x + halfCard.x, y: start.y - cardPadding },
+            { x: end.x, y: start.y - cardPadding },
             { x: end.x, y: end.y },
           ]
           : [
             { x: start.x, y: start.y },
-            { x: start.x - buttonMargin, y: start.y },
-            { x: start.x - buttonMargin, y: end.y },
+            { x: start.x - cardPadding, y: start.y },
+            { x: start.x - cardPadding, y: end.y },
             { x: end.x, y: end.y },
           ]
       );
@@ -59,7 +59,7 @@ export function getPoints(d, topId, { depthSpacing, isVertical, x, y }) {
     // to up button or dummy root
     points.push([
       { x: start.x + halfCard.x, y: start.y },
-      { x: start.x + halfCard.x, y: start.y - buttonMargin },
+      { x: start.x + halfCard.x, y: start.y - cardPadding },
     ]);
   }
 
@@ -67,7 +67,7 @@ export function getPoints(d, topId, { depthSpacing, isVertical, x, y }) {
     // to expand button
     points.push([
       { x: start.x + halfCard.x, y: start.y + cardHeight },
-      { x: start.x + halfCard.x, y: start.y + cardHeight + buttonMargin },
+      { x: start.x + halfCard.x, y: start.y + cardHeight + cardPadding },
     ]);
   }
 
