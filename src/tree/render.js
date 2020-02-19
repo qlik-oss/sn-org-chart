@@ -4,17 +4,24 @@ import box from './box';
 import createPaths from './path';
 import transform from './transform';
 
-export const filterTree = ({ topId, isExpanded, expandedChildren }, nodeTree) => {
+export const filterTree = ({ topId, isExpanded, expandedChildren }, nodeTree, extended) => {
   const topNode = nodeTree.descendants().find(node => node.data.id === topId) || nodeTree;
   const subTree = [];
   if (isExpanded && topNode.children) {
     // children
     topNode.children.forEach(child => {
       subTree.push(child);
-      if (child.children && expandedChildren.indexOf(child.data.id) !== -1) {
-        child.children.forEach(grandChild => {
-          subTree.push(grandChild);
-        });
+      if (child.children) {
+        if (expandedChildren.indexOf(child.data.id) !== -1 || extended) {
+          child.children.forEach(grandChild => {
+            subTree.push(grandChild);
+            if (expandedChildren.indexOf(child.data.id) !== -1 && extended && grandChild.children) {
+              child.children.forEach(extendedChild => {
+                subTree.push(extendedChild);
+              });
+            }
+          });
+        }
       }
     });
   }
@@ -31,6 +38,24 @@ export const filterTree = ({ topId, isExpanded, expandedChildren }, nodeTree) =>
     subTree.unshift(topNode); // self
   }
   return subTree;
+};
+
+export const createSnapshotData = (expandedState, allNodes, layout) => {
+  if (layout.snapshotData.dataMatrix) {
+    return layout.snapshotData.dataMatrix;
+  }
+  // filter down to the visible nodes
+  const nodes = filterTree(expandedState, allNodes, true);
+  const usedMatrix = [];
+  const { qDataPages } = layout.qHyperCube;
+  const dataMatrix = [];
+  qDataPages.forEach(page => {
+    dataMatrix.push(...page.qMatrix);
+  });
+  nodes.forEach(n => {
+    usedMatrix.push(dataMatrix[n.data.rowNo]);
+  });
+  return usedMatrix;
 };
 
 export const paintTree = ({

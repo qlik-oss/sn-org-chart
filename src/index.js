@@ -13,11 +13,12 @@ import {
   useImperativeHandle,
   useConstraints,
   useTranslator,
+  useRect,
 } from '@nebula.js/supernova';
 import properties from './object-properties';
 import data from './data';
 import ext from './extension/ext';
-import { paintTree, preRenderTree } from './tree/render';
+import { paintTree, preRenderTree, createSnapshotData } from './tree/render';
 import stylingUtils from './utils/styling';
 import treeTransform from './utils/tree-utils';
 import viewStateUtil from './utils/viewstate-utils';
@@ -57,6 +58,8 @@ export default function supernova(env) {
         transform: {},
         constraints,
       });
+
+      const rect = useRect();
 
       const translator = useTranslator();
       useEffect(() => {
@@ -213,9 +216,10 @@ export default function supernova(env) {
             setTransform,
             transformState: (viewState && viewState.transform) || {},
             selectionsAndTransform,
+            rect,
           });
         }
-      }, [objectData]);
+      }, [objectData, rect]);
 
       const createViewState = () => {
         const vs = {
@@ -227,7 +231,10 @@ export default function supernova(env) {
       };
 
       onTakeSnapshot(snapshotLayout => {
-        snapshotLayout.viewState = createViewState();
+        // Need a check here becuase of free resize in storytelling
+
+        snapshotLayout.snapshotData.viewState = createViewState();
+        snapshotLayout.snapshotData.dataMatrix = createSnapshotData(expandedState, objectData.allNodes, layout);
       });
 
       useImperativeHandle(() => ({

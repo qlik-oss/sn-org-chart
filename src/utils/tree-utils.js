@@ -69,6 +69,10 @@ async function fetchPage(dataPages, dataMatrix, model, fullHeight, currentRow, c
 }
 
 const getDataMatrix = async (layout, model) => {
+  if (layout.snapshotData) {
+    return { status: '', dataMatrix: layout.snapshotData.dataMatrix };
+  }
+
   const dataPages = layout.qHyperCube && layout.qHyperCube.qDataPages;
   const fullHeight = layout.qHyperCube.qSize.qcy;
   const loadedHeight = dataPages[0].qArea.qHeight;
@@ -169,6 +173,7 @@ export function createNodes(matrix, attributeIndecies, status, navigationMode, t
       elemNo: row[0].qElemNumber,
       attributes: getAttributes(attributeIndecies, row[0].qAttrExps),
       measure: row[2] && row[2].qText,
+      rowNo: i,
     };
     nodeMap[id] = node;
     allNodes.push(node);
