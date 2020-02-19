@@ -171,7 +171,7 @@ export default function supernova(env) {
           // Resolving the promise to indicate readiness for printing
           return Promise.resolve();
         });
-      }, [layout, model, translator]);
+      }, [layout, model, translator, Theme.name()]);
 
       // This one can split up. Only need to get new height/width when rect is changed
       useEffect(() => {
