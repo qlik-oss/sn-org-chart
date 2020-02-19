@@ -5,30 +5,33 @@ describe('styling', () => {
     let reference;
     const palette = ['firstColor', 'secondColor'];
     const defaultColor = '#e6e6e6';
+    const Theme = {
+      getColorPickerColor: (color) => palette[color.index] || 'none'
+    };
     beforeEach(() => {
       reference = { colorType: 'auto', colorExpression: 'pink', color: { index: 1 } };
     });
     it('should return default color', () => {
-      const result = getColor(reference, palette, defaultColor);
+      const result = getColor(reference, Theme, defaultColor);
       expect(result).to.equal(defaultColor);
     });
 
     it('should return color from expression', () => {
       reference.colorType = 'byExpression';
-      const result = getColor(reference, palette, defaultColor);
+      const result = getColor(reference, Theme, defaultColor);
       expect(result).to.equal('rgba(255,192,203,1)');
     });
 
     it('should return color from colorPicker', () => {
       reference.colorType = 'colorPicker';
-      const result = getColor(reference, palette, defaultColor);
+      const result = getColor(reference, Theme, defaultColor);
       expect(result).to.equal('secondColor');
     });
 
     it('should return default color from colorPicker', () => {
       reference.colorType = 'colorPicker';
       reference.color.index = 10;
-      const result = getColor(reference, palette, defaultColor);
+      const result = getColor(reference, Theme, defaultColor);
       expect(result).to.equal('#e6e6e6');
     });
   });
