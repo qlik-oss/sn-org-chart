@@ -1,5 +1,5 @@
-import { getPoints, getPath } from './path';
-import constants from './size-constants';
+import { getPoints, getPath } from '../path';
+import constants from '../size-constants';
 
 describe('path', () => {
   describe('getPath', () => {
@@ -158,6 +158,12 @@ describe('path', () => {
       ];
       const points = getPoints(d, topId, positioning)[0];
       expect(points).to.deep.equal(expectedPoints);
+    });
+
+    it('should return no points if no parent', () => {
+      d.parent = undefined;
+      const points = getPoints(d, topId, positioning);
+      expect(points).to.deep.equal([]);
     });
   });
 });
