@@ -31,13 +31,17 @@ export function openTooltip(tooltip, d, containerHeight, cardStyling, x, y, sel)
   const measure = d.data.measure
     ? `${cardStyling.measureLabel ? `${cardStyling.measureLabel}: ` : ''}${d.data.measure}`
     : '';
+  tooltip.active = true;
   setTimeout(() => {
-    tooltip
-      .html(`${label}<br />${subLabel}${extraLabel}${measure}`)
-      .attr('style', () => getTooltipStyle(d, containerHeight, x, y, sel));
+    if (tooltip.active) {
+      tooltip
+        .html(`${label}<br />${subLabel}${extraLabel}${measure}`)
+        .attr('style', () => getTooltipStyle(d, containerHeight, x, y, sel));
+    }
   }, 250);
 }
 
 export function closeTooltip(tooltip) {
+  tooltip.active = false;
   tooltip.attr('style', 'visibility: hidden;opacity: 0;');
 }
