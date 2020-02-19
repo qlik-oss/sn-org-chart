@@ -12,6 +12,7 @@ import {
   useOptions,
   useImperativeHandle,
   useConstraints,
+  useTranslator,
 } from '@nebula.js/supernova';
 import properties from './object-properties';
 import data from './data';
@@ -21,6 +22,7 @@ import stylingUtils from './utils/styling';
 import treeTransform from './utils/tree-utils';
 import viewStateUtil from './utils/viewstate-utils';
 import { setZooming } from './tree/transform';
+import autoRegister from './locale/translations';
 import './styles/tooltip.less';
 import './styles/paths.less';
 import './styles/warnings.less';
@@ -48,22 +50,39 @@ export default function supernova(env) {
       const [opts] = useState(options);
       const selectionsAPI = useSelections();
       const constraints = useConstraints();
-      const [selectionsAndTransform] = useState({ api: selectionsAPI, setState: setSelectionState, linked: false, transform: {} });
+      const [selectionsAndTransform] = useState({
+        api: selectionsAPI,
+        setState: setSelectionState,
+        linked: false,
+        transform: {},
+        constraints,
+      });
+
+      const translator = useTranslator();
+      useEffect(() => {
+        autoRegister(translator);
+      }, [translator]);
 
       const resetSelections = () => {
         setSelectionState([]);
       };
+      const resetSelectionsAndLinked = () => {
+        setLinked(false);
+        setSelectionState([]);
+      };
+
       useEffect(() => {
         if (!selectionsAndTransform.api) {
           return () => {};
         }
         selectionsAndTransform.api = selectionsAPI;
-        selectionsAndTransform.api.on('canceled', resetSelections);
+        selectionsAndTransform.api.on('canceled', resetSelectionsAndLinked);
+        selectionsAndTransform.api.on('confirmed', resetSelectionsAndLinked);
         selectionsAndTransform.api.on('cleared', resetSelections);
         // Return function called on unmount
         return () => {
-          selectionsAndTransform.api.removeListener('deactivated', resetSelections);
-          selectionsAndTransform.api.removeListener('canceled', resetSelections);
+          selectionsAndTransform.api.removeListener('canceled', resetSelectionsAndLinked);
+          selectionsAndTransform.api.removeListener('confirmed', resetSelectionsAndLinked);
           selectionsAndTransform.api.removeListener('cleared', resetSelections);
         };
       }, [selectionsAPI]);
@@ -72,10 +91,17 @@ export default function supernova(env) {
         selectionsAndTransform.transform = transform;
       }, [transform]);
 
+      useEffect(() => {
+        selectionsAndTransform.constraints = constraints;
+      }, [constraints]);
+
+      useEffect(() => {
+        selectionsAndTransform.linked = linked;
+      }, [linked]);
+
       useAction(
         () => ({
           action() {
-            selectionsAndTransform.linked = !linked;
             setLinked(!linked);
           },
           icon: {
@@ -90,6 +116,7 @@ export default function supernova(env) {
             ],
           },
           active: linked,
+          label: translator.get('Object.OrgChart.IncludeDescendants'),
         }),
         [linked]
       );
@@ -97,14 +124,12 @@ export default function supernova(env) {
       useEffect(() => {
         const addKeyPress = event => {
           if (event.key === 'Shift') {
-            selectionsAndTransform.linked = true;
             setLinked(true);
           }
         };
 
         const removeKeyPress = event => {
           if (event.key === 'Shift') {
-            selectionsAndTransform.linked = false;
             setLinked(false);
           }
         };
@@ -135,17 +160,18 @@ export default function supernova(env) {
         if (!layout) {
           return Promise.resolve();
         }
-        return treeTransform({ layout, model }).then(transformed => {
-          const viewState = viewStateUtil.getViewState(opts, layout);
-          const expState = viewState && viewState.expandedState ? viewState.expandedState : null;
+        const viewState = viewStateUtil.getViewState(opts, layout);
+        viewState && viewState.expandedState && setExpandedState(viewState.expandedState);
+        viewState && viewState.transform && setTransform(viewState.transform);
+
+        return treeTransform({ layout, model, translator }).then(transformed => {
           setDataTree(transformed);
           setStyling(stylingUtils.cardStyling({ Theme, layout }));
           setSelectionState([]);
-          setExpandedState(expState);
           // Resolving the promise to indicate readiness for printing
           return Promise.resolve();
         });
-      }, [layout, model]);
+      }, [layout, model, translator]);
 
       // This one can split up. Only need to get new height/width when rect is changed
       useEffect(() => {
@@ -171,23 +197,30 @@ export default function supernova(env) {
             expandedState,
             styling,
             setStateCallback,
-            selections: selectionsAndTransform,
+            selectionsAndTransform,
             selectionState,
-            constraints,
             useTransitions: expandedState.useTransitions,
+            element,
           });
         }
-      }, [expandedState, objectData, selectionState, constraints]);
+      }, [expandedState, objectData, selectionState]);
 
       useEffect(() => {
         if (objectData && layout.navigationMode === 'free') {
-          setZooming(objectData, setTransform, !constraints.active);
+          const viewState = viewStateUtil.getViewState(opts, layout);
+          setZooming({
+            objectData,
+            setTransform,
+            transformState: (viewState && viewState.transform) || {},
+            selectionsAndTransform,
+          });
         }
-      }, [objectData, constraints]);
+      }, [objectData]);
 
       const createViewState = () => {
         const vs = {
           expandedState,
+          transform,
         };
         vs.expandedState.useTransitions = false;
         return vs;

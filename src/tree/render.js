@@ -39,10 +39,10 @@ export const paintTree = ({
   expandedState,
   styling,
   setStateCallback,
-  selections,
+  selectionsAndTransform,
   selectionState,
-  constraints,
   useTransitions,
+  element,
 }) => {
   const { svg, divBox, allNodes, positioning, width, height } = objectData;
   const { navigationMode } = allNodes.data;
@@ -59,11 +59,9 @@ export const paintTree = ({
     expandedState,
     setStateCallback,
     selectionState,
-    selections,
-    !constraints.active,
-    !constraints.passive,
+    selectionsAndTransform,
     navigationMode,
-    height
+    element
   );
   // Create the lines (links) between the nodes
   const node = svg
@@ -78,11 +76,12 @@ export const paintTree = ({
 };
 
 export const getSize = ({ error, warn }, element) => {
-  const size = element.getBoundingClientRect();
+  // eslint-disable-next-line prefer-const
+  let { width, height } = element.getBoundingClientRect();
   if (error || (warn && warn.length)) {
-    size.height -= 20;
+    height -= 20;
   }
-  return size;
+  return { width, height };
 };
 
 export function preRenderTree(element, dataTree) {
@@ -95,21 +94,6 @@ export function preRenderTree(element, dataTree) {
     .append('span')
     .attr('class', 'sn-org-zoomwrapper')
     .node();
-
-  if (dataTree.error) {
-    select(zoomWrapper)
-      .append('div')
-      .attr('class', 'sn-org-error')
-      .html(dataTree.message);
-    return false;
-  }
-
-  if (dataTree.warn && dataTree.warn.length) {
-    select(zoomWrapper)
-      .append('span')
-      .attr('class', 'sn-org-warning')
-      .html(`*${dataTree.warn.join(' ')}`);
-  }
 
   const svgBox = select(zoomWrapper)
     .selectAll('svg')
@@ -128,6 +112,21 @@ export function preRenderTree(element, dataTree) {
     .attr('class', 'sn-org-nodes');
 
   createTooltip(element);
+
+  if (dataTree.error) {
+    select(zoomWrapper)
+      .append('div')
+      .attr('class', 'sn-org-error')
+      .html(dataTree.message);
+    return false;
+  }
+
+  if (dataTree.warn && dataTree.warn.length) {
+    select(zoomWrapper)
+      .append('span')
+      .attr('class', 'sn-org-warning')
+      .html(`*${dataTree.warn.join(' ')}`);
+  }
 
   const svg = svgBox.append('g').attr('class', 'sn-org-paths');
   // Here are the settings for the tree. For instance nodesize can be adjusted

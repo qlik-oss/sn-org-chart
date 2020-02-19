@@ -65,16 +65,14 @@ export default function box(
   expandedState,
   setStateCallback,
   selectionState,
-  sel,
-  allowInteractions,
-  allowTooltips,
+  selectionsAndTransform,
   navigationMode,
-  containerHeight
+  element
 ) {
   const { cardWidth, cardHeight, buttonWidth, buttonHeight, buttonMargin, rootDiameter } = constants;
   const { topId, isExpanded } = expandedState;
   const topNode = nodes.find(node => node.data.id === topId);
-  const ancestorIds = topNode.parent ? topNode.parent.ancestors().map(anc => anc.data.id) : [];
+  const ancestorIds = topNode && topNode.parent ? topNode.parent.ancestors().map(anc => anc.data.id) : [];
 
   // dummy root
   divBox
@@ -96,14 +94,14 @@ export default function box(
     .attr('style', d => `width:${cardWidth}px;height:${cardHeight}px; top:${y(d)}px;left:${x(d)}px;`)
     .attr('id', d => d.data.id)
     .on('click', node => {
-      if (allowInteractions && node.data.id !== 'Root') {
-        selections.select(node, sel, selectionState);
+      if (!selectionsAndTransform.constraints.active && node.data.id !== 'Root') {
+        selections.select(node, selectionsAndTransform, selectionState);
       }
     })
-    .html(d => card(d.data, cardStyling, sel, selectionState))
+    .html(d => card(d.data, cardStyling, selectionsAndTransform, selectionState))
     .on('mouseenter', d => {
-      if (allowTooltips && event.buttons === 0) {
-        openTooltip(d, containerHeight, cardStyling, x, y, sel);
+      if (!selectionsAndTransform.constraints.active && event.buttons === 0) {
+        openTooltip(d, element.clientHeight, cardStyling, x, y, selectionsAndTransform);
       }
     })
     .on('mouseleave', () => {
@@ -130,8 +128,11 @@ export default function box(
           (cardWidth - buttonWidth) / 2}px;`
     )
     .attr('id', d => `${d.data.id}-expand`)
+    .on('mouseenter', () => {
+      if (!selectionsAndTransform.constraints.active) event.target.style.cursor = 'pointer';
+    })
     .on('click', d => {
-      if (allowInteractions) {
+      if (!selectionsAndTransform.constraints.active) {
         setStateCallback(getNewState(d, expandedState, ancestorIds));
       }
     })
@@ -153,7 +154,7 @@ export default function box(
       )
       .attr('id', d => `${d.data.id}-up`)
       .on('click', d => {
-        if (allowInteractions) {
+        if (!selectionsAndTransform.constraints.active) {
           setStateCallback(getNewUpState(d, isExpanded));
         }
       })

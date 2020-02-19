@@ -37,18 +37,24 @@ export function applyTransform(eventTransform, svg, divBox, width, height) {
   );
 }
 
-export function setZooming(objectData, settingZoom, allowInteractions) {
-  const { svg, divBox, width, height, allNodes, zoomWrapper } = objectData;
+export function setZooming({ objectData, setTransform, transformState, selectionsAndTransform }) {
+  const { svg, divBox, width, height, zoomWrapper, allNodes, element } = objectData;
+  const { x = 0, y = 0 } = transformState;
   const maxZoom = 6;
   const minZoom = 0.2;
-  const scaleFactor = Math.max(Math.min(maxZoom, allNodes.zoomFactor), minZoom);
+  const zoomFactor = (transformState && 1 / transformState.zoom) || allNodes.zoomFactor;
+  const scaleFactor = Math.max(Math.min(maxZoom, zoomFactor), minZoom);
+
+  // sends otherwise captured mouse event to handle context menu correctly in sense
+  const bubbleEvent = () => {
+    const newEvent = document.createEvent('MouseEvents');
+    newEvent.initEvent('mousedown', true, false);
+    element.dispatchEvent(newEvent);
+  };
 
   const zoomed = () => {
-    settingZoom({
-      zoom: event.transform.k / scaleFactor,
-      x: event.transform.x,
-      y: event.transform.y,
-    });
+    setTransform({ zoom: event.transform.k / scaleFactor, x: event.transform.x, y: event.transform.y });
+    bubbleEvent();
     applyTransform(
       zoomIdentity.translate(event.transform.x, event.transform.y).scale(event.transform.k / scaleFactor),
       svg,
@@ -64,16 +70,19 @@ export function setZooming(objectData, settingZoom, allowInteractions) {
         [0, 0],
         [width, height],
       ])
-      .filter(allowInteractions)
+      .filter(
+        () =>
+          !selectionsAndTransform.constraints.active &&
+          event.type !== 'dblclick' &&
+          !(event.type === 'mousedown' && event.which === 3)
+      )
       .scaleExtent([minZoom * scaleFactor, maxZoom * scaleFactor])
       .on('zoom', zoomed)
+      .on('end', bubbleEvent)
   );
-  settingZoom({
-    zoom: 1 / scaleFactor,
-    x: 0,
-    y: 0,
-  });
-  applyTransform(zoomIdentity.translate(0, 0).scale(1 / scaleFactor), svg, divBox, width, height);
+
+  setTransform({ zoom: 1 / scaleFactor, x, y });
+  applyTransform(zoomIdentity.translate(x, y).scale(1 / scaleFactor), svg, divBox, width, height);
 }
 
 export default function transform(nodes, width, height, svg, divBox, useTransitions) {
