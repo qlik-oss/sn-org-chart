@@ -59,6 +59,9 @@ export default function supernova(env) {
       });
 
       const translator = useTranslator();
+      useEffect(() => {
+        autoRegister(translator);
+      }, [translator]);
 
       const resetSelections = () => {
         setSelectionState([]);
@@ -104,6 +107,7 @@ export default function supernova(env) {
             ],
           },
           active: linked,
+          label: translator.get('Object.OrgChart.IncludeDescendants'),
         }),
         [linked]
       );
@@ -153,7 +157,6 @@ export default function supernova(env) {
         viewState && viewState.expandedState && setExpandedState(viewState.expandedState);
         viewState && viewState.transform && setTransform(viewState.transform);
 
-        autoRegister(translator);
         return treeTransform({ layout, model, translator }).then(transformed => {
           setDataTree(transformed);
           setStyling(stylingUtils.cardStyling({ Theme, layout }));

@@ -14,4 +14,5 @@ export default {
   'Object.OrgChart.ColorLabelExpression': 'Color expression',
   'Object.OrgChart.BackgroundColor': 'Background color',
   'Object.OrgChart.FontColor': 'Font color',
+  'Object.OrgChart.IncludeDescendants': 'Include descendants',
 };
