@@ -3,7 +3,7 @@ import constants from './size-constants';
 
 export function getPoints(d, topId, { depthSpacing, isVertical, x, y }) {
   // TODO: Generalize to make all directions work, currently on only ttb working
-  const { cardWidth, cardHeight, buttonHeight, cardPadding } = constants;
+  const { cardWidth, cardHeight, buttonHeight, cardPadding, buttonMargin } = constants;
   const points = [];
   const halfCard = { x: cardWidth / 2, y: cardHeight / 2 };
   const start = { x: x(d), y: y(d) };
@@ -19,8 +19,8 @@ export function getPoints(d, topId, { depthSpacing, isVertical, x, y }) {
           ? [
             { x: start.x, y: start.y + halfCard.y },
             { x: end.x - halfCard.x, y: start.y + halfCard.y },
-            { x: end.x - halfCard.x, y: end.y + cardPadding },
-            { x: end.x, y: end.y + cardPadding },
+            { x: end.x - halfCard.x, y: end.y + buttonMargin },
+            { x: end.x, y: end.y + buttonMargin },
             { x: end.x, y: end.y },
           ]
           : [

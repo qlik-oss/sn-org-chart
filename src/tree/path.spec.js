@@ -88,8 +88,8 @@ describe('path', () => {
       expectedPoints = [
         { x: 300, y: 152 },
         { x: 0, y: 152 },
-        { x: 0, y: 104 },
-        { x: 76, y: 104 },
+        { x: 0, y: 112 },
+        { x: 76, y: 112 },
         { x: 76, y: 96 },
       ];
       const points = getPoints(d, topId, positioning)[0];
