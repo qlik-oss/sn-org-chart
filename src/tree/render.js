@@ -95,21 +95,6 @@ export function preRenderTree(element, dataTree) {
     .attr('class', 'sn-org-zoomwrapper')
     .node();
 
-  if (dataTree.error) {
-    select(zoomWrapper)
-      .append('div')
-      .attr('class', 'sn-org-error')
-      .html(dataTree.message);
-    return false;
-  }
-
-  if (dataTree.warn && dataTree.warn.length) {
-    select(zoomWrapper)
-      .append('span')
-      .attr('class', 'sn-org-warning')
-      .html(`*${dataTree.warn.join(' ')}`);
-  }
-
   const svgBox = select(zoomWrapper)
     .selectAll('svg')
     .data([{}])
@@ -135,6 +120,21 @@ export function preRenderTree(element, dataTree) {
     .on('mousedown', () => {
       tooltip.html('').attr('style', 'visibility: hidden;opacity: 0;');
     });
+
+  if (dataTree.error) {
+    select(zoomWrapper)
+      .append('div')
+      .attr('class', 'sn-org-error')
+      .html(dataTree.message);
+    return false;
+  }
+
+  if (dataTree.warn && dataTree.warn.length) {
+    select(zoomWrapper)
+      .append('span')
+      .attr('class', 'sn-org-warning')
+      .html(`*${dataTree.warn.join(' ')}`);
+  }
 
   const svg = svgBox.append('g').attr('class', 'sn-org-paths');
   // Here are the settings for the tree. For instance nodesize can be adjusted
