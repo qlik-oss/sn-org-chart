@@ -63,7 +63,8 @@ export default function supernova(env) {
         autoRegister(translator);
       }, [translator]);
 
-      const resetSelections = () => {
+      const resetSelections = resetLinked => {
+        resetLinked && setLinked(false);
         setSelectionState([]);
       };
       useEffect(() => {
@@ -71,12 +72,13 @@ export default function supernova(env) {
           return () => {};
         }
         selectionsAndTransform.api = selectionsAPI;
-        selectionsAndTransform.api.on('canceled', resetSelections);
-        selectionsAndTransform.api.on('cleared', resetSelections);
+        selectionsAndTransform.api.on('canceled', () => resetSelections(true));
+        selectionsAndTransform.api.on('confirmed', () => resetSelections(true));
+        selectionsAndTransform.api.on('cleared', () => resetSelections(false));
         // Return function called on unmount
         return () => {
-          selectionsAndTransform.api.removeListener('deactivated', resetSelections);
           selectionsAndTransform.api.removeListener('canceled', resetSelections);
+          selectionsAndTransform.api.removeListener('confirmed', resetSelections);
           selectionsAndTransform.api.removeListener('cleared', resetSelections);
         };
       }, [selectionsAPI]);
@@ -89,10 +91,13 @@ export default function supernova(env) {
         selectionsAndTransform.constraints = constraints;
       }, [constraints]);
 
+      useEffect(() => {
+        selectionsAndTransform.linked = linked;
+      }, [linked]);
+
       useAction(
         () => ({
           action() {
-            selectionsAndTransform.linked = !linked;
             setLinked(!linked);
           },
           icon: {
@@ -115,14 +120,12 @@ export default function supernova(env) {
       useEffect(() => {
         const addKeyPress = event => {
           if (event.key === 'Shift') {
-            selectionsAndTransform.linked = true;
             setLinked(true);
           }
         };
 
         const removeKeyPress = event => {
           if (event.key === 'Shift') {
-            selectionsAndTransform.linked = false;
             setLinked(false);
           }
         };
