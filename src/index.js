@@ -66,17 +66,23 @@ export default function supernova(env) {
       const resetSelections = () => {
         setSelectionState([]);
       };
+      const resetSelectionsAndLinked = () => {
+        setLinked(false);
+        setSelectionState([]);
+      };
+
       useEffect(() => {
         if (!selectionsAndTransform.api) {
           return () => {};
         }
         selectionsAndTransform.api = selectionsAPI;
-        selectionsAndTransform.api.on('canceled', resetSelections);
+        selectionsAndTransform.api.on('canceled', resetSelectionsAndLinked);
+        selectionsAndTransform.api.on('confirmed', resetSelectionsAndLinked);
         selectionsAndTransform.api.on('cleared', resetSelections);
         // Return function called on unmount
         return () => {
-          selectionsAndTransform.api.removeListener('deactivated', resetSelections);
-          selectionsAndTransform.api.removeListener('canceled', resetSelections);
+          selectionsAndTransform.api.removeListener('canceled', resetSelectionsAndLinked);
+          selectionsAndTransform.api.removeListener('confirmed', resetSelectionsAndLinked);
           selectionsAndTransform.api.removeListener('cleared', resetSelections);
         };
       }, [selectionsAPI]);
@@ -89,10 +95,13 @@ export default function supernova(env) {
         selectionsAndTransform.constraints = constraints;
       }, [constraints]);
 
+      useEffect(() => {
+        selectionsAndTransform.linked = linked;
+      }, [linked]);
+
       useAction(
         () => ({
           action() {
-            selectionsAndTransform.linked = !linked;
             setLinked(!linked);
           },
           icon: {
@@ -115,14 +124,12 @@ export default function supernova(env) {
       useEffect(() => {
         const addKeyPress = event => {
           if (event.key === 'Shift') {
-            selectionsAndTransform.linked = true;
             setLinked(true);
           }
         };
 
         const removeKeyPress = event => {
           if (event.key === 'Shift') {
-            selectionsAndTransform.linked = false;
             setLinked(false);
           }
         };
