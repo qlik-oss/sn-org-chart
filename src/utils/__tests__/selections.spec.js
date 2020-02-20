@@ -55,9 +55,16 @@ describe('selections', () => {
       expect(selectionObj.setState).to.have.been.calledWith([1, 2, 3, 798, 88]);
     });
 
-    it('should deselect when pressing a selected node', () => {
+    it('should deselect node', () => {
       isActive = true;
-      selectionState.push(1);
+      selectionState = [1, 2];
+      select(node, selectionObj, selectionState);
+      expect(selectionObj.setState).to.have.been.calledWith([2]);
+    });
+    it('should deselect node and children', () => {
+      isActive = true;
+      selectionObj.linked = true;
+      selectionState = [1, 2];
       select(node, selectionObj, selectionState);
       expect(selectionObj.api.clear).to.have.been.calledOnce;
       expect(selectionObj.setState).to.have.been.calledWith([]);

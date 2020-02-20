@@ -46,7 +46,6 @@ describe('position', () => {
     });
     it('should return xActual for leaf node', () => {
       const xActual = widthTranslation(d, widthSpacing, element, axis);
-      // console.log(xActual);
       expect(xActual).to.equal(124);
     });
   });

@@ -153,7 +153,6 @@ export function haveNoChildren(nodes) {
 }
 
 export function createNodes(matrix, attributeIndecies, status, navigationMode, translator) {
-  // console.log(matrix);
   const nodeMap = {};
   const allNodes = [];
   for (let i = 0; i < matrix.length; ++i) {
@@ -172,8 +171,6 @@ export function createNodes(matrix, attributeIndecies, status, navigationMode, t
     nodeMap[id] = node;
     allNodes.push(node);
   }
-
-  // console.log(allNodes);
 
   const rootNodes = [];
   let maxNodeWarning = false;
