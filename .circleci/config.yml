@@ -1,5 +1,9 @@
 version: 2
 
+defaults: &defaults
+  working_directory: ~/org
+  # Available images https://hub.docker.com/r/circleci/node/tags/
+
 aliases:
   - &restore_yarn_cache
     name: Restore yarn cache
@@ -19,20 +23,34 @@ aliases:
     at: ~/project
 
 jobs:
-  build:
+  install:
+    <<: *defaults
     docker:
-      - image: circleci/node:10.16.3
+      - image: circleci/node:10.14.0-browsers
+    steps:
+      - checkout
+      - restore_cache: *restore_yarn_cache
+      - run: yarn install --frozen-lockfile
+      - save_cache: *save_yarn_cache
+
+      - store_artifacts:
+          path: package.json
+
+      - persist_to_workspace:
+          root: ~/org
+          paths:
+            - .
+
+  build:
+    <<: *defaults
+    docker:
+      - image: circleci/node:10.14.0-browsers
       - image: qlikcore/engine:12.556.0
         command: -S AcceptEULA=yes
       - image: browserless/chrome:1.9-puppeteer-1.13.0
-
-    working_directory: ~/project
-
     steps:
-      - checkout
-
-      - restore_cache: *restore_yarn_cache
-
+      - attach_workspace:
+          at: ~/org
       - run:
           name: Install dependencies
           command: yarn install --frozen-lockfile
@@ -66,4 +84,34 @@ jobs:
       - store_test_results:
           path: coverage/junit
 
-      - save_cache: *save_yarn_cache
+      - persist_to_workspace:
+          root: ~/org
+          paths:
+            - dist
+
+  publish-dev:
+    <<: *defaults
+    docker:
+      - image: circleci/node:10.14.0-browsers
+    steps:
+      - attach_workspace:
+          at: ~/org
+      - run: mv ./dist sn-org-chart && zip -r "sn-org-chart.zip" "./sn-org-chart"
+      - store_artifacts:
+          path: ./sn-org-chart.zip
+
+workflows:
+  version: 2
+  build-all:
+    jobs:
+      - install
+      - build:
+          requires:
+            - install
+      - publish-dev:
+          requires:
+            - build
+          filters:
+            branches:
+              only:
+                - master
