@@ -2,37 +2,58 @@
   .sn-org-tooltip {
     visibility: hidden;
     opacity: 0;
+    /* Unsupported in IE, so there we set width explicitly */
+    width: fit-content;
+
+    @media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+      width: 230px;
+    }
+
+    /* Position the tooltip text */
+    position: absolute;
+    z-index: 1;
+  }
+
+  /* Tooltip arrow */
+  .sn-org-tooltip::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 0%;
+    margin-left: -10px;
+    border-width: 10px;
+    border-style: solid;
+    border-color: #404040 transparent transparent transparent;
+  }
+
+  .sn-org-tooltip-visible {
+    opacity: 0.9;
+    visibility: visible;
+  }
+
+  .sn-org-tooltip-inner {
+    max-width: 240px;
+    right: 50%;
     font-family: 'QlikView Sans', sans-serif;
-    width: 240px;
-    max-height: 100px;
+    position: relative;
+
+    max-height: 150px;
     background-color: #404040;
-    color: #E6E6E6;
-    text-align: center;
-    font-size: 12px;
+    color: #e6e6e6;
+    text-align: left;
+    font-size: 13px;
     line-height: 15px;
-    padding: 5px 0;
+    padding: 10px 10px 10px 10px;
     border-radius: 6px;
 
     overflow-wrap: break-word;
     word-wrap: break-word;
     word-break: break-word;
+    overflow: hidden;
 
-    /* Position the tooltip text */
-    position: absolute;
-    z-index: 1;
-    bottom: 125%;
-    left: 50%;
-  }
-
-  /* Tooltip arrow */
-  .sn-org-tooltip::after {
-    content: "";
-    position: absolute;
-    top: 100%;
-    left: 50%;
-    margin-left: -10px;
-    border-width: 10px;
-    border-style: solid;
-    border-color: #404040 transparent transparent transparent;
+    .sn-org-tooltip-header {
+      font-weight: bold;
+      padding-bottom: 5px;
+    }
   }
 }

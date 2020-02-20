@@ -3,25 +3,26 @@ import constants from './size-constants';
 
 export function createTooltip(element) {
   const tooltip = select(element)
-    .selectAll('.sn-org-tooltip')
-    .data([{}])
-    .enter()
     .append('div')
     .attr('class', 'sn-org-tooltip')
     .on('mousedown', () => {
-      tooltip.html('').attr('style', 'visibility: hidden;opacity: 0;');
+      tooltip.classed('sn-org-tooltip-visible', false);
     });
   return tooltip;
 }
 
+function getLabels(label, subLabel, extraLabel, measure) {
+  return `<div class="sn-org-tooltip-inner"><div class="sn-org-tooltip-header">${label}</div>
+  ${subLabel}${extraLabel}${measure}
+  </div>`;
+}
+
 function getTooltipStyle(d, containerHeight, x, y, sel) {
-  const { cardWidth, tooltipWidth, tooltipPadding } = constants;
+  const { cardWidth, tooltipPadding } = constants;
   const halfCardWidth = cardWidth / 2;
-  const halfTooltipWidth = tooltipWidth / 2;
   const yLocation = containerHeight - (y(d) * sel.transform.zoom + sel.transform.y - tooltipPadding);
-  const xLocation =
-    x(d) * sel.transform.zoom + sel.transform.x - (halfTooltipWidth - halfCardWidth * sel.transform.zoom);
-  return `bottom:${yLocation}px;left:${xLocation}px;visibility: visible;opacity: 0.9;`;
+  const xLocation = x(d) * sel.transform.zoom + sel.transform.x + halfCardWidth * sel.transform.zoom;
+  return `bottom:${yLocation}px;left:${xLocation}px;`;
 }
 
 export function openTooltip(tooltip, d, containerHeight, cardStyling, x, y, sel) {
@@ -35,7 +36,8 @@ export function openTooltip(tooltip, d, containerHeight, cardStyling, x, y, sel)
   tooltip.timeout = setTimeout(() => {
     if (tooltip.active) {
       tooltip
-        .html(`${label}<br />${subLabel}${extraLabel}${measure}`)
+        .html(getLabels(label, subLabel, extraLabel, measure))
+        .classed('sn-org-tooltip-visible', true)
         .attr('style', () => getTooltipStyle(d, containerHeight, x, y, sel));
     }
   }, 250);
@@ -44,5 +46,5 @@ export function openTooltip(tooltip, d, containerHeight, cardStyling, x, y, sel)
 export function closeTooltip(tooltip) {
   clearTimeout(tooltip.timeout);
   tooltip.active = false;
-  tooltip.attr('style', 'visibility: hidden;opacity: 0;');
+  tooltip.classed('sn-org-tooltip-visible', false);
 }
