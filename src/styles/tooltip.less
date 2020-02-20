@@ -3,11 +3,9 @@
     visibility: hidden;
     opacity: 0;
     /* Unsupported in IE, so there we set width explicitly */
+    width: 230px;
+    width: -moz-max-content;
     width: fit-content;
-
-    @media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
-      width: 230px;
-    }
 
     /* Position the tooltip text */
     position: absolute;
