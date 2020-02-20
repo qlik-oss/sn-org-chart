@@ -32,7 +32,7 @@ export function openTooltip(tooltip, d, containerHeight, cardStyling, x, y, sel)
     ? `${cardStyling.measureLabel ? `${cardStyling.measureLabel}: ` : ''}${d.data.measure}`
     : '';
   tooltip.active = true;
-  setTimeout(() => {
+  tooltip.timeout = setTimeout(() => {
     if (tooltip.active) {
       tooltip
         .html(`${label}<br />${subLabel}${extraLabel}${measure}`)
@@ -42,6 +42,7 @@ export function openTooltip(tooltip, d, containerHeight, cardStyling, x, y, sel)
 }
 
 export function closeTooltip(tooltip) {
+  clearTimeout(tooltip.timeout);
   tooltip.active = false;
   tooltip.attr('style', 'visibility: hidden;opacity: 0;');
 }
