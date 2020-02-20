@@ -23,13 +23,11 @@ export const getBBoxOfNodes = nodes => {
   };
 };
 
-
 export const getTranslations = (bBox, height, width) => {
   const scaleToWidth = bBox.width / width > bBox.height / height;
   const scaleFactor = scaleToWidth ? bBox.width / width : bBox.height / height;
   const translations = { scaleFactor };
   if (scaleToWidth) {
-    console.log('width');
     const yTrans = -bBox.y + (height * scaleFactor - bBox.height) / 2;
     translations.divTranslation = `${-bBox.x}px, ${yTrans}px`;
     translations.svgTranslation = `${-bBox.x} ${yTrans}`;

@@ -14,14 +14,14 @@ export function createTooltip(element) {
   return tooltip;
 }
 
-function getTooltipStyle(d, containerHeight, x, y, sel) {
+export function getTooltipStyle(d, containerHeight, x, y, sel) {
   const { cardWidth, tooltipWidth, tooltipPadding } = constants;
   const halfCardWidth = cardWidth / 2;
   const halfTooltipWidth = tooltipWidth / 2;
   const yLocation = containerHeight - (y(d) * sel.transform.zoom + sel.transform.y - tooltipPadding);
   const xLocation =
     x(d) * sel.transform.zoom + sel.transform.x - (halfTooltipWidth - halfCardWidth * sel.transform.zoom);
-  return `bottom:${yLocation}px;left:${xLocation}px;visibility: visible;opacity: 0.9;`;
+  return `bottom: ${yLocation}px;left: ${xLocation}px;visibility: visible;opacity: 0.9;`;
 }
 
 export function openTooltip(tooltip, d, containerHeight, cardStyling, x, y, sel) {
