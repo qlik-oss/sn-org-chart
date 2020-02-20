@@ -1,4 +1,4 @@
-import position, { depthTranslation } from '../position';
+import position, { depthTranslation, widthTranslation } from '../position';
 import defaultValues from '../../__tests__/default-orgchart-props';
 
 describe('position', () => {
@@ -30,6 +30,24 @@ describe('position', () => {
       d.parent.children = undefined;
       const yActual = depthTranslation(d, depthSpacing, axis);
       expect(yActual).to.equal(204);
+    });
+  });
+
+  describe('widthTranslation', () => {
+    const widthSpacing = 124;
+    const element = {
+      clientWidth: 1000,
+    };
+    let axis;
+    let d;
+    beforeEach(() => {
+      axis = 'xActual';
+      d = JSON.parse(JSON.stringify(defaultValues.nodes));
+    });
+    it('should return xActual for leaf node', () => {
+      const xActual = widthTranslation(d, widthSpacing, element, axis);
+      // console.log(xActual);
+      expect(xActual).to.equal(124);
     });
   });
 });
