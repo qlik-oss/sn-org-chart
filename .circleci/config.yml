@@ -66,4 +66,7 @@ jobs:
       - store_test_results:
           path: coverage/junit
 
+      - store_extension:
+          path: dist
+
       - save_cache: *save_yarn_cache
