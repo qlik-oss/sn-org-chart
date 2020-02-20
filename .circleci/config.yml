@@ -96,9 +96,9 @@ jobs:
     steps:
       - attach_workspace:
           at: ~/org
-      - run: zip -r "sn-org-chart.zip" "./dist"
+      - run: zip -r "sn-org-chart.zip" "./dist/*.*"
       - store_artifacts:
-          path: ./dist/sn-org-chart.zip
+          path: ./sn-org-chart.zip
 
 workflows:
   version: 2
