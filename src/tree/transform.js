@@ -1,7 +1,7 @@
 import { select, zoom, event, zoomIdentity } from 'd3';
 import constants from './size-constants';
 
-const getBBoxOfNodes = nodes => {
+export const getBBoxOfNodes = nodes => {
   const { cardWidth, cardHeight, buttonHeight, buttonMargin } = constants;
   const bbox = {
     left: Infinity,
@@ -23,6 +23,30 @@ const getBBoxOfNodes = nodes => {
   };
 };
 
+export function getInitialZoomState(bBox, element) {
+  const { widthMargin, cardHeight, minZoom, maxZoom } = constants;
+  const { width, height } = bBox;
+  const { clientHeight, clientWidth } = element;
+  const calcWidth = clientWidth - 2 * widthMargin;
+  const calcHeight = clientHeight - cardHeight;
+  const xZoom = Math.max(Math.min(width / calcWidth, maxZoom), minZoom);
+  const yZoom = Math.max(Math.min(height / calcHeight, maxZoom), minZoom);
+  if (xZoom > yZoom) {
+    // Zooming for x direction
+    return {
+      x: -bBox.x + widthMargin * xZoom,
+      y: -bBox.y,
+      initialZoom: xZoom,
+    };
+  }
+  // Zooming for y direction
+  return {
+    x: -bBox.x + widthMargin * yZoom,
+    y: cardHeight * yZoom,
+    initialZoom: yZoom,
+  };
+}
+
 export function applyTransform(eventTransform, svg, divBox, width, height) {
   const scaleFactor = eventTransform.k;
   const translation = `${eventTransform.x}px, ${eventTransform.y}px`;
@@ -37,12 +61,11 @@ export function applyTransform(eventTransform, svg, divBox, width, height) {
   );
 }
 
-export function setZooming({ objectData, setTransform, transformState, selectionsAndTransform }) {
-  const { svg, divBox, width, height, zoomWrapper, allNodes, element } = objectData;
+export function setZooming({ objectData, setTransform, transformState, selectionsAndTransform, initialZoomState }) {
+  const { svg, divBox, width, height, zoomWrapper, element } = objectData;
   const { x = 0, y = 0 } = transformState;
-  const maxZoom = 6;
-  const minZoom = 0.2;
-  const zoomFactor = (transformState && 1 / transformState.zoom) || allNodes.zoomFactor;
+  const { minZoom, maxZoom } = constants;
+  const zoomFactor = (transformState && 1 / transformState.zoom) || initialZoomState.initialZoom;
   const scaleFactor = Math.max(Math.min(maxZoom, zoomFactor), minZoom);
 
   // sends otherwise captured mouse event to handle context menu correctly in sense

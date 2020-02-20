@@ -16,6 +16,8 @@ const constants = {
   r: 4,
   tooltipWidth: 240,
   tooltipPadding: 15,
+  maxZoom: 6,
+  minZoom: 0.2,
 };
 
 export default constants;
