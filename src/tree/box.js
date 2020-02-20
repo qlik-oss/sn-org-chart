@@ -2,6 +2,7 @@ import card from '../card/card';
 import selections from '../utils/selections';
 import { haveNoChildren } from '../utils/tree-utils';
 import constants from './size-constants';
+import { openTooltip, closeTooltip } from './tooltip';
 
 export const getSign = (d, { topId, isExpanded, expandedChildren }, ancestorIds) => {
   if (
@@ -59,7 +60,6 @@ export const getNewUpState = (d, isExpanded) => ({
 export default function box(
   { x, y },
   divBox,
-  tooltip,
   nodes,
   cardStyling,
   expandedState,
@@ -67,7 +67,8 @@ export default function box(
   selectionState,
   selectionsAndTransform,
   navigationMode,
-  element
+  element,
+  tooltip
 ) {
   const {
     cardWidth,
@@ -76,14 +77,10 @@ export default function box(
     buttonHeight,
     cardPadding,
     rootDiameter,
-    tooltipWidth,
-    tooltipPadding,
   } = constants;
   const { topId, isExpanded } = expandedState;
   const topNode = nodes.find(node => node.data.id === topId);
   const ancestorIds = topNode && topNode.parent ? topNode.parent.ancestors().map(anc => anc.data.id) : [];
-  let tooltipOpen = -1;
-  let tooltipClose = -1;
 
   // dummy root
   divBox
@@ -94,18 +91,6 @@ export default function box(
     .attr('class', 'sn-org-root')
     .attr('style', d => `top:${y(d) - rootDiameter - cardPadding}px;left:${x(d) + (cardWidth - rootDiameter) / 2}px`)
     .attr('id', d => d.data.id);
-
-  function getTooltipStyle(d) {
-    const halfCardWidth = cardWidth / 2;
-    const halfTooltipWidth = tooltipWidth / 2;
-    return `bottom:${element.clientHeight -
-      (y(d) * selectionsAndTransform.transform.zoom + selectionsAndTransform.transform.y - tooltipPadding)}px;left:${x(
-      d
-    ) *
-      selectionsAndTransform.transform.zoom +
-      selectionsAndTransform.transform.x -
-      (halfTooltipWidth - halfCardWidth * selectionsAndTransform.transform.zoom)}px;visibility: visible;opacity: 0.9;`;
-  }
 
   // cards
   divBox
@@ -123,33 +108,18 @@ export default function box(
     })
     .html(d => card(d.data, cardStyling, selectionsAndTransform, selectionState))
     .on('mouseenter', d => {
-      if (!selectionsAndTransform.constraints.passive && tooltipOpen === -1 && event.buttons === 0) {
-        tooltipOpen = setTimeout(() => {
-          tooltip
-            .html(
-              `${d.data.attributes.label || d.data.id}<br />${
-                d.data.attributes.subLabel ? `${d.data.attributes.subLabel}<br />` : ''
-              }${d.data.attributes.extraLabel ? `${d.data.attributes.extraLabel}<br />` : ''}${d.data.measure || ''}`
-            )
-            .attr('style', () => getTooltipStyle(d));
-          tooltipOpen = -1;
-        }, 250);
-        tooltipClose = setTimeout(() => {
-          tooltip.html('').attr('style', 'visibility: hidden;opacity: 0;');
-        }, 7000);
+      if (!selectionsAndTransform.constraints.active && event.buttons === 0) {
+        openTooltip(tooltip, d, element.clientHeight, cardStyling, x, y, selectionsAndTransform);
       }
     })
     .on('mouseleave', () => {
-      clearTimeout(tooltipOpen);
-      tooltipOpen = -1;
-      clearTimeout(tooltipClose);
-      tooltip.html('').attr('style', 'visibility: hidden;opacity: 0;');
+      closeTooltip(tooltip);
     })
     .on('mousedown', () => {
-      clearTimeout(tooltipOpen);
-      tooltipOpen = -1;
-      clearTimeout(tooltipClose);
-      tooltip.html('').attr('style', 'visibility: hidden;opacity: 0;');
+      closeTooltip(tooltip);
+    })
+    .on('wheel', () => {
+      closeTooltip(tooltip);
     });
 
   // expand/collapse

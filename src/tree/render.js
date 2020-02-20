@@ -3,6 +3,7 @@ import position from './position';
 import box from './box';
 import createPaths from './path';
 import transform from './transform';
+import { createTooltip } from './tooltip';
 
 export const filterTree = ({ topId, isExpanded, expandedChildren }, nodeTree, extended) => {
   const topNode = nodeTree.descendants().find(node => node.data.id === topId) || nodeTree;
@@ -79,7 +80,6 @@ export const paintTree = ({
   box(
     positioning,
     divBox,
-    tooltip,
     nodes,
     styling,
     expandedState,
@@ -87,7 +87,8 @@ export const paintTree = ({
     selectionState,
     selectionsAndTransform,
     navigationMode,
-    element
+    element,
+    tooltip
   );
   // Create the lines (links) between the nodes
   const node = svg
@@ -137,15 +138,7 @@ export function preRenderTree(element, dataTree) {
     .append('div')
     .attr('class', 'sn-org-nodes');
 
-  const tooltip = select(element)
-    .selectAll('.sn-org-tooltip')
-    .data([{}])
-    .enter()
-    .append('div')
-    .attr('class', 'sn-org-tooltip')
-    .on('mousedown', () => {
-      tooltip.html('').attr('style', 'visibility: hidden;opacity: 0;');
-    });
+  const tooltip = createTooltip(element);
 
   if (dataTree.error) {
     select(zoomWrapper)
@@ -169,5 +162,5 @@ export function preRenderTree(element, dataTree) {
     .nodeSize([0, positioning.depthSpacing]);
 
   const allNodes = treemap(hierarchy(dataTree));
-  return { svg, divBox, allNodes, positioning, width, height, element, tooltip, zoomWrapper };
+  return { svg, divBox, allNodes, positioning, width, height, element, zoomWrapper, tooltip };
 }
