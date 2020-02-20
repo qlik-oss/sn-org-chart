@@ -5,6 +5,9 @@ defaults: &defaults
   # Available images https://hub.docker.com/r/circleci/node/tags/
   docker:
     - image: circleci/node:10.14.0-browsers
+    - image: qlikcore/engine:12.556.0
+      command: -S AcceptEULA=yes
+    - image: browserless/chrome:1.9-puppeteer-1.13.0
 
 aliases:
   - &restore_yarn_cache
@@ -25,7 +28,7 @@ aliases:
     at: ~/project
 
 jobs:
-  build:
+  install:
     <<: *defaults
     steps:
       - checkout
@@ -40,6 +43,12 @@ jobs:
           root: ~/org
           paths:
             - .
+
+  build:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: ~/org
       - run:
           name: Install dependencies
           command: yarn install --frozen-lockfile
@@ -87,7 +96,10 @@ workflows:
   version: 2
   build-all:
     jobs:
-      - build
+      - install
+      - build:
+          requires:
+            - install
       - publish-dev:
           requires:
             - build
