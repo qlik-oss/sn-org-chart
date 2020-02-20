@@ -3,11 +3,6 @@ version: 2
 defaults: &defaults
   working_directory: ~/org
   # Available images https://hub.docker.com/r/circleci/node/tags/
-  docker:
-    - image: circleci/node:10.14.0-browsers
-    - image: qlikcore/engine:12.556.0
-      command: -S AcceptEULA=yes
-    - image: browserless/chrome:1.9-puppeteer-1.13.0
 
 aliases:
   - &restore_yarn_cache
@@ -30,6 +25,8 @@ aliases:
 jobs:
   install:
     <<: *defaults
+    docker:
+      - image: circleci/node:10.14.0-browsers
     steps:
       - checkout
       - restore_cache: *restore_yarn_cache
@@ -46,6 +43,11 @@ jobs:
 
   build:
     <<: *defaults
+    docker:
+      - image: circleci/node:10.14.0-browsers
+      - image: qlikcore/engine:12.556.0
+        command: -S AcceptEULA=yes
+      - image: browserless/chrome:1.9-puppeteer-1.13.0
     steps:
       - attach_workspace:
           at: ~/org
@@ -82,13 +84,19 @@ jobs:
       - store_test_results:
           path: coverage/junit
 
-      - save_cache: *save_yarn_cache
+      - persist_to_workspace:
+          root: ~/org
+          paths:
+            - dist
 
   publish-dev:
     <<: *defaults
+    docker:
+      - image: circleci/node:10.14.0-browsers
     steps:
       - attach_workspace:
           at: ~/org
+      - run: ./scripts/zip-extensions.sh
       - store_artifacts:
           path: ./dist
 
