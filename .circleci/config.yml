@@ -1,5 +1,11 @@
 version: 2
 
+defaults: &defaults
+  working_directory: ~/org
+  # Available images https://hub.docker.com/r/circleci/node/tags/
+  docker:
+    - image: circleci/node:10.14.0-browsers
+
 aliases:
   - &restore_yarn_cache
     name: Restore yarn cache
@@ -19,20 +25,27 @@ aliases:
     at: ~/project
 
 jobs:
-  build:
-    docker:
-      - image: circleci/node:10.16.3
-      - image: qlikcore/engine:12.556.0
-        command: -S AcceptEULA=yes
-      - image: browserless/chrome:1.9-puppeteer-1.13.0
-
-    working_directory: ~/project
-
+  install:
+    <<: *defaults
     steps:
       - checkout
-
       - restore_cache: *restore_yarn_cache
+      - run: yarn install --frozen-lockfile
+      - save_cache: *save_yarn_cache
 
+      - store_artifacts:
+          path: package.json
+
+      - persist_to_workspace:
+          root: ~/org
+          paths:
+            - .
+
+  build:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: ~/org
       - run:
           name: Install dependencies
           command: yarn install --frozen-lockfile
@@ -70,3 +83,27 @@ jobs:
           path: dist
 
       - save_cache: *save_yarn_cache
+
+  publish-dev:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: ~/org
+      - store_artifacts:
+          path: ./dist
+
+workflows:
+  version: 2
+  build-all:
+    jobs:
+      - install
+      - build:
+          requires:
+            - install
+      - publish-dev:
+          requires:
+            - build
+          #filters:
+          # branches:
+          #  only:
+          #   - master
