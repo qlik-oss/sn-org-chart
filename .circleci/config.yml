@@ -25,7 +25,7 @@ aliases:
     at: ~/project
 
 jobs:
-  install:
+  build:
     <<: *defaults
     steps:
       - checkout
@@ -40,12 +40,6 @@ jobs:
           root: ~/org
           paths:
             - .
-
-  build:
-    <<: *defaults
-    steps:
-      - attach_workspace:
-          at: ~/org
       - run:
           name: Install dependencies
           command: yarn install --frozen-lockfile
@@ -70,7 +64,7 @@ jobs:
       - run:
           name: Integration tests
           command: |
-            DocId=$(curl -s --data-binary @./data/apps/org-chart-test.qvf http://localhost:9076/v1/apps/import | jq -r '.attributes.id')
+            DocId=$(curl -s --data-binary @data/apps/org-chart-test.qvf http://localhost:9076/v1/apps/import | jq -r '.attributes.id')
             APP_ID=$DocId yarn run test:integration --chrome.browserWSEndpoint "ws://localhost:3000" --no-launch
 
       - store_artifacts:
