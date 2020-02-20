@@ -18,6 +18,7 @@ const defaultValues = {
       id: '1',
       elemNo: 1,
       childNumber: 1,
+      isLocked: false,
     },
     parent: {
       x: 0,
