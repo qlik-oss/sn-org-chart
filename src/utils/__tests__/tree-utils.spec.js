@@ -1,4 +1,4 @@
-import { createNodes, haveNoChildren, getAllTreeElemNo } from '../tree-utils';
+import { createNodes, haveNoChildren, getAllTreeElemNo, getAttributeIndecies, getAttributes } from '../tree-utils';
 import defaultValues from '../../__tests__/default-orgchart-props';
 
 function generateMatrix(numRows, childCount = 1) {
@@ -17,6 +17,16 @@ describe('tree-utils', () => {
       const matrix = [[{ qText: '007', qElemNumber: 0 }, { qText: '-' }]];
       const node = createNodes(matrix, [], null, null, translator);
       expect(node.id).to.equal('007');
+    });
+    it('should add a warning for max data', () => {
+      const matrix = [[{ qText: '007', qElemNumber: 0 }, { qText: '-' }]];
+      const node = createNodes(matrix, [], 'max-data-limit', null, translator);
+      expect(node.warn).to.eql(['Object.OrgChart.MaxData']);
+    });
+    it('should add a warning for max children', () => {
+      const matrix = generateMatrix(103, 103);
+      const node = createNodes(matrix, [], null, null, translator);
+      expect(node.warn).to.eql(['Object.OrgChart.MaxChildren']);
     });
     it('should detect all cycles', () => {
       const matrix = generateMatrix(10, 2);
@@ -39,6 +49,60 @@ describe('tree-utils', () => {
     });
   });
 
+  describe('getAttributesIndecies', () => {
+    let attrsInfo;
+    let indecies;
+    beforeEach(() => {
+      attrsInfo = [];
+    });
+    it('should return empty array when attrsInfo is empty', () => {
+      indecies = getAttributeIndecies(attrsInfo);
+      expect(indecies).to.eql([]);
+    });
+    it('should return empty array when attrsInfo is empty', () => {
+      attrsInfo = [
+        { id: 'colorByExpression' },
+        {},
+        { id: 'labelExpression' },
+      ];
+      const expected = [
+        { prop: 'color', index: 0 },
+        { prop: 'label', index: 2 },
+      ];
+      indecies = getAttributeIndecies(attrsInfo);
+      expect(indecies).to.eql(expected);
+    });
+  });
+
+  describe('getAttributes', () => {
+    let qAttrExpr;
+    let indecies;
+    let attributes;
+    let expected;
+    beforeEach(() => {
+      indecies = [];
+      qAttrExpr = {
+        qValues: [
+          {
+            qText: 'someExpression',
+          },
+        ]
+      };
+    });
+    it('should return array with atrtibute', () => {
+      indecies.push({ prop: 'label', index: 0 });
+      expected = { label: 'someExpression' };
+      attributes = getAttributes(indecies, qAttrExpr);
+      expect(attributes).to.eql(expected);
+    });
+    it('should return array with resolved color', () => {
+      indecies.push({ prop: 'color', index: 0 });
+      expected = { color: 'none' };
+      attributes = getAttributes(indecies, qAttrExpr);
+      expect(attributes).to.eql(expected);
+    });
+  });
+
   describe('haveNoChildren', () => {
     const nodes = [{}, {}];
     it('should return true for undifined input', () => {
@@ -53,10 +117,6 @@ describe('tree-utils', () => {
       expect(haveNoChildren(nodes)).to.be.false;
     });
   });
-  // Tests to add
-  // should check for cycles and output something
-  // should handle orphans
-  // should handle multiple roots
 
   describe('getAllTreeElemNo', () => {
     it('should return all ids in tree and activate', () => {

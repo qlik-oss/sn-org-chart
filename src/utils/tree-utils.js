@@ -96,7 +96,7 @@ const getDataMatrix = async (layout, model) => {
   return { status, dataMatrix };
 };
 
-function getAttributIndecies(attrsInfo) {
+export function getAttributeIndecies(attrsInfo) {
   if (attrsInfo && attrsInfo.length) {
     const indecies = [];
     attrsInfo.forEach((attr, i) => {
@@ -109,7 +109,7 @@ function getAttributIndecies(attrsInfo) {
   return [];
 }
 
-function getAttributes(indecies, qAttrExps) {
+export function getAttributes(indecies, qAttrExps) {
   const attributes = {};
   indecies.forEach(attr => {
     if (attr.prop === 'color') {
@@ -149,6 +149,7 @@ export function haveNoChildren(nodes) {
 }
 
 export function createNodes(matrix, attributeIndecies, status, navigationMode, translator) {
+  // console.log(matrix);
   const nodeMap = {};
   const allNodes = [];
   for (let i = 0; i < matrix.length; ++i) {
@@ -166,6 +167,8 @@ export function createNodes(matrix, attributeIndecies, status, navigationMode, t
     nodeMap[id] = node;
     allNodes.push(node);
   }
+
+  // console.log(allNodes);
 
   const rootNodes = [];
   let maxNodeWarning = false;
@@ -238,7 +241,7 @@ export default async function transform({ layout, model, translator }) {
   }
 
   const { status, dataMatrix } = await getDataMatrix(layout, model);
-  const attributeIndecies = getAttributIndecies(layout.qHyperCube.qDimensionInfo[0].qAttrExprInfo);
+  const attributeIndecies = getAttributeIndecies(layout.qHyperCube.qDimensionInfo[0].qAttrExprInfo);
 
   if (!dataMatrix) {
     return null;
