@@ -17,7 +17,7 @@ import {
 import properties from './object-properties';
 import data from './data';
 import ext from './extension/ext';
-import { paintTree, preRenderTree } from './tree/render';
+import { paintTree, preRenderTree, createSnapshotData } from './tree/render';
 import stylingUtils from './utils/styling';
 import treeTransform from './utils/tree-utils';
 import viewStateUtil from './utils/viewstate-utils';
@@ -35,7 +35,6 @@ export default function supernova(env) {
       data,
     },
     component: () => {
-      const [dataTree, setDataTree] = useState(null);
       const [objectData, setObjectData] = useState(null);
       const [styling, setStyling] = useState(null);
       const [expandedState, setExpandedState] = useState(null);
@@ -155,7 +154,7 @@ export default function supernova(env) {
        * - render [allNodes, positioning, styling, rect]
        */
 
-      usePromise(() => {
+      const [dataTree] = usePromise(() => {
         // Get and transform the data into a tree structure
         if (!layout) {
           return Promise.resolve();
@@ -165,11 +164,10 @@ export default function supernova(env) {
         viewState && viewState.transform && setTransform(viewState.transform);
 
         return treeTransform({ layout, model, translator }).then(transformed => {
-          setDataTree(transformed);
           setStyling(stylingUtils.cardStyling({ Theme, layout }));
           setSelectionState([]);
           // Resolving the promise to indicate readiness for printing
-          return Promise.resolve();
+          return transformed;
         });
       }, [layout, model, translator, Theme.name()]);
 
@@ -227,7 +225,8 @@ export default function supernova(env) {
       };
 
       onTakeSnapshot(snapshotLayout => {
-        snapshotLayout.viewState = createViewState();
+        snapshotLayout.snapshotData.viewState = createViewState();
+        snapshotLayout.snapshotData.dataMatrix = createSnapshotData(expandedState, objectData.allNodes, layout);
       });
 
       useImperativeHandle(() => ({

@@ -75,6 +75,10 @@ export default {
                 ],
               },
               desc: {
+                show: (dim, handler) => {
+                  const dims = handler.getDimensions();
+                  return dims[0] === dim;
+                },
                 component: 'text',
                 translation: 'Object.OrgChart.ExtraLabelDesc',
                 style: 'hint',
