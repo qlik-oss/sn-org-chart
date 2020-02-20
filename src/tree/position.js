@@ -16,8 +16,6 @@ export default function position(orientation, element, initialZoomState) {
         d.parent.data.id !== 'Root' && haveNoChildren(d.parent.children)
           ? d.parent[axis] + buttonMargin
           : d.parent[axis] + (d.data.childNumber - (d.parent.children.length - 1) / 2) * widthSpacing;
-    } else if (!d.children) {
-      d[axis] = initialZoomState.x || 0;
     } else {
       // In case of zoom mode we need to have the tree moved to the right from the start
       d[axis] = initialZoomState.x || 0;
