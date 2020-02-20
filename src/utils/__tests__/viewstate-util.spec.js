@@ -8,7 +8,9 @@ describe('viewstateUtiils', () => {
     let viewState;
     beforeEach(() => {
       opts = { viewState: 'optsViewState' };
-      layout = { viewState: 'layoutViewState' };
+      layout = {
+        snapshotData: { viewState: 'layoutViewState' },
+      };
     });
     it('should return viewState from opts object', () => {
       viewState = getViewState(opts, layout);

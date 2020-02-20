@@ -7,7 +7,7 @@ describe('position', () => {
     const element = '';
     it('should return position object', () => {
       const { depthSpacing, isVertical, x, y } = position(orientation, element);
-      expect(depthSpacing).to.equal(124);
+      expect(depthSpacing).to.equal(120);
       expect(isVertical).to.equal(true);
       expect(x).to.be.a('function');
       expect(y).to.be.a('function');
