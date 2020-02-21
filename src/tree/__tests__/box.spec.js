@@ -1,6 +1,6 @@
 /* eslint-disable prefer-destructuring */
-import { getSign, getNewState, getNewUpState } from './box';
-import defaultValues from '../__tests__/default-orgchart-props';
+import { getSign, getNewState, getNewUpState } from '../box';
+import defaultValues from '../../__tests__/default-orgchart-props';
 
 describe('box', () => {
   let d;
