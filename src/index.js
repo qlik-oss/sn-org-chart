@@ -225,6 +225,9 @@ export default function supernova(env) {
       };
 
       onTakeSnapshot(snapshotLayout => {
+        if (!snapshotLayout.snapshotData) {
+          snapshotLayout.snapshotData = {};
+        }
         snapshotLayout.snapshotData.viewState = createViewState();
         snapshotLayout.snapshotData.dataMatrix = createSnapshotData(expandedState, objectData.allNodes, layout);
       });
