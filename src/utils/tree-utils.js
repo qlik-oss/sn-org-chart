@@ -1,3 +1,5 @@
+import colorUtils from './color-utils';
+
 const pageSize = 3300;
 const attributeIDs = {
   colorByExpression: 'color',
@@ -98,7 +100,7 @@ const getDataMatrix = async (layout, model) => {
   return { status, dataMatrix };
 };
 
-function getAttributIndecies(attrsInfo) {
+export function getAttributeIndecies(attrsInfo) {
   if (attrsInfo && attrsInfo.length) {
     const indecies = [];
     attrsInfo.forEach((attr, i) => {
@@ -111,20 +113,11 @@ function getAttributIndecies(attrsInfo) {
   return [];
 }
 
-function transformColor(color) {
-  if (color && color.substring(0, 4) === 'ARGB') {
-    // transform the engine output to css
-    const comps = color.substring(5, color.length - 1).split(',');
-    return `rgba(${comps[1]},${comps[2]},${comps[3]},${comps[0]}`;
-  }
-  return color;
-}
-
-function getAttributes(indecies, qAttrExps) {
+export function getAttributes(indecies, qAttrExps) {
   const attributes = {};
   indecies.forEach(attr => {
     if (attr.prop === 'color') {
-      attributes[attr.prop] = transformColor(qAttrExps.qValues[attr.index].qText);
+      attributes[attr.prop] = colorUtils.resolveExpression(qAttrExps.qValues[attr.index].qText);
     } else {
       attributes[attr.prop] = qAttrExps.qValues[attr.index].qText;
     }
@@ -250,7 +243,7 @@ export default async function transform({ layout, model, translator }) {
   }
 
   const { status, dataMatrix } = await getDataMatrix(layout, model);
-  const attributeIndecies = getAttributIndecies(layout.qHyperCube.qDimensionInfo[0].qAttrExprInfo);
+  const attributeIndecies = getAttributeIndecies(layout.qHyperCube.qDimensionInfo[0].qAttrExprInfo);
 
   if (!dataMatrix) {
     return null;
