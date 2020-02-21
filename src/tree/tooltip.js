@@ -26,9 +26,6 @@ export function getTooltipContent(d, cardStyling) {
   const measure = d.data.measure
     ? `${cardStyling.measureLabel ? `${cardStyling.measureLabel}: ` : ''}${d.data.measure}`
     : '';
-  //   `<div class="sn-org-tooltip-inner"><div class="sn-org-tooltip-header">${label}</div>
-  // ${subLabel}${extraLabel}${measure}
-  // </div>`;
   return `<div class="sn-org-tooltip-inner"><div class="sn-org-tooltip-header">${label}</div>${subLabel}${extraLabel}${measure}</div>`;
 }
 
