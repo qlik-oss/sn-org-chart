@@ -23,7 +23,7 @@ export const getBBoxOfNodes = nodes => {
   };
 };
 
-export function getInitialZoomState(bBox, element) {
+export const getInitialZoomState = (bBox, element) => {
   const { widthMargin, cardHeight, minZoom, maxZoom } = constants;
   const { width, height } = bBox;
   const { clientHeight, clientWidth } = element;
@@ -45,9 +45,26 @@ export function getInitialZoomState(bBox, element) {
     y: cardHeight * yZoom,
     initialZoom: yZoom,
   };
-}
+};
 
-export function applyTransform(eventTransform, svg, divBox, width, height) {
+export const getTranslations = (bBox, height, width) => {
+  const scaleToWidth = bBox.width / width > bBox.height / height;
+  const scaleFactor = scaleToWidth ? bBox.width / width : bBox.height / height;
+  const translations = { scaleFactor };
+  if (scaleToWidth) {
+    const yTrans = -bBox.y + (height * scaleFactor - bBox.height) / 2;
+    translations.divTranslation = `${-bBox.x}px, ${yTrans}px`;
+    translations.svgTranslation = `${-bBox.x} ${yTrans}`;
+  } else {
+    const xTrans = -bBox.x + (width * scaleFactor - bBox.width) / 2;
+    translations.divTranslation = `${xTrans}px, ${-bBox.y}px`;
+    translations.svgTranslation = `${xTrans} ${-bBox.y}`;
+  }
+
+  return translations;
+};
+
+export const applyTransform = (eventTransform, svg, divBox, width, height) => {
   const scaleFactor = eventTransform.k;
   const translation = `${eventTransform.x}px, ${eventTransform.y}px`;
 
@@ -59,7 +76,7 @@ export function applyTransform(eventTransform, svg, divBox, width, height) {
     'style',
     `width:${width}px;height:${height}px; transform: translate(${translation}) scale(${scaleFactor})`
   );
-}
+};
 
 export function setZooming({ objectData, setTransform, transformState, selectionsAndTransform, initialZoomState }) {
   const { svg, divBox, width, height, zoomWrapper, element } = objectData;
@@ -111,25 +128,16 @@ export function setZooming({ objectData, setTransform, transformState, selection
 export default function transform(nodes, width, height, svg, divBox, useTransitions) {
   // Zooming and positioning of the tree
   const bBox = getBBoxOfNodes(nodes);
-  const scaleToWidhth = bBox.width / width > bBox.height / height;
-  const scaleFactor = scaleToWidhth ? bBox.width / width : bBox.height / height;
-  const translation = scaleToWidhth
-    ? `${-bBox.x}px, ${-bBox.y + (height * scaleFactor - bBox.height) / 2}px`
-    : `${-bBox.x + (width * scaleFactor - bBox.width) / 2}px, ${-bBox.y}px`;
-
-  const svgTranslate = scaleToWidhth
-    ? `${-bBox.x} ${-bBox.y + (height * scaleFactor - bBox.height) / 2}`
-    : `${-bBox.x + (width * scaleFactor - bBox.width) / 2} ${-bBox.y}`;
-
+  const { divTranslation, svgTranslation, scaleFactor } = getTranslations(bBox, height, width);
   const isIE11 = !!window.MSInputMethodContext && !!document.documentMode;
   if (isIE11) {
     // Transition using d3 + svg transform, for IE11
-    svg.attr('transform', `scale(${1 / scaleFactor}) translate(${svgTranslate})`);
+    svg.attr('transform', `scale(${1 / scaleFactor}) translate(${svgTranslation})`);
     divBox.classed('org-disable-transition', true);
     svg.classed('org-disable-transition', true);
   } else {
     // Transition using css, does not work in IE11
-    svg.attr('style', `transform: scale(${1 / scaleFactor}) translate(${translation});`);
+    svg.attr('style', `transform: scale(${1 / scaleFactor}) translate(${divTranslation});`);
     divBox.classed('org-disable-transition', !useTransitions);
     svg.classed('org-disable-transition', !useTransitions);
   }
@@ -137,6 +145,6 @@ export default function transform(nodes, width, height, svg, divBox, useTransiti
   divBox.attr(
     'style',
     `width:${width}px;height:${height}px;
-      transform: scale(${1 / scaleFactor}) translate(${translation});`
+      transform: scale(${1 / scaleFactor}) translate(${divTranslation});`
   );
 }

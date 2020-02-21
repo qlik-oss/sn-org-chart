@@ -60,12 +60,12 @@ describe('color-utils', () => {
       expect(colorUtils.isDarkColor('rgb(250,0,0)')).to.be.true;
     });
 
-    it('should not be dark color rgb(255,192,203,1)', () => {
-      expect(colorUtils.isDarkColor('rgb(255,192,203,1)')).to.be.false;
+    it('should not be dark color rgba(255,192,203,1)', () => {
+      expect(colorUtils.isDarkColor('rgba(255,192,203,1)')).to.be.false;
     });
 
-    it('should be dark color rgb(255,192,203,1)', () => {
-      expect(colorUtils.isDarkColor('rgb(255,192,203,1)')).to.be.false;
+    it('should be dark color rgba(255,192,203,1)', () => {
+      expect(colorUtils.isDarkColor('rgba(255,192,203,1)')).to.be.false;
     });
   });
 });
