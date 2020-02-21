@@ -24,19 +24,22 @@ export function getTooltipStyle(d, containerHeight, x, y, sel) {
   return `bottom: ${yLocation}px;left: ${xLocation}px;visibility: visible;opacity: 0.9;`;
 }
 
-export function openTooltip(tooltip, d, containerHeight, cardStyling, x, y, sel) {
+export function getTooltipContent(d, cardStyling) {
   const label = d.data.attributes.label || d.data.id;
   const subLabel = d.data.attributes.subLabel ? `${d.data.attributes.subLabel}<br />` : '';
   const extraLabel = d.data.attributes.extraLabel ? `${d.data.attributes.extraLabel}<br />` : '';
   const measure = d.data.measure
     ? `${cardStyling.measureLabel ? `${cardStyling.measureLabel}: ` : ''}${d.data.measure}`
     : '';
+  return `${label}<br />${subLabel}${extraLabel}${measure}`;
+}
+
+export function openTooltip(tooltip, d, containerHeight, cardStyling, x, y, sel) {
+  const tooltipContent = getTooltipContent(d, cardStyling);
   tooltip.active = true;
   tooltip.timeout = setTimeout(() => {
     if (tooltip.active) {
-      tooltip
-        .html(`${label}<br />${subLabel}${extraLabel}${measure}`)
-        .attr('style', () => getTooltipStyle(d, containerHeight, x, y, sel));
+      tooltip.html(tooltipContent).attr('style', () => getTooltipStyle(d, containerHeight, x, y, sel));
     }
   }, 250);
 }
