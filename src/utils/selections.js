@@ -10,7 +10,7 @@ export default {
       if (node.data.isLocked) {
         return;
       }
-      if (!selections.api.isActive() || !selectionState) { // selectioState !== [] ?
+      if (!selections.api.isActive() || !selectionState) {
         selections.api.begin('/qHyperCubeDef');
         newState = [];
       } else {

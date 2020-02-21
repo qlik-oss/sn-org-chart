@@ -1,7 +1,6 @@
 import selections from '../selections';
 import defaultValues from '../../__tests__/default-orgchart-props';
 
-
 describe('selections', () => {
   describe('select', () => {
     const { select } = selections;
@@ -29,12 +28,12 @@ describe('selections', () => {
       select(node, selectionObj, selectionState);
       expect(selectionObj.setState).to.not.have.been.called;
     });
-    it('should early return if elemNo is negative', () => {
+    it('should early return if elemNo isLocked is true', () => {
       node.data.isLocked = true;
       select(node, selectionObj, selectionState);
       expect(selectionObj.setState).to.not.have.been.called;
     });
-    it('should call begin sand setState to node id', () => {
+    it('should call begin and setState to node id', () => {
       select(node, selectionObj, selectionState);
       expect(selectionObj.api.begin).to.have.been.calledOnce;
       expect(selectionObj.api.select).to.have.been.calledOnce;
