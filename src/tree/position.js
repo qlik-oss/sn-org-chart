@@ -24,7 +24,11 @@ export const depthTranslation = (d, depthSpacing, axis, initialZoomState) => {
   const { cardHeight, leafMargin } = constants;
 
   if (d.parent && d.parent.data.id !== 'Root' && haveNoChildren(d.parent.children)) {
-    d[axis] = d.parent.y + depthSpacing + d.data.childNumber * (cardHeight + leafMargin);
+    d[axis] =
+      d.parent.y +
+      depthSpacing +
+      d.data.childNumber * (cardHeight + leafMargin) +
+      ((initialZoomState && initialZoomState.y) || 0);
   } else {
     d[axis] = d.y + ((initialZoomState && initialZoomState.y) || 0);
   }
