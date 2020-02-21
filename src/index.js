@@ -8,6 +8,7 @@ import {
   useTheme,
   useSelections,
   useAction,
+  useRect,
   onTakeSnapshot,
   useOptions,
   useImperativeHandle,
@@ -21,7 +22,7 @@ import { paintTree, preRenderTree, createSnapshotData } from './tree/render';
 import stylingUtils from './utils/styling';
 import treeTransform from './utils/tree-utils';
 import viewStateUtil from './utils/viewstate-utils';
-import { setZooming } from './tree/transform';
+import { setZooming, snapshotZoom } from './tree/transform';
 import autoRegister from './locale/translations';
 import './styles/tooltip.less';
 import './styles/paths.less';
@@ -47,6 +48,7 @@ export default function supernova(env) {
       const Theme = useTheme();
       const options = useOptions();
       const [opts] = useState(options);
+      const rect = useRect();
       const selectionsAPI = useSelections();
       const constraints = useConstraints();
       const [selectionsAndTransform] = useState({
@@ -216,9 +218,11 @@ export default function supernova(env) {
       }, [objectData]);
 
       const createViewState = () => {
+        const size = { width: element.clientWidth, height: element.clientHeight };
         const vs = {
           expandedState,
           transform,
+          size,
         };
         vs.expandedState.useTransitions = false;
         return vs;
@@ -228,9 +232,17 @@ export default function supernova(env) {
         if (!snapshotLayout.snapshotData) {
           snapshotLayout.snapshotData = {};
         }
-        snapshotLayout.snapshotData.viewState = createViewState();
+        if (!layout.snapshotData.viewState) {
+          snapshotLayout.snapshotData.viewState = createViewState();
+        }
         snapshotLayout.snapshotData.dataMatrix = createSnapshotData(expandedState, objectData.allNodes, layout);
       });
+
+      useEffect(() => {
+        if (objectData && layout && layout.snapshotData) {
+          snapshotZoom(objectData, rect, layout.snapshotData.viewState);
+        }
+      }, [rect, objectData]);
 
       useImperativeHandle(() => ({
         getViewState() {
