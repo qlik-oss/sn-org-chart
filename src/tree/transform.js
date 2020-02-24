@@ -1,5 +1,6 @@
 import { select, zoom, event, zoomIdentity } from 'd3';
 import constants from './size-constants';
+import { closeTooltip } from './tooltip';
 
 export const getBBoxOfNodes = nodes => {
   const { cardWidth, cardHeight, buttonHeight, buttonMargin } = constants;
@@ -79,7 +80,7 @@ export const applyTransform = (eventTransform, svg, divBox, width, height) => {
 };
 
 export function setZooming({ objectData, setTransform, transformState, selectionsAndTransform, initialZoomState }) {
-  const { svg, divBox, width, height, zoomWrapper, element } = objectData;
+  const { svg, divBox, width, height, zoomWrapper, element, tooltip } = objectData;
   const { x = 0, y = 0 } = transformState;
   const { minZoom, maxZoom } = constants;
   const zoomFactor = (transformState && 1 / transformState.zoom) || initialZoomState.initialZoom;
@@ -95,6 +96,7 @@ export function setZooming({ objectData, setTransform, transformState, selection
   const zoomed = () => {
     setTransform({ zoom: event.transform.k / scaleFactor, x: event.transform.x, y: event.transform.y });
     bubbleEvent();
+    closeTooltip(tooltip);
     applyTransform(
       zoomIdentity.translate(event.transform.x, event.transform.y).scale(event.transform.k / scaleFactor),
       svg,

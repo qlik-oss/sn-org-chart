@@ -70,18 +70,12 @@ export default function box(
   element,
   tooltip
 ) {
-  const {
-    cardWidth,
-    cardHeight,
-    buttonWidth,
-    buttonHeight,
-    cardPadding,
-    rootDiameter,
-  } = constants;
+  const { cardWidth, cardHeight, buttonWidth, buttonHeight, cardPadding, rootDiameter } = constants;
   const { topId, isExpanded } = expandedState;
   const topNode = nodes.find(node => node.data.id === topId);
   const ancestorIds = topNode && topNode.parent ? topNode.parent.ancestors().map(anc => anc.data.id) : [];
 
+  const touchmode = document.getElementsByTagName('html')[0].classList.contains('touch-on');
   // dummy root
   divBox
     .selectAll('.sn-org-nodes')
@@ -103,19 +97,23 @@ export default function box(
     .attr('id', d => d.data.id)
     .on('click', node => {
       if (!selectionsAndTransform.constraints.active && node.data.id !== 'Root') {
+        touchmode && openTooltip(tooltip, node, element.clientHeight, cardStyling, x, y, selectionsAndTransform, 0);
         selections.select(node, selectionsAndTransform, selectionState);
       }
     })
     .html(d => card(d.data, cardStyling, selectionsAndTransform, selectionState))
     .on('mouseenter', d => {
-      if (!selectionsAndTransform.constraints.active && event.buttons === 0) {
+      if (!touchmode && !selectionsAndTransform.constraints.active && event.buttons === 0) {
         openTooltip(tooltip, d, element.clientHeight, cardStyling, x, y, selectionsAndTransform);
       }
     })
     .on('mouseleave', () => {
-      closeTooltip(tooltip);
+      !touchmode && closeTooltip(tooltip);
     })
     .on('mousedown', () => {
+      closeTooltip(tooltip);
+    })
+    .on('touchmove', () => {
       closeTooltip(tooltip);
     })
     .on('wheel', () => {

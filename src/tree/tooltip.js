@@ -29,7 +29,7 @@ export function getTooltipContent(d, cardStyling) {
   return `<div class="sn-org-tooltip-inner"><div class="sn-org-tooltip-header">${label}</div>${subLabel}${extraLabel}${measure}</div>`;
 }
 
-export function openTooltip(tooltip, d, containerHeight, cardStyling, x, y, sel) {
+export function openTooltip(tooltip, d, containerHeight, cardStyling, x, y, sel, delay = 250) {
   tooltip.active = true;
   tooltip.timeout = setTimeout(() => {
     if (tooltip.active) {
@@ -38,7 +38,7 @@ export function openTooltip(tooltip, d, containerHeight, cardStyling, x, y, sel)
         .classed('sn-org-tooltip-visible', true)
         .attr('style', () => getTooltipStyle(d, containerHeight, x, y, sel));
     }
-  }, 250);
+  }, delay);
 }
 
 export function closeTooltip(tooltip) {
