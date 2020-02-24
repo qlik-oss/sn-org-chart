@@ -75,11 +75,7 @@ export default function box(
   const topNode = nodes.find(node => node.data.id === topId);
   const ancestorIds = topNode && topNode.parent ? topNode.parent.ancestors().map(anc => anc.data.id) : [];
 
-  let touchmode = false;
-  if (!selectionsAndTransform.constraints.active) {
-    touchmode = document.getElementsByTagName('html')[0].classList.contains('touch-on');
-  }
-
+  const touchmode = document.getElementsByTagName('html')[0].classList.contains('touch-on');
   // dummy root
   divBox
     .selectAll('.sn-org-nodes')
@@ -101,7 +97,7 @@ export default function box(
     .attr('id', d => d.data.id)
     .on('click', node => {
       if (!selectionsAndTransform.constraints.active && node.data.id !== 'Root') {
-        touchmode && openTooltip(tooltip, node, element.clientHeight, cardStyling, x, y, selectionsAndTransform);
+        touchmode && openTooltip(tooltip, node, element.clientHeight, cardStyling, x, y, selectionsAndTransform, 0);
         selections.select(node, selectionsAndTransform, selectionState);
       }
     })
@@ -112,7 +108,7 @@ export default function box(
       }
     })
     .on('mouseleave', () => {
-      closeTooltip(tooltip);
+      !touchmode && closeTooltip(tooltip);
     })
     .on('mousedown', () => {
       closeTooltip(tooltip);
