@@ -1,7 +1,7 @@
 import { select, zoom, event, zoomIdentity } from 'd3';
 import constants from './size-constants';
 
-const getBBoxOfNodes = nodes => {
+export const getBBoxOfNodes = nodes => {
   const { cardWidth, cardHeight, buttonHeight, buttonMargin } = constants;
   const bbox = {
     left: Infinity,
@@ -23,7 +23,48 @@ const getBBoxOfNodes = nodes => {
   };
 };
 
-export function applyTransform(eventTransform, svg, divBox, width, height) {
+export const getInitialZoomState = (bBox, element) => {
+  const { widthMargin, cardHeight, minZoom, maxZoom } = constants;
+  const { width, height } = bBox;
+  const { clientHeight, clientWidth } = element;
+  const calcWidth = width + 2 * widthMargin;
+  const calcHeight = height + cardHeight;
+  const xZoom = Math.max(Math.min(calcWidth / clientWidth, maxZoom), minZoom);
+  const yZoom = Math.max(Math.min(calcHeight / clientHeight, maxZoom), minZoom);
+  if (xZoom > yZoom) {
+    // Zooming for x direction
+    return {
+      initialX: -bBox.x + widthMargin,
+      initialY: -bBox.y + (clientHeight * xZoom - height) / 2,
+      initialZoom: xZoom,
+    };
+  }
+  // Zooming for y direction
+  return {
+    initialX: -bBox.x + (clientWidth * yZoom - width) / 2,
+    initialY: cardHeight / 2,
+    initialZoom: yZoom,
+  };
+};
+
+export const getTranslations = (bBox, height, width) => {
+  const scaleToWidth = bBox.width / width > bBox.height / height;
+  const scaleFactor = scaleToWidth ? bBox.width / width : bBox.height / height;
+  const translations = { scaleFactor };
+  if (scaleToWidth) {
+    const yTrans = -bBox.y + (height * scaleFactor - bBox.height) / 2;
+    translations.divTranslation = `${-bBox.x}px, ${yTrans}px`;
+    translations.svgTranslation = `${-bBox.x} ${yTrans}`;
+  } else {
+    const xTrans = -bBox.x + (width * scaleFactor - bBox.width) / 2;
+    translations.divTranslation = `${xTrans}px, ${-bBox.y}px`;
+    translations.svgTranslation = `${xTrans} ${-bBox.y}`;
+  }
+
+  return translations;
+};
+
+export const applyTransform = (eventTransform, svg, divBox, width, height) => {
   const scaleFactor = eventTransform.k;
   const translation = `${eventTransform.x}px, ${eventTransform.y}px`;
 
@@ -35,14 +76,13 @@ export function applyTransform(eventTransform, svg, divBox, width, height) {
     'style',
     `width:${width}px;height:${height}px; transform: translate(${translation}) scale(${scaleFactor})`
   );
-}
+};
 
-export function setZooming({ objectData, setTransform, transformState, selectionsAndTransform }) {
-  const { svg, divBox, width, height, zoomWrapper, allNodes, element } = objectData;
+export function setZooming({ objectData, setTransform, transformState, selectionsAndTransform, initialZoomState }) {
+  const { svg, divBox, width, height, zoomWrapper, element } = objectData;
   const { x = 0, y = 0 } = transformState;
-  const maxZoom = 6;
-  const minZoom = 0.2;
-  const zoomFactor = (transformState && 1 / transformState.zoom) || allNodes.zoomFactor;
+  const { minZoom, maxZoom } = constants;
+  const zoomFactor = (transformState && 1 / transformState.zoom) || initialZoomState.initialZoom;
   const scaleFactor = Math.max(Math.min(maxZoom, zoomFactor), minZoom);
 
   // sends otherwise captured mouse event to handle context menu correctly in sense
@@ -101,25 +141,16 @@ export const snapshotZoom = (objectData, rect, viewState) => {
 export default function transform(nodes, width, height, svg, divBox, useTransitions) {
   // Zooming and positioning of the tree
   const bBox = getBBoxOfNodes(nodes);
-  const scaleToWidhth = bBox.width / width > bBox.height / height;
-  const scaleFactor = scaleToWidhth ? bBox.width / width : bBox.height / height;
-  const translation = scaleToWidhth
-    ? `${-bBox.x}px, ${-bBox.y + (height * scaleFactor - bBox.height) / 2}px`
-    : `${-bBox.x + (width * scaleFactor - bBox.width) / 2}px, ${-bBox.y}px`;
-
-  const svgTranslate = scaleToWidhth
-    ? `${-bBox.x} ${-bBox.y + (height * scaleFactor - bBox.height) / 2}`
-    : `${-bBox.x + (width * scaleFactor - bBox.width) / 2} ${-bBox.y}`;
-
+  const { divTranslation, svgTranslation, scaleFactor } = getTranslations(bBox, height, width);
   const isIE11 = !!window.MSInputMethodContext && !!document.documentMode;
   if (isIE11) {
     // Transition using d3 + svg transform, for IE11
-    svg.attr('transform', `scale(${1 / scaleFactor}) translate(${svgTranslate})`);
+    svg.attr('transform', `scale(${1 / scaleFactor}) translate(${svgTranslation})`);
     divBox.classed('org-disable-transition', true);
     svg.classed('org-disable-transition', true);
   } else {
     // Transition using css, does not work in IE11
-    svg.attr('style', `transform: scale(${1 / scaleFactor}) translate(${translation});`);
+    svg.attr('style', `transform: scale(${1 / scaleFactor}) translate(${divTranslation});`);
     divBox.classed('org-disable-transition', !useTransitions);
     svg.classed('org-disable-transition', !useTransitions);
   }
@@ -127,6 +158,6 @@ export default function transform(nodes, width, height, svg, divBox, useTransiti
   divBox.attr(
     'style',
     `width:${width}px;height:${height}px;
-      transform: scale(${1 / scaleFactor}) translate(${translation});`
+      transform: scale(${1 / scaleFactor}) translate(${divTranslation});`
   );
 }

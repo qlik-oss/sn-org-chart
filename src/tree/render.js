@@ -123,7 +123,7 @@ export const getSize = ({ error, warn }, element) => {
 export function preRenderTree(element, dataTree) {
   element.innerHTML = '';
   element.className = 'sn-org-chart';
-  const positioning = position('ttb', element);
+  const positioning = position('ttb', element, {});
   const { width, height } = getSize(dataTree, element);
 
   const zoomWrapper = select(element)

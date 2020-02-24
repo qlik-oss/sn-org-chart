@@ -1,6 +1,6 @@
 {
   "name": "@nebula.js/sn-org-chart",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "",
   "license": "MIT",
   "author": "QlikTech International AB",
@@ -62,11 +62,11 @@
     "eslint": "6.8.0",
     "eslint-config-airbnb-base": "14.0.0",
     "eslint-plugin-import": "2.20.1",
-    "eslint-plugin-mocha": "6.2.2",
+    "eslint-plugin-mocha": "6.3.0",
     "husky": "4.2.3",
+    "less": "^3.11.1",
     "lint-staged": "10.0.7",
     "mocha-junit-reporter": "1.23.3",
-    "shx": "^0.3.2",
-    "less": "^3.11.1"
+    "shx": "^0.3.2"
   }
 }
