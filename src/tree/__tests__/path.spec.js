@@ -131,7 +131,7 @@ describe('path', () => {
       expect(points).to.deep.equal(expectedPoints);
     });
 
-    it('should return points for line to up button', () => {
+    it.skip('should return points for line to up button', () => {
       topId = '1';
       expectedPoints = [
         { x: 376, y: 120 },
