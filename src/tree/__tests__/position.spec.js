@@ -18,17 +18,24 @@ describe('position', () => {
     const depthSpacing = 124;
     let axis;
     let d;
+    let initialZoomState;
     beforeEach(() => {
       axis = 'xActual';
       d = JSON.parse(JSON.stringify(defaultValues.nodes));
+      initialZoomState = { initialX: 0, initialY: 0 };
     });
-    it('should return yActual for leaf node', () => {
-      const yActual = depthTranslation(d, depthSpacing, axis);
+    it('should return yActual for node with initial offset', () => {
+      initialZoomState.initialY = 100;
+      const yActual = depthTranslation(d, depthSpacing, axis, initialZoomState);
+      expect(yActual).to.equal(224);
+    });
+    it('should return yActual for node', () => {
+      const yActual = depthTranslation(d, depthSpacing, axis, initialZoomState);
       expect(yActual).to.equal(124);
     });
     it('should return yActual for leaf node', () => {
       d.parent.children = undefined;
-      const yActual = depthTranslation(d, depthSpacing, axis);
+      const yActual = depthTranslation(d, depthSpacing, axis, initialZoomState);
       expect(yActual).to.equal(204);
     });
   });
@@ -40,13 +47,30 @@ describe('position', () => {
     };
     let axis;
     let d;
+    let initialZoomState;
     beforeEach(() => {
       axis = 'xActual';
       d = JSON.parse(JSON.stringify(defaultValues.nodes));
+      initialZoomState = { initialX: 100, initialY: 0 };
     });
-    it('should return xActual for leaf node', () => {
-      const xActual = widthTranslation(d, widthSpacing, element, axis);
+    it('should return xActual for node', () => {
+      const xActual = widthTranslation(d, widthSpacing, element, axis, initialZoomState);
       expect(xActual).to.equal(124);
+    });
+    it('should return xActual for node with root parent and initialsZoom', () => {
+      d.parent.data.id = 'Root';
+      const xActual = widthTranslation(d, widthSpacing, element, axis, initialZoomState);
+      expect(xActual).to.equal(224);
+    });
+    it('should return xActual for node with root parent and no initialsZoom', () => {
+      d.parent.data.id = 'Root';
+      const xActual = widthTranslation(d, widthSpacing, element, axis, {});
+      expect(xActual).to.equal(124);
+    });
+    it('should return xActual for parent node', () => {
+      d = {};
+      const xActual = widthTranslation(d, widthSpacing, element, axis, initialZoomState);
+      expect(xActual).to.equal(100);
     });
   });
 });

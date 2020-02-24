@@ -23,6 +23,30 @@ export const getBBoxOfNodes = nodes => {
   };
 };
 
+export const getInitialZoomState = (bBox, element) => {
+  const { widthMargin, cardHeight, minZoom, maxZoom } = constants;
+  const { width, height } = bBox;
+  const { clientHeight, clientWidth } = element;
+  const calcWidth = width + 2 * widthMargin;
+  const calcHeight = height + cardHeight;
+  const xZoom = Math.max(Math.min(calcWidth / clientWidth, maxZoom), minZoom);
+  const yZoom = Math.max(Math.min(calcHeight / clientHeight, maxZoom), minZoom);
+  if (xZoom > yZoom) {
+    // Zooming for x direction
+    return {
+      initialX: -bBox.x + widthMargin,
+      initialY: -bBox.y + (clientHeight * xZoom - height) / 2,
+      initialZoom: xZoom,
+    };
+  }
+  // Zooming for y direction
+  return {
+    initialX: -bBox.x + (clientWidth * yZoom - width) / 2,
+    initialY: cardHeight / 2,
+    initialZoom: yZoom,
+  };
+};
+
 export const getTranslations = (bBox, height, width) => {
   const scaleToWidth = bBox.width / width > bBox.height / height;
   const scaleFactor = scaleToWidth ? bBox.width / width : bBox.height / height;
@@ -40,7 +64,7 @@ export const getTranslations = (bBox, height, width) => {
   return translations;
 };
 
-export function applyTransform(eventTransform, svg, divBox, width, height) {
+export const applyTransform = (eventTransform, svg, divBox, width, height) => {
   const scaleFactor = eventTransform.k;
   const translation = `${eventTransform.x}px, ${eventTransform.y}px`;
 
@@ -52,14 +76,13 @@ export function applyTransform(eventTransform, svg, divBox, width, height) {
     'style',
     `width:${width}px;height:${height}px; transform: translate(${translation}) scale(${scaleFactor})`
   );
-}
+};
 
-export function setZooming({ objectData, setTransform, transformState, selectionsAndTransform }) {
-  const { svg, divBox, width, height, zoomWrapper, allNodes, element } = objectData;
+export function setZooming({ objectData, setTransform, transformState, selectionsAndTransform, initialZoomState }) {
+  const { svg, divBox, width, height, zoomWrapper, element } = objectData;
   const { x = 0, y = 0 } = transformState;
-  const maxZoom = 6;
-  const minZoom = 0.2;
-  const zoomFactor = (transformState && 1 / transformState.zoom) || allNodes.zoomFactor;
+  const { minZoom, maxZoom } = constants;
+  const zoomFactor = (transformState && 1 / transformState.zoom) || initialZoomState.initialZoom;
   const scaleFactor = Math.max(Math.min(maxZoom, zoomFactor), minZoom);
 
   // sends otherwise captured mouse event to handle context menu correctly in sense

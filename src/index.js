@@ -17,11 +17,12 @@ import {
 import properties from './object-properties';
 import data from './data';
 import ext from './extension/ext';
-import { paintTree, preRenderTree, createSnapshotData } from './tree/render';
+import { paintTree, preRenderTree, createSnapshotData, filterTree } from './tree/render';
+import position from './tree/position';
 import stylingUtils from './utils/styling';
 import treeTransform from './utils/tree-utils';
 import viewStateUtil from './utils/viewstate-utils';
-import { setZooming } from './tree/transform';
+import { setZooming, getBBoxOfNodes, getInitialZoomState } from './tree/transform';
 import autoRegister from './locale/translations';
 import './styles/tooltip.less';
 import './styles/paths.less';
@@ -177,13 +178,6 @@ export default function supernova(env) {
           const preRender = preRenderTree(element, dataTree);
           if (preRender) {
             setObjectData(preRender);
-            (!expandedState || !preRender.allNodes.descendants().find(node => node.data.id === expandedState.topId)) &&
-              setExpandedState({
-                topId: preRender.allNodes.data.id,
-                isExpanded: true,
-                expandedChildren: [],
-                useTransitions: false,
-              });
           }
         }
       }, [element, dataTree]);
@@ -201,17 +195,48 @@ export default function supernova(env) {
             element,
           });
         }
-      }, [expandedState, objectData, selectionState]);
+      }, [expandedState, selectionState]);
 
       useEffect(() => {
         if (objectData && layout.navigationMode === 'free') {
           const viewState = viewStateUtil.getViewState(opts, layout);
+          const resetExpandedState =
+            !expandedState || !objectData.allNodes.descendants().find(node => node.data.id === expandedState.topId);
+          const newExpandedState = resetExpandedState
+            ? { topId: objectData.allNodes.data.id, isExpanded: true, expandedChildren: [], useTransitions: false }
+            : expandedState;
+
+          const renderNodes = filterTree(newExpandedState, objectData.allNodes);
+          renderNodes.forEach(node => {
+            if (!node.xActual || !node.yActual) {
+              objectData.positioning.x(node);
+              objectData.positioning.y(node);
+            }
+          });
+          const bBox = getBBoxOfNodes(renderNodes);
+          const initialZoomState = getInitialZoomState(bBox, element);
+          objectData.positioning = position('ttb', element, initialZoomState);
           setZooming({
             objectData,
             setTransform,
             transformState: (viewState && viewState.transform) || {},
             selectionsAndTransform,
+            initialZoomState,
           });
+          if (resetExpandedState) {
+            setExpandedState(newExpandedState);
+          } else {
+            paintTree({
+              objectData,
+              expandedState,
+              styling,
+              setStateCallback,
+              selectionsAndTransform,
+              selectionState,
+              useTransitions: expandedState.useTransitions,
+              element,
+            });
+          }
         }
       }, [objectData]);
 
