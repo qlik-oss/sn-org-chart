@@ -34,15 +34,15 @@ export const getInitialZoomState = (bBox, element) => {
   if (xZoom > yZoom) {
     // Zooming for x direction
     return {
-      x: -bBox.x + widthMargin * xZoom,
-      y: -bBox.y,
+      initialX: -bBox.x + widthMargin * xZoom,
+      initialY: -bBox.y + (clientHeight * xZoom - height) / 2,
       initialZoom: xZoom,
     };
   }
   // Zooming for y direction
   return {
-    x: -bBox.x + widthMargin * yZoom,
-    y: cardHeight * yZoom,
+    initialX: -bBox.x + (clientWidth * yZoom - width) / 2,
+    initialY: cardHeight * yZoom,
     initialZoom: yZoom,
   };
 };
