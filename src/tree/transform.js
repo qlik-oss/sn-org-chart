@@ -27,14 +27,14 @@ export const getInitialZoomState = (bBox, element) => {
   const { widthMargin, cardHeight, minZoom, maxZoom } = constants;
   const { width, height } = bBox;
   const { clientHeight, clientWidth } = element;
-  const calcWidth = clientWidth - 2 * widthMargin;
-  const calcHeight = clientHeight - cardHeight;
-  const xZoom = Math.max(Math.min(width / calcWidth, maxZoom), minZoom);
-  const yZoom = Math.max(Math.min(height / calcHeight, maxZoom), minZoom);
+  const calcWidth = width + 2 * widthMargin;
+  const calcHeight = height + cardHeight;
+  const xZoom = Math.max(Math.min(calcWidth / clientWidth, maxZoom), minZoom);
+  const yZoom = Math.max(Math.min(calcHeight / clientHeight, maxZoom), minZoom);
   if (xZoom > yZoom) {
     // Zooming for x direction
     return {
-      initialX: -bBox.x + widthMargin * xZoom,
+      initialX: -bBox.x + widthMargin,
       initialY: -bBox.y + (clientHeight * xZoom - height) / 2,
       initialZoom: xZoom,
     };
@@ -42,7 +42,7 @@ export const getInitialZoomState = (bBox, element) => {
   // Zooming for y direction
   return {
     initialX: -bBox.x + (clientWidth * yZoom - width) / 2,
-    initialY: cardHeight * yZoom,
+    initialY: cardHeight / 2,
     initialZoom: yZoom,
   };
 };

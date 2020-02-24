@@ -1,4 +1,4 @@
-import { getBBoxOfNodes, getTranslations } from '../transform';
+import { getBBoxOfNodes, getTranslations, getInitialZoomState } from '../transform';
 
 describe('transform', () => {
   describe('getBBoxOfNodes', () => {
@@ -56,6 +56,27 @@ describe('transform', () => {
         };
         expect(translatoions).to.deep.equal(expected);
       });
+    });
+  });
+
+  describe('getInitialZoomState', () => {
+    let element;
+    let bBox;
+    beforeEach(() => {
+      element = { clientWidth: 1000, clientHeight: 1000 };
+      bBox = { width: 1000, height: 1000, x: 0, y: 0 };
+    });
+
+    it('should zoom in x direction', () => {
+      bBox.width = 1936;
+      const result = getInitialZoomState(bBox, element);
+      expect(result).to.eql({ initialX: 32, initialY: 500, initialZoom: 2 });
+    });
+
+    it('should zoom in y direction', () => {
+      bBox.height = 1936;
+      const result = getInitialZoomState(bBox, element);
+      expect(result).to.eql({ initialX: 500, initialY: 32, initialZoom: 2 });
     });
   });
 });
