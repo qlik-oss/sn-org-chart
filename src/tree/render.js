@@ -55,7 +55,9 @@ export const createSnapshotData = (expandedState, allNodes, layout) => {
     dataMatrix.push(...page.qMatrix);
   });
   nodes.forEach(n => {
-    usedMatrix.push(dataMatrix[n.data.rowNo]);
+    if (n.data.rowNo !== undefined) {
+      usedMatrix.push(dataMatrix[n.data.rowNo]);
+    }
   });
   return usedMatrix;
 };
