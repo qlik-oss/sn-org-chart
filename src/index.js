@@ -200,12 +200,12 @@ export default function supernova(env) {
       useEffect(() => {
         if (objectData && layout.navigationMode === 'free') {
           const viewState = viewStateUtil.getViewState(opts, layout);
-          const newExpandedState = expandedState || {
-            topId: objectData.allNodes.data.id,
-            isExpanded: true,
-            expandedChildren: [],
-            useTransitions: false,
-          };
+          const resetExpandedState =
+            !expandedState || !objectData.allNodes.descendants().find(node => node.data.id === expandedState.topId);
+          const newExpandedState = resetExpandedState
+            ? { topId: objectData.allNodes.data.id, isExpanded: true, expandedChildren: [], useTransitions: false }
+            : expandedState;
+
           const renderNodes = filterTree(newExpandedState, objectData.allNodes);
           renderNodes.forEach(node => {
             if (!node.xActual || !node.yActual) {
@@ -223,7 +223,7 @@ export default function supernova(env) {
             selectionsAndTransform,
             initialZoomState,
           });
-          if (!expandedState) {
+          if (resetExpandedState) {
             setExpandedState(newExpandedState);
           } else {
             paintTree({
