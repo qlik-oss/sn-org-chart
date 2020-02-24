@@ -6,7 +6,7 @@ export function getPoints(d, topId, { depthSpacing, isVertical, x, y }) {
   const { cardWidth, cardHeight, buttonHeight, cardPadding, buttonMargin } = constants;
   const points = [];
   const halfCard = { x: cardWidth / 2, y: cardHeight / 2 };
-  const start = { x: x(d), y: y(d) };
+  const start = { x: d.xActual, y: d.yActual };
 
   if (d.parent && d.parent.data.id !== 'Root' && d.data.id !== topId) {
     const halfDepth = depthSpacing / 2;
