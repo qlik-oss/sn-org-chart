@@ -177,7 +177,7 @@ export default function supernova(env) {
           const preRender = preRenderTree(element, dataTree);
           if (preRender) {
             setObjectData(preRender);
-            !expandedState &&
+            (!expandedState || !preRender.allNodes.descendants().find(node => node.data.id === expandedState.topId)) &&
               setExpandedState({
                 topId: preRender.allNodes.data.id,
                 isExpanded: true,
