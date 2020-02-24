@@ -8,7 +8,8 @@ export function getPoints(d, topId, { depthSpacing, isVertical, x, y }) {
   const halfCard = { x: cardWidth / 2, y: cardHeight / 2 };
   const start = { x: x(d), y: y(d) };
 
-  if (d.parent && d.parent.data.id !== 'Root' && d.data.id !== topId) {
+  // TODO: fix so auto mode does not get a path to parent not showing
+  if (d.parent && d.parent.data.id !== 'Root') {
     const halfDepth = depthSpacing / 2;
     const end = { x: x(d.parent) + halfCard.x, y: y(d.parent) + cardHeight + cardPadding + buttonHeight };
 
