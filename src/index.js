@@ -218,9 +218,7 @@ export default function supernova(env) {
           });
           const bBox = getBBoxOfNodes(renderNodes);
           const initialZoomState =
-            layout.snapshotData && layout.snapshotData.viewState
-              ? layout.snapshotData.viewState.initialZoom
-              : getInitialZoomState(bBox, element);
+            viewState && viewState.initialZoom ? viewState.initialZoom : getInitialZoomState(bBox, element);
           setInitialZoom(initialZoomState);
           objectData.positioning = position('ttb', element, initialZoomState);
           setZooming({
