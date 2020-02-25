@@ -125,6 +125,7 @@ export function preRenderTree(element, dataTree, selectionsAndTransform, selecti
     .on('click', () => {
       if (!selectionsAndTransform.constraints.active && (!selectionsAndTransform.api.isActive() || !selectionState)) {
         selectionsAndTransform.api.begin('/qHyperCubeDef');
+        selectionsAndTransform.setState([]);
       }
     })
     .node();
