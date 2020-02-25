@@ -180,7 +180,7 @@ export default function supernova(env) {
             setObjectData(preRender);
           }
         }
-      }, [element, dataTree]);
+      }, [element, dataTree, constraints]);
 
       useEffect(() => {
         if (objectData && expandedState && styling) {
