@@ -113,7 +113,7 @@ export const getSize = ({ error, warn }, element) => {
   return { width, height };
 };
 
-export function preRenderTree(element, dataTree) {
+export function preRenderTree(element, dataTree, selectionsAndTransform, selectionState) {
   element.innerHTML = '';
   element.className = 'sn-org-chart';
   const positioning = position('ttb', element, {});
@@ -122,6 +122,11 @@ export function preRenderTree(element, dataTree) {
   const zoomWrapper = select(element)
     .append('span')
     .attr('class', 'sn-org-zoomwrapper')
+    .on('click', () => {
+      if (!selectionsAndTransform.constraints.active && (!selectionsAndTransform.api.isActive() || !selectionState)) {
+        selectionsAndTransform.api.begin('/qHyperCubeDef');
+      }
+    })
     .node();
 
   const svgBox = select(zoomWrapper)

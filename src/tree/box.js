@@ -140,6 +140,7 @@ export default function box(
     .on('click', d => {
       if (!selectionsAndTransform.constraints.active) {
         setStateCallback(getNewState(d, expandedState, ancestorIds));
+        event.stopPropagation();
       }
     })
     .html(d => `${getSign(d, expandedState, ancestorIds)} ${d.data.children.length}`);
