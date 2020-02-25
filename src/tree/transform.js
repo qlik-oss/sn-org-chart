@@ -127,10 +127,8 @@ export function setZooming({ objectData, setTransform, transformState, selection
 
 export const snapshotZoom = (objectData, rect, viewState) => {
   const { svg, divBox } = objectData;
-  const snapZoom =
-    rect.width / viewState.size.width > rect.height / viewState.size.height
-      ? rect.height / viewState.size.height
-      : rect.width / viewState.size.width;
+  const { size } = viewState;
+  const snapZoom = rect.width / size.w > rect.height / size.h ? rect.height / size.h : rect.width / size.w;
   const newX = viewState.transform.x * snapZoom;
   const newY = viewState.transform.y * snapZoom;
   const newZoom = viewState.transform.zoom * snapZoom;

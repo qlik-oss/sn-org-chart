@@ -43,6 +43,7 @@ export default function supernova(env) {
       const [linked, setLinked] = useState(false);
       const [selectionState, setSelectionState] = useState([]);
       const [transform, setTransform] = useState(null);
+      const [initialZoom, setInitialZoom] = useState(null);
       const layout = useStaleLayout();
       const model = useModel();
       const element = useElement();
@@ -216,7 +217,11 @@ export default function supernova(env) {
             }
           });
           const bBox = getBBoxOfNodes(renderNodes);
-          const initialZoomState = getInitialZoomState(bBox, element);
+          const initialZoomState =
+            layout.snapshotData && layout.snapshotData.viewState
+              ? layout.snapshotData.viewState.initialZoom
+              : getInitialZoomState(bBox, element);
+          setInitialZoom(initialZoomState);
           objectData.positioning = position('ttb', element, initialZoomState);
           setZooming({
             objectData,
@@ -243,11 +248,12 @@ export default function supernova(env) {
       }, [objectData]);
 
       const createViewState = () => {
-        const size = { width: element.clientWidth, height: element.clientHeight };
+        const size = { w: element.clientWidth, h: element.clientHeight };
         const vs = {
           expandedState,
           transform,
           size,
+          initialZoom,
         };
         vs.expandedState.useTransitions = false;
         return vs;
@@ -265,7 +271,7 @@ export default function supernova(env) {
 
       useEffect(() => {
         if (objectData && layout && layout.snapshotData) {
-          snapshotZoom(objectData, rect, layout.snapshotData.viewState);
+          snapshotZoom(objectData, rect, layout.snapshotData.viewState, layout.snapshotData.object);
         }
       }, [rect, objectData]);
 
