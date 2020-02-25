@@ -29,7 +29,16 @@ export const filterTree = ({ topId, isExpanded, expandedChildren }, nodeTree, ex
 
   if (nodeTree.data.navigationMode === 'free' && topNode.parent) {
     const ancestors = topNode.parent.ancestors();
+    const ancestorIds = ancestors.map(anc => anc.data.id);
     ancestors.forEach(ancestor => {
+      if (extended) {
+        ancestor.children.forEach(child => {
+          child.children &&
+            ancestorIds.indexOf(child.data.id) === -1 &&
+            child.data.id !== topNode.data.id &&
+            subTree.unshift(...child.children);
+        });
+      }
       subTree.unshift(...ancestor.children);
       if (!ancestor.parent) {
         subTree.unshift(ancestor);

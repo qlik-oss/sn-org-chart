@@ -8,6 +8,7 @@ import {
   useTheme,
   useSelections,
   useAction,
+  useRect,
   onTakeSnapshot,
   useOptions,
   useImperativeHandle,
@@ -22,7 +23,7 @@ import position from './tree/position';
 import stylingUtils from './utils/styling';
 import treeTransform from './utils/tree-utils';
 import viewStateUtil from './utils/viewstate-utils';
-import { setZooming, getBBoxOfNodes, getInitialZoomState } from './tree/transform';
+import { setZooming, snapshotZoom, getBBoxOfNodes, getInitialZoomState } from './tree/transform';
 import autoRegister from './locale/translations';
 import './styles/tooltip.less';
 import './styles/paths.less';
@@ -42,12 +43,14 @@ export default function supernova(env) {
       const [linked, setLinked] = useState(false);
       const [selectionState, setSelectionState] = useState([]);
       const [transform, setTransform] = useState(null);
+      const [initialZoom, setInitialZoom] = useState(null);
       const layout = useStaleLayout();
       const model = useModel();
       const element = useElement();
       const Theme = useTheme();
       const options = useOptions();
       const [opts] = useState(options);
+      const rect = useRect();
       const selectionsAPI = useSelections();
       const constraints = useConstraints();
       const [selectionsAndTransform] = useState({
@@ -214,7 +217,9 @@ export default function supernova(env) {
             }
           });
           const bBox = getBBoxOfNodes(renderNodes);
-          const initialZoomState = getInitialZoomState(bBox, element);
+          const initialZoomState =
+            viewState && viewState.initialZoom ? viewState.initialZoom : getInitialZoomState(bBox, element);
+          setInitialZoom(initialZoomState);
           objectData.positioning = position('ttb', element, initialZoomState);
           setZooming({
             objectData,
@@ -241,18 +246,32 @@ export default function supernova(env) {
       }, [objectData]);
 
       const createViewState = () => {
+        const size = { w: element.clientWidth, h: element.clientHeight };
         const vs = {
           expandedState,
           transform,
+          size,
+          initialZoom,
         };
         vs.expandedState.useTransitions = false;
         return vs;
       };
 
       onTakeSnapshot(snapshotLayout => {
-        snapshotLayout.snapshotData.viewState = createViewState();
+        if (!snapshotLayout.snapshotData) {
+          snapshotLayout.snapshotData = {};
+        }
+        if (!layout.snapshotData || !layout.snapshotData.viewState) {
+          snapshotLayout.snapshotData.viewState = createViewState();
+        }
         snapshotLayout.snapshotData.dataMatrix = createSnapshotData(expandedState, objectData.allNodes, layout);
       });
+
+      useEffect(() => {
+        if (objectData && layout && layout.snapshotData) {
+          snapshotZoom(objectData, rect, layout.snapshotData.viewState);
+        }
+      }, [rect, objectData]);
 
       useImperativeHandle(() => ({
         getViewState() {
