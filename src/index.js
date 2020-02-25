@@ -271,7 +271,7 @@ export default function supernova(env) {
 
       useEffect(() => {
         if (objectData && layout && layout.snapshotData) {
-          snapshotZoom(objectData, rect, layout.snapshotData.viewState, layout.snapshotData.object);
+          snapshotZoom(objectData, rect, layout.snapshotData.viewState);
         }
       }, [rect, objectData]);
 
