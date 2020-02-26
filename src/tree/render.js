@@ -113,20 +113,11 @@ export const paintTree = ({
   }
 };
 
-export const getSize = ({ error, warn }, element) => {
-  // eslint-disable-next-line prefer-const
-  let { width, height } = element.getBoundingClientRect();
-  if (error || (warn && warn.length)) {
-    height -= 20;
-  }
-  return { width, height };
-};
-
 export function preRenderTree(element, dataTree, selectionsAndTransform, selectionState) {
   element.innerHTML = '';
   element.className = 'sn-org-chart';
   const positioning = position('ttb', element, {});
-  const { width, height } = getSize(dataTree, element);
+  const { width, height } = element.getBoundingClientRect();
 
   const zoomWrapper = select(element)
     .append('span')
