@@ -17,7 +17,7 @@ function getParentId(row) {
   return row[1].qText;
 }
 
-function anyCycle(nodes) {
+export function anyCycle(nodes) {
   const visited = {};
   const marked = {};
   function isCycleUtil(node) {

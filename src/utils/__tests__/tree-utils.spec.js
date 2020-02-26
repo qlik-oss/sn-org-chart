@@ -1,4 +1,11 @@
-import { createNodes, haveNoChildren, getAllTreeElemNo, getAttributeIndecies, getAttributes } from '../tree-utils';
+import {
+  createNodes,
+  haveNoChildren,
+  getAllTreeElemNo,
+  getAttributeIndecies,
+  getAttributes,
+  anyCycle,
+} from '../tree-utils';
 import defaultValues from '../../__tests__/default-orgchart-props';
 
 function generateMatrix(numRows, childCount = 1) {
@@ -12,6 +19,25 @@ function generateMatrix(numRows, childCount = 1) {
 const translator = { get: d => d };
 
 describe('tree-utils', () => {
+  describe('anyCycle', () => {
+    let nodes;
+    beforeEach(() => {
+      const node3 = { id: '3', children: [] };
+      const node2 = { id: '2', children: [node3] };
+      const node1 = { id: '1', children: [node2] };
+      nodes = [node1, node2, node3];
+    });
+    it('should not detect a cycle in the nodes', () => {
+      const result = anyCycle(nodes);
+      expect(result).to.be.false;
+    });
+    it('should detect a cycle in the nodes', () => {
+      nodes[2].children = [{ id: '1', children: [] }];
+      const result = anyCycle(nodes);
+      expect(result).to.be.true;
+    });
+  });
+
   describe('createNodes', () => {
     it('should create a tree', () => {
       const matrix = [[{ qText: '007', qElemNumber: 0 }, { qText: '-' }]];
@@ -60,11 +86,7 @@ describe('tree-utils', () => {
       expect(indecies).to.eql([]);
     });
     it('should return empty array when attrsInfo is empty', () => {
-      attrsInfo = [
-        { id: 'colorByExpression' },
-        {},
-        { id: 'labelExpression' },
-      ];
+      attrsInfo = [{ id: 'colorByExpression' }, {}, { id: 'labelExpression' }];
       const expected = [
         { prop: 'color', index: 0 },
         { prop: 'label', index: 2 },
@@ -86,7 +108,7 @@ describe('tree-utils', () => {
           {
             qText: 'someExpression',
           },
-        ]
+        ],
       };
     });
     it('should return array with atrtibute', () => {
