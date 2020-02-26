@@ -2,7 +2,7 @@
 export default {
   'Object.OrgChart': 'Org chart', // Name of chart, to be added to sense when native
   'Object.OrgChart.Description':
-    'Displays the relations of an organization or similarly structured data. Starts at the top and allows for navigation through the hierachy.', // Description of chart, to be added to sense when native
+    'Displays the relations of an organization or similarly structured data. Starts at the top and allows for navigation through the hierarchy.', // Description of chart, to be added to sense when native
   'Object.OrgChart.MaxData': 'The maximum data limit is reached. The tree may display incorrectly.',
   'Object.OrgChart.DummyWarn': 'The data contains multiple root nodes.',
   'Object.OrgChart.CycleWarning': 'Data contains circular references, nodes are omitted.',
