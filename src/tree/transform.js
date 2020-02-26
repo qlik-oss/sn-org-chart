@@ -151,7 +151,6 @@ export function setZooming({ objectData, setTransform, transformState, selection
 
 export const getSnapshotZoom = (rect, viewState) => {
   const { size } = viewState;
-  console.log(rect.width / size.w > rect.height / size.h);
   const snapZoom = rect.width / size.w > rect.height / size.h ? rect.height / size.h : rect.width / size.w;
   const newX = viewState.transform.x * snapZoom;
   const newY = viewState.transform.y * snapZoom;

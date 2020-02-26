@@ -60,6 +60,11 @@ describe('position', () => {
       const xActual = widthTranslation(d, widthSpacing, element, axis, initialZoomState);
       expect(xActual).to.equal(125);
     });
+    it('should return xActual for leaf node', () => {
+      d.parent.children = [{}];
+      const xActual = widthTranslation(d, widthSpacing, element, axis, initialZoomState);
+      expect(xActual).to.equal(17);
+    });
     it('should return xActual for node, calculating xActual for parent recursively', () => {
       d.parent.xActual = undefined;
       const xActual = widthTranslation(d, widthSpacing, element, axis, initialZoomState);
