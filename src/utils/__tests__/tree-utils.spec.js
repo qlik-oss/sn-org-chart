@@ -223,7 +223,7 @@ describe('tree-utils', () => {
       const result = await transform({ layout, model, translator });
       expect(result).to.be.null;
     });
-    it('should return null for empty dataMatrix', async () => {
+    it('should return tree object', async () => {
       layout = {
         qHyperCube: {
           qDimensionInfo: [{}, {}],
