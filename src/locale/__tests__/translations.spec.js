@@ -23,6 +23,11 @@ describe('translations', () => {
     });
 
     it('Should early return when translation is different from id', () => {
+      translator.get = () => 'someTranslation';
+      expect(translator.add).to.not.have.been.called;
+    });
+
+    it('Should call add for every key', () => {
       autoRegister(translator);
       expect(translator.add).to.have.callCount(Object.keys(en).length);
     });
