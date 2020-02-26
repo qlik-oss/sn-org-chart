@@ -1,6 +1,6 @@
 {
   "name": "Org chart",
-  "description": "Displays the relations of an organization or similarly structured data. Starts at the top and allows for navigation through the hierachy.",
+  "description": "Displays the relations of an organization or similarly structured data. Starts at the top and allows for navigation through the hierarchy.",
   "icon": "network",
   "preview": "preview.png",
   "author": "QlikTech International AB",
