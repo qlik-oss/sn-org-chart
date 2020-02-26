@@ -122,11 +122,23 @@ export const getSize = ({ error, warn }, element) => {
   return { width, height };
 };
 
-export function preRenderTree(element, dataTree, selectionsAndTransform, selectionState) {
+export const preRenderTree = (element, dataTree, selectionsAndTransform, selectionState, setObjectData) => {
   element.innerHTML = '';
   element.className = 'sn-org-chart';
   const positioning = position('ttb', element, {});
   const { width, height } = getSize(dataTree, element);
+
+  const homeButton = select(element)
+    .append('button')
+    .attr('class', 'sn-org-homebutton disabled')
+    .on('click', () => {
+      const preRender = preRenderTree(element, dataTree, selectionsAndTransform, selectionState, setObjectData);
+      if (preRender) {
+        setObjectData(preRender);
+      }
+    })
+    .html('<span class="lui-fade-button__icon  lui-icon  lui-icon--large  lui-icon--home"></span>')
+    .node();
 
   const zoomWrapper = select(element)
     .append('span')
@@ -179,5 +191,16 @@ export function preRenderTree(element, dataTree, selectionsAndTransform, selecti
     .nodeSize([0, positioning.depthSpacing]);
 
   const allNodes = treemap(hierarchy(dataTree));
-  return { svg, divBox, allNodes, positioning, width, height, element, zoomWrapper, tooltip };
-}
+  return setObjectData({
+    svg,
+    divBox,
+    allNodes,
+    positioning,
+    width,
+    height,
+    element,
+    zoomWrapper,
+    tooltip,
+    homeButton,
+  });
+};

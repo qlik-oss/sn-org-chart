@@ -29,6 +29,7 @@ import './styles/tooltip.less';
 import './styles/paths.less';
 import './styles/warnings.less';
 import './styles/nodes.less';
+import './styles/homebutton.less';
 
 export default function supernova(env) {
   return {
@@ -178,10 +179,7 @@ export default function supernova(env) {
       // This one can split up. Only need to get new height/width when rect is changed
       useEffect(() => {
         if (element && dataTree) {
-          const preRender = preRenderTree(element, dataTree, selectionsAndTransform, selectionState);
-          if (preRender) {
-            setObjectData(preRender);
-          }
+          preRenderTree(element, dataTree, selectionsAndTransform, selectionState, setObjectData);
         }
       }, [element, dataTree, constraints]);
 
