@@ -78,6 +78,15 @@ describe('tree-utils', () => {
       expect(result.status).to.equal('');
       expect(result.dataMatrix.length).to.equal(2);
     });
+
+    it('should return empty dataMatrix', async () => {
+      layout.qHyperCube.qDataPages[0].qArea.qHeight = 0;
+      layout.qHyperCube.qDataPages[0].qMatrix = [];
+      layout.qHyperCube.qSize.qcy = 0;
+      const result = await getDataMatrix(layout, model);
+      expect(result.status).to.equal('');
+      expect(result.dataMatrix.length).to.equal(0);
+    });
   });
 
   describe('createNodes', () => {
