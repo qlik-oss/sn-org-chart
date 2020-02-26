@@ -65,10 +65,6 @@ describe('position', () => {
       const xActual = widthTranslation(d, widthSpacing, element, axis, initialZoomState);
       expect(xActual).to.equal(224);
     });
-    it('should return xActual for node', () => {
-      const xActual = widthTranslation(d, widthSpacing, element, axis, initialZoomState);
-      expect(xActual).to.equal(125);
-    });
     it('should return xActual for node with root parent and initialsZoom', () => {
       d.parent.data.id = 'Root';
       const xActual = widthTranslation(d, widthSpacing, element, axis, initialZoomState);

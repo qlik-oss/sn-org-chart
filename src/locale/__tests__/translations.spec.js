@@ -23,7 +23,8 @@ describe('translations', () => {
     });
 
     it('Should early return when translation is different from id', () => {
-      translator.get = () => 'someTranslation';
+      translator.get = () => 'somexTranslation';
+      autoRegister(translator);
       expect(translator.add).to.not.have.been.called;
     });
 
