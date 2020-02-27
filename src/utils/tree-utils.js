@@ -17,7 +17,7 @@ function getParentId(row) {
   return row[1].qText;
 }
 
-function anyCycle(nodes) {
+export function anyCycle(nodes) {
   const visited = {};
   const marked = {};
   function isCycleUtil(node) {
@@ -44,7 +44,7 @@ function anyCycle(nodes) {
   return false;
 }
 
-async function fetchPage(dataPages, dataMatrix, model, fullHeight, currentRow, callNum, maxCalls) {
+export async function fetchPage(dataPages, dataMatrix, model, fullHeight, currentRow, callNum, maxCalls) {
   await model
     .getHyperCubeData('/qHyperCubeDef', [
       {
@@ -70,7 +70,7 @@ async function fetchPage(dataPages, dataMatrix, model, fullHeight, currentRow, c
   return '';
 }
 
-const getDataMatrix = async (layout, model) => {
+export const getDataMatrix = async (layout, model) => {
   if (layout.snapshotData) {
     return { status: '', dataMatrix: layout.snapshotData.dataMatrix };
   }
