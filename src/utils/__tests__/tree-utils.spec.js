@@ -112,6 +112,11 @@ describe('tree-utils', () => {
       const node = createNodes(matrix, [], null, null, translator);
       expect(node.warn).to.eql(['Object.OrgChart.MaxChildren']);
     });
+    it('should add max node warning on root nodes', () => {
+      const matrix = generateMatrix(150, 0);
+      const node = createNodes(matrix, [], null, null, translator);
+      expect(node.warn).to.eql(['Object.OrgChart.MaxChildren', 'Object.OrgChart.DummyWarn']);
+    });
     it('should detect all cycles', () => {
       const matrix = generateMatrix(10, 2);
       matrix[0][1].qText = '1';
