@@ -87,6 +87,13 @@ describe('tree-utils', () => {
       expect(result.status).to.equal('');
       expect(result.dataMatrix.length).to.equal(0);
     });
+
+    it('should handle multiple datapages', async () => {
+      layout.qHyperCube.qDataPages.push({ qArea: { qHeight: 1 }, qMatrix: [{}] });
+      const result = await getDataMatrix(layout, model);
+      expect(result.status).to.equal('');
+      expect(result.dataMatrix.length).to.equal(2);
+    });
   });
 
   describe('createNodes', () => {
