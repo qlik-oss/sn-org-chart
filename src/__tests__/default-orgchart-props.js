@@ -21,14 +21,17 @@ const defaultValues = {
       isLocked: false,
     },
     parent: {
-      x: 0,
-      y: 0,
+      x: 1,
+      y: 1,
+      xActual: 1,
       data: {
         id: '0',
       },
-      children: [{
-        children: [{}],
-      }],
+      children: [
+        {
+          children: [{}],
+        },
+      ],
     },
     children: [
       {
@@ -40,11 +43,13 @@ const defaultValues = {
           data: {
             id: '1',
           },
-          children: [{
-            data: {
-              id: '2'
-            }
-          }],
+          children: [
+            {
+              data: {
+                id: '2',
+              },
+            },
+          ],
         },
         children: [
           {

@@ -12,6 +12,9 @@ describe('position', () => {
       expect(x).to.be.a('function');
       expect(y).to.be.a('function');
     });
+    it('should not return position when incorrect orientation', () => {
+      expect(position('someOrientation', element)).to.be.undefined;
+    });
   });
 
   describe('depthTranslation', () => {
@@ -36,7 +39,7 @@ describe('position', () => {
     it('should return yActual for leaf node', () => {
       d.parent.children = undefined;
       const yActual = depthTranslation(d, depthSpacing, axis, initialZoomState);
-      expect(yActual).to.equal(204);
+      expect(yActual).to.equal(205);
     });
   });
 
@@ -55,22 +58,38 @@ describe('position', () => {
     });
     it('should return xActual for node', () => {
       const xActual = widthTranslation(d, widthSpacing, element, axis, initialZoomState);
-      expect(xActual).to.equal(124);
+      expect(xActual).to.equal(125);
+    });
+    it('should return xActual for leaf node', () => {
+      d.parent.children = [{}];
+      const xActual = widthTranslation(d, widthSpacing, element, axis, initialZoomState);
+      expect(xActual).to.equal(17);
+    });
+    it('should return xActual for node, calculating xActual for parent recursively', () => {
+      d.parent.xActual = undefined;
+      const xActual = widthTranslation(d, widthSpacing, element, axis, initialZoomState);
+      expect(xActual).to.equal(224);
     });
     it('should return xActual for node with root parent and initialsZoom', () => {
       d.parent.data.id = 'Root';
       const xActual = widthTranslation(d, widthSpacing, element, axis, initialZoomState);
-      expect(xActual).to.equal(224);
+      expect(xActual).to.equal(225);
     });
     it('should return xActual for node with root parent and no initialsZoom', () => {
       d.parent.data.id = 'Root';
       const xActual = widthTranslation(d, widthSpacing, element, axis, {});
-      expect(xActual).to.equal(124);
+      expect(xActual).to.equal(125);
     });
-    it('should return xActual for parent node', () => {
+    it('should return xActual for node without parent', () => {
       d = {};
       const xActual = widthTranslation(d, widthSpacing, element, axis, initialZoomState);
       expect(xActual).to.equal(100);
+    });
+    it('should return xActual for node without parent and no initialX', () => {
+      d = {};
+      initialZoomState.initialX = undefined;
+      const xActual = widthTranslation(d, widthSpacing, element, axis, initialZoomState);
+      expect(xActual).to.equal(0);
     });
   });
 });

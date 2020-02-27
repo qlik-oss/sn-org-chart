@@ -23,7 +23,7 @@ import position from './tree/position';
 import stylingUtils from './utils/styling';
 import treeTransform from './utils/tree-utils';
 import viewStateUtil from './utils/viewstate-utils';
-import { setZooming, snapshotZoom, getBBoxOfNodes, getInitialZoomState } from './tree/transform';
+import { setZooming, getSnapshotZoom, getBBoxOfNodes, getInitialZoomState, applyTransform } from './tree/transform';
 import autoRegister from './locale/translations';
 import './styles/tooltip.less';
 import './styles/paths.less';
@@ -269,7 +269,8 @@ export default function supernova(env) {
 
       useEffect(() => {
         if (objectData && layout && layout.snapshotData) {
-          snapshotZoom(objectData, rect, layout.snapshotData.viewState);
+          const snapshotZoom = getSnapshotZoom(rect, layout.snapshotData.viewState);
+          applyTransform(snapshotZoom, objectData.svg, objectData.divBox, rect.width, rect.height);
         }
       }, [rect, objectData]);
 

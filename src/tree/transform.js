@@ -149,15 +149,13 @@ export function setZooming({ objectData, setTransform, transformState, selection
   applyTransform(zoomIdentity.translate(x, y).scale(1 / scaleFactor), svg, divBox, width, height);
 }
 
-export const snapshotZoom = (objectData, rect, viewState) => {
-  const { svg, divBox } = objectData;
+export const getSnapshotZoom = (rect, viewState) => {
   const { size } = viewState;
   const snapZoom = rect.width / size.w > rect.height / size.h ? rect.height / size.h : rect.width / size.w;
   const newX = viewState.transform.x * snapZoom;
   const newY = viewState.transform.y * snapZoom;
   const newZoom = viewState.transform.zoom * snapZoom;
-  const zoomEvent = zoomIdentity.translate(newX, newY).scale(newZoom);
-  applyTransform(zoomEvent, svg, divBox, rect.width, rect.height);
+  return zoomIdentity.translate(newX, newY).scale(newZoom);
 };
 
 export default function transform(nodes, width, height, svg, divBox, useTransitions) {
