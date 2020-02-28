@@ -85,23 +85,17 @@ export function setZooming({ objectData, setTransform, transformState, selection
   const { minZoom, maxZoom } = constants;
   const zoomFactor = (transformState && 1 / transformState.zoom) || initialZoomState.initialZoom;
   const scaleFactor = Math.max(Math.min(maxZoom, zoomFactor), minZoom);
-  const touchmode = document.getElementsByTagName('html')[0].classList.contains('touch-on');
-  let touchStarted;
 
   // sends otherwise captured mouse event to handle context menu correctly in sense
-  const bubbleMouseEvent = () => {
-    const mouseEvent = document.createEvent('MouseEvents');
-    mouseEvent.initEvent('mousedown', true, false);
-    element.dispatchEvent(mouseEvent);
-  };
-
-  const bubbleTouchEvent = () => {
-    const touchEvent = new TouchEvent(event.sourceEvent.type, event.sourceEvent);
-    element.dispatchEvent(touchEvent);
+  const bubbleEvent = () => {
+    const newEvent = document.createEvent('MouseEvents');
+    newEvent.initEvent('mousedown', true, false);
+    element.dispatchEvent(newEvent);
   };
 
   const zoomed = () => {
     setTransform({ zoom: event.transform.k / scaleFactor, x: event.transform.x, y: event.transform.y });
+    bubbleEvent();
     closeTooltip(tooltip);
     applyTransform(
       zoomIdentity.translate(event.transform.x, event.transform.y).scale(event.transform.k / scaleFactor),
@@ -125,24 +119,8 @@ export function setZooming({ objectData, setTransform, transformState, selection
           !(event.type === 'mousedown' && event.which === 3)
       )
       .scaleExtent([minZoom * scaleFactor, maxZoom * scaleFactor])
-      .on('start', () => {
-        if (touchmode && !touchStarted) {
-          touchStarted = true;
-          bubbleTouchEvent();
-        } else if (!touchmode) {
-          bubbleMouseEvent();
-        }
-      })
-      .on('zoom', () => {
-        zoomed();
-        touchmode && bubbleTouchEvent();
-      })
-      .on('end', () => {
-        if (touchmode) {
-          touchStarted = false;
-          bubbleTouchEvent();
-        }
-      })
+      .on('zoom', zoomed)
+      .on('end', bubbleEvent)
   );
 
   setTransform({ zoom: 1 / scaleFactor, x, y });
