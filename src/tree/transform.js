@@ -119,8 +119,8 @@ export function setZooming({ objectData, setTransform, transformState, selection
           !(event.type === 'mousedown' && event.which === 3)
       )
       .scaleExtent([minZoom * scaleFactor, maxZoom * scaleFactor])
+      .on('start', bubbleEvent)
       .on('zoom', zoomed)
-      .on('end', bubbleEvent)
   );
 
   setTransform({ zoom: 1 / scaleFactor, x, y });
