@@ -50,27 +50,6 @@ export const filterTree = ({ topId, isExpanded, expandedChildren }, nodeTree, ex
   return subTree;
 };
 
-export const createSnapshotData = (expandedState, allNodes, layout) => {
-  if (layout.snapshotData && layout.snapshotData.dataMatrix) {
-    // Need a check here becuase of free resize in storytelling
-    return layout.snapshotData.dataMatrix;
-  }
-  // filter down to the visible nodes
-  const nodes = filterTree(expandedState, allNodes, true);
-  const usedMatrix = [];
-  const { qDataPages } = layout.qHyperCube;
-  const dataMatrix = [];
-  qDataPages.forEach(page => {
-    dataMatrix.push(...page.qMatrix);
-  });
-  nodes.forEach(n => {
-    if (n.data.rowNo !== undefined) {
-      usedMatrix.push(dataMatrix[n.data.rowNo]);
-    }
-  });
-  return usedMatrix;
-};
-
 export const paintTree = ({
   preRenderData,
   expandedState,
@@ -78,7 +57,6 @@ export const paintTree = ({
   setExpandedCallback,
   storageState,
   selectionObj,
-  // selectionState,
   useTransitions,
   element,
 }) => {
@@ -96,7 +74,6 @@ export const paintTree = ({
     styling,
     expandedState,
     setExpandedCallback,
-    // selectionState,
     storageState,
     selectionObj,
     navigationMode,
@@ -120,7 +97,6 @@ export function preRenderTree({
   dataTree,
   selectionObj,
   storageState,
-  // selectionState,
   setInitialZoom,
   setTransform,
   expandedState,
