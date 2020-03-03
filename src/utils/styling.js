@@ -1,13 +1,13 @@
 import colorUtils from './color-utils';
 
-export function getColor(reference, palette, defaultColor) {
+export function getColor(reference, Theme, defaultColor) {
   let color;
   switch (reference.colorType) {
     case 'byExpression':
       color = colorUtils.resolveExpression(reference.colorExpression);
       break;
     case 'colorPicker':
-      color = colorUtils.resolveColor(reference.color, palette);
+      color = Theme.getColorPickerColor(reference.color);
       break;
     default:
       color = defaultColor;
@@ -17,12 +17,15 @@ export function getColor(reference, palette, defaultColor) {
 
 const stylingUtils = {
   cardStyling: ({ Theme, layout }) => {
-    const palette = colorUtils.getPalette(Theme);
-    const backgroundColor = getColor(layout.style.backgroundColor, palette, '#e6e6e6');
-    const fontColor = getColor(layout.style.fontColor, palette, 'default');
+    const backgroundColor = getColor(layout.style.backgroundColor, Theme, '#e6e6e6');
+    const fontColor = getColor(layout.style.fontColor, Theme, 'default');
+    const measureLabel = layout.qHyperCube.qMeasureInfo.length
+      ? layout.qHyperCube.qMeasureInfo[0].qFallbackTitle
+      : null;
     const cardStyling = {
       backgroundColor,
       fontColor,
+      measureLabel,
     };
     return cardStyling;
   },

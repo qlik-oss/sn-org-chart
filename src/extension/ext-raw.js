@@ -6,6 +6,13 @@ const colorOptions = [
   { value: 'byExpression', translation: 'properties.colorMode.byExpression' },
 ];
 
+// Navigation options only needed when adding new option
+// const navigationOptions = [
+//   { value: 'regular', translation: '$Unlimited sizing' },
+//   { value: 'scroll', translation: '$SCroll thing' },
+//   { value: 'free', translation: '$Free pan and zoom' },
+// ];
+
 export default {
   definition: {
     type: 'items',
@@ -14,8 +21,15 @@ export default {
       data: {
         uses: 'data',
         items: {
+          measures: {
+            disabledRef: '',
+          },
           dimensions: {
+            disabledRef: '',
             items: {
+              dimensionLimits: {
+                show: false,
+              },
               attributes: {
                 component: 'attribute-expression-reference',
                 defaultValue: [],
@@ -28,7 +42,7 @@ export default {
                   {
                     component: 'expression',
                     ref: 'qExpression',
-                    translation: '$Label expression',
+                    translation: 'Object.OrgChart.LabelExpression',
                     defaultValue: '',
                     id: 'labelExpression',
                     tid: 'labelExpression',
@@ -36,7 +50,7 @@ export default {
                   {
                     component: 'expression',
                     ref: 'qExpression',
-                    translation: '$Sub label expression',
+                    translation: 'Object.OrgChart.SubLabelExpression',
                     defaultValue: '',
                     id: 'subLabelExpression',
                     tid: 'subLabelExpression',
@@ -44,20 +58,30 @@ export default {
                   {
                     component: 'expression',
                     ref: 'qExpression',
-                    translation: '$Extra label expression',
+                    translation: 'Object.OrgChart.ExtraLabelExpression',
                     defaultValue: '',
                     id: 'extraLabelExpression',
                     tid: 'extraLabelExpression',
                   },
+
                   {
                     component: 'expression',
                     ref: 'qExpression',
-                    translation: '$Color expression',
+                    translation: 'Object.OrgChart.ColorLabelExpression',
                     defaultValue: '',
                     id: 'colorByExpression',
                     tid: 'nodeColorByExpression',
                   },
                 ],
+              },
+              desc: {
+                show: (dim, handler) => {
+                  const dims = handler.getDimensions();
+                  return dims[0] === dim;
+                },
+                component: 'text',
+                translation: 'Object.OrgChart.ExtraLabelDesc',
+                style: 'hint',
               },
             },
           },
@@ -101,10 +125,23 @@ export default {
               backgroundColor: {
                 type: 'items',
                 items: {
+                  // Dropdown for navigation options. Should only be activated when adding new options
+                  // navigation: {
+                  //   type: 'items',
+                  //   items: {
+                  //     navigtaionMode: {
+                  //       ref: 'navigationMode',
+                  //       type: 'string',
+                  //       translation: '$Navigationmode',
+                  //       component: 'dropdown',
+                  //       options: navigationOptions,
+                  //     },
+                  //   },
+                  // },
                   useColorExpression: {
                     ref: 'style.backgroundColor.colorType',
                     type: 'string',
-                    translation: 'AppDetails.SheetBackgroundColor',
+                    translation: 'Object.OrgChart.BackgroundColor',
                     component: 'dropdown',
                     options: colorOptions,
                   },
@@ -132,7 +169,7 @@ export default {
                   useColorExpression: {
                     ref: 'style.fontColor.colorType',
                     type: 'string',
-                    translation: 'AppDetails.SheetFontColor',
+                    translation: 'Object.OrgChart.FontColor',
                     component: 'dropdown',
                     options: colorOptions,
                   },

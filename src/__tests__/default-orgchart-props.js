@@ -12,14 +12,26 @@ const defaultValues = {
   },
   layout: { style: props.style },
   nodes: {
+    x: 0,
+    y: 124,
     data: {
       id: '1',
       elemNo: 1,
+      childNumber: 1,
+      isLocked: false,
     },
     parent: {
+      x: 1,
+      y: 1,
+      xActual: 1,
       data: {
         id: '0',
       },
+      children: [
+        {
+          children: [{}],
+        },
+      ],
     },
     children: [
       {
@@ -31,11 +43,13 @@ const defaultValues = {
           data: {
             id: '1',
           },
-          children: [{
-            data: {
-              id: '2'
-            }
-          }],
+          children: [
+            {
+              data: {
+                id: '2',
+              },
+            },
+          ],
         },
         children: [
           {

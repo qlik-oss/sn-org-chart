@@ -3,20 +3,29 @@ import {
   useEffect,
   useElement,
   useModel,
-  useRect,
   useState,
   usePromise,
   useTheme,
   useSelections,
   useAction,
+  useRect,
+  onTakeSnapshot,
+  useOptions,
+  useImperativeHandle,
+  useConstraints,
+  useTranslator,
 } from '@nebula.js/supernova';
 import properties from './object-properties';
 import data from './data';
 import ext from './extension/ext';
-import { paintTree, preRenderTree } from './tree/render';
+import { paintTree, preRenderTree, createSnapshotData, filterTree } from './tree/render';
+import position from './tree/position';
 import stylingUtils from './utils/styling';
 import treeTransform from './utils/tree-utils';
-import './styles/treeCss.less';
+import viewStateUtil from './utils/viewstate-utils';
+import { setZooming, getSnapshotZoom, getBBoxOfNodes, getInitialZoomState, applyTransform } from './tree/transform';
+import autoRegister from './locale/translations';
+import './styles/tooltip.less';
 import './styles/paths.less';
 import './styles/warnings.less';
 import './styles/nodes.less';
@@ -28,51 +37,93 @@ export default function supernova(env) {
       data,
     },
     component: () => {
-      const [dataTree, setDataTree] = useState(null);
       const [objectData, setObjectData] = useState(null);
       const [styling, setStyling] = useState(null);
       const [expandedState, setExpandedState] = useState(null);
       const [linked, setLinked] = useState(false);
       const [selectionState, setSelectionState] = useState([]);
+      const [transform, setTransform] = useState(null);
+      const [initialZoom, setInitialZoom] = useState(null);
       const layout = useStaleLayout();
       const model = useModel();
       const element = useElement();
-      const rect = useRect()[0];
       const Theme = useTheme();
+      const options = useOptions();
+      const [opts] = useState(options);
+      const rect = useRect();
       const selectionsAPI = useSelections();
-      const [selections] = useState({ api: selectionsAPI, setState: setSelectionState, linked: false });
+      const constraints = useConstraints();
+      const [selectionsAndTransform] = useState({
+        api: selectionsAPI,
+        setState: setSelectionState,
+        linked: false,
+        transform: {},
+        constraints,
+      });
+
+      const translator = useTranslator();
+      useEffect(() => {
+        autoRegister(translator);
+      }, [translator]);
 
       const resetSelections = () => {
         setSelectionState([]);
       };
+      const resetSelectionsAndLinked = () => {
+        setLinked(false);
+        setSelectionState([]);
+      };
+
       useEffect(() => {
-        selections.api = selectionsAPI;
-        if (selections.api) {
-          selections.api.on('deactivated', resetSelections);
-          selections.api.on('canceled', resetSelections);
-          selections.api.on('cleared', resetSelections);
+        if (!selectionsAndTransform.api) {
+          return () => {};
         }
+        selectionsAndTransform.api = selectionsAPI;
+        selectionsAndTransform.api.on('deactivated', resetSelections);
+        selectionsAndTransform.api.on('canceled', resetSelectionsAndLinked);
+        selectionsAndTransform.api.on('confirmed', resetSelectionsAndLinked);
+        selectionsAndTransform.api.on('cleared', resetSelections);
         // Return function called on unmount
         return () => {
-          if (selections.api) {
-            selections.api.removeListener('deactivated', resetSelections);
-            selections.api.removeListener('canceled', resetSelections);
-            selections.api.removeListener('cleared', resetSelections);
+          if (selectionsAndTransform.api) {
+            selectionsAndTransform.api.removeListener('deactivated', resetSelections);
+            selectionsAndTransform.api.removeListener('canceled', resetSelectionsAndLinked);
+            selectionsAndTransform.api.removeListener('confirmed', resetSelectionsAndLinked);
+            selectionsAndTransform.api.removeListener('cleared', resetSelections);
           }
         };
       }, [selectionsAPI]);
 
+      useEffect(() => {
+        selectionsAndTransform.transform = transform;
+      }, [transform]);
+
+      useEffect(() => {
+        selectionsAndTransform.constraints = constraints;
+      }, [constraints]);
+
+      useEffect(() => {
+        selectionsAndTransform.linked = linked;
+      }, [linked]);
+
       useAction(
         () => ({
           action() {
-            selections.linked = !linked;
             setLinked(!linked);
           },
           icon: {
-            d:
-              'M9.5,15 C9.77614237,15 10,15.2238576 10,15.5 C10,15.7761424 9.77614237,16 9.5,16 L6.5,16 C6.22385763,16 6,15.7761424 6,15.5 C6,15.2238576 6.22385763,15 6.5,15 L9.5,15 Z M15.5,13 C15.7761424,13 16,13.2238576 16,13.5 L16,15 C16,15.5522847 15.5522847,16 15,16 L13.5,16 C13.2238576,16 13,15.7761424 13,15.5 C13,15.2238576 13.2238576,15 13.5,15 L14.4,15 C14.7313708,15 15,14.7313708 15,14.4 L15,13.5 C15,13.2238576 15.2238576,13 15.5,13 Z M0.5,13 C0.776142375,13 1,13.2238576 1,13.5 L1,14.4 C1,14.7313708 1.26862915,15 1.6,15 L2.5,15 C2.77614237,15 3,15.2238576 3,15.5 C3,15.7761424 2.77614237,16 2.5,16 L1,16 C0.44771525,16 1.28867715e-16,15.5522847 6.123234e-17,15 L1.5308085e-16,13.5 C1.19263162e-16,13.2238576 0.223857625,13 0.5,13 Z M7.5,2.5 L7.5,5.5 L5.5,5.5 L5.5,7.5 L7,7.5 L7,6.5 L12,6.5 L12,9.5 L7,9.5 L7,8.5 L5.5,8.5 L5.5,11.2 C5.5,11.3420161 5.5986801,11.4609842 5.73121275,11.4920768 L5.8,11.5 L9,11.5 L9,10.5 L14,10.5 L14,13.5 L9,13.5 L9,12.5 L5.8,12.5 C5.12690296,12.5 4.57328475,11.9884503 4.50671175,11.3329174 L4.5,11.2 L4.5,5.5 L2.5,5.5 L2.5,2.5 L7.5,2.5 Z M0.5,6 C0.776142375,6 1,6.22385763 1,6.5 L1,9.5 C1,9.77614237 0.776142375,10 0.5,10 C0.223857625,10 0,9.77614237 0,9.5 L0,6.5 C0,6.22385763 0.223857625,6 0.5,6 Z M15.5,6 C15.7761424,6 16,6.22385763 16,6.5 L16,9.5 C16,9.77614237 15.7761424,10 15.5,10 C15.2238576,10 15,9.77614237 15,9.5 L15,6.5 C15,6.22385763 15.2238576,6 15.5,6 Z M2.5,2.48689958e-14 C2.77614237,2.48689958e-14 3,0.223857625 3,0.5 C3,0.776142375 2.77614237,1 2.5,1 L1.6,1 C1.26862915,1 1,1.26862915 1,1.6 L1,2.5 C1,2.77614237 0.776142375,3 0.5,3 C0.223857625,3 0,2.77614237 0,2.5 L0,1 C0,0.44771525 0.44771525,2.48689958e-14 1,2.48689958e-14 L2.5,2.48689958e-14 Z M15,2.48689958e-14 C15.5522847,2.48689958e-14 16,0.44771525 16,1 L16,2.5 C16,2.77614237 15.7761424,3 15.5,3 C15.2238576,3 15,2.77614237 15,2.5 L15,1.6 C15,1.26862915 14.7313708,1 14.4,1 L13.5,1 C13.2238576,1 13,0.776142375 13,0.5 C13,0.223857625 13.2238576,2.48689958e-14 13.5,2.48689958e-14 L15,2.48689958e-14 Z M9.5,2.51445413e-14 C9.77614237,2.51614501e-14 10,0.223857625 10,0.5 C10,0.776142375 9.77614237,1 9.5,1 L6.5,1 C6.22385763,1 6,0.776142375 6,0.5 C6,0.223857625 6.22385763,2.45765414e-14 6.5,2.45934502e-14 L9.5,2.51445413e-14 Z',
+            shapes: [
+              {
+                type: 'path',
+                attrs: {
+                  d:
+                    'M7.7,3 C7.86568542,3 8,3.13431458 8,3.3 L8,5.7 C8,5.86568542 7.86568542,6 7.7,6 L6,6 L6,9 L7.492,9 L7.49291992,8.3 C7.49291992,8.13431458 7.6272345,8 7.79291992,8 L12.1929199,8 C12.3586053,8 12.4929199,8.13431458 12.4929199,8.3 L12.4929199,10.7 C12.4929199,10.8656854 12.3586053,11 12.1929199,11 L7.79291992,11 C7.6272345,11 7.49291992,10.8656854 7.49291992,10.7 L7.492,10 L6,10 L6,13.7 C6,13.8420161 6.0986801,13.9609842 6.23121275,13.9920768 L6.3,14 L9.5,14 L9.5,13.3 C9.5,13.1343146 9.63431458,13 9.8,13 L14.2,13 C14.3656854,13 14.5,13.1343146 14.5,13.3 L14.5,15.7 C14.5,15.8656854 14.3656854,16 14.2,16 L9.8,16 C9.63431458,16 9.5,15.8656854 9.5,15.7 L9.5,15 L6.3,15 C5.62690296,15 5.07328475,14.4884503 5.00671175,13.8329174 L5,13.7 L5,6 L3.3,6 C3.13431458,6 3,5.86568542 3,5.7 L3,3.3 C3,3.13431458 3.13431458,3 3.3,3 L7.7,3 Z M0.5,13 C0.776142375,13 1,13.2238576 1,13.5 L1,14.4 C1,14.7313708 1.26862915,15 1.6,15 L2.5,15 C2.77614237,15 3,15.2238576 3,15.5 C3,15.7761424 2.77614237,16 2.5,16 L1,16 C0.44771525,16 0,15.5522847 0,15 L0,13.5 C0,13.2238576 0.223857625,13 0.5,13 Z M0.5,6 C0.776142375,6 1,6.22385763 1,6.5 L1,9.5 C1,9.77614237 0.776142375,10 0.5,10 C0.223857625,10 0,9.77614237 0,9.5 L0,6.5 C0,6.22385763 0.223857625,6 0.5,6 Z M15.5,6 C15.7761424,6 16,6.22385763 16,6.5 L16,9.5 C16,9.77614237 15.7761424,10 15.5,10 C15.2238576,10 15,9.77614237 15,9.5 L15,6.5 C15,6.22385763 15.2238576,6 15.5,6 Z M15,0 C15.5522847,0 16,0.44771525 16,1 L16,2.5 C16,2.77614237 15.7761424,3 15.5,3 C15.2238576,3 15,2.77614237 15,2.5 L15,1.6 C15,1.26862915 14.7313708,1 14.4,1 L13.5,1 C13.2238576,1 13,0.776142375 13,0.5 C13,0.223857625 13.2238576,0 13.5,0 L15,0 Z M2.5,2.22044605e-16 C2.77614237,2.22044605e-16 3,0.223857625 3,0.5 C3,0.776142375 2.77614237,1 2.5,1 L1.6,1 C1.26862915,1 1,1.26862915 1,1.6 L1,2.5 C1,2.77614237 0.776142375,3 0.5,3 C0.223857625,3 0,2.77614237 0,2.5 L0,1 C0,0.44771525 0.44771525,2.22044605e-16 1,2.22044605e-16 L2.5,2.22044605e-16 Z M9.5,0 C9.77614237,0 10,0.223857625 10,0.5 C10,0.776142375 9.77614237,1 9.5,1 L6.5,1 C6.22385763,1 6,0.776142375 6,0.5 C6,0.223857625 6.22385763,0 6.5,0 L9.5,0 Z',
+                },
+              },
+            ],
           },
           active: linked,
+          label: translator.get('Object.OrgChart.IncludeDescendants'),
         }),
         [linked]
       );
@@ -111,35 +162,32 @@ export default function supernova(env) {
        * - render [allNodes, positioning, styling, rect]
        */
 
-      usePromise(() => {
+      const [dataTree] = usePromise(() => {
         // Get and transform the data into a tree structure
-        if (layout) {
-          return treeTransform({ layout, model }).then(transformed => {
-            setDataTree(transformed);
-            setStyling(stylingUtils.cardStyling({ Theme, layout }));
-            setExpandedState(null);
-            setSelectionState([]);
-          });
+        if (!layout) {
+          return Promise.resolve();
         }
-        return Promise.resolve();
-      }, [layout, model]);
+        const viewState = viewStateUtil.getViewState(opts, layout);
+        viewState && viewState.expandedState && setExpandedState(viewState.expandedState);
+        viewState && viewState.transform && setTransform(viewState.transform);
+
+        return treeTransform({ layout, model, translator }).then(transformed => {
+          setStyling(stylingUtils.cardStyling({ Theme, layout }));
+          setSelectionState([]);
+          // Resolving the promise to indicate readiness for printing
+          return transformed;
+        });
+      }, [layout, model, translator, Theme.name()]);
 
       // This one can split up. Only need to get new height/width when rect is changed
       useEffect(() => {
         if (element && dataTree) {
-          const preRender = preRenderTree(element, dataTree);
+          const preRender = preRenderTree(element, dataTree, selectionsAndTransform, selectionState);
           if (preRender) {
             setObjectData(preRender);
-            !expandedState &&
-              setExpandedState({
-                topId: preRender.allNodes.data.id,
-                isExpanded: true,
-                expandedChildren: [],
-                useTransitions: false,
-              });
           }
         }
-      }, [element, dataTree, rect]);
+      }, [element, dataTree, constraints]);
 
       useEffect(() => {
         if (objectData && expandedState && styling) {
@@ -148,12 +196,93 @@ export default function supernova(env) {
             expandedState,
             styling,
             setStateCallback,
-            selections,
+            selectionsAndTransform,
             selectionState,
             useTransitions: expandedState.useTransitions,
+            element,
           });
         }
-      }, [expandedState, objectData, selectionState]);
+      }, [expandedState, selectionState]);
+
+      useEffect(() => {
+        if (objectData && layout.navigationMode === 'free') {
+          const viewState = viewStateUtil.getViewState(opts, layout);
+          const resetExpandedState =
+            !expandedState || !objectData.allNodes.descendants().find(node => node.data.id === expandedState.topId);
+          const newExpandedState = resetExpandedState
+            ? { topId: objectData.allNodes.data.id, isExpanded: true, expandedChildren: [], useTransitions: false }
+            : expandedState;
+
+          const renderNodes = filterTree(newExpandedState, objectData.allNodes);
+          renderNodes.forEach(node => {
+            if (!node.xActual || !node.yActual) {
+              objectData.positioning.x(node);
+              objectData.positioning.y(node);
+            }
+          });
+          const bBox = getBBoxOfNodes(renderNodes);
+          const initialZoomState =
+            viewState && viewState.initialZoom ? viewState.initialZoom : getInitialZoomState(bBox, element);
+          setInitialZoom(initialZoomState);
+          objectData.positioning = position('ttb', element, initialZoomState);
+          setZooming({
+            objectData,
+            setTransform,
+            transformState: (viewState && viewState.transform) || {},
+            selectionsAndTransform,
+            initialZoomState,
+          });
+          if (resetExpandedState) {
+            setExpandedState(newExpandedState);
+          } else {
+            paintTree({
+              objectData,
+              expandedState,
+              styling,
+              setStateCallback,
+              selectionsAndTransform,
+              selectionState,
+              useTransitions: expandedState.useTransitions,
+              element,
+            });
+          }
+        }
+      }, [objectData]);
+
+      const createViewState = () => {
+        const size = { w: element.clientWidth, h: element.clientHeight };
+        const vs = {
+          expandedState,
+          transform,
+          size,
+          initialZoom,
+        };
+        vs.expandedState.useTransitions = false;
+        return vs;
+      };
+
+      onTakeSnapshot(snapshotLayout => {
+        if (!snapshotLayout.snapshotData) {
+          snapshotLayout.snapshotData = {};
+        }
+        if (!layout.snapshotData || !layout.snapshotData.viewState) {
+          snapshotLayout.snapshotData.viewState = createViewState();
+        }
+        snapshotLayout.snapshotData.dataMatrix = createSnapshotData(expandedState, objectData.allNodes, layout);
+      });
+
+      useEffect(() => {
+        if (objectData && layout && layout.snapshotData) {
+          const snapshotZoom = getSnapshotZoom(rect, layout.snapshotData.viewState);
+          applyTransform(snapshotZoom, objectData.svg, objectData.divBox, rect.width, rect.height);
+        }
+      }, [rect, objectData]);
+
+      useImperativeHandle(() => ({
+        getViewState() {
+          return createViewState();
+        },
+      }));
     },
     ext: ext(env),
   };

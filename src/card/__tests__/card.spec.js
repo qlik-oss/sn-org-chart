@@ -81,13 +81,8 @@ describe('card', () => {
       selections = { api: { isActive: () => false } };
     });
 
-    it('should return html for root node', () => {
-      data.id = 'Root';
-      const result = card(data, cardStyling, selections);
-      expect(result).to.equal('<div class="sn-org-root"/>');
-    });
-
     it('should return html for node with only id', () => {
+      data.attributes = null;
       const result = card(data, cardStyling, selections);
       expect(result).to.equal(getHtml(`<div class="sn-org-card-title">${data.id}</div>`));
     });
@@ -95,7 +90,7 @@ describe('card', () => {
     it('should return html for node with attribute label', () => {
       data.attributes.label = 'this is the label';
       const result = card(data, cardStyling, selections);
-      expect(result).to.equal(getHtml('<div class="sn-org-card-title">this is the label</div>'));
+      expect(result).to.equal(getHtml(`<div class="sn-org-card-title">${data.attributes.label}</div>`));
     });
 
     it('should return html for node with id and subLabel', () => {
@@ -127,6 +122,19 @@ describe('card', () => {
       expect(result).to.equal(
         getHtml(
           `<div class="sn-org-card-title">${data.attributes.label}</div><div class="sn-org-card-label">${data.attributes.subLabel}</div><div class="sn-org-card-label">${data.measure}</div>`
+        )
+      );
+    });
+    it('should return html for node with three labels and measure with label', () => {
+      data.attributes.label = 'this is the label';
+      data.attributes.subLabel = 'subsub';
+      data.attributes.extraLabel = 'extra';
+      data.measure = 'measure';
+      cardStyling.measureLabel = 'measureLabel';
+      const result = card(data, cardStyling, selections);
+      expect(result).to.equal(
+        getHtml(
+          `<div class="sn-org-card-title">${data.attributes.label}</div><div class="sn-org-card-label">${data.attributes.subLabel}</div><div class="sn-org-card-label">measureLabel: ${data.measure}</div>`
         )
       );
     });

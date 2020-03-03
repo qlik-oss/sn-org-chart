@@ -23,6 +23,10 @@ const properties = {
    */
   footnote: '',
   /**
+   * @type {'regular'|'scroll'|'free'}
+   */
+  navigationMode: 'free',
+  /**
    * @type {object}
    */
   style: {
@@ -39,7 +43,7 @@ const properties = {
        */
       color: {
         index: -1,
-        color: null,
+        color: '#484848',
       },
       /**
        * @type {string}
@@ -59,7 +63,7 @@ const properties = {
        */
       color: {
         index: -1,
-        color: null,
+        color: '#e6e6e6',
       },
       /**
        * @type {string}

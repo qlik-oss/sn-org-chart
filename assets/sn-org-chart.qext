@@ -1,7 +1,7 @@
 {
-  "name": "Organizational Chart",
-  "description": "Chart to visualise organisations",
-  "icon": "network",
+  "name": "Org chart",
+  "description": "Displays the relations of an organization or similarly structured data. Starts at the top and allows for navigation through the hierarchy.",
+  "icon": "org-chart",
   "preview": "preview.png",
   "author": "QlikTech International AB",
   "supernova": true,

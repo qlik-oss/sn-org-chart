@@ -1,17 +1,23 @@
-const buttonMargin = 12;
+const cardPadding = 8;
+const buttonMargin = 16;
 const buttonHeight = 24;
 
 const constants = {
   cardWidth: 152,
   cardHeight: 64,
   widthMargin: 32,
-  heightMargin: buttonHeight + buttonMargin * 3,
-  leafMargin: 16,
+  heightMargin: buttonHeight + cardPadding * 2 + buttonMargin,
   buttonMargin,
+  leafMargin: 16,
+  cardPadding,
   buttonWidth: 48, // TODO: might need to be dynamic
   buttonHeight,
   rootDiameter: 20,
   r: 4,
+  tooltipWidth: 240,
+  tooltipPadding: 15,
+  maxZoom: 6,
+  minZoom: 0.2,
 };
 
 export default constants;

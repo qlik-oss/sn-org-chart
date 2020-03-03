@@ -1,4 +1,4 @@
-import translations from './translations';
+import colorUtils from './color-utils';
 
 const pageSize = 3300;
 const attributeIDs = {
@@ -17,7 +17,7 @@ function getParentId(row) {
   return row[1].qText;
 }
 
-function anyCycle(nodes) {
+export function anyCycle(nodes) {
   const visited = {};
   const marked = {};
   function isCycleUtil(node) {
@@ -44,7 +44,7 @@ function anyCycle(nodes) {
   return false;
 }
 
-async function fetchPage(dataPages, dataMatrix, model, fullHeight, currentRow, callNum, maxCalls) {
+export async function fetchPage(dataPages, dataMatrix, model, fullHeight, currentRow, callNum, maxCalls) {
   await model
     .getHyperCubeData('/qHyperCubeDef', [
       {
@@ -70,7 +70,11 @@ async function fetchPage(dataPages, dataMatrix, model, fullHeight, currentRow, c
   return '';
 }
 
-const getDataMatrix = async (layout, model) => {
+export const getDataMatrix = async (layout, model) => {
+  if (layout.snapshotData) {
+    return { status: '', dataMatrix: layout.snapshotData.dataMatrix };
+  }
+
   const dataPages = layout.qHyperCube && layout.qHyperCube.qDataPages;
   const fullHeight = layout.qHyperCube.qSize.qcy;
   const loadedHeight = dataPages[0].qArea.qHeight;
@@ -96,7 +100,7 @@ const getDataMatrix = async (layout, model) => {
   return { status, dataMatrix };
 };
 
-function getAttributIndecies(attrsInfo) {
+export function getAttributeIndecies(attrsInfo) {
   if (attrsInfo && attrsInfo.length) {
     const indecies = [];
     attrsInfo.forEach((attr, i) => {
@@ -109,20 +113,11 @@ function getAttributIndecies(attrsInfo) {
   return [];
 }
 
-function transformColor(color) {
-  if (color && color.substring(0, 4) === 'ARGB') {
-    // transform the engine output to css
-    const comps = color.substring(5, color.length - 1).split(',');
-    return `rgba(${comps[1]},${comps[2]},${comps[3]},${comps[0]}`;
-  }
-  return color;
-}
-
-function getAttributes(indecies, qAttrExps) {
+export function getAttributes(indecies, qAttrExps) {
   const attributes = {};
   indecies.forEach(attr => {
     if (attr.prop === 'color') {
-      attributes[attr.prop] = transformColor(qAttrExps.qValues[attr.index].qText);
+      attributes[attr.prop] = colorUtils.resolveExpression(qAttrExps.qValues[attr.index].qText);
     } else {
       attributes[attr.prop] = qAttrExps.qValues[attr.index].qText;
     }
@@ -157,7 +152,7 @@ export function haveNoChildren(nodes) {
   return true;
 }
 
-export function createNodes(matrix, attributeIndecies, status) {
+export function createNodes(matrix, attributeIndecies, status, navigationMode, translator) {
   const nodeMap = {};
   const allNodes = [];
   for (let i = 0; i < matrix.length; ++i) {
@@ -171,50 +166,60 @@ export function createNodes(matrix, attributeIndecies, status) {
       elemNo: row[0].qElemNumber,
       attributes: getAttributes(attributeIndecies, row[0].qAttrExps),
       measure: row[2] && row[2].qText,
+      rowNo: i,
     };
     nodeMap[id] = node;
     allNodes.push(node);
   }
 
   const rootNodes = [];
+  let maxNodeWarning = false;
   for (let i = 0; i < allNodes.length; ++i) {
     const node = allNodes[i];
     const parentNode = nodeMap[node.parentId];
     node.parent = parentNode;
     if (parentNode) {
-      parentNode.children.push({ childNumber: parentNode.children.length, ...node });
+      parentNode.children.length > 98
+        ? (maxNodeWarning = true)
+        : parentNode.children.push({ childNumber: parentNode.children.length, ...node });
     } else {
-      rootNodes.push(node);
+      rootNodes.length > 98 ? (maxNodeWarning = true) : rootNodes.push(node);
     }
   }
 
   // We might be able to use the rootnodes lenght as well
   if (rootNodes.length === 0) {
     // The only way to have no root noot is to have a single cycle, which means we cannot break it
-    return { error: NO_ROOT, message: translations[NO_ROOT] };
+    return { error: NO_ROOT, message: translator.get('Object.OrgChart.MissingRoot') };
   }
   const warn = [];
   if (status === MAX_DATA) {
-    warn.push(translations[MAX_DATA]);
+    warn.push(translator.get('Object.OrgChart.MaxData'));
+  }
+  // Only show a maximum of children.
+  if (maxNodeWarning) {
+    warn.push(translator.get('Object.OrgChart.MaxChildren'));
   }
   // I have not looked at these functions at all. But we need to check the data as well I would say.
   if (anyCycle(allNodes)) {
-    warn.push(translations.cycle);
+    warn.push(translator.get('Object.OrgChart.CycleWarning'));
   }
 
   if (rootNodes.length === 1) {
     rootNodes[0].warn = warn;
+    rootNodes[0].navigationMode = navigationMode;
     return rootNodes[0];
   }
 
   // Here a fake root node is created when multiple rootnodes exist
-  warn.push(translations.dummy_warn);
+  warn.push(translator.get('Object.OrgChart.DummyWarn'));
   const rootNode = {
     id: 'Root',
-    name: translations.dummy,
+    name: translator.get('Object.OrgChart.DummyRoot'),
     isDummy: true, // Should be rendered in a specific way?
     warn,
     children: rootNodes,
+    navigationMode,
   };
 
   rootNodes.forEach((node, i) => {
@@ -229,7 +234,7 @@ export function createNodes(matrix, attributeIndecies, status) {
   return rootNode;
 }
 
-export default async function transform({ layout, model }) {
+export default async function transform({ layout, model, translator }) {
   if (!layout.qHyperCube) {
     throw new Error('Require a hypercube');
   }
@@ -238,7 +243,7 @@ export default async function transform({ layout, model }) {
   }
 
   const { status, dataMatrix } = await getDataMatrix(layout, model);
-  const attributeIndecies = getAttributIndecies(layout.qHyperCube.qDimensionInfo[0].qAttrExprInfo);
+  const attributeIndecies = getAttributeIndecies(layout.qHyperCube.qDimensionInfo[0].qAttrExprInfo);
 
   if (!dataMatrix) {
     return null;
@@ -247,5 +252,5 @@ export default async function transform({ layout, model }) {
     return null;
   }
 
-  return createNodes(dataMatrix, attributeIndecies, status);
+  return createNodes(dataMatrix, attributeIndecies, status, layout.navigationMode, translator);
 }
