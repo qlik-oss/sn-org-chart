@@ -79,8 +79,8 @@ export const applyTransform = (eventTransform, svg, divBox, width, height) => {
   );
 };
 
-export function setZooming({ objectData, setTransform, transformState, selectionsAndTransform, initialZoomState }) {
-  const { svg, divBox, width, height, zoomWrapper, element, tooltip } = objectData;
+export function setZooming({ preRenderData, setTransform, transformState, storageState, initialZoomState }) {
+  const { svg, divBox, width, height, zoomWrapper, element, tooltip } = preRenderData;
   const { x = 0, y = 0 } = transformState;
   const { minZoom, maxZoom } = constants;
   const zoomFactor = (transformState && 1 / transformState.zoom) || initialZoomState.initialZoom;
@@ -114,7 +114,7 @@ export function setZooming({ objectData, setTransform, transformState, selection
       ])
       .filter(
         () =>
-          !selectionsAndTransform.constraints.active &&
+          !storageState.constraints.active &&
           event.type !== 'dblclick' &&
           !(event.type === 'mousedown' && event.which === 3)
       )

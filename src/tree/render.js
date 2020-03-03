@@ -72,16 +72,17 @@ export const createSnapshotData = (expandedState, allNodes, layout) => {
 };
 
 export const paintTree = ({
-  objectData,
+  preRenderData,
   expandedState,
   styling,
-  setStateCallback,
-  selectionsAndTransform,
-  selectionState,
+  setExpandedCallback,
+  storageState,
+  selectionObj,
+  // selectionState,
   useTransitions,
   element,
 }) => {
-  const { svg, divBox, allNodes, positioning, width, height, tooltip } = objectData;
+  const { svg, divBox, allNodes, positioning, width, height, tooltip } = preRenderData;
   const { navigationMode } = allNodes.data;
   divBox.selectAll('*').remove();
   svg.selectAll('*').remove();
@@ -94,9 +95,10 @@ export const paintTree = ({
     nodes,
     styling,
     expandedState,
-    setStateCallback,
-    selectionState,
-    selectionsAndTransform,
+    setExpandedCallback,
+    // selectionState,
+    storageState,
+    selectionObj,
     navigationMode,
     element,
     tooltip
@@ -116,8 +118,9 @@ export const paintTree = ({
 export function preRenderTree({
   element,
   dataTree,
-  selectionsAndTransform,
-  selectionState,
+  selectionObj,
+  storageState,
+  // selectionState,
   setInitialZoom,
   setTransform,
   expandedState,
@@ -133,9 +136,9 @@ export function preRenderTree({
     .append('span')
     .attr('class', 'sn-org-zoomwrapper')
     .on('click', () => {
-      if (!selectionsAndTransform.constraints.active && (!selectionsAndTransform.api.isActive() || !selectionState)) {
-        selectionsAndTransform.api.begin('/qHyperCubeDef');
-        selectionsAndTransform.setState([]);
+      if (!storageState.constraints.active && (!selectionObj.api.isActive() || !selectionObj.state)) {
+        selectionObj.api.begin('/qHyperCubeDef');
+        selectionObj.setState([]);
       }
     })
     .node();
@@ -201,10 +204,10 @@ export function preRenderTree({
   setInitialZoom(initialZoomState);
   positioning = position('ttb', element, initialZoomState);
   setZooming({
-    objectData: { svg, divBox, width, height, zoomWrapper, element, tooltip },
+    preRenderData: { svg, divBox, width, height, zoomWrapper, element, tooltip },
     setTransform,
     transformState: (viewState && viewState.transform) || {},
-    selectionsAndTransform,
+    storageState,
     initialZoomState,
   });
   if (resetExpandedState) {

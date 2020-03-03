@@ -1,7 +1,7 @@
 import { onTakeSnapshot, useImperativeHandle, useElement } from '@nebula.js/supernova';
 import { createSnapshotData } from './tree/render';
 
-export default function snapshot(expandedState, objectData, layout, transform, initialZoom) {
+export default function snapshot(expandedState, preRenderData, layout, transform, initialZoom) {
   const element = useElement();
 
   const createViewState = () => {
@@ -22,7 +22,7 @@ export default function snapshot(expandedState, objectData, layout, transform, i
     if (!layout.snapshotData || !layout.snapshotData.viewState) {
       snapshotLayout.snapshotData.viewState = createViewState();
     }
-    snapshotLayout.snapshotData.dataMatrix = createSnapshotData(expandedState, objectData.allNodes, layout);
+    snapshotLayout.snapshotData.dataMatrix = createSnapshotData(expandedState, preRenderData.allNodes, layout);
   });
 
   useImperativeHandle(() => ({

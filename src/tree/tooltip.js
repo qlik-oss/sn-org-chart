@@ -11,11 +11,11 @@ export function createTooltip(element) {
   return tooltip;
 }
 
-export function getTooltipStyle(d, containerHeight, x, y, sel) {
+export function getTooltipStyle(d, containerHeight, x, y, transform) {
   const { cardWidth, tooltipPadding } = constants;
   const halfCardWidth = cardWidth / 2;
-  const yLocation = containerHeight - (y(d) * sel.transform.zoom + sel.transform.y - tooltipPadding);
-  const xLocation = x(d) * sel.transform.zoom + sel.transform.x + halfCardWidth * sel.transform.zoom;
+  const yLocation = containerHeight - (y(d) * transform.zoom + transform.y - tooltipPadding);
+  const xLocation = x(d) * transform.zoom + transform.x + halfCardWidth * transform.zoom;
   return `bottom:${yLocation}px;left:${xLocation}px;`;
 }
 
@@ -29,14 +29,14 @@ export function getTooltipContent(d, cardStyling) {
   return `<div class="sn-org-tooltip-inner"><div class="sn-org-tooltip-header">${label}</div>${subLabel}${extraLabel}${measure}</div>`;
 }
 
-export function openTooltip(tooltip, d, containerHeight, cardStyling, x, y, sel, delay = 250) {
+export function openTooltip(tooltip, d, containerHeight, cardStyling, x, y, transform, delay = 250) {
   tooltip.active = true;
   tooltip.timeout = setTimeout(() => {
     if (tooltip.active) {
       tooltip
         .html(getTooltipContent(d, cardStyling))
         .classed('sn-org-tooltip-visible', true)
-        .attr('style', () => getTooltipStyle(d, containerHeight, x, y, sel));
+        .attr('style', () => getTooltipStyle(d, containerHeight, x, y, transform));
     }
   }, delay);
 }
