@@ -17,7 +17,7 @@ export function getFontColor(cardStyling, backgroundColor) {
 }
 
 export default (data, cardStyling, selectionObj) => {
-  const { api, state } = selectionObj.api;
+  const { api, state } = selectionObj;
   const isSelected = api && api.isActive() && state.indexOf(data.elemNo) !== -1;
   const backgroundColor = getBackgroundColor(data, cardStyling);
   const topColor = colorUtils.getDarkColor(backgroundColor);

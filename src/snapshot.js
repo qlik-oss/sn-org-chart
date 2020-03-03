@@ -1,5 +1,26 @@
 import { onTakeSnapshot, useImperativeHandle, useElement } from '@nebula.js/supernova';
-import { createSnapshotData } from './tree/render';
+import { filterTree } from './tree/render';
+
+export const createSnapshotData = (expandedState, allNodes, layout) => {
+  if (layout.snapshotData && layout.snapshotData.dataMatrix) {
+    // Need a check here becuase of free resize in storytelling
+    return layout.snapshotData.dataMatrix;
+  }
+  // filter down to the visible nodes
+  const nodes = filterTree(expandedState, allNodes, true);
+  const usedMatrix = [];
+  const { qDataPages } = layout.qHyperCube;
+  const dataMatrix = [];
+  qDataPages.forEach(page => {
+    dataMatrix.push(...page.qMatrix);
+  });
+  nodes.forEach(n => {
+    if (n.data.rowNo !== undefined) {
+      usedMatrix.push(dataMatrix[n.data.rowNo]);
+    }
+  });
+  return usedMatrix;
+};
 
 export default function snapshot(expandedState, preRenderData, layout, transform, initialZoom) {
   const element = useElement();
@@ -15,6 +36,7 @@ export default function snapshot(expandedState, preRenderData, layout, transform
     vs.expandedState.useTransitions = false;
     return vs;
   };
+
   onTakeSnapshot(snapshotLayout => {
     if (!snapshotLayout.snapshotData) {
       snapshotLayout.snapshotData = {};
