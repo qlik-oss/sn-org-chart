@@ -9,21 +9,19 @@ import {
   useSelections,
   useAction,
   useRect,
-  onTakeSnapshot,
   useOptions,
-  useImperativeHandle,
   useConstraints,
   useTranslator,
 } from '@nebula.js/supernova';
 import properties from './object-properties';
 import data from './data';
 import ext from './extension/ext';
-import { paintTree, preRenderTree, createSnapshotData, filterTree } from './tree/render';
-import position from './tree/position';
+import snapshot from './snapshot';
+import { paintTree, preRenderTree } from './tree/render';
 import stylingUtils from './utils/styling';
 import treeTransform from './utils/tree-utils';
 import viewStateUtil from './utils/viewstate-utils';
-import { setZooming, getSnapshotZoom, getBBoxOfNodes, getInitialZoomState, applyTransform } from './tree/transform';
+import { getSnapshotZoom, applyTransform } from './tree/transform';
 import autoRegister from './locale/translations';
 import './styles/tooltip.less';
 import './styles/paths.less';
@@ -49,7 +47,6 @@ export default function supernova(env) {
       const element = useElement();
       const Theme = useTheme();
       const options = useOptions();
-      const [opts] = useState(options);
       const rect = useRect();
       const selectionsAPI = useSelections();
       const constraints = useConstraints();
@@ -163,7 +160,7 @@ export default function supernova(env) {
         if (!layout) {
           return Promise.resolve();
         }
-        const viewState = viewStateUtil.getViewState(opts, layout);
+        const viewState = viewStateUtil.getViewState(options, layout);
         viewState && viewState.expandedState && setExpandedState(viewState.expandedState);
         viewState && viewState.transform && setTransform(viewState.transform);
 
@@ -178,12 +175,30 @@ export default function supernova(env) {
       // This one can split up. Only need to get new height/width when rect is changed
       useEffect(() => {
         if (element && dataTree) {
-          const preRender = preRenderTree(element, dataTree, selectionsAndTransform, selectionState);
+          const viewState = viewStateUtil.getViewState(options, layout);
+          const preRender = preRenderTree({
+            element,
+            dataTree,
+            selectionsAndTransform,
+            selectionState,
+            setInitialZoom,
+            setTransform,
+            expandedState,
+            setExpandedState,
+            viewState,
+          });
           if (preRender) {
             setObjectData(preRender);
           }
         }
       }, [element, dataTree, constraints]);
+
+      useEffect(() => {
+        if (objectData && layout && layout.snapshotData) {
+          const snapshotZoom = getSnapshotZoom(rect, layout.snapshotData.viewState);
+          applyTransform(snapshotZoom, objectData.svg, objectData.divBox, rect.width, rect.height);
+        }
+      }, [rect, objectData]);
 
       useEffect(() => {
         if (objectData && expandedState && styling) {
@@ -198,87 +213,9 @@ export default function supernova(env) {
             element,
           });
         }
-      }, [expandedState, selectionState]);
+      }, [expandedState, objectData, selectionState]);
 
-      useEffect(() => {
-        if (objectData && layout.navigationMode === 'free') {
-          const viewState = viewStateUtil.getViewState(opts, layout);
-          const resetExpandedState =
-            !expandedState || !objectData.allNodes.descendants().find(node => node.data.id === expandedState.topId);
-          const newExpandedState = resetExpandedState
-            ? { topId: objectData.allNodes.data.id, isExpanded: true, expandedChildren: [], useTransitions: false }
-            : expandedState;
-
-          const renderNodes = filterTree(newExpandedState, objectData.allNodes);
-          renderNodes.forEach(node => {
-            if (!node.xActual || !node.yActual) {
-              objectData.positioning.x(node);
-              objectData.positioning.y(node);
-            }
-          });
-          const bBox = getBBoxOfNodes(renderNodes);
-          const initialZoomState =
-            viewState && viewState.initialZoom ? viewState.initialZoom : getInitialZoomState(bBox, element);
-          setInitialZoom(initialZoomState);
-          objectData.positioning = position('ttb', element, initialZoomState);
-          setZooming({
-            objectData,
-            setTransform,
-            transformState: (viewState && viewState.transform) || {},
-            selectionsAndTransform,
-            initialZoomState,
-          });
-          if (resetExpandedState) {
-            setExpandedState(newExpandedState);
-          } else {
-            paintTree({
-              objectData,
-              expandedState,
-              styling,
-              setStateCallback,
-              selectionsAndTransform,
-              selectionState,
-              useTransitions: expandedState.useTransitions,
-              element,
-            });
-          }
-        }
-      }, [objectData]);
-
-      const createViewState = () => {
-        const size = { w: element.clientWidth, h: element.clientHeight };
-        const vs = {
-          expandedState,
-          transform,
-          size,
-          initialZoom,
-        };
-        vs.expandedState.useTransitions = false;
-        return vs;
-      };
-
-      onTakeSnapshot(snapshotLayout => {
-        if (!snapshotLayout.snapshotData) {
-          snapshotLayout.snapshotData = {};
-        }
-        if (!layout.snapshotData || !layout.snapshotData.viewState) {
-          snapshotLayout.snapshotData.viewState = createViewState();
-        }
-        snapshotLayout.snapshotData.dataMatrix = createSnapshotData(expandedState, objectData.allNodes, layout);
-      });
-
-      useEffect(() => {
-        if (objectData && layout && layout.snapshotData) {
-          const snapshotZoom = getSnapshotZoom(rect, layout.snapshotData.viewState);
-          applyTransform(snapshotZoom, objectData.svg, objectData.divBox, rect.width, rect.height);
-        }
-      }, [rect, objectData]);
-
-      useImperativeHandle(() => ({
-        getViewState() {
-          return createViewState();
-        },
-      }));
+      snapshot(expandedState, objectData, layout, transform, initialZoom);
     },
     ext: ext(env),
   };

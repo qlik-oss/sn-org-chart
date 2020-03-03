@@ -2,7 +2,7 @@ import { hierarchy, tree, select } from 'd3';
 import position from './position';
 import box from './box';
 import createPaths from './path';
-import transform from './transform';
+import transform, { getBBoxOfNodes, setZooming, getInitialZoomState } from './transform';
 import { createTooltip } from './tooltip';
 
 export const filterTree = ({ topId, isExpanded, expandedChildren }, nodeTree, extended) => {
@@ -113,10 +113,20 @@ export const paintTree = ({
   }
 };
 
-export function preRenderTree(element, dataTree, selectionsAndTransform, selectionState) {
+export function preRenderTree({
+  element,
+  dataTree,
+  selectionsAndTransform,
+  selectionState,
+  setInitialZoom,
+  setTransform,
+  expandedState,
+  setExpandedState,
+  viewState,
+}) {
   element.innerHTML = '';
   element.className = 'sn-org-chart';
-  const positioning = position('ttb', element, {});
+  let positioning = position('ttb', element, {});
   const { width, height } = element.getBoundingClientRect();
 
   const zoomWrapper = select(element)
@@ -170,5 +180,36 @@ export function preRenderTree(element, dataTree, selectionsAndTransform, selecti
     .nodeSize([0, positioning.depthSpacing]);
 
   const allNodes = treemap(hierarchy(dataTree));
+
+  // const viewState = false; // viewStateUtil.getViewState(opts, layout);
+  const resetExpandedState =
+    !expandedState || !allNodes.descendants().find(node => node.data.id === expandedState.topId);
+  const newExpandedState = resetExpandedState
+    ? { topId: allNodes.data.id, isExpanded: true, expandedChildren: [], useTransitions: false }
+    : expandedState;
+
+  const renderNodes = filterTree(newExpandedState, allNodes);
+  renderNodes.forEach(node => {
+    if (!node.xActual || !node.yActual) {
+      positioning.x(node);
+      positioning.y(node);
+    }
+  });
+  const bBox = getBBoxOfNodes(renderNodes);
+  const initialZoomState =
+    viewState && viewState.initialZoom ? viewState.initialZoom : getInitialZoomState(bBox, element);
+  setInitialZoom(initialZoomState);
+  positioning = position('ttb', element, initialZoomState);
+  setZooming({
+    objectData: { svg, divBox, width, height, zoomWrapper, element, tooltip },
+    setTransform,
+    transformState: (viewState && viewState.transform) || {},
+    selectionsAndTransform,
+    initialZoomState,
+  });
+  if (resetExpandedState) {
+    setExpandedState(newExpandedState);
+  }
+
   return { svg, divBox, allNodes, positioning, width, height, element, zoomWrapper, tooltip };
 }
