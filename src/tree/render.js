@@ -123,6 +123,16 @@ export function preRenderTree(element, dataTree, selectionsAndTransform, selecti
   const zoomWrapper = select(element)
     .append('span')
     .attr('class', 'sn-org-zoomwrapper')
+    .on('click', () => {
+      if (
+        !interactions.swiping &&
+        !selectionsAndTransform.constraints.active &&
+        (!selectionsAndTransform.api.isActive() || !selectionState)
+      ) {
+        selectionsAndTransform.api.begin('/qHyperCubeDef');
+        selectionsAndTransform.setState([]);
+      }
+    })
     .node();
 
   Touche(zoomWrapper).tap({

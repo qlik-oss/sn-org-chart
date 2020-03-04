@@ -81,7 +81,7 @@ export const applyTransform = (eventTransform, svg, divBox, width, height) => {
 };
 
 export function setZooming({ objectData, setTransform, transformState, selectionsAndTransform, initialZoomState }) {
-  const { svg, divBox, width, height, zoomWrapper, element, tooltip, interactions } = objectData;
+  const { svg, divBox, width, height, zoomWrapper, tooltip, interactions } = objectData;
   const { x = 0, y = 0 } = transformState;
   const { minZoom, maxZoom } = constants;
   const zoomFactor = (transformState && 1 / transformState.zoom) || initialZoomState.initialZoom;
@@ -116,7 +116,11 @@ export function setZooming({ objectData, setTransform, transformState, selection
   };
 
   const scrollZoom = () => {
-    setTransform({ zoom: event.transform.k / scaleFactor, x: event.transform.x, y: event.transform.y });
+    setTransform({
+      zoom: event.transform.k / scaleFactor,
+      x: event.transform.x + selectionsAndTransform.transform.x,
+      y: event.transform.y + selectionsAndTransform.transform.y,
+    });
     closeTooltip(tooltip);
     applyTransform(
       {
@@ -133,6 +137,9 @@ export function setZooming({ objectData, setTransform, transformState, selection
 
   Touche(zoomWrapper)
     .swipe({
+      options: {
+        preventDefault: false,
+      },
       start: (e, data) => {
         interactions.swiping = true;
         translate(e, data, false);
@@ -150,13 +157,19 @@ export function setZooming({ objectData, setTransform, transformState, selection
       },
     });
 
-  select(element).call(
+  select(zoomWrapper).call(
     zoom()
       .extent([
         [0, 0],
         [width, height],
       ])
-      .filter(() => !selectionsAndTransform.constraints.active && event.type === 'wheel')
+      .filter(
+        () =>
+          !selectionsAndTransform.constraints.active &&
+          event.type !== 'dblclick' &&
+          !(event.type === 'mousedown' && event.which === 3) &&
+          event.type !== 'touchstart'
+      )
       .scaleExtent([minZoom * scaleFactor, maxZoom * scaleFactor])
       .on('zoom', scrollZoom)
   );

@@ -96,6 +96,12 @@ export default function box(
     .attr('class', 'sn-org-card')
     .attr('style', d => `width:${cardWidth}px;height:${cardHeight}px; top:${y(d)}px;left:${x(d)}px;`)
     .attr('id', d => d.data.id)
+    .on('click', node => {
+      if (!selectionsAndTransform.constraints.active && node.data.id !== 'Root') {
+        touchmode && openTooltip(tooltip, node, element.clientHeight, cardStyling, x, y, selectionsAndTransform, 0);
+        selections.select(node, selectionsAndTransform, selectionState);
+      }
+    })
     .each((node, index, cards) => {
       Touche(cards[index]).tap({
         end: () => {
@@ -141,6 +147,12 @@ export default function box(
     .attr('id', d => `${d.data.id}-expand`)
     .on('mouseenter', () => {
       if (!selectionsAndTransform.constraints.active) event.target.style.cursor = 'pointer';
+    })
+    .on('click', node => {
+      if (!selectionsAndTransform.constraints.active) {
+        setStateCallback(getNewState(node, expandedState, ancestorIds));
+        event.stopPropagation();
+      }
     })
     .each((node, index, expandBoxes) => {
       Touche(expandBoxes[index]).tap({
