@@ -20,7 +20,9 @@ describe('should render', () => {
   describe('from snapshot', () => {
     before(async () => {
       await page.goto(`${process.testServer.url}/render/?snapshot=basic`);
-      await page.waitForSelector(content, { visible: true });
+      await page.waitForSelector(content, {
+        timeout: 5000,
+      });
     });
 
     it('basic example', async () => {
