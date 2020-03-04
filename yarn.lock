@@ -10475,6 +10475,11 @@ toposort@^1.0.0:
   resolved "https://registry.yarnpkg.com/toposort/-/toposort-1.0.7.tgz#2e68442d9f64ec720b8cc89e6443ac6caa950029"
   integrity sha1-LmhELZ9k7HILjMieZEOsbKqVACk=
 
+touchejs@^1.1.8:
+  version "1.1.8"
+  resolved "https://registry.yarnpkg.com/touchejs/-/touchejs-1.1.8.tgz#456206fc19b4636bbdc40f4cf5dbdf887f47906a"
+  integrity sha512-oRvDod8NZW0LL4aZ4/AbLdOTURptUpuxEoIUvJhhi64P7a6msIXCq6ZBfTu7V12iRggWHrNoNfQePwZqk2rS2Q==
+
 tough-cookie@~2.5.0:
   version "2.5.0"
   resolved "https://registry.yarnpkg.com/tough-cookie/-/tough-cookie-2.5.0.tgz#cd9fb2a0aa1d5a12b473bd9fb96fa3dcff65ade2"
