@@ -58,6 +58,10 @@ export default function supernova(env) {
       }, [translator.language()]);
 
       useEffect(() => {
+        wrapperState.constraints = constraints;
+      }, [constraints]);
+
+      useEffect(() => {
         wrapperState.transform = transform;
       }, [transform]);
 
