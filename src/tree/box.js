@@ -1,3 +1,4 @@
+import Touche from 'touchejs';
 import card from '../card/card';
 import selections from '../utils/selections';
 import { haveNoChildren } from '../utils/tree-utils';
@@ -58,8 +59,6 @@ export const getNewUpState = (d, isExpanded) => ({
 });
 
 export default function box(
-  { x, y },
-  divBox,
   nodes,
   cardStyling,
   expandedState,
@@ -68,8 +67,10 @@ export default function box(
   selectionsAndTransform,
   navigationMode,
   element,
-  tooltip
+  objectData
 ) {
+  const { interactions, divBox, positioning, tooltip } = objectData;
+  const { x, y } = positioning;
   const { cardWidth, cardHeight, buttonWidth, buttonHeight, cardPadding, rootDiameter } = constants;
   const { topId, isExpanded } = expandedState;
   const topNode = nodes.find(node => node.data.id === topId);
@@ -95,11 +96,15 @@ export default function box(
     .attr('class', 'sn-org-card')
     .attr('style', d => `width:${cardWidth}px;height:${cardHeight}px; top:${y(d)}px;left:${x(d)}px;`)
     .attr('id', d => d.data.id)
-    .on('click', node => {
-      if (!selectionsAndTransform.constraints.active && node.data.id !== 'Root') {
-        touchmode && openTooltip(tooltip, node, element.clientHeight, cardStyling, x, y, selectionsAndTransform, 0);
-        selections.select(node, selectionsAndTransform, selectionState);
-      }
+    .each((node, index, cards) => {
+      Touche(cards[index]).tap({
+        end: () => {
+          if (!selectionsAndTransform.constraints.active && node.data.id !== 'Root') {
+            touchmode && openTooltip(tooltip, node, element.clientHeight, cardStyling, x, y, selectionsAndTransform, 0);
+            selections.select(node, selectionsAndTransform, selectionState);
+          }
+        },
+      });
     })
     .html(d => card(d.data, cardStyling, selectionsAndTransform, selectionState))
     .on('mouseenter', d => {
@@ -137,11 +142,19 @@ export default function box(
     .on('mouseenter', () => {
       if (!selectionsAndTransform.constraints.active) event.target.style.cursor = 'pointer';
     })
-    .on('click', d => {
-      if (!selectionsAndTransform.constraints.active) {
-        setStateCallback(getNewState(d, expandedState, ancestorIds));
-        event.stopPropagation();
-      }
+    .each((node, index, expandBoxes) => {
+      Touche(expandBoxes[index]).tap({
+        end: () => {
+          interactions.swiping = true;
+          setTimeout(() => {
+            interactions.swiping = false;
+          });
+          if (!selectionsAndTransform.constraints.active) {
+            setStateCallback(getNewState(node, expandedState, ancestorIds));
+            event.stopPropagation();
+          }
+        },
+      });
     })
     .html(d => `${getSign(d, expandedState, ancestorIds)} ${d.data.children.length}`);
 

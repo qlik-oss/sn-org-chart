@@ -1,4 +1,5 @@
-import { select, zoom, event, zoomIdentity } from 'd3';
+import { select } from 'd3';
+import Touche from 'touchejs';
 import constants from './size-constants';
 import { closeTooltip } from './tooltip';
 
@@ -66,10 +67,10 @@ export const getTranslations = (bBox, height, width) => {
 };
 
 export const applyTransform = (eventTransform, svg, divBox, width, height) => {
-  const scaleFactor = eventTransform.k;
+  const scaleFactor = eventTransform.zoom;
   const translation = `${eventTransform.x}px, ${eventTransform.y}px`;
 
-  svg.attr('transform', eventTransform);
+  svg.attr('transform', `translate(${eventTransform.x} ${eventTransform.y}) scale(${scaleFactor})`);
   divBox.classed('org-disable-transition', true);
   svg.classed('org-disable-transition', true);
 
@@ -80,51 +81,92 @@ export const applyTransform = (eventTransform, svg, divBox, width, height) => {
 };
 
 export function setZooming({ objectData, setTransform, transformState, selectionsAndTransform, initialZoomState }) {
-  const { svg, divBox, width, height, zoomWrapper, element, tooltip } = objectData;
+  const { svg, divBox, width, height, zoomWrapper, element, tooltip, interactions } = objectData;
   const { x = 0, y = 0 } = transformState;
   const { minZoom, maxZoom } = constants;
   const zoomFactor = (transformState && 1 / transformState.zoom) || initialZoomState.initialZoom;
   const scaleFactor = Math.max(Math.min(maxZoom, zoomFactor), minZoom);
+  // const zoomState = {
+  //   x: 0,
+  //   y: 0,
+  //   scale: initialZoomState.initialZoom,
+  // };
 
-  // sends otherwise captured mouse event to handle context menu correctly in sense
-  const bubbleEvent = () => {
-    const newEvent = document.createEvent('MouseEvents');
-    newEvent.initEvent('mousedown', true, false);
-    element.dispatchEvent(newEvent);
-  };
+  // const doTransform = (deltaX, deltaY, newScale) => {
+  //   const { transform } = selectionsAndTransform;
+  //   applyTransform({ x: deltaX + transform.x, y: deltaY + transform.y, scale: newScale }, svg, divBox, width, height);
+  // };
 
-  const zoomed = () => {
-    setTransform({ zoom: event.transform.k / scaleFactor, x: event.transform.x, y: event.transform.y });
-    bubbleEvent();
+  const translate = (e, data, saveState) => {
     closeTooltip(tooltip);
-    applyTransform(
-      zoomIdentity.translate(event.transform.x, event.transform.y).scale(event.transform.k / scaleFactor),
-      svg,
-      divBox,
-      width,
-      height
-    );
+    const { deltaX, deltaY } = data.swipe;
+    const newX = selectionsAndTransform.transform.x + deltaX;
+    const newY = selectionsAndTransform.transform.y + deltaY;
+    applyTransform({ x: newX, y: newY, zoom: selectionsAndTransform.transform.zoom }, svg, divBox, width, height);
+    if (saveState) {
+      setTransform({ x: newX, y: newY, zoom: selectionsAndTransform.transform.zoom });
+      setTimeout(() => {
+        interactions.swiping = false;
+      });
+    }
   };
 
-  select(zoomWrapper).call(
-    zoom()
-      .extent([
-        [0, 0],
-        [width, height],
-      ])
-      .filter(
-        () =>
-          !selectionsAndTransform.constraints.active &&
-          event.type !== 'dblclick' &&
-          !(event.type === 'mousedown' && event.which === 3)
-      )
-      .scaleExtent([minZoom * scaleFactor, maxZoom * scaleFactor])
-      .on('start', bubbleEvent)
-      .on('zoom', zoomed)
-  );
+  const applyZoom = (e, data, saveState) => {
+    closeTooltip(tooltip);
+    const { zoom } = selectionsAndTransform.transform;
+    const newZoom = Math.max(Math.min(zoom / (1 / data.scale), maxZoom), minZoom);
+    if (newZoom !== zoom) {
+      applyTransform(
+        { x: selectionsAndTransform.transform.x, y: selectionsAndTransform.transform.y, zoom: newZoom },
+        svg,
+        divBox,
+        width,
+        height
+      );
+      if (saveState) {
+        setTransform({ x: selectionsAndTransform.transform.x, y: selectionsAndTransform.transform.y, zoom: newZoom });
+      }
+    }
+  };
+
+  Touche(zoomWrapper)
+    .swipe({
+      start: (e, data) => {
+        interactions.swiping = true;
+        translate(e, data, false);
+      },
+      update: translate,
+      end: (e, data) => {
+        translate(e, data, true);
+      },
+    })
+    .pinch({
+      start: applyZoom,
+      update: applyZoom,
+      end: (e, data) => {
+        applyZoom(e, data, true);
+      },
+    });
+
+  select(element).on('wheel', () => {
+    // const { offsetX, offsetY } = event;
+    // const { transform } = selectionsAndTransform;
+    // const scale = Math.max(Math.min(transform.zoom - event.deltaY / 1000, maxZoom), minZoom);
+    // if (scale !== transform.zoom) {
+    //   const newXOffset =
+    //     zoomState.x + ((offsetX / ((scale / zoomState.scale) * 100)) * event.deltaY) / Math.abs(event.deltaY);
+    //   const newYOffset =
+    //     zoomState.y + ((offsetY / ((scale / zoomState.scale) * 100)) * event.deltaY) / Math.abs(event.deltaY);
+    //   zoomState.scale = scale;
+    //   zoomState.x = newXOffset;
+    //   zoomState.y = newYOffset;
+    //   applyTransform({ x: newXOffset, y: newYOffset, scale }, svg, divBox, width, height);
+    //   setTransform({ x: newXOffset, y: newYOffset, zoom: scale });
+    // }
+  });
 
   setTransform({ zoom: 1 / scaleFactor, x, y });
-  applyTransform(zoomIdentity.translate(x, y).scale(1 / scaleFactor), svg, divBox, width, height);
+  applyTransform({ x, y, zoom: 1 / zoomFactor }, svg, divBox, width, height);
 }
 
 export const getSnapshotZoom = (rect, viewState) => {
@@ -133,7 +175,7 @@ export const getSnapshotZoom = (rect, viewState) => {
   const newX = viewState.transform.x * snapZoom;
   const newY = viewState.transform.y * snapZoom;
   const newZoom = viewState.transform.zoom * snapZoom;
-  return zoomIdentity.translate(newX, newY).scale(newZoom);
+  return { x: newX, y: newY, zoom: newZoom };
 };
 
 export default function transform(nodes, width, height, svg, divBox, useTransitions) {

@@ -1,9 +1,11 @@
+import Touche from 'touchejs';
 import { hierarchy, tree, select } from 'd3';
 import position from './position';
 import box from './box';
 import createPaths from './path';
 import transform from './transform';
 import { createTooltip } from './tooltip';
+import Interactions from '../utils/interaction-utils';
 
 export const filterTree = ({ topId, isExpanded, expandedChildren }, nodeTree, extended) => {
   const topNode = nodeTree.descendants().find(node => node.data.id === topId) || nodeTree;
@@ -81,7 +83,7 @@ export const paintTree = ({
   useTransitions,
   element,
 }) => {
-  const { svg, divBox, allNodes, positioning, width, height, tooltip } = objectData;
+  const { svg, divBox, allNodes, positioning, width, height } = objectData;
   const { navigationMode } = allNodes.data;
   divBox.selectAll('*').remove();
   svg.selectAll('*').remove();
@@ -89,8 +91,6 @@ export const paintTree = ({
   const nodes = filterTree(expandedState, allNodes);
   // Create cards and naviagation buttons
   box(
-    positioning,
-    divBox,
     nodes,
     styling,
     expandedState,
@@ -99,7 +99,7 @@ export const paintTree = ({
     selectionsAndTransform,
     navigationMode,
     element,
-    tooltip
+    objectData
   );
   // Create the lines (links) between the nodes
   const node = svg
@@ -114,6 +114,7 @@ export const paintTree = ({
 };
 
 export function preRenderTree(element, dataTree, selectionsAndTransform, selectionState) {
+  const interactions = new Interactions();
   element.innerHTML = '';
   element.className = 'sn-org-chart';
   const positioning = position('ttb', element, {});
@@ -122,13 +123,21 @@ export function preRenderTree(element, dataTree, selectionsAndTransform, selecti
   const zoomWrapper = select(element)
     .append('span')
     .attr('class', 'sn-org-zoomwrapper')
-    .on('click', () => {
-      if (!selectionsAndTransform.constraints.active && (!selectionsAndTransform.api.isActive() || !selectionState)) {
+    .node();
+
+  Touche(zoomWrapper).tap({
+    end: () => {
+      console.log('clicking to select');
+      if (
+        !interactions.swiping &&
+        !selectionsAndTransform.constraints.active &&
+        (!selectionsAndTransform.api.isActive() || !selectionState)
+      ) {
         selectionsAndTransform.api.begin('/qHyperCubeDef');
         selectionsAndTransform.setState([]);
       }
-    })
-    .node();
+    },
+  });
 
   const svgBox = select(zoomWrapper)
     .selectAll('svg')
@@ -170,5 +179,5 @@ export function preRenderTree(element, dataTree, selectionsAndTransform, selecti
     .nodeSize([0, positioning.depthSpacing]);
 
   const allNodes = treemap(hierarchy(dataTree));
-  return { svg, divBox, allNodes, positioning, width, height, element, zoomWrapper, tooltip };
+  return { svg, divBox, allNodes, positioning, width, height, element, zoomWrapper, tooltip, interactions };
 }
