@@ -127,7 +127,6 @@ export function preRenderTree(element, dataTree, selectionsAndTransform, selecti
 
   Touche(zoomWrapper).tap({
     end: () => {
-      console.log('clicking to select');
       if (
         !interactions.swiping &&
         !selectionsAndTransform.constraints.active &&
