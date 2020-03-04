@@ -1,4 +1,4 @@
-import { select } from 'd3';
+import { select, zoom, event } from 'd3';
 import Touche from 'touchejs';
 import constants from './size-constants';
 import { closeTooltip } from './tooltip';
@@ -86,16 +86,6 @@ export function setZooming({ objectData, setTransform, transformState, selection
   const { minZoom, maxZoom } = constants;
   const zoomFactor = (transformState && 1 / transformState.zoom) || initialZoomState.initialZoom;
   const scaleFactor = Math.max(Math.min(maxZoom, zoomFactor), minZoom);
-  // const zoomState = {
-  //   x: 0,
-  //   y: 0,
-  //   scale: initialZoomState.initialZoom,
-  // };
-
-  // const doTransform = (deltaX, deltaY, newScale) => {
-  //   const { transform } = selectionsAndTransform;
-  //   applyTransform({ x: deltaX + transform.x, y: deltaY + transform.y, scale: newScale }, svg, divBox, width, height);
-  // };
 
   const translate = (e, data, saveState) => {
     closeTooltip(tooltip);
@@ -111,22 +101,34 @@ export function setZooming({ objectData, setTransform, transformState, selection
     }
   };
 
-  const applyZoom = (e, data, saveState) => {
+  const pinchZoom = (e, data, saveState) => {
     closeTooltip(tooltip);
-    const { zoom } = selectionsAndTransform.transform;
-    const newZoom = Math.max(Math.min(zoom / (1 / data.scale), maxZoom), minZoom);
-    if (newZoom !== zoom) {
-      applyTransform(
-        { x: selectionsAndTransform.transform.x, y: selectionsAndTransform.transform.y, zoom: newZoom },
-        svg,
-        divBox,
-        width,
-        height
-      );
+    const oldZoom = selectionsAndTransform.transform.zoom;
+    const newZoom = Math.max(Math.min(oldZoom / (1 / data.scale), maxZoom), minZoom);
+    if (newZoom !== oldZoom) {
+      const newX = selectionsAndTransform.transform.x;
+      const newY = selectionsAndTransform.transform.y;
+      applyTransform({ x: newX, y: newY, zoom: newZoom }, svg, divBox, width, height);
       if (saveState) {
-        setTransform({ x: selectionsAndTransform.transform.x, y: selectionsAndTransform.transform.y, zoom: newZoom });
+        setTransform({ x: newX, y: newY, zoom: newZoom });
       }
     }
+  };
+
+  const scrollZoom = () => {
+    setTransform({ zoom: event.transform.k / scaleFactor, x: event.transform.x, y: event.transform.y });
+    closeTooltip(tooltip);
+    applyTransform(
+      {
+        x: event.transform.x,
+        y: event.transform.y,
+        zoom: event.transform.k / scaleFactor,
+      },
+      svg,
+      divBox,
+      width,
+      height
+    );
   };
 
   Touche(zoomWrapper)
@@ -141,29 +143,23 @@ export function setZooming({ objectData, setTransform, transformState, selection
       },
     })
     .pinch({
-      start: applyZoom,
-      update: applyZoom,
+      start: pinchZoom,
+      update: pinchZoom,
       end: (e, data) => {
-        applyZoom(e, data, true);
+        pinchZoom(e, data, true);
       },
     });
 
-  select(element).on('wheel', () => {
-    // const { offsetX, offsetY } = event;
-    // const { transform } = selectionsAndTransform;
-    // const scale = Math.max(Math.min(transform.zoom - event.deltaY / 1000, maxZoom), minZoom);
-    // if (scale !== transform.zoom) {
-    //   const newXOffset =
-    //     zoomState.x + ((offsetX / ((scale / zoomState.scale) * 100)) * event.deltaY) / Math.abs(event.deltaY);
-    //   const newYOffset =
-    //     zoomState.y + ((offsetY / ((scale / zoomState.scale) * 100)) * event.deltaY) / Math.abs(event.deltaY);
-    //   zoomState.scale = scale;
-    //   zoomState.x = newXOffset;
-    //   zoomState.y = newYOffset;
-    //   applyTransform({ x: newXOffset, y: newYOffset, scale }, svg, divBox, width, height);
-    //   setTransform({ x: newXOffset, y: newYOffset, zoom: scale });
-    // }
-  });
+  select(element).call(
+    zoom()
+      .extent([
+        [0, 0],
+        [width, height],
+      ])
+      .filter(() => !selectionsAndTransform.constraints.active && event.type === 'wheel')
+      .scaleExtent([minZoom * scaleFactor, maxZoom * scaleFactor])
+      .on('zoom', scrollZoom)
+  );
 
   setTransform({ zoom: 1 / scaleFactor, x, y });
   applyTransform({ x, y, zoom: 1 / zoomFactor }, svg, divBox, width, height);
