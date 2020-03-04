@@ -25,7 +25,7 @@ describe('tooltip', () => {
   describe('getTooltipContent', () => {
     const htmlBegining = '<div class="sn-org-tooltip-inner"><div class="sn-org-tooltip-header">';
     let d;
-    let cardStyling;
+    let styling;
     let content;
 
     beforeEach(() => {
@@ -40,40 +40,40 @@ describe('tooltip', () => {
           },
         },
       };
-      cardStyling = {
+      styling = {
         measureLabel: '',
       };
     });
 
     it('Should return string containing id', () => {
-      content = getTooltipContent(d, cardStyling);
+      content = getTooltipContent(d, styling);
       expect(content).to.equal(`${htmlBegining}someId</div></div>`);
     });
     it('Should return string containing label', () => {
       d.data.attributes.label = 'someLabel';
-      content = getTooltipContent(d, cardStyling);
+      content = getTooltipContent(d, styling);
       expect(content).to.equal(`${htmlBegining}someLabel</div></div>`);
     });
     it('Should return string containing id and subLabel', () => {
       d.data.attributes.subLabel = 'someSubLabel';
-      content = getTooltipContent(d, cardStyling);
+      content = getTooltipContent(d, styling);
       expect(content).to.equal(`${htmlBegining}someId</div>someSubLabel<br /></div>`);
     });
     it('Should return string containing id, subLabel and extraLabel', () => {
       d.data.attributes.subLabel = 'someSubLabel';
       d.data.attributes.extraLabel = 'someExtraLabel';
-      content = getTooltipContent(d, cardStyling);
+      content = getTooltipContent(d, styling);
       expect(content).to.equal(`${htmlBegining}someId</div>someSubLabel<br />someExtraLabel<br /></div>`);
     });
     it('Should return string containing id and measure', () => {
       d.data.measure = 'someMeasure';
-      content = getTooltipContent(d, cardStyling);
+      content = getTooltipContent(d, styling);
       expect(content).to.equal(`${htmlBegining}someId</div>someMeasure</div>`);
     });
     it('Should return string containing id and measure', () => {
       d.data.measure = 'someMeasure';
-      cardStyling.measureLabel = 'someMeasureLabel';
-      content = getTooltipContent(d, cardStyling);
+      styling.measureLabel = 'someMeasureLabel';
+      content = getTooltipContent(d, styling);
       expect(content).to.equal(`${htmlBegining}someId</div>someMeasureLabel: someMeasure</div>`);
     });
   });

@@ -51,35 +51,35 @@ export const filterTree = ({ topId, isExpanded, expandedChildren }, nodeTree, ex
 };
 
 export const paintTree = ({
-  preRenderData,
+  containerData,
   expandedState,
   styling,
   setExpandedCallback,
-  storageState,
+  wrapperState,
   selectionObj,
   useTransitions,
   element,
 }) => {
-  const { svg, divBox, allNodes, positioning, width, height, tooltip } = preRenderData;
+  const { svg, divBox, allNodes, positioning, width, height, tooltip } = containerData;
   const { navigationMode } = allNodes.data;
   divBox.selectAll('*').remove();
   svg.selectAll('*').remove();
   // filter the nodes the nodes
   const nodes = filterTree(expandedState, allNodes);
   // Create cards and naviagation buttons
-  box(
+  box({
     positioning,
     divBox,
     nodes,
     styling,
     expandedState,
     setExpandedCallback,
-    storageState,
+    wrapperState,
     selectionObj,
     navigationMode,
     element,
-    tooltip
-  );
+    tooltip,
+  });
   // Create the lines (links) between the nodes
   const node = svg
     .selectAll('.sn-org-paths')
@@ -92,11 +92,11 @@ export const paintTree = ({
   }
 };
 
-export function preRenderTree({
+export function createContainer({
   element,
   dataTree,
   selectionObj,
-  storageState,
+  wrapperState,
   setInitialZoom,
   setTransform,
   expandedState,
@@ -112,7 +112,7 @@ export function preRenderTree({
     .append('span')
     .attr('class', 'sn-org-zoomwrapper')
     .on('click', () => {
-      if (!storageState.constraints.active && (!selectionObj.api.isActive() || !selectionObj.state)) {
+      if (!wrapperState.constraints.active && (!selectionObj.api.isActive() || !selectionObj.state)) {
         selectionObj.api.begin('/qHyperCubeDef');
         selectionObj.setState([]);
       }
@@ -160,7 +160,6 @@ export function preRenderTree({
 
   const allNodes = treemap(hierarchy(dataTree));
 
-  // const viewState = false; // viewStateUtil.getViewState(opts, layout);
   const resetExpandedState =
     !expandedState || !allNodes.descendants().find(node => node.data.id === expandedState.topId);
   const newExpandedState = resetExpandedState
@@ -180,10 +179,10 @@ export function preRenderTree({
   setInitialZoom(initialZoomState);
   positioning = position('ttb', element, initialZoomState);
   setZooming({
-    preRenderData: { svg, divBox, width, height, zoomWrapper, element, tooltip },
+    containerData: { svg, divBox, width, height, zoomWrapper, element, tooltip },
     setTransform,
     transformState: (viewState && viewState.transform) || {},
-    storageState,
+    wrapperState,
     initialZoomState,
   });
   if (resetExpandedState) {

@@ -57,20 +57,20 @@ export const getNewUpState = (d, isExpanded) => ({
   isExpanded: true,
 });
 
-export default function box(
-  { x, y },
+export default function box({
+  positioning,
   divBox,
   nodes,
-  cardStyling,
+  styling,
   expandedState,
   setExpandedCallback,
-  // selectionState,
-  storageState,
+  wrapperState,
   selectionObj,
   navigationMode,
   element,
-  tooltip
-) {
+  tooltip,
+}) {
+  const { x, y } = positioning;
   const { cardWidth, cardHeight, buttonWidth, buttonHeight, cardPadding, rootDiameter } = constants;
   const { topId, isExpanded } = expandedState;
   const topNode = nodes.find(node => node.data.id === topId);
@@ -96,15 +96,15 @@ export default function box(
     .attr('style', d => `width:${cardWidth}px;height:${cardHeight}px; top:${y(d)}px;left:${x(d)}px;`)
     .attr('id', d => d.data.id)
     .on('click', node => {
-      if (!storageState.constraints.active && node.data.id !== 'Root') {
-        touchmode && openTooltip(tooltip, node, element.clientHeight, cardStyling, x, y, storageState.transform, 0);
+      if (!wrapperState.constraints.active && node.data.id !== 'Root') {
+        touchmode && openTooltip(tooltip, node, element.clientHeight, styling, x, y, wrapperState.transform, 0);
         selections.select(node, selectionObj);
       }
     })
-    .html(d => card(d.data, cardStyling, selectionObj))
+    .html(d => card(d.data, styling, selectionObj))
     .on('mouseenter', d => {
-      if (!touchmode && !storageState.constraints.passive && event.buttons === 0) {
-        openTooltip(tooltip, d, element.clientHeight, cardStyling, x, y, storageState.transform);
+      if (!touchmode && !wrapperState.constraints.passive && event.buttons === 0) {
+        openTooltip(tooltip, d, element.clientHeight, styling, x, y, wrapperState.transform);
       }
     })
     .on('mouseleave', () => {
@@ -135,10 +135,10 @@ export default function box(
     )
     .attr('id', d => `${d.data.id}-expand`)
     .on('mouseenter', () => {
-      if (!storageState.constraints.active) event.target.style.cursor = 'pointer';
+      if (!wrapperState.constraints.active) event.target.style.cursor = 'pointer';
     })
     .on('click', d => {
-      if (!storageState.constraints.active) {
+      if (!wrapperState.constraints.active) {
         setExpandedCallback(getNewState(d, expandedState, ancestorIds));
         event.stopPropagation();
       }
@@ -161,7 +161,7 @@ export default function box(
       )
       .attr('id', d => `${d.data.id}-up`)
       .on('click', d => {
-        if (!storageState.constraints.active) {
+        if (!wrapperState.constraints.active) {
           setExpandedCallback(getNewUpState(d, isExpanded));
         }
       })

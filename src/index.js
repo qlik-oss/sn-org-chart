@@ -16,7 +16,7 @@ import data from './data';
 import ext from './extension/ext';
 import snapshot from './snapshot';
 import selectionHandler from './selections-handler';
-import { paintTree, preRenderTree } from './tree/render';
+import { paintTree, createContainer } from './tree/render';
 import stylingUtils from './utils/styling';
 import treeTransform from './utils/tree-utils';
 import viewStateUtil from './utils/viewstate-utils';
@@ -42,12 +42,12 @@ export default function supernova(env) {
       const rect = useRect();
       const constraints = useConstraints();
       const translator = useTranslator();
-      const [preRenderData, setPreRenderData] = useState(null);
+      const [containerData, setContainerData] = useState(null);
       const [styling, setStyling] = useState(null);
       const [expandedState, setExpandedState] = useState(null);
       const [transform, setTransform] = useState(null);
       const [initialZoom, setInitialZoom] = useState(null);
-      const [storageState] = useState({
+      const [wrapperState] = useState({
         transform: {},
         constraints,
       });
@@ -58,12 +58,8 @@ export default function supernova(env) {
       }, [translator.language()]);
 
       useEffect(() => {
-        storageState.transform = transform;
+        wrapperState.transform = transform;
       }, [transform]);
-
-      useEffect(() => {
-        storageState.constraints = constraints;
-      }, [constraints]);
 
       const setExpandedCallback = newExpandedState => {
         newExpandedState.useTransitions = true;
@@ -91,48 +87,48 @@ export default function supernova(env) {
       useEffect(() => {
         if (element && dataTree) {
           const viewState = viewStateUtil.getViewState(options, layout);
-          const preRender = preRenderTree({
+          const container = createContainer({
             element,
             dataTree,
             expandedState,
             viewState,
-            storageState,
+            wrapperState,
             selectionObj,
             setInitialZoom,
             setTransform,
             setExpandedState,
           });
-          if (preRender) {
-            setPreRenderData(preRender);
+          if (container) {
+            setContainerData(container);
           }
         }
       }, [element, dataTree, constraints]);
 
       // Updates snapshot when resizing
       useEffect(() => {
-        if (preRenderData && layout && layout.snapshotData) {
+        if (containerData && layout && layout.snapshotData) {
           const snapshotZoom = getSnapshotZoom(rect, layout.snapshotData.viewState);
-          applyTransform(snapshotZoom, preRenderData.svg, preRenderData.divBox, rect.width, rect.height);
+          applyTransform(snapshotZoom, containerData.svg, containerData.divBox, rect.width, rect.height);
         }
-      }, [rect, preRenderData]);
+      }, [rect, containerData]);
 
       // Call paintTree, currenly repaints all current nodes
       useEffect(() => {
-        if (preRenderData && expandedState && styling) {
+        if (containerData && expandedState && styling) {
           paintTree({
-            preRenderData,
+            containerData,
             expandedState,
             styling,
             setExpandedCallback,
-            storageState,
+            wrapperState,
             selectionObj,
             useTransitions: expandedState.useTransitions,
             element,
           });
         }
-      }, [expandedState, preRenderData, selectionObj.state]);
+      }, [expandedState, containerData, selectionObj.state]);
 
-      snapshot(expandedState, preRenderData, layout, transform, initialZoom);
+      snapshot(expandedState, containerData, layout, transform, initialZoom);
     },
     ext: ext(env),
   };

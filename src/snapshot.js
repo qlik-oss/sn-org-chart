@@ -34,7 +34,7 @@ export const createViewState = (expandedState, transform, initialZoom, element) 
   return vs;
 };
 
-export default function snapshot(expandedState, preRenderData, layout, transform, initialZoom) {
+export default function snapshot(expandedState, containerData, layout, transform, initialZoom) {
   const element = useElement();
   onTakeSnapshot(snapshotLayout => {
     if (!snapshotLayout.snapshotData) {
@@ -43,7 +43,7 @@ export default function snapshot(expandedState, preRenderData, layout, transform
     if (!layout.snapshotData || !layout.snapshotData.viewState) {
       snapshotLayout.snapshotData.viewState = createViewState(expandedState, transform, initialZoom, element);
     }
-    snapshotLayout.snapshotData.dataMatrix = createSnapshotData(expandedState, preRenderData.allNodes, layout);
+    snapshotLayout.snapshotData.dataMatrix = createSnapshotData(expandedState, containerData.allNodes, layout);
   });
 
   useImperativeHandle(() => ({
