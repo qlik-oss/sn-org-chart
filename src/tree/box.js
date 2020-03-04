@@ -103,7 +103,7 @@ export default function box(
     })
     .html(d => card(d.data, cardStyling, selectionObj))
     .on('mouseenter', d => {
-      if (!touchmode && !storageState.constraints.active && event.buttons === 0) {
+      if (!touchmode && !storageState.constraints.passive && event.buttons === 0) {
         openTooltip(tooltip, d, element.clientHeight, cardStyling, x, y, storageState.transform);
       }
     })

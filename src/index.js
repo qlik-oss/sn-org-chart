@@ -108,7 +108,7 @@ export default function supernova(env) {
         }
       }, [element, dataTree, constraints]);
 
-      // Updates snapshot??
+      // Updates snapshot when resizing
       useEffect(() => {
         if (preRenderData && layout && layout.snapshotData) {
           const snapshotZoom = getSnapshotZoom(rect, layout.snapshotData.viewState);

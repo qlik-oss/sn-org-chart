@@ -10,16 +10,14 @@ describe('tooltip', () => {
     const constainerHeight = 1000;
     const x = () => d.xActual;
     const y = () => d.yActual;
-    const sel = {
-      transform: {
-        zoom: 1,
-        y: 1,
-        x: 1,
-      },
+    const transform = {
+      zoom: 1,
+      y: 1,
+      x: 1,
     };
 
     it('Should return string containing style', () => {
-      const style = getTooltipStyle(d, constainerHeight, x, y, sel);
+      const style = getTooltipStyle(d, constainerHeight, x, y, transform);
       expect(style).to.equal('bottom:1014px;left:77px;');
     });
   });
