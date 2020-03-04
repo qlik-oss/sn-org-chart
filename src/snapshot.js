@@ -22,8 +22,7 @@ export const createSnapshotData = (expandedState, allNodes, layout) => {
   return usedMatrix;
 };
 
-export const createViewState = (expandedState, transform, initialZoom) => {
-  const element = useElement();
+export const createViewState = (expandedState, transform, initialZoom, element) => {
   const size = { w: element.clientWidth, h: element.clientHeight };
   const vs = {
     expandedState,
@@ -36,12 +35,13 @@ export const createViewState = (expandedState, transform, initialZoom) => {
 };
 
 export default function snapshot(expandedState, preRenderData, layout, transform, initialZoom) {
+  const element = useElement();
   onTakeSnapshot(snapshotLayout => {
     if (!snapshotLayout.snapshotData) {
       snapshotLayout.snapshotData = {};
     }
     if (!layout.snapshotData || !layout.snapshotData.viewState) {
-      snapshotLayout.snapshotData.viewState = createViewState(expandedState, transform, initialZoom);
+      snapshotLayout.snapshotData.viewState = createViewState(expandedState, transform, initialZoom, element);
     }
     snapshotLayout.snapshotData.dataMatrix = createSnapshotData(expandedState, preRenderData.allNodes, layout);
   });

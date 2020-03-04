@@ -1,5 +1,5 @@
 import { hierarchy } from 'd3';
-import { createSnapshotData } from '../snapshot';
+import { createSnapshotData, createViewState } from '../snapshot';
 
 describe('snapshot', () => {
   describe('createSnapshotData', () => {
@@ -78,6 +78,27 @@ describe('snapshot', () => {
       nodeTree.children[1].data.rowNo = undefined;
       const result = createSnapshotData({ topId, isExpanded, expandedChildren }, nodeTree, layout);
       expect(result).to.eql([0, 1, 2]);
+    });
+  });
+
+  describe('createViewState', () => {
+    const expandedState = {};
+    const transform = 'someTransform';
+    const initialZoom = 'someZoom';
+    const element = {
+      clientHeight: 100,
+      clientWidth: 200,
+    };
+
+    it('should return correct viewstate', () => {
+      const result = createViewState(expandedState, transform, initialZoom, element);
+      const expected = {
+        expandedState: { useTransitions: false },
+        transform,
+        size: { w: 200, h: 100 },
+        initialZoom,
+      };
+      expect(result).to.eql(expected);
     });
   });
 });

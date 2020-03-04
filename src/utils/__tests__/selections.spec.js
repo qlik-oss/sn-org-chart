@@ -22,6 +22,11 @@ describe('selections', () => {
         state: [],
       };
     });
+    it('should not run anyhing if api or is undefined', () => {
+      node = undefined;
+      select(node, selectionObj);
+      expect(selectionObj.setState).to.not.have.been.called;
+    });
     it('should early return if elemNo is negative', () => {
       node.data.elemNo = -2;
       select(node, selectionObj);
@@ -52,7 +57,6 @@ describe('selections', () => {
       expect(selectionObj.api.select).to.have.been.calledOnce;
       expect(selectionObj.setState).to.have.been.calledWith([1, 2, 3, 798, 88]);
     });
-
     it('should deselect node', () => {
       isActive = true;
       selectionObj.state = [1, 2];
