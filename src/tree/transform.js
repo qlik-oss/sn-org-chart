@@ -88,30 +88,34 @@ export function setZooming({ objectData, setTransform, transformState, selection
   const scaleFactor = Math.max(Math.min(maxZoom, zoomFactor), minZoom);
 
   const translate = (e, data, saveState) => {
-    closeTooltip(tooltip);
-    const { deltaX, deltaY } = data.swipe;
-    const newX = selectionsAndTransform.transform.x + deltaX;
-    const newY = selectionsAndTransform.transform.y + deltaY;
-    applyTransform({ x: newX, y: newY, zoom: selectionsAndTransform.transform.zoom }, svg, divBox, width, height);
-    if (saveState) {
-      setTransform({ x: newX, y: newY, zoom: selectionsAndTransform.transform.zoom });
-      setTimeout(() => {
-        interactions.swiping = false;
-      });
+    if (!selectionsAndTransform.constraints.active) {
+      closeTooltip(tooltip);
+      const { deltaX, deltaY } = data.swipe;
+      const newX = selectionsAndTransform.transform.x + deltaX;
+      const newY = selectionsAndTransform.transform.y + deltaY;
+      applyTransform({ x: newX, y: newY, zoom: selectionsAndTransform.transform.zoom }, svg, divBox, width, height);
+      if (saveState) {
+        setTransform({ x: newX, y: newY, zoom: selectionsAndTransform.transform.zoom });
+        setTimeout(() => {
+          interactions.swiping = false;
+        });
+      }
     }
   };
 
   const pinchZoom = (e, data, saveState) => {
-    closeTooltip(tooltip);
-    const oldZoom = selectionsAndTransform.transform.zoom;
-    const newZoom = Math.max(Math.min(oldZoom / (1 / data.scale), maxZoom), minZoom);
-    if (newZoom !== oldZoom) {
-      const zoomDelta = newZoom / oldZoom;
-      const newX = selectionsAndTransform.transform.x * zoomDelta + (width - zoomDelta * width) / 2;
-      const newY = selectionsAndTransform.transform.y * zoomDelta + (height - zoomDelta * height) / 2;
-      applyTransform({ x: newX, y: newY, zoom: newZoom }, svg, divBox, width, height);
-      if (saveState) {
-        setTransform({ x: newX, y: newY, zoom: newZoom });
+    if (!selectionsAndTransform.constraints.active) {
+      closeTooltip(tooltip);
+      const oldZoom = selectionsAndTransform.transform.zoom;
+      const newZoom = Math.max(Math.min(oldZoom / (1 / data.scale), maxZoom), minZoom);
+      if (newZoom !== oldZoom) {
+        const zoomDelta = newZoom / oldZoom;
+        const newX = selectionsAndTransform.transform.x * zoomDelta + (width - zoomDelta * width) / 2;
+        const newY = selectionsAndTransform.transform.y * zoomDelta + (height - zoomDelta * height) / 2;
+        applyTransform({ x: newX, y: newY, zoom: newZoom }, svg, divBox, width, height);
+        if (saveState) {
+          setTransform({ x: newX, y: newY, zoom: newZoom });
+        }
       }
     }
   };
