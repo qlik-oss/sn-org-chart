@@ -119,8 +119,8 @@ export function setZooming({ objectData, setTransform, transformState, selection
   const scrollZoom = () => {
     setTransform({
       zoom: event.transform.k / scaleFactor,
-      x: event.transform.x + selectionsAndTransform.transform.x,
-      y: event.transform.y + selectionsAndTransform.transform.y,
+      x: event.transform.x,
+      y: event.transform.y,
     });
     closeTooltip(tooltip);
     applyTransform(
