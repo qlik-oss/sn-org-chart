@@ -1,6 +1,7 @@
 /* eslint-disable prefer-destructuring */
-import { getSign, getNewState, getNewUpState } from '../box';
 import defaultValues from '../../__tests__/default-orgchart-props';
+
+const [{ getSign, getNewState, getNewUpState }] = aw.mock([['touchejs', () => () => {}]], ['../box']);
 
 describe('box', () => {
   let d;

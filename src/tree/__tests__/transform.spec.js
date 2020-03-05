@@ -1,4 +1,7 @@
-import { getBBoxOfNodes, getTranslations, getInitialZoomState, applyTransform, getSnapshotZoom } from '../transform';
+const [{ getBBoxOfNodes, getTranslations, getInitialZoomState, applyTransform, getSnapshotZoom }] = aw.mock(
+  [['touchejs', () => () => {}]],
+  ['../transform']
+);
 
 describe('transform', () => {
   describe('getBBoxOfNodes', () => {
@@ -82,7 +85,7 @@ describe('transform', () => {
 
   describe('applyTransform', () => {
     const eventTransform = {
-      k: 2,
+      zoom: 2,
       x: 100,
       y: 200,
     };
@@ -99,7 +102,7 @@ describe('transform', () => {
 
     it('should add classes, set transform and style attributes', () => {
       applyTransform(eventTransform, svg, divBox, width, height);
-      expect(svg.attr).to.be.calledWith('transform', eventTransform);
+      expect(svg.attr).to.be.calledWith('transform', 'translate(100 200) scale(2)');
       expect(svg.classed).to.be.calledWith('org-disable-transition', true);
       expect(divBox.attr).to.be.calledWith(
         'style',
@@ -133,7 +136,7 @@ describe('transform', () => {
 
     it('should return snapshotZoom object adjusted to height', () => {
       const snapshotZoom = { ...getSnapshotZoom(rect, viewState) };
-      expect(snapshotZoom).to.eql({ k: 5, x: 250, y: 500 });
+      expect(snapshotZoom).to.eql({ zoom: 5, x: 250, y: 500 });
     });
 
     it('should return snapshotZoom object adjusted to width', () => {
@@ -142,7 +145,7 @@ describe('transform', () => {
         height: 1000,
       };
       const snapshotZoom = { ...getSnapshotZoom(rect, viewState) };
-      expect(snapshotZoom).to.eql({ k: 10, x: 500, y: 1000 });
+      expect(snapshotZoom).to.eql({ zoom: 10, x: 500, y: 1000 });
     });
   });
 });
