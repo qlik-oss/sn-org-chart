@@ -33,7 +33,7 @@
     "lint": "eslint src",
     "start": "nebula serve --type sn-org-chart",
     "test:unit": "aw -c aw.config.js",
-    "test:integration": "aw puppet --glob 'test/integration/**/*.spec.js'",
+    "test:integration": "aw puppet --glob 'test/integration/**/*.spec.js' --chrome.headless true --chrome.slowMo 10",
     "prepublishOnly": "rm -rf dist && npm run build"
   },
   "husky": {
