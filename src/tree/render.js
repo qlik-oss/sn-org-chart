@@ -135,18 +135,20 @@ export function preRenderTree(element, dataTree, selectionsAndTransform, selecti
     })
     .node();
 
-  Touche(zoomWrapper).tap({
-    end: () => {
-      if (
-        !interactions.swiping &&
-        !selectionsAndTransform.constraints.active &&
-        (!selectionsAndTransform.api.isActive() || !selectionState)
-      ) {
-        selectionsAndTransform.api.begin('/qHyperCubeDef');
-        selectionsAndTransform.setState([]);
-      }
-    },
-  });
+  if (!interactions.isIE) {
+    Touche(zoomWrapper).tap({
+      end: () => {
+        if (
+          !interactions.swiping &&
+          !selectionsAndTransform.constraints.active &&
+          (!selectionsAndTransform.api.isActive() || !selectionState)
+        ) {
+          selectionsAndTransform.api.begin('/qHyperCubeDef');
+          selectionsAndTransform.setState([]);
+        }
+      },
+    });
+  }
 
   const svgBox = select(zoomWrapper)
     .selectAll('svg')

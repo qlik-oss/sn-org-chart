@@ -115,6 +115,9 @@ export function setZooming({ objectData, setTransform, transformState, selection
         applyTransform({ x: newX, y: newY, zoom: newZoom }, svg, divBox, width, height);
         if (saveState) {
           setTransform({ x: newX, y: newY, zoom: newZoom });
+          setTimeout(() => {
+            interactions.swiping = false;
+          });
         }
       }
     }
@@ -140,27 +143,45 @@ export function setZooming({ objectData, setTransform, transformState, selection
     );
   };
 
-  Touche(zoomWrapper)
-    .swipe({
-      options: {
-        preventDefault: false,
-      },
-      start: (e, data) => {
-        interactions.swiping = true;
-        translate(e, data, false);
-      },
-      update: translate,
-      end: (e, data) => {
-        translate(e, data, true);
-      },
-    })
-    .pinch({
-      start: pinchZoom,
-      update: pinchZoom,
-      end: (e, data) => {
-        pinchZoom(e, data, true);
-      },
-    });
+  if (!interactions.isIE) {
+    Touche(zoomWrapper)
+      .swipe({
+        options: {
+          preventDefault: false,
+        },
+        start: (e, data) => {
+          interactions.swiping = true;
+          translate(e, data, false);
+        },
+        update: translate,
+        end: (e, data) => {
+          translate(e, data, true);
+        },
+      })
+      .pinch({
+        start: (e, data) => {
+          interactions.swiping = true;
+          pinchZoom(e, data);
+        },
+        update: pinchZoom,
+        end: (e, data) => {
+          pinchZoom(e, data, true);
+        },
+      })
+      .longtap({
+        options: {
+          preventDefault: false,
+        },
+        start: () => {
+          interactions.swiping = true;
+        },
+        end: () => {
+          setTimeout(() => {
+            interactions.swiping = false;
+          });
+        },
+      });
+  }
 
   select(zoomWrapper).call(
     zoom()

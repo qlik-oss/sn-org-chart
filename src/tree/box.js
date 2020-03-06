@@ -103,14 +103,17 @@ export default function box(
       }
     })
     .each((node, index, cards) => {
-      Touche(cards[index]).tap({
-        end: () => {
-          if (!selectionsAndTransform.constraints.active && node.data.id !== 'Root') {
-            touchmode && openTooltip(tooltip, node, element.clientHeight, cardStyling, x, y, selectionsAndTransform, 0);
-            selections.select(node, selectionsAndTransform, selectionState);
-          }
-        },
-      });
+      if (!interactions.isIE) {
+        Touche(cards[index]).tap({
+          end: () => {
+            if (!selectionsAndTransform.constraints.active && node.data.id !== 'Root') {
+              touchmode &&
+                openTooltip(tooltip, node, element.clientHeight, cardStyling, x, y, selectionsAndTransform, 0);
+              selections.select(node, selectionsAndTransform, selectionState);
+            }
+          },
+        });
+      }
     })
     .html(d => card(d.data, cardStyling, selectionsAndTransform, selectionState))
     .on('mouseenter', d => {
@@ -155,18 +158,20 @@ export default function box(
       }
     })
     .each((node, index, expandBoxes) => {
-      Touche(expandBoxes[index]).tap({
-        end: () => {
-          interactions.swiping = true;
-          setTimeout(() => {
-            interactions.swiping = false;
-          });
-          if (!selectionsAndTransform.constraints.active) {
-            setStateCallback(getNewState(node, expandedState, ancestorIds));
-            event.stopPropagation();
-          }
-        },
-      });
+      if (!interactions.isIE) {
+        Touche(expandBoxes[index]).tap({
+          end: () => {
+            interactions.swiping = true;
+            setTimeout(() => {
+              interactions.swiping = false;
+            });
+            if (!selectionsAndTransform.constraints.active) {
+              setStateCallback(getNewState(node, expandedState, ancestorIds));
+              event.stopPropagation();
+            }
+          },
+        });
+      }
     })
     .html(d => `${getSign(d, expandedState, ancestorIds)} ${d.data.children.length}`);
 
