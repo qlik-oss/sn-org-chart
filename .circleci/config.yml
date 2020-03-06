@@ -26,7 +26,7 @@ jobs:
   install:
     <<: *defaults
     docker:
-      - image: circleci/node:10.14.0-browsers
+      - image: circleci/node:10.14.0
     steps:
       - checkout
       - restore_cache: *restore_yarn_cache
@@ -44,10 +44,10 @@ jobs:
   build:
     <<: *defaults
     docker:
-      - image: circleci/node:10.14.0-browsers
+      - image: circleci/node:10.14.0
       - image: qlikcore/engine:12.556.0
         command: -S AcceptEULA=yes
-      - image: browserless/chrome:1.9-puppeteer-1.13.0
+      - image: browserless/chrome:1.23.1-puppeteer-1.20.0
     steps:
       - attach_workspace:
           at: ~/org
@@ -92,7 +92,7 @@ jobs:
   publish-dev:
     <<: *defaults
     docker:
-      - image: circleci/node:10.14.0-browsers
+      - image: circleci/node:10.14.0
     steps:
       - attach_workspace:
           at: ~/org
