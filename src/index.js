@@ -79,14 +79,18 @@ export default function supernova(env) {
           return () => {};
         }
         selectionsAndTransform.api = selectionsAPI;
+        selectionsAndTransform.api.on('deactivated', resetSelections);
         selectionsAndTransform.api.on('canceled', resetSelectionsAndLinked);
         selectionsAndTransform.api.on('confirmed', resetSelectionsAndLinked);
         selectionsAndTransform.api.on('cleared', resetSelections);
         // Return function called on unmount
         return () => {
-          selectionsAndTransform.api.removeListener('canceled', resetSelectionsAndLinked);
-          selectionsAndTransform.api.removeListener('confirmed', resetSelectionsAndLinked);
-          selectionsAndTransform.api.removeListener('cleared', resetSelections);
+          if (selectionsAndTransform.api) {
+            selectionsAndTransform.api.removeListener('deactivated', resetSelections);
+            selectionsAndTransform.api.removeListener('canceled', resetSelectionsAndLinked);
+            selectionsAndTransform.api.removeListener('confirmed', resetSelectionsAndLinked);
+            selectionsAndTransform.api.removeListener('cleared', resetSelections);
+          }
         };
       }, [selectionsAPI]);
 
