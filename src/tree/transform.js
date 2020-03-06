@@ -123,7 +123,7 @@ export function setZooming({ objectData, setTransform, transformState, selection
     }
   };
 
-  const scrollZoom = () => {
+  const desktopPanZoom = () => {
     setTransform({
       zoom: event.transform.k / scaleFactor,
       x: event.transform.x,
@@ -197,7 +197,7 @@ export function setZooming({ objectData, setTransform, transformState, selection
           event.type !== 'touchstart'
       )
       .scaleExtent([minZoom * scaleFactor, maxZoom * scaleFactor])
-      .on('zoom', scrollZoom)
+      .on('zoom', desktopPanZoom)
   );
 
   setTransform({ zoom: 1 / scaleFactor, x, y });
