@@ -115,6 +115,12 @@ export const paintTree = ({
 
 export function preRenderTree(element, dataTree, selectionsAndTransform, selectionState) {
   const interactions = new Interactions();
+  select(element)
+    .selectAll('.sn-org-chart-touche')
+    .nodes()
+    .forEach(elem => {
+      Touche(elem).off();
+    });
   element.innerHTML = '';
   element.className = 'sn-org-chart';
   const positioning = position('ttb', element, {});
@@ -122,7 +128,7 @@ export function preRenderTree(element, dataTree, selectionsAndTransform, selecti
 
   const zoomWrapper = select(element)
     .append('span')
-    .attr('class', 'sn-org-zoomwrapper')
+    .attr('class', 'sn-org-zoomwrapper sn-org-chart-touche')
     .on('click', () => {
       if (
         !interactions.swiping &&

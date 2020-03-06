@@ -93,7 +93,7 @@ export default function box(
     .data(nodes.filter(node => node.data.id !== 'Root'))
     .enter()
     .append('div')
-    .attr('class', 'sn-org-card')
+    .attr('class', 'sn-org-card sn-org-chart-touche')
     .attr('style', d => `width:${cardWidth}px;height:${cardHeight}px; top:${y(d)}px;left:${x(d)}px;`)
     .attr('id', d => d.data.id)
     .on('click', node => {
@@ -140,7 +140,7 @@ export default function box(
     .data(nodes.filter(node => !!node.children && node.data.id !== 'Root'))
     .enter()
     .append('div')
-    .attr('class', 'sn-org-traverse')
+    .attr('class', 'sn-org-traverse sn-org-chart-touche')
     .attr(
       'style',
       d =>
