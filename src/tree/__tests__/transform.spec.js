@@ -1,7 +1,4 @@
-const [{ getBBoxOfNodes, getTranslations, getInitialZoomState, applyTransform, getSnapshotZoom }] = aw.mock(
-  [['touchejs', () => () => {}]],
-  ['../transform']
-);
+import { getBBoxOfNodes, getTranslations, getInitialZoomState, applyTransform, getSnapshotZoom } from '../transform';
 
 describe('transform', () => {
   describe('getBBoxOfNodes', () => {

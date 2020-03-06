@@ -1,6 +1,5 @@
 import { hierarchy } from 'd3';
-
-const [{ filterTree, createSnapshotData }] = aw.mock([['touchejs', () => () => {}]], ['../render']);
+import { filterTree, createSnapshotData } from '../render';
 
 const nodes = {
   id: '1',
