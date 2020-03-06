@@ -5,7 +5,7 @@ const artifacts = {
 describe('should render', () => {
   const content = '.sn-org-chart';
   const app = encodeURIComponent(process.env.APP_ID || '/apps/org-chart-test.qvf');
-  describe('from app', () => {
+  describe.skip('from app', () => {
     before(async () => {
       await page.goto(`${process.testServer.url}/render/?app=${app}&object=EjGZmXS`);
       await page.waitForSelector(content, { visible: true });
