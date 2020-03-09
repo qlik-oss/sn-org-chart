@@ -132,7 +132,7 @@ export default function supernova(env) {
         }
       }, [expandedState, containerData, selectionObj.state]);
 
-      snapshot(expandedState, containerData, layout, transform, initialZoom);
+      snapshot(expandedState, containerData, layout, transform, initialZoom, element);
     },
     ext: ext(env),
   };

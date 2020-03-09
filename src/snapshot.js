@@ -48,7 +48,7 @@ export default function snapshot(expandedState, containerData, layout, transform
 
   useImperativeHandle(() => ({
     getViewState() {
-      return createViewState();
+      return createViewState(expandedState, transform, initialZoom, element);
     },
   }));
 }
