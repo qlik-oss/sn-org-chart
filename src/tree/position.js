@@ -10,7 +10,7 @@ export const widthTranslation = (d, widthSpacing, element, axis, initialZoomStat
       d.parent[axis] = widthTranslation(d.parent, widthSpacing, element, axis, initialZoomState);
     }
     if (d.parent.data.id === 'Root') {
-      d[axis] = d.parent[axis] + (d.data.childNumber - (d.parent.children.length - 1) / 2) * widthSpacing + initialX;
+      d[axis] = d.parent[axis] + (d.data.childNumber - (d.parent.children.length - 1) / 2) * widthSpacing;
     } else {
       d[axis] = haveNoChildren(d.parent.children)
         ? d.parent[axis] + buttonMargin
