@@ -2,7 +2,7 @@ import { hierarchy, tree, select } from 'd3';
 import position from './position';
 import box from './box';
 import createPaths from './path';
-import transform from './transform';
+import transform, { getBBoxOfNodes, setZooming, getInitialZoomState } from './transform';
 import { createTooltip } from './tooltip';
 
 export const filterTree = ({ topId, isExpanded, expandedChildren }, nodeTree, extended) => {
@@ -50,57 +50,36 @@ export const filterTree = ({ topId, isExpanded, expandedChildren }, nodeTree, ex
   return subTree;
 };
 
-export const createSnapshotData = (expandedState, allNodes, layout) => {
-  if (layout.snapshotData && layout.snapshotData.dataMatrix) {
-    // Need a check here becuase of free resize in storytelling
-    return layout.snapshotData.dataMatrix;
-  }
-  // filter down to the visible nodes
-  const nodes = filterTree(expandedState, allNodes, true);
-  const usedMatrix = [];
-  const { qDataPages } = layout.qHyperCube;
-  const dataMatrix = [];
-  qDataPages.forEach(page => {
-    dataMatrix.push(...page.qMatrix);
-  });
-  nodes.forEach(n => {
-    if (n.data.rowNo !== undefined) {
-      usedMatrix.push(dataMatrix[n.data.rowNo]);
-    }
-  });
-  return usedMatrix;
-};
-
 export const paintTree = ({
-  objectData,
+  containerData,
   expandedState,
   styling,
-  setStateCallback,
-  selectionsAndTransform,
-  selectionState,
+  setExpandedCallback,
+  wrapperState,
+  selectionObj,
   useTransitions,
   element,
 }) => {
-  const { svg, divBox, allNodes, positioning, width, height, tooltip } = objectData;
+  const { svg, divBox, allNodes, positioning, width, height, tooltip } = containerData;
   const { navigationMode } = allNodes.data;
   divBox.selectAll('*').remove();
   svg.selectAll('*').remove();
   // filter the nodes the nodes
   const nodes = filterTree(expandedState, allNodes);
   // Create cards and naviagation buttons
-  box(
+  box({
     positioning,
     divBox,
     nodes,
     styling,
     expandedState,
-    setStateCallback,
-    selectionState,
-    selectionsAndTransform,
+    setExpandedCallback,
+    wrapperState,
+    selectionObj,
     navigationMode,
     element,
-    tooltip
-  );
+    tooltip,
+  });
   // Create the lines (links) between the nodes
   const node = svg
     .selectAll('.sn-org-paths')
@@ -113,19 +92,29 @@ export const paintTree = ({
   }
 };
 
-export function preRenderTree(element, dataTree, selectionsAndTransform, selectionState) {
+export function createContainer({
+  element,
+  dataTree,
+  selectionObj,
+  wrapperState,
+  setInitialZoom,
+  setTransform,
+  expandedState,
+  setExpandedState,
+  viewState,
+}) {
   element.innerHTML = '';
   element.className = 'sn-org-chart';
-  const positioning = position('ttb', element, {});
+  let positioning = position('ttb', element, {});
   const { width, height } = element.getBoundingClientRect();
 
   const zoomWrapper = select(element)
     .append('span')
     .attr('class', 'sn-org-zoomwrapper')
     .on('click', () => {
-      if (!selectionsAndTransform.constraints.active && (!selectionsAndTransform.api.isActive() || !selectionState)) {
-        selectionsAndTransform.api.begin('/qHyperCubeDef');
-        selectionsAndTransform.setState([]);
+      if (!wrapperState.constraints.active && (!selectionObj.api.isActive() || !selectionObj.state)) {
+        selectionObj.api.begin('/qHyperCubeDef');
+        selectionObj.setState([]);
       }
     })
     .node();
@@ -170,5 +159,35 @@ export function preRenderTree(element, dataTree, selectionsAndTransform, selecti
     .nodeSize([0, positioning.depthSpacing]);
 
   const allNodes = treemap(hierarchy(dataTree));
+
+  const resetExpandedState =
+    !expandedState || !allNodes.descendants().find(node => node.data.id === expandedState.topId);
+  const newExpandedState = resetExpandedState
+    ? { topId: allNodes.data.id, isExpanded: true, expandedChildren: [], useTransitions: false }
+    : expandedState;
+
+  const renderNodes = filterTree(newExpandedState, allNodes);
+  renderNodes.forEach(node => {
+    if (!node.xActual || !node.yActual) {
+      positioning.x(node);
+      positioning.y(node);
+    }
+  });
+  const bBox = getBBoxOfNodes(renderNodes);
+  const initialZoomState =
+    viewState && viewState.initialZoom ? viewState.initialZoom : getInitialZoomState(bBox, element);
+  setInitialZoom(initialZoomState);
+  positioning = position('ttb', element, initialZoomState);
+  setZooming({
+    containerData: { svg, divBox, width, height, zoomWrapper, element, tooltip },
+    setTransform,
+    transformState: (viewState && viewState.transform) || {},
+    wrapperState,
+    initialZoomState,
+  });
+  if (resetExpandedState) {
+    setExpandedState(newExpandedState);
+  }
+
   return { svg, divBox, allNodes, positioning, width, height, element, zoomWrapper, tooltip };
 }

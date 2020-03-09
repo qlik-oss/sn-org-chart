@@ -11,32 +11,30 @@ export function createTooltip(element) {
   return tooltip;
 }
 
-export function getTooltipStyle(d, containerHeight, x, y, sel) {
+export function getTooltipStyle(d, containerHeight, x, y, transform) {
   const { cardWidth, tooltipPadding } = constants;
   const halfCardWidth = cardWidth / 2;
-  const yLocation = containerHeight - (y(d) * sel.transform.zoom + sel.transform.y - tooltipPadding);
-  const xLocation = x(d) * sel.transform.zoom + sel.transform.x + halfCardWidth * sel.transform.zoom;
+  const yLocation = containerHeight - (y(d) * transform.zoom + transform.y - tooltipPadding);
+  const xLocation = x(d) * transform.zoom + transform.x + halfCardWidth * transform.zoom;
   return `bottom:${yLocation}px;left:${xLocation}px;`;
 }
 
-export function getTooltipContent(d, cardStyling) {
+export function getTooltipContent(d, styling) {
   const label = d.data.attributes.label || d.data.id;
   const subLabel = d.data.attributes.subLabel ? `${d.data.attributes.subLabel}<br />` : '';
   const extraLabel = d.data.attributes.extraLabel ? `${d.data.attributes.extraLabel}<br />` : '';
-  const measure = d.data.measure
-    ? `${cardStyling.measureLabel ? `${cardStyling.measureLabel}: ` : ''}${d.data.measure}`
-    : '';
+  const measure = d.data.measure ? `${styling.measureLabel ? `${styling.measureLabel}: ` : ''}${d.data.measure}` : '';
   return `<div class="sn-org-tooltip-inner"><div class="sn-org-tooltip-header">${label}</div>${subLabel}${extraLabel}${measure}</div>`;
 }
 
-export function openTooltip(tooltip, d, containerHeight, cardStyling, x, y, sel, delay = 250) {
+export function openTooltip(tooltip, d, containerHeight, styling, x, y, transform, delay = 250) {
   tooltip.active = true;
   tooltip.timeout = setTimeout(() => {
     if (tooltip.active) {
       tooltip
-        .html(getTooltipContent(d, cardStyling))
+        .html(getTooltipContent(d, styling))
         .classed('sn-org-tooltip-visible', true)
-        .attr('style', () => getTooltipStyle(d, containerHeight, x, y, sel));
+        .attr('style', () => getTooltipStyle(d, containerHeight, x, y, transform));
     }
   }, delay);
 }

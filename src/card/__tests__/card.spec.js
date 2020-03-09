@@ -149,8 +149,8 @@ describe('card', () => {
     it('should return html for selected node in active state', () => {
       data.measure = 'measure';
       data.selected = true;
-      selections = { api: { isActive: () => true } };
-      const result = card(data, cardStyling, selections, [data.elemNo]);
+      selections = { api: { isActive: () => true }, state: [data.elemNo] };
+      const result = card(data, cardStyling, selections);
       expect(result).to.equal(
         getHtml(
           `<div class="sn-org-card-title">${data.id}</div><div class="sn-org-card-label">${data.measure}</div>`,
@@ -162,8 +162,8 @@ describe('card', () => {
     it('should return html for not selected node in active state', () => {
       data.measure = 'measure';
       data.selected = false;
-      selections = { api: { isActive: () => true } };
-      const result = card(data, cardStyling, selections, [7]);
+      selections = { api: { isActive: () => true }, state: [7] };
+      const result = card(data, cardStyling, selections);
       expect(result).to.equal(
         getHtml(
           `<div class="sn-org-card-title">${data.id}</div><div class="sn-org-card-label">${data.measure}</div>`,

@@ -1,8 +1,9 @@
 import { getAllTreeElemNo } from './tree-utils';
 
 export default {
-  select: (node, selections, selectionState) => {
-    if (node && selections.api) {
+  select: (node, selectionObj) => {
+    const { api, state, linked, setState } = selectionObj;
+    if (node && api) {
       let newState;
       if (node.data.elemNo < 0 && node.data.elemNo !== -3) {
         return;
@@ -10,18 +11,18 @@ export default {
       if (node.data.isLocked) {
         return;
       }
-      if (!selections.api.isActive() || !selectionState) {
-        selections.api.begin('/qHyperCubeDef');
+      if (!api.isActive() || !state) {
+        api.begin('/qHyperCubeDef');
         newState = [];
       } else {
-        newState = selectionState.concat();
+        newState = state.concat();
       }
 
       const ind = newState.indexOf(node.data.elemNo);
       const activate = ind === -1;
       let linkedIds = [];
 
-      if (selections.linked) {
+      if (linked) {
         linkedIds = getAllTreeElemNo(node, activate);
       }
       if (!activate) {
@@ -39,14 +40,14 @@ export default {
       }
 
       if (newState.length === 0) {
-        selections.api.clear();
+        api.clear();
       } else {
-        selections.api.select({
+        api.select({
           method: 'selectHyperCubeValues',
           params: ['/qHyperCubeDef', 0, newState, false],
         });
       }
-      selections.setState(newState);
+      setState(newState);
     }
   },
 };
