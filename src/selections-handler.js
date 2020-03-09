@@ -30,11 +30,13 @@ export default function selectionHandler(translator) {
       return () => {};
     }
     selectionObj.api = selectionsAPI;
+    selectionObj.api.on('deactivated', resetSelections);
     selectionObj.api.on('canceled', resetSelectionsAndLinked);
     selectionObj.api.on('confirmed', resetSelectionsAndLinked);
     selectionObj.api.on('cleared', resetSelections);
     // Return function called on unmount
     return () => {
+      selectionObj.api.removeListener('deactivated', resetSelections);
       selectionObj.api.removeListener('canceled', resetSelectionsAndLinked);
       selectionObj.api.removeListener('confirmed', resetSelectionsAndLinked);
       selectionObj.api.removeListener('cleared', resetSelections);
