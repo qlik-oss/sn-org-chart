@@ -58,24 +58,23 @@ export const getNewUpState = (d, isExpanded) => ({
   isExpanded: true,
 });
 
-export default function box(
+export default function box({
   nodes,
-  cardStyling,
+  styling,
   expandedState,
-  setStateCallback,
-  selectionState,
-  selectionsAndTransform,
+  setExpandedCallback,
+  wrapperState,
+  selectionObj,
   navigationMode,
   element,
-  objectData
-) {
-  const { interactions, divBox, positioning, tooltip } = objectData;
+  containerData,
+}) {
+  const { interactions, divBox, positioning, tooltip } = containerData;
   const { x, y } = positioning;
   const { cardWidth, cardHeight, buttonWidth, buttonHeight, cardPadding, rootDiameter } = constants;
   const { topId, isExpanded } = expandedState;
   const topNode = nodes.find(node => node.data.id === topId);
   const ancestorIds = topNode && topNode.parent ? topNode.parent.ancestors().map(anc => anc.data.id) : [];
-
   const touchmode = document.getElementsByTagName('html')[0].classList.contains('touch-on');
   // dummy root
   divBox
@@ -97,28 +96,27 @@ export default function box(
     .attr('style', d => `width:${cardWidth}px;height:${cardHeight}px; top:${y(d)}px;left:${x(d)}px;`)
     .attr('id', d => d.data.id)
     .on('click', node => {
-      if (!selectionsAndTransform.constraints.active && node.data.id !== 'Root') {
-        touchmode && openTooltip(tooltip, node, element.clientHeight, cardStyling, x, y, selectionsAndTransform, 0);
-        selections.select(node, selectionsAndTransform, selectionState);
+      if (!wrapperState.constraints.active && node.data.id !== 'Root') {
+        touchmode && openTooltip(tooltip, node, element.clientHeight, styling, x, y, wrapperState.transform, 0);
+        selections.select(node, selectionObj);
       }
     })
     .each((node, index, cards) => {
       if (!interactions.isIE) {
         Touche(cards[index]).tap({
           end: () => {
-            if (!selectionsAndTransform.constraints.active && node.data.id !== 'Root') {
-              touchmode &&
-                openTooltip(tooltip, node, element.clientHeight, cardStyling, x, y, selectionsAndTransform, 0);
-              selections.select(node, selectionsAndTransform, selectionState);
+            if (!selectionObj.constraints.active && node.data.id !== 'Root') {
+              touchmode && openTooltip(tooltip, node, element.clientHeight, styling, x, y, selectionObj, 0);
+              selections.select(node, selectionObj);
             }
           },
         });
       }
     })
-    .html(d => card(d.data, cardStyling, selectionsAndTransform, selectionState))
+    .html(d => card(d.data, styling, selectionObj))
     .on('mouseenter', d => {
-      if (!touchmode && !selectionsAndTransform.constraints.active && event.buttons === 0) {
-        openTooltip(tooltip, d, element.clientHeight, cardStyling, x, y, selectionsAndTransform);
+      if (!touchmode && !wrapperState.constraints.active && event.buttons === 0) {
+        openTooltip(tooltip, d, element.clientHeight, styling, x, y, wrapperState.transform);
       }
     })
     .on('mouseleave', () => {
@@ -149,11 +147,11 @@ export default function box(
     )
     .attr('id', d => `${d.data.id}-expand`)
     .on('mouseenter', () => {
-      if (!selectionsAndTransform.constraints.active) event.target.style.cursor = 'pointer';
+      if (!wrapperState.constraints.active) event.target.style.cursor = 'pointer';
     })
     .on('click', node => {
-      if (!selectionsAndTransform.constraints.active) {
-        setStateCallback(getNewState(node, expandedState, ancestorIds));
+      if (!selectionObj.constraints.active) {
+        setExpandedCallback(getNewState(node, expandedState, ancestorIds));
         event.stopPropagation();
       }
     })
@@ -165,8 +163,8 @@ export default function box(
             setTimeout(() => {
               interactions.swiping = false;
             });
-            if (!selectionsAndTransform.constraints.active) {
-              setStateCallback(getNewState(node, expandedState, ancestorIds));
+            if (!selectionObj.constraints.active) {
+              setExpandedCallback(getNewState(node, expandedState, ancestorIds));
               event.stopPropagation();
             }
           },
@@ -191,8 +189,8 @@ export default function box(
       )
       .attr('id', d => `${d.data.id}-up`)
       .on('click', d => {
-        if (!selectionsAndTransform.constraints.active) {
-          setStateCallback(getNewUpState(d, isExpanded));
+        if (!wrapperState.constraints.active) {
+          setExpandedCallback(getNewUpState(d, isExpanded));
         }
       })
       .html('↑');

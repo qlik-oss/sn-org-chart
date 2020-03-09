@@ -1,5 +1,5 @@
 import { hierarchy } from 'd3';
-import { filterTree, createSnapshotData } from '../render';
+import { filterTree } from '../render';
 
 const nodes = {
   id: '1',
@@ -100,44 +100,6 @@ describe('render', () => {
       const result = filterTree({ topId, isExpanded, expandedChildren }, nodeTree);
       expect(result.length).to.equal(5);
       expect(result.map(node => node.data.id)).to.deep.equal(['1', '2', '4', '3', '5']);
-    });
-  });
-
-  describe('createSnapshotData', () => {
-    let topId;
-    let isExpanded;
-    let expandedChildren;
-    let nodeTree;
-    let layout;
-
-    beforeEach(() => {
-      topId = '1';
-      isExpanded = true;
-      expandedChildren = [];
-      nodeTree = hierarchy(nodes);
-      layout = {
-        snapshotData: {},
-        qHyperCube: {
-          qDataPages: [{ qMatrix: [0, 1, 2, 3, 4] }],
-        },
-      };
-    });
-
-    it('should return matrix from snapshotData', () => {
-      layout.snapshotData.dataMatrix = 'someMatrix';
-      const result = createSnapshotData({ topId, isExpanded, expandedChildren }, nodeTree, layout);
-      expect(result).to.equal('someMatrix');
-    });
-
-    it('should return usedMatrix', () => {
-      const result = createSnapshotData({ topId, isExpanded, expandedChildren }, nodeTree, layout);
-      expect(result).to.eql([0, 1, 2, 4]);
-    });
-
-    it('should return usedMatrix except node with missing rowNo', () => {
-      nodeTree.children[1].data.rowNo = undefined;
-      const result = createSnapshotData({ topId, isExpanded, expandedChildren }, nodeTree, layout);
-      expect(result).to.eql([0, 1, 2]);
     });
   });
 });

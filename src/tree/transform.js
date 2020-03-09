@@ -80,22 +80,29 @@ export const applyTransform = (eventTransform, svg, divBox, width, height) => {
   );
 };
 
-export function setZooming({ objectData, setTransform, transformState, selectionsAndTransform, initialZoomState }) {
-  const { svg, divBox, width, height, zoomWrapper, tooltip, interactions } = objectData;
+export function setZooming({
+  containerData,
+  setTransform,
+  transformState,
+  wrapperState,
+  initialZoomState,
+  interactions,
+}) {
+  const { svg, divBox, width, height, zoomWrapper, tooltip } = containerData;
   const { x = 0, y = 0 } = transformState;
   const { minZoom, maxZoom } = constants;
   const zoomFactor = (transformState && 1 / transformState.zoom) || initialZoomState.initialZoom;
   const scaleFactor = Math.max(Math.min(maxZoom, zoomFactor), minZoom);
 
   const translate = (e, data, saveState) => {
-    if (!selectionsAndTransform.constraints.active) {
+    if (!wrapperState.constraints.active) {
       closeTooltip(tooltip);
       const { deltaX, deltaY } = data.swipe;
-      const newX = selectionsAndTransform.transform.x + deltaX;
-      const newY = selectionsAndTransform.transform.y + deltaY;
-      applyTransform({ x: newX, y: newY, zoom: selectionsAndTransform.transform.zoom }, svg, divBox, width, height);
+      const newX = wrapperState.transform.x + deltaX;
+      const newY = wrapperState.transform.y + deltaY;
+      applyTransform({ x: newX, y: newY, zoom: wrapperState.transform.zoom }, svg, divBox, width, height);
       if (saveState) {
-        setTransform({ x: newX, y: newY, zoom: selectionsAndTransform.transform.zoom });
+        setTransform({ x: newX, y: newY, zoom: wrapperState.transform.zoom });
         setTimeout(() => {
           interactions.swiping = false;
         });
@@ -104,14 +111,14 @@ export function setZooming({ objectData, setTransform, transformState, selection
   };
 
   const pinchZoom = (e, data, saveState) => {
-    if (!selectionsAndTransform.constraints.active) {
+    if (!wrapperState.constraints.active) {
       closeTooltip(tooltip);
-      const oldZoom = selectionsAndTransform.transform.zoom;
+      const oldZoom = wrapperState.transform.zoom;
       const newZoom = Math.max(Math.min(oldZoom / (1 / data.scale), maxZoom), minZoom);
       if (newZoom !== oldZoom) {
         const zoomDelta = newZoom / oldZoom;
-        const newX = selectionsAndTransform.transform.x * zoomDelta + (width - zoomDelta * width) / 2;
-        const newY = selectionsAndTransform.transform.y * zoomDelta + (height - zoomDelta * height) / 2;
+        const newX = wrapperState.transform.x * zoomDelta + (width - zoomDelta * width) / 2;
+        const newY = wrapperState.transform.y * zoomDelta + (height - zoomDelta * height) / 2;
         applyTransform({ x: newX, y: newY, zoom: newZoom }, svg, divBox, width, height);
         if (saveState) {
           setTransform({ x: newX, y: newY, zoom: newZoom });
@@ -191,7 +198,7 @@ export function setZooming({ objectData, setTransform, transformState, selection
       ])
       .filter(
         () =>
-          !selectionsAndTransform.constraints.active &&
+          !wrapperState.constraints.active &&
           event.type !== 'dblclick' &&
           !(event.type === 'mousedown' && event.which === 3) &&
           event.type !== 'touchstart'

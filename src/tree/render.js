@@ -3,7 +3,7 @@ import { hierarchy, tree, select } from 'd3';
 import position from './position';
 import box from './box';
 import createPaths from './path';
-import transform from './transform';
+import transform, { getBBoxOfNodes, setZooming, getInitialZoomState } from './transform';
 import { createTooltip } from './tooltip';
 import Interactions from '../utils/interaction-utils';
 
@@ -52,55 +52,34 @@ export const filterTree = ({ topId, isExpanded, expandedChildren }, nodeTree, ex
   return subTree;
 };
 
-export const createSnapshotData = (expandedState, allNodes, layout) => {
-  if (layout.snapshotData && layout.snapshotData.dataMatrix) {
-    // Need a check here becuase of free resize in storytelling
-    return layout.snapshotData.dataMatrix;
-  }
-  // filter down to the visible nodes
-  const nodes = filterTree(expandedState, allNodes, true);
-  const usedMatrix = [];
-  const { qDataPages } = layout.qHyperCube;
-  const dataMatrix = [];
-  qDataPages.forEach(page => {
-    dataMatrix.push(...page.qMatrix);
-  });
-  nodes.forEach(n => {
-    if (n.data.rowNo !== undefined) {
-      usedMatrix.push(dataMatrix[n.data.rowNo]);
-    }
-  });
-  return usedMatrix;
-};
-
 export const paintTree = ({
-  objectData,
+  containerData,
   expandedState,
   styling,
-  setStateCallback,
-  selectionsAndTransform,
-  selectionState,
+  setExpandedCallback,
+  wrapperState,
+  selectionObj,
   useTransitions,
   element,
 }) => {
-  const { svg, divBox, allNodes, positioning, width, height } = objectData;
+  const { svg, divBox, allNodes, positioning, width, height } = containerData;
   const { navigationMode } = allNodes.data;
   divBox.selectAll('*').remove();
   svg.selectAll('*').remove();
   // filter the nodes the nodes
   const nodes = filterTree(expandedState, allNodes);
   // Create cards and naviagation buttons
-  box(
+  box({
     nodes,
     styling,
     expandedState,
-    setStateCallback,
-    selectionState,
-    selectionsAndTransform,
+    setExpandedCallback,
+    wrapperState,
+    selectionObj,
     navigationMode,
     element,
-    objectData
-  );
+    containerData,
+  });
   // Create the lines (links) between the nodes
   const node = svg
     .selectAll('.sn-org-paths')
@@ -113,7 +92,17 @@ export const paintTree = ({
   }
 };
 
-export function preRenderTree(element, dataTree, selectionsAndTransform, selectionState) {
+export function createContainer({
+  element,
+  dataTree,
+  selectionObj,
+  wrapperState,
+  setInitialZoom,
+  setTransform,
+  expandedState,
+  setExpandedState,
+  viewState,
+}) {
   const interactions = new Interactions();
   select(element)
     .selectAll('.sn-org-chart-touche')
@@ -123,7 +112,7 @@ export function preRenderTree(element, dataTree, selectionsAndTransform, selecti
     });
   element.innerHTML = '';
   element.className = 'sn-org-chart';
-  const positioning = position('ttb', element, {});
+  let positioning = position('ttb', element, {});
   const { width, height } = element.getBoundingClientRect();
 
   const zoomWrapper = select(element)
@@ -132,11 +121,11 @@ export function preRenderTree(element, dataTree, selectionsAndTransform, selecti
     .on('click', () => {
       if (
         !interactions.swiping &&
-        !selectionsAndTransform.constraints.active &&
-        (!selectionsAndTransform.api.isActive() || !selectionState)
+        !wrapperState.constraints.active &&
+        (!selectionObj.api.isActive() || !selectionObj.state)
       ) {
-        selectionsAndTransform.api.begin('/qHyperCubeDef');
-        selectionsAndTransform.setState([]);
+        selectionObj.api.begin('/qHyperCubeDef');
+        selectionObj.setState([]);
       }
     })
     .node();
@@ -146,11 +135,11 @@ export function preRenderTree(element, dataTree, selectionsAndTransform, selecti
       end: () => {
         if (
           !interactions.swiping &&
-          !selectionsAndTransform.constraints.active &&
-          (!selectionsAndTransform.api.isActive() || !selectionState)
+          !wrapperState.constraints.active &&
+          (!selectionObj.api.isActive() || !selectionObj.state)
         ) {
-          selectionsAndTransform.api.begin('/qHyperCubeDef');
-          selectionsAndTransform.setState([]);
+          selectionObj.api.begin('/qHyperCubeDef');
+          selectionObj.setState([]);
         }
       },
     });
@@ -196,5 +185,37 @@ export function preRenderTree(element, dataTree, selectionsAndTransform, selecti
     .nodeSize([0, positioning.depthSpacing]);
 
   const allNodes = treemap(hierarchy(dataTree));
+
+  const resetExpandedState =
+    !expandedState || !allNodes.descendants().find(node => node.data.id === expandedState.topId);
+  const newExpandedState = resetExpandedState
+    ? { topId: allNodes.data.id, isExpanded: true, expandedChildren: [], useTransitions: false }
+    : expandedState;
+
+  const renderNodes = filterTree(newExpandedState, allNodes);
+  renderNodes.forEach(node => {
+    if (!node.xActual || !node.yActual) {
+      positioning.x(node);
+      positioning.y(node);
+    }
+  });
+  const bBox = getBBoxOfNodes(renderNodes);
+  const initialZoomState =
+    viewState && viewState.initialZoom ? viewState.initialZoom : getInitialZoomState(bBox, element);
+  setInitialZoom(initialZoomState);
+  positioning = position('ttb', element, initialZoomState);
+  setZooming({
+    containerData: { svg, divBox, width, height, zoomWrapper, element, tooltip },
+    setTransform,
+    transformState: (viewState && viewState.transform) || {},
+    wrapperState,
+    initialZoomState,
+    selectionObj,
+    interactions,
+  });
+  if (resetExpandedState) {
+    setExpandedState(newExpandedState);
+  }
+
   return { svg, divBox, allNodes, positioning, width, height, element, zoomWrapper, tooltip, interactions };
 }
