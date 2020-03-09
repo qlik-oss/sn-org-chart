@@ -105,8 +105,8 @@ export default function box({
       if (!interactions.isIE) {
         Touche(cards[index]).tap({
           end: () => {
-            if (!selectionObj.constraints.active && node.data.id !== 'Root') {
-              touchmode && openTooltip(tooltip, node, element.clientHeight, styling, x, y, selectionObj, 0);
+            if (!wrapperState.constraints.active && node.data.id !== 'Root') {
+              touchmode && openTooltip(tooltip, node, element.clientHeight, styling, x, y, wrapperState.transform, 0);
               selections.select(node, selectionObj);
             }
           },
@@ -150,7 +150,7 @@ export default function box({
       if (!wrapperState.constraints.active) event.target.style.cursor = 'pointer';
     })
     .on('click', node => {
-      if (!selectionObj.constraints.active) {
+      if (!wrapperState.constraints.active) {
         setExpandedCallback(getNewState(node, expandedState, ancestorIds));
         event.stopPropagation();
       }
@@ -163,7 +163,7 @@ export default function box({
             setTimeout(() => {
               interactions.swiping = false;
             });
-            if (!selectionObj.constraints.active) {
+            if (!wrapperState.constraints.active) {
               setExpandedCallback(getNewState(node, expandedState, ancestorIds));
               event.stopPropagation();
             }
