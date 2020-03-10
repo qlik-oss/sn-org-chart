@@ -109,11 +109,6 @@ export function setZooming({
       // Only save the state at the end of panning
       if (saveState) {
         setTransform({ x: newX, y: newY, zoom: wrapperState.transform.zoom });
-
-        // Set swiping to false in timeout to make sure the end tap event does not start selections
-        setTimeout(() => {
-          interactions.swiping = false;
-        });
       }
     }
   };
@@ -137,11 +132,6 @@ export function setZooming({
         // Only save the state at the end of zooming. In case we want to apply the zoom at the position of the touch points be aware that the end event only has one touch point!
         if (saveState) {
           setTransform({ x: newX, y: newY, zoom: newZoom });
-
-          // Set swiping to false in timeout to make sure the end tap event does not start selections
-          setTimeout(() => {
-            interactions.swiping = false;
-          });
         }
       }
     }
@@ -182,6 +172,10 @@ export function setZooming({
         update: translate,
         end: (e, data) => {
           translate(e, data, true);
+          // Set swiping to false in timeout to make sure the end tap event does not start selections
+          setTimeout(() => {
+            interactions.swiping = false;
+          });
         },
       })
       .pinch({
@@ -192,6 +186,10 @@ export function setZooming({
         update: pinchZoom,
         end: (e, data) => {
           pinchZoom(e, data, true);
+          // Set swiping to false in timeout to make sure the end tap event does not start selections
+          setTimeout(() => {
+            interactions.swiping = false;
+          });
         },
       })
       .longtap({
@@ -202,6 +200,7 @@ export function setZooming({
           interactions.swiping = true;
         },
         end: () => {
+          // Set swiping to false in timeout to make sure the end tap event does not start selections
           setTimeout(() => {
             interactions.swiping = false;
           });
