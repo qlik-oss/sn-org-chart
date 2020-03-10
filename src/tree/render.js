@@ -113,7 +113,7 @@ export const createContainer = ({
     .append('button')
     .attr('class', 'sn-org-homebutton disabled')
     .on('click', () => {
-      const containerData = createContainer(element, dataTree, selectionObj, wrapperState, setInitialZoom, setTransform, expandedState, setExpandedState, viewState, setContainerData);
+      const containerData = createContainer({ element, dataTree, selectionObj, wrapperState, setInitialZoom, setTransform, expandedState, setExpandedState, viewState, setContainerData });
       if (containerData) {
         setContainerData(containerData);
       }
