@@ -192,7 +192,7 @@ export const createContainer = ({
   setInitialZoom(initialZoomState);
   positioning = position('ttb', element, initialZoomState);
   setZooming({
-    containerData: { svg, divBox, width, height, zoomWrapper, element, tooltip },
+    containerData: { svg, divBox, width, height, zoomWrapper, element, tooltip, homeButton },
     setTransform,
     transformState: (viewState && viewState.transform) || {},
     wrapperState,
