@@ -96,7 +96,7 @@ export default function box({
     .attr('style', d => `width:${cardWidth}px;height:${cardHeight}px; top:${y(d)}px;left:${x(d)}px;`)
     .attr('id', d => d.data.id)
     .on('click', node => {
-      if (!wrapperState.constraints.active && node.data.id !== 'Root') {
+      if (!wrapperState.constraints.active) {
         touchmode && openTooltip(tooltip, node, element.clientHeight, styling, x, y, wrapperState.transform, 0);
         selections.select(node, selectionObj);
       }
@@ -105,7 +105,7 @@ export default function box({
       if (!interactions.isIE) {
         Touche(cards[index]).tap({
           end: () => {
-            if (!wrapperState.constraints.active && node.data.id !== 'Root') {
+            if (!wrapperState.constraints.active) {
               touchmode && openTooltip(tooltip, node, element.clientHeight, styling, x, y, wrapperState.transform, 0);
               selections.select(node, selectionObj);
             }
