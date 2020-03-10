@@ -70,6 +70,9 @@ const properties = {
        */
       colorExpression: '',
     },
+    border: {
+      show: 'top',
+    },
   },
 };
 

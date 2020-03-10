@@ -22,12 +22,13 @@ const stylingUtils = {
     const measureLabel = layout.qHyperCube.qMeasureInfo.length
       ? layout.qHyperCube.qMeasureInfo[0].qFallbackTitle
       : null;
-    const cardStyling = {
+    const { border } = layout.style;
+    return {
       backgroundColor,
       fontColor,
       measureLabel,
+      border,
     };
-    return cardStyling;
   },
 };
 

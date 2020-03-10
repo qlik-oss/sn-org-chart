@@ -6,6 +6,12 @@ const colorOptions = [
   { value: 'byExpression', translation: 'properties.colorMode.byExpression' },
 ];
 
+const borderOptions = [
+  { value: 'none', translation: 'Common.None' },
+  { value: 'top', translation: 'Top border' },
+  { value: 'all', translation: 'All around' },
+];
+
 // Navigation options only needed when adding new option
 // const navigationOptions = [
 //   { value: 'regular', translation: '$Unlimited sizing' },
@@ -188,6 +194,19 @@ export default {
                     translation: 'Common.Expression',
                     expression: 'optional',
                     show: data => propertyResolver.getValue(data, 'style.fontColor.colorType') === 'byExpression',
+                  },
+                },
+              },
+              border: {
+                type: 'items',
+                items: {
+                  showBorders: {
+                    ref: 'style.border.show',
+                    type: 'string',
+                    translation: '$Object.OrgChart.ShowBorder',
+                    component: 'dropdown',
+                    defaultValue: 'top',
+                    options: borderOptions,
                   },
                 },
               },
