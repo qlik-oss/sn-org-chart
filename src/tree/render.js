@@ -113,10 +113,7 @@ export const createContainer = ({
     .append('button')
     .attr('class', 'sn-org-homebutton disabled')
     .on('click', () => {
-      const containerData = createContainer({ element, dataTree, selectionObj, wrapperState, setInitialZoom, setTransform, expandedState, setExpandedState, viewState, setContainerData });
-      if (containerData) {
-        setContainerData(containerData);
-      }
+      createContainer({ element, dataTree, selectionObj, wrapperState, setInitialZoom, setTransform, expandedState, setExpandedState, viewState, setContainerData });
     })
     .html('<span class="lui-fade-button__icon  lui-icon  lui-icon--large  lui-icon--home"></span>')
     .node();
