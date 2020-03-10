@@ -13,6 +13,7 @@ export default {
   'Object.OrgChart.ExtraLabelExpression': 'Card description',
   'Object.OrgChart.ColorLabelExpression': 'Card background color',
   'Object.OrgChart.BackgroundColor': 'Background color',
+  'Object.OrgChart.Image': 'Image URL',
   'Object.OrgChart.FontColor': 'Font color',
   'Object.OrgChart.IncludeDescendants': 'Include descendants',
   'Object.OrgChart.ExtraLabelDesc': 'Description is only visible when a measure is not used',

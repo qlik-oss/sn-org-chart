@@ -23,7 +23,11 @@ export default (data, cardStyling, selectionObj) => {
   const topColor = colorUtils.getDarkColor(backgroundColor);
   const fontColor = getFontColor(cardStyling, backgroundColor);
   const attributes = data.attributes || {};
-  let html = `<div class="sn-org-card-title">${attributes.label || data.id}</div>`;
+  let html = '<div class="sn-org-card-content">';
+  if (attributes.imageURL) {
+    html += `<img class="sn-org-card-image" src="${attributes.imageURL}"/>`;
+  }
+  html += `<div class="sn-org-card-textarea"><div class="sn-org-card-title">${attributes.label || data.id}</div>`;
   if (attributes.subLabel) {
     html += `<div class="sn-org-card-label">${attributes.subLabel}</div>`;
   }
@@ -33,6 +37,7 @@ export default (data, cardStyling, selectionObj) => {
   } else if (attributes.extraLabel) {
     html += `<div class="sn-org-card-label">${attributes.extraLabel}</div>`;
   }
+  html += '</div>';
   const topbar = isSelected ? '' : `<div class="sn-org-card-top" style="background-color:${topColor};"></div>`;
   const selectedClass = api && api.isActive() ? (isSelected ? ' selected' : ' not-selected') : '';
   return `${topbar}<div class="sn-org-card-text${selectedClass}" style="background-color:${backgroundColor};color:${fontColor};">${html}</div>`;

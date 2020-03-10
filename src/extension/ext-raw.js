@@ -63,7 +63,6 @@ export default {
                     id: 'extraLabelExpression',
                     tid: 'extraLabelExpression',
                   },
-
                   {
                     component: 'expression',
                     ref: 'qExpression',
@@ -71,6 +70,14 @@ export default {
                     defaultValue: '',
                     id: 'colorByExpression',
                     tid: 'nodeColorByExpression',
+                  },
+                  {
+                    component: 'expression',
+                    ref: 'qExpression',
+                    translation: 'Object.OrgChart.Image',
+                    defaultValue: '',
+                    id: 'imageExpression',
+                    tid: 'imageExpression',
                   },
                 ],
               },
