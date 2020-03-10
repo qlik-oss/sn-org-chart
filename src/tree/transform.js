@@ -29,6 +29,8 @@ export const getInitialZoomState = (bBox, element) => {
   const { widthMargin, cardHeight, minZoom, maxZoom } = constants;
   const { width, height } = bBox;
   const { clientHeight, clientWidth } = element;
+
+  // To keep some space at the sides use some extra margin here
   const calcWidth = width + 2 * widthMargin;
   const calcHeight = height + cardHeight;
   const xZoom = Math.max(Math.min(calcWidth / clientWidth, maxZoom), minZoom);
@@ -91,9 +93,12 @@ export function setZooming({
   const { svg, divBox, width, height, zoomWrapper, tooltip } = containerData;
   const { x = 0, y = 0 } = transformState;
   const { minZoom, maxZoom } = constants;
+
+  // Get zoomfactor either from transformState (snapshot or export) or initialsZoomState
   const zoomFactor = (transformState && 1 / transformState.zoom) || initialZoomState.initialZoom;
   const scaleFactor = Math.max(Math.min(maxZoom, zoomFactor), minZoom);
 
+  // Translate for touch events
   const translate = (e, data, saveState) => {
     if (!wrapperState.constraints.active) {
       closeTooltip(tooltip);
@@ -101,8 +106,11 @@ export function setZooming({
       const newX = wrapperState.transform.x + deltaX;
       const newY = wrapperState.transform.y + deltaY;
       applyTransform({ x: newX, y: newY, zoom: wrapperState.transform.zoom }, svg, divBox, width, height);
+      // Only save the state at the end of panning
       if (saveState) {
         setTransform({ x: newX, y: newY, zoom: wrapperState.transform.zoom });
+
+        // Set swiping to false in timeout to make sure the end tap event does not start selections
         setTimeout(() => {
           interactions.swiping = false;
         });
@@ -110,18 +118,27 @@ export function setZooming({
     }
   };
 
+  // Zooming for touch events
   const pinchZoom = (e, data, saveState) => {
     if (!wrapperState.constraints.active) {
       closeTooltip(tooltip);
+
+      // Compare the new zoom (data.scale) with the stored zoom state
       const oldZoom = wrapperState.transform.zoom;
       const newZoom = Math.max(Math.min(oldZoom / (1 / data.scale), maxZoom), minZoom);
+
+      // When newZoom is equal to oldZoom we have reached the borders of zooming. We should not apply any changes anymore (the chart would keep moving around).
       if (newZoom !== oldZoom) {
         const zoomDelta = newZoom / oldZoom;
         const newX = wrapperState.transform.x * zoomDelta + (width - zoomDelta * width) / 2;
         const newY = wrapperState.transform.y * zoomDelta + (height - zoomDelta * height) / 2;
         applyTransform({ x: newX, y: newY, zoom: newZoom }, svg, divBox, width, height);
+
+        // Only save the state at the end of zooming. In case we want to apply the zoom at the position of the touch points be aware that the end event only has one touch point!
         if (saveState) {
           setTransform({ x: newX, y: newY, zoom: newZoom });
+
+          // Set swiping to false in timeout to make sure the end tap event does not start selections
           setTimeout(() => {
             interactions.swiping = false;
           });
@@ -130,6 +147,7 @@ export function setZooming({
     }
   };
 
+  // D3 zooming and panning for desktop
   const desktopPanZoom = () => {
     setTransform({
       zoom: event.transform.k / scaleFactor,
@@ -150,6 +168,7 @@ export function setZooming({
     );
   };
 
+  // Touche on IE captures too many events
   if (!interactions.isIE) {
     Touche(zoomWrapper)
       .swipe({
@@ -190,12 +209,14 @@ export function setZooming({
       });
   }
 
+  // D3 zooming
   select(zoomWrapper).call(
     zoom()
       .extent([
         [0, 0],
         [width, height],
       ])
+      // Filter the events. Only analysis mode | No double click | No touch events
       .filter(
         () =>
           !wrapperState.constraints.active &&
@@ -220,6 +241,7 @@ export const getSnapshotZoom = (rect, viewState) => {
   return { x: newX, y: newY, zoom: newZoom };
 };
 
+// This transform is only used in non-free zoom mode. If we do not implement other modes we should remove it.
 export default function transform(nodes, width, height, svg, divBox, useTransitions) {
   // Zooming and positioning of the tree
   const bBox = getBBoxOfNodes(nodes);
