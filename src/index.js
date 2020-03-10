@@ -26,6 +26,7 @@ import './styles/tooltip.less';
 import './styles/paths.less';
 import './styles/warnings.less';
 import './styles/nodes.less';
+import './styles/home-button.less';
 
 export default function supernova(env) {
   return {
@@ -91,7 +92,7 @@ export default function supernova(env) {
       useEffect(() => {
         if (element && dataTree) {
           const viewState = viewStateUtil.getViewState(options, layout);
-          const container = createContainer({
+          createContainer({
             element,
             dataTree,
             expandedState,
@@ -101,10 +102,8 @@ export default function supernova(env) {
             setInitialZoom,
             setTransform,
             setExpandedState,
+            setContainerData,
           });
-          if (container) {
-            setContainerData(container);
-          }
         }
       }, [element, dataTree, constraints]);
 

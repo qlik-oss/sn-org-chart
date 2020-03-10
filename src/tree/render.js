@@ -92,7 +92,7 @@ export const paintTree = ({
   }
 };
 
-export function createContainer({
+export const createContainer = ({
   element,
   dataTree,
   selectionObj,
@@ -102,11 +102,24 @@ export function createContainer({
   expandedState,
   setExpandedState,
   viewState,
-}) {
+  setContainerData,
+}) => {
   element.innerHTML = '';
   element.className = 'sn-org-chart';
   let positioning = position('ttb', element, {});
   const { width, height } = element.getBoundingClientRect();
+
+  const homeButton = select(element)
+    .append('button')
+    .attr('class', 'sn-org-homebutton disabled')
+    .on('click', () => {
+      const containerData = createContainer(element, dataTree, selectionObj, wrapperState, setInitialZoom, setTransform, expandedState, setExpandedState, viewState, setContainerData);
+      if (containerData) {
+        setContainerData(containerData);
+      }
+    })
+    .html('<span class="lui-fade-button__icon  lui-icon  lui-icon--large  lui-icon--home"></span>')
+    .node();
 
   const zoomWrapper = select(element)
     .append('span')
@@ -189,5 +202,5 @@ export function createContainer({
     setExpandedState(newExpandedState);
   }
 
-  return { svg, divBox, allNodes, positioning, width, height, element, zoomWrapper, tooltip };
-}
+  return setContainerData({ svg, divBox, allNodes, positioning, width, height, element, zoomWrapper, tooltip, homeButton });
+};
