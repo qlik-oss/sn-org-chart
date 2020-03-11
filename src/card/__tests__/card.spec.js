@@ -166,5 +166,12 @@ describe('card', () => {
       expect(result).to.include('border:; border-top:;');
       expect(result).to.include('height:64px;');
     });
+
+    it('should default to top border', () => {
+      cardStyling.border = {};
+      const result = card(data, cardStyling, selections);
+      expect(result).to.include('border:; border-top:3px solid #737373;');
+      expect(result).to.include('height:61px;');
+    });
   });
 });
