@@ -156,9 +156,15 @@ describe('card', () => {
     it('should return html for card with all borders', () => {
       cardStyling.border.show = 'all';
       const result = card(data, cardStyling, selections);
-      expect(result).to.include('<div class="sn-org-card-text"');
       expect(result).to.include('border:1px solid #737373; border-top:3px solid #737373;');
       expect(result).to.include('height:60px;');
+    });
+
+    it('should return html for card with no borders', () => {
+      cardStyling.border.show = 'none';
+      const result = card(data, cardStyling, selections);
+      expect(result).to.include('border:; border-top:;');
+      expect(result).to.include('height:64px;');
     });
   });
 });
