@@ -6,7 +6,7 @@ describe('styling', () => {
     const palette = ['firstColor', 'secondColor'];
     const defaultColor = '#e6e6e6';
     const Theme = {
-      getColorPickerColor: (color) => palette[color.index] || 'none'
+      getColorPickerColor: color => palette[color.index] || 'none',
     };
     beforeEach(() => {
       reference = { colorType: 'auto', colorExpression: 'pink', color: { index: 1 } };
@@ -41,21 +41,34 @@ describe('styling', () => {
       style: {
         backgroundColor: { colorType: 'auto' },
         fontColor: { colorType: 'auto' },
+        border: { show: 'top' },
       },
       qHyperCube: {
-        qMeasureInfo: [{
-          qFallbackTitle: 'measureLabel',
-        }],
+        qMeasureInfo: [
+          {
+            qFallbackTitle: 'measureLabel',
+          },
+        ],
       },
     };
     it('should return cardStyling', () => {
       const result = stylingUtils.cardStyling({ layout });
-      expect(result).to.deep.equal({ backgroundColor: '#e6e6e6', fontColor: 'default', measureLabel: 'measureLabel' });
+      expect(result).to.deep.equal({
+        backgroundColor: '#e6e6e6',
+        fontColor: 'default',
+        measureLabel: 'measureLabel',
+        border: { show: 'top' },
+      });
     });
     it('should return cardStyling with no measureLabel', () => {
       layout.qHyperCube.qMeasureInfo = [];
       const result = stylingUtils.cardStyling({ layout });
-      expect(result).to.deep.equal({ backgroundColor: '#e6e6e6', fontColor: 'default', measureLabel: null });
+      expect(result).to.deep.equal({
+        backgroundColor: '#e6e6e6',
+        fontColor: 'default',
+        measureLabel: null,
+        border: { show: 'top' },
+      });
     });
   });
 });
