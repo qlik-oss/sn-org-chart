@@ -59,15 +59,6 @@ describe('card', () => {
   });
 
   describe('card', () => {
-    function getHtml(html, selected) {
-      if (selected === ' selected') {
-        return `<div class="sn-org-card-text${selected}" style="background-color:#e6e6e6;color:#484848;">${html}</div>`;
-      }
-      if (selected) {
-        return `<div class="sn-org-card-top" style="background-color:#737373;"></div><div class="sn-org-card-text${selected}" style="background-color:#e6e6e6;color:#484848;">${html}</div>`;
-      }
-      return `<div class="sn-org-card-top" style="background-color:#737373;"></div><div class="sn-org-card-text" style="background-color:#e6e6e6;color:#484848;">${html}</div>`;
-    }
     let data;
     let cardStyling;
     let selections;
@@ -77,54 +68,52 @@ describe('card', () => {
         attributes: {},
         elemNo: 5,
       };
-      cardStyling = { backgroundColor: '#e6e6e6', fontColor: 'default' };
+      cardStyling = { backgroundColor: '#e6e6e6', fontColor: 'default', border: { show: 'top' } };
       selections = { api: { isActive: () => false } };
     });
 
     it('should return html for node with only id', () => {
       data.attributes = null;
       const result = card(data, cardStyling, selections);
-      expect(result).to.equal(getHtml(`<div class="sn-org-card-title">${data.id}</div>`));
+      expect(result).to.equal(
+        '<div class="sn-org-card-text" style="background-color:#e6e6e6;color:#484848; border:; border-top:3px solid #737373; height:61px;"><div class="sn-org-card-title">someId</div></div>'
+      );
     });
 
     it('should return html for node with attribute label', () => {
       data.attributes.label = 'this is the label';
       const result = card(data, cardStyling, selections);
-      expect(result).to.equal(getHtml(`<div class="sn-org-card-title">${data.attributes.label}</div>`));
+      expect(result).to.include('<div class="sn-org-card-title">this is the label</div>');
     });
 
     it('should return html for node with id and subLabel', () => {
       data.attributes.subLabel = 'subsub';
       const result = card(data, cardStyling, selections);
-      expect(result).to.equal(
-        getHtml(
-          `<div class="sn-org-card-title">${data.id}</div><div class="sn-org-card-label">${data.attributes.subLabel}</div>`
-        )
-      );
+      expect(result).to.include('<div class="sn-org-card-title">someId</div>');
+      expect(result).to.include('<div class="sn-org-card-label">subsub</div>');
     });
+
     it('should return html for node with three labels', () => {
       data.attributes.label = 'this is the label';
       data.attributes.subLabel = 'subsub';
       data.attributes.extraLabel = 'extra';
       const result = card(data, cardStyling, selections);
-      expect(result).to.equal(
-        getHtml(
-          `<div class="sn-org-card-title">${data.attributes.label}</div><div class="sn-org-card-label">${data.attributes.subLabel}</div><div class="sn-org-card-label">${data.attributes.extraLabel}</div>`
-        )
-      );
+      expect(result).to.include('<div class="sn-org-card-title">this is the label</div>');
+      expect(result).to.include('<div class="sn-org-card-label">subsub</div>');
+      expect(result).to.include('<div class="sn-org-card-label">extra</div>');
     });
+
     it('should return html for node with three labels and measure', () => {
       data.attributes.label = 'this is the label';
       data.attributes.subLabel = 'subsub';
       data.attributes.extraLabel = 'extra';
       data.measure = 'measure';
       const result = card(data, cardStyling, selections);
-      expect(result).to.equal(
-        getHtml(
-          `<div class="sn-org-card-title">${data.attributes.label}</div><div class="sn-org-card-label">${data.attributes.subLabel}</div><div class="sn-org-card-label">${data.measure}</div>`
-        )
-      );
+      expect(result).to.include('<div class="sn-org-card-label">subsub</div>');
+      expect(result).to.not.include('<div class="sn-org-card-label">extra</div>');
+      expect(result).to.include('<div class="sn-org-card-label">measure</div>');
     });
+
     it('should return html for node with three labels and measure with label', () => {
       data.attributes.label = 'this is the label';
       data.attributes.subLabel = 'subsub';
@@ -132,18 +121,16 @@ describe('card', () => {
       data.measure = 'measure';
       cardStyling.measureLabel = 'measureLabel';
       const result = card(data, cardStyling, selections);
-      expect(result).to.equal(
-        getHtml(
-          `<div class="sn-org-card-title">${data.attributes.label}</div><div class="sn-org-card-label">${data.attributes.subLabel}</div><div class="sn-org-card-label">measureLabel: ${data.measure}</div>`
-        )
-      );
+      expect(result).to.include('<div class="sn-org-card-label">subsub</div>');
+      expect(result).to.not.include('<div class="sn-org-card-label">extra</div>');
+      expect(result).to.include('<div class="sn-org-card-label">measureLabel: measure</div>');
     });
+
     it('should return html for node with id and measure', () => {
       data.measure = 'measure';
       const result = card(data, cardStyling, selections);
-      expect(result).to.equal(
-        getHtml(`<div class="sn-org-card-title">${data.id}</div><div class="sn-org-card-label">${data.measure}</div>`)
-      );
+      expect(result).to.include('<div class="sn-org-card-title">someId</div>');
+      expect(result).to.include('<div class="sn-org-card-label">measure</div>');
     });
 
     it('should return html for selected node in active state', () => {
@@ -151,12 +138,9 @@ describe('card', () => {
       data.selected = true;
       selections = { api: { isActive: () => true }, state: [data.elemNo] };
       const result = card(data, cardStyling, selections);
-      expect(result).to.equal(
-        getHtml(
-          `<div class="sn-org-card-title">${data.id}</div><div class="sn-org-card-label">${data.measure}</div>`,
-          ' selected'
-        )
-      );
+      expect(result).to.include('<div class="sn-org-card-text selected"');
+      expect(result).to.include('border:; border-top:;');
+      expect(result).to.include('height:56px;');
     });
 
     it('should return html for not selected node in active state', () => {
@@ -164,12 +148,17 @@ describe('card', () => {
       data.selected = false;
       selections = { api: { isActive: () => true }, state: [7] };
       const result = card(data, cardStyling, selections);
-      expect(result).to.equal(
-        getHtml(
-          `<div class="sn-org-card-title">${data.id}</div><div class="sn-org-card-label">${data.measure}</div>`,
-          ' not-selected'
-        )
-      );
+      expect(result).to.include('<div class="sn-org-card-text not-selected"');
+      expect(result).to.include('border:; border-top:3px solid #737373;');
+      expect(result).to.include('height:61px;');
+    });
+
+    it('should return html for card with all borders', () => {
+      cardStyling.border.show = 'all';
+      const result = card(data, cardStyling, selections);
+      expect(result).to.include('<div class="sn-org-card-text"');
+      expect(result).to.include('border:1px solid #737373; border-top:3px solid #737373;');
+      expect(result).to.include('height:60px;');
     });
   });
 });
