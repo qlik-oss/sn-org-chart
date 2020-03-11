@@ -52,7 +52,6 @@ export const filterTree = ({ topId, isExpanded, expandedChildren }, nodeTree, ex
 
 export const paintTree = ({
   containerData,
-  expandedState,
   styling,
   setExpandedCallback,
   wrapperState,
@@ -65,14 +64,13 @@ export const paintTree = ({
   divBox.selectAll('*').remove();
   svg.selectAll('*').remove();
   // filter the nodes the nodes
-  const nodes = filterTree(expandedState, allNodes);
+  const nodes = filterTree(wrapperState.expandedState, allNodes);
   // Create cards and naviagation buttons
   box({
     positioning,
     divBox,
     nodes,
     styling,
-    expandedState,
     setExpandedCallback,
     wrapperState,
     selectionObj,
@@ -85,7 +83,7 @@ export const paintTree = ({
     .selectAll('.sn-org-paths')
     .data(nodes)
     .enter();
-  createPaths(node, positioning, expandedState.topId);
+  createPaths(node, positioning, wrapperState.expandedState.topId);
   // Scale and translate
   if (navigationMode !== 'free') {
     transform(nodes, width, height, svg, divBox, useTransitions);
@@ -99,7 +97,6 @@ export const createContainer = ({
   wrapperState,
   setInitialZoom,
   setTransform,
-  expandedState,
   setExpandedState,
   viewState,
   setContainerData,
@@ -108,15 +105,6 @@ export const createContainer = ({
   element.className = 'sn-org-chart';
   let positioning = position('ttb', element, {});
   const { width, height } = element.getBoundingClientRect();
-
-  const homeButton = select(element)
-    .append('button')
-    .attr('class', 'sn-org-homebutton disabled')
-    .on('click', () => {
-      createContainer({ element, dataTree, selectionObj, wrapperState, setInitialZoom, setTransform, expandedState, setExpandedState, viewState, setContainerData });
-    })
-    .html('<span class="lui-fade-button__icon  lui-icon  lui-icon--large  lui-icon--home"></span>')
-    .node();
 
   const zoomWrapper = select(element)
     .append('span')
@@ -145,6 +133,22 @@ export const createContainer = ({
     .append('div')
     .attr('class', 'sn-org-nodes');
 
+  const homeButton = select(element)
+    .append('button')
+    .attr('class', 'sn-org-homebutton disabled')
+    .on('click', () => {
+      createContainer({ element, dataTree, selectionObj, wrapperState, setInitialZoom, setTransform, setExpandedState, viewState, setContainerData });
+    })
+    .html(`<span class="lui-fade-button__icon sn-org-home-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="16" height="16" viewBox="0 0 16 16">
+              <defs>
+                <path id="home-a" d="M2,7.9 L8,3.4 L14,7.9 L14,16 L12,16 L12,11.2 C12,11.0895431 11.9104569,11 11.8,11 L9.2,11 C9.08954305,11 9,11.0895431 9,11.2 L9,16 L2,16 L2,7.9 Z M7,13.8 L7,11.2 C7,11.0895431 6.91045695,11 6.8,11 L4.2,11 C4.08954305,11 4,11.0895431 4,11.2 L4,13.8 C4,13.9104569 4.08954305,14 4.2,14 L6.8,14 C6.91045695,14 7,13.9104569 7,13.8 Z M13,4.1 L16,6.5 L15,7.5 L8,2 L1,7.5 L0,6.5 L8,0 L11,2.4 L11,1 L13,1 L13,4.1 Z"/>
+              </defs>
+              <use xlink:href="#home-a"/>
+            </svg>
+          </span>`)
+    .node();
+
   const tooltip = createTooltip(element);
 
   if (dataTree.error) {
@@ -171,10 +175,10 @@ export const createContainer = ({
   const allNodes = treemap(hierarchy(dataTree));
 
   const resetExpandedState =
-    !expandedState || !allNodes.descendants().find(node => node.data.id === expandedState.topId);
+    !wrapperState.expandedState || !allNodes.descendants().find(node => node.data.id === wrapperState.expandedState.topId);
   const newExpandedState = resetExpandedState
     ? { topId: allNodes.data.id, isExpanded: true, expandedChildren: [], useTransitions: false }
-    : expandedState;
+    : wrapperState.expandedState;
 
   const renderNodes = filterTree(newExpandedState, allNodes);
   renderNodes.forEach(node => {

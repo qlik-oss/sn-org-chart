@@ -51,6 +51,7 @@ export default function supernova(env) {
       const [wrapperState] = useState({
         transform: {},
         constraints,
+        expandedState,
       });
       const selectionObj = selectionHandler(translator);
 
@@ -65,6 +66,10 @@ export default function supernova(env) {
       useEffect(() => {
         wrapperState.transform = transform;
       }, [transform]);
+
+      useEffect(() => {
+        wrapperState.expandedState = expandedState;
+      }, [expandedState]);
 
       const setExpandedCallback = newExpandedState => {
         newExpandedState.useTransitions = true;
@@ -95,7 +100,6 @@ export default function supernova(env) {
           createContainer({
             element,
             dataTree,
-            expandedState,
             viewState,
             wrapperState,
             selectionObj,
@@ -120,7 +124,6 @@ export default function supernova(env) {
         if (containerData && expandedState && styling) {
           paintTree({
             containerData,
-            expandedState,
             styling,
             setExpandedCallback,
             wrapperState,
