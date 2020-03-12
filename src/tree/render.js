@@ -4,6 +4,7 @@ import box from './box';
 import createPaths from './path';
 import transform, { getBBoxOfNodes, setZooming, getInitialZoomState } from './transform';
 import { createTooltip } from './tooltip';
+import { homeIcon } from '../utils/svg-icons';
 
 export const filterTree = ({ topId, isExpanded, expandedChildren }, nodeTree, extended) => {
   const topNode = nodeTree.descendants().find(node => node.data.id === topId) || nodeTree;
@@ -52,7 +53,6 @@ export const filterTree = ({ topId, isExpanded, expandedChildren }, nodeTree, ex
 
 export const paintTree = ({
   containerData,
-  expandedState,
   styling,
   setExpandedCallback,
   wrapperState,
@@ -65,14 +65,13 @@ export const paintTree = ({
   divBox.selectAll('*').remove();
   svg.selectAll('*').remove();
   // filter the nodes the nodes
-  const nodes = filterTree(expandedState, allNodes);
+  const nodes = filterTree(wrapperState.expandedState, allNodes);
   // Create cards and naviagation buttons
   box({
     positioning,
     divBox,
     nodes,
     styling,
-    expandedState,
     setExpandedCallback,
     wrapperState,
     selectionObj,
@@ -85,24 +84,24 @@ export const paintTree = ({
     .selectAll('.sn-org-paths')
     .data(nodes)
     .enter();
-  createPaths(node, positioning, expandedState.topId);
+  createPaths(node, positioning, wrapperState.expandedState.topId);
   // Scale and translate
   if (navigationMode !== 'free') {
     transform(nodes, width, height, svg, divBox, useTransitions);
   }
 };
 
-export function createContainer({
+export const createContainer = ({
   element,
   dataTree,
   selectionObj,
   wrapperState,
   setInitialZoom,
   setTransform,
-  expandedState,
   setExpandedState,
   viewState,
-}) {
+  setContainerData,
+}) => {
   element.innerHTML = '';
   element.className = 'sn-org-chart';
   let positioning = position('ttb', element, {});
@@ -135,6 +134,15 @@ export function createContainer({
     .append('div')
     .attr('class', 'sn-org-nodes');
 
+  const homeButton = select(element)
+    .append('button')
+    .attr('class', 'sn-org-homebutton disabled')
+    .on('click', () => {
+      createContainer({ element, dataTree, selectionObj, wrapperState, setInitialZoom, setTransform, setExpandedState, viewState, setContainerData });
+    })
+    .html(homeIcon)
+    .node();
+
   const tooltip = createTooltip(element);
 
   if (dataTree.error) {
@@ -161,10 +169,10 @@ export function createContainer({
   const allNodes = treemap(hierarchy(dataTree));
 
   const resetExpandedState =
-    !expandedState || !allNodes.descendants().find(node => node.data.id === expandedState.topId);
+    !wrapperState.expandedState || !allNodes.descendants().find(node => node.data.id === wrapperState.expandedState.topId);
   const newExpandedState = resetExpandedState
     ? { topId: allNodes.data.id, isExpanded: true, expandedChildren: [], useTransitions: false }
-    : expandedState;
+    : wrapperState.expandedState;
 
   const renderNodes = filterTree(newExpandedState, allNodes);
   renderNodes.forEach(node => {
@@ -179,7 +187,7 @@ export function createContainer({
   setInitialZoom(initialZoomState);
   positioning = position('ttb', element, initialZoomState);
   setZooming({
-    containerData: { svg, divBox, width, height, zoomWrapper, element, tooltip },
+    containerData: { svg, divBox, width, height, zoomWrapper, element, tooltip, homeButton },
     setTransform,
     transformState: (viewState && viewState.transform) || {},
     wrapperState,
@@ -189,5 +197,5 @@ export function createContainer({
     setExpandedState(newExpandedState);
   }
 
-  return { svg, divBox, allNodes, positioning, width, height, element, zoomWrapper, tooltip };
-}
+  return setContainerData({ svg, divBox, allNodes, positioning, width, height, element, zoomWrapper, tooltip, homeButton });
+};

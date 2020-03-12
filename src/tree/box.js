@@ -62,7 +62,6 @@ export default function box({
   divBox,
   nodes,
   styling,
-  expandedState,
   setExpandedCallback,
   wrapperState,
   selectionObj,
@@ -72,7 +71,7 @@ export default function box({
 }) {
   const { x, y } = positioning;
   const { cardWidth, cardHeight, buttonWidth, buttonHeight, cardPadding, rootDiameter } = constants;
-  const { topId, isExpanded } = expandedState;
+  const { topId, isExpanded } = wrapperState.expandedState;
   const topNode = nodes.find(node => node.data.id === topId);
   const ancestorIds = topNode && topNode.parent ? topNode.parent.ancestors().map(anc => anc.data.id) : [];
   const touchmode = document.getElementsByTagName('html')[0].classList.contains('touch-on');
@@ -139,11 +138,11 @@ export default function box({
     })
     .on('click', d => {
       if (!wrapperState.constraints.active) {
-        setExpandedCallback(getNewState(d, expandedState, ancestorIds));
+        setExpandedCallback(getNewState(d, wrapperState.expandedState, ancestorIds));
         event.stopPropagation();
       }
     })
-    .html(d => `${getSign(d, expandedState, ancestorIds)} ${d.data.children.length}`);
+    .html(d => `${getSign(d, wrapperState.expandedState, ancestorIds)} ${d.data.children.length}`);
 
   // go up
   if (navigationMode !== 'free') {
