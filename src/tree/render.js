@@ -4,6 +4,7 @@ import box from './box';
 import createPaths from './path';
 import transform, { getBBoxOfNodes, setZooming, getInitialZoomState } from './transform';
 import { createTooltip } from './tooltip';
+import { homeIcon } from '../utils/svg-icons';
 
 export const filterTree = ({ topId, isExpanded, expandedChildren }, nodeTree, extended) => {
   const topNode = nodeTree.descendants().find(node => node.data.id === topId) || nodeTree;
@@ -139,14 +140,7 @@ export const createContainer = ({
     .on('click', () => {
       createContainer({ element, dataTree, selectionObj, wrapperState, setInitialZoom, setTransform, setExpandedState, viewState, setContainerData });
     })
-    .html(`<span class="lui-fade-button__icon sn-org-home-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="20" height="20" viewBox="0 0 16 16">
-              <defs>
-                <path id="home-a" d="M2,7.9 L8,3.4 L14,7.9 L14,16 L12,16 L12,11.2 C12,11.0895431 11.9104569,11 11.8,11 L9.2,11 C9.08954305,11 9,11.0895431 9,11.2 L9,16 L2,16 L2,7.9 Z M7,13.8 L7,11.2 C7,11.0895431 6.91045695,11 6.8,11 L4.2,11 C4.08954305,11 4,11.0895431 4,11.2 L4,13.8 C4,13.9104569 4.08954305,14 4.2,14 L6.8,14 C6.91045695,14 7,13.9104569 7,13.8 Z M13,4.1 L16,6.5 L15,7.5 L8,2 L1,7.5 L0,6.5 L8,0 L11,2.4 L11,1 L13,1 L13,4.1 Z"/>
-              </defs>
-              <use xlink:href="#home-a"/>
-            </svg>
-          </span>`)
+    .html(homeIcon)
     .node();
 
   const tooltip = createTooltip(element);
