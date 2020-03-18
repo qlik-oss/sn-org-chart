@@ -64,7 +64,7 @@ export default function selectionHandler(translator) {
         ],
       },
       active: singleSelect,
-      label: translator.get('Object.OrgChart.IncludeDescendants'),
+      label: translator.get('Object.OrgChart.SingleSelect'),
     }),
     [singleSelect]
   );
