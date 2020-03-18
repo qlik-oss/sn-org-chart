@@ -154,6 +154,7 @@ export const createContainer = ({
         setExpandedState,
         viewState,
         setContainerData,
+        layout,
       });
     })
     .html(homeIcon)
