@@ -2,7 +2,7 @@ import { hierarchy, tree, select } from 'd3';
 import position from './position';
 import box from './box';
 import createPaths from './path';
-import transform, { getBBoxOfNodes, setZooming, getInitialZoomState } from './transform';
+import { getBBoxOfNodes, setZooming, getInitialZoomState } from './transform';
 import { createTooltip } from './tooltip';
 import { homeIcon } from '../utils/svg-icons';
 import constants from './size-constants';
@@ -55,16 +55,8 @@ export const filterTree = ({ topId, isExpanded, expandedChildren }, nodeTree, ex
   return subTree;
 };
 
-export const paintTree = ({
-  containerData,
-  styling,
-  setExpandedCallback,
-  wrapperState,
-  selectionObj,
-  useTransitions,
-  element,
-}) => {
-  const { svg, divBox, allNodes, positioning, width, height, tooltip } = containerData;
+export const paintTree = ({ containerData, styling, setExpandedCallback, wrapperState, selectionObj, element }) => {
+  const { svg, divBox, allNodes, positioning, tooltip } = containerData;
   const { navigationMode } = allNodes.data;
   divBox.selectAll('*').remove();
   svg.selectAll('*').remove();
@@ -88,7 +80,7 @@ export const paintTree = ({
     .selectAll('.sn-org-paths')
     .data(nodes)
     .enter();
-  createPaths(node, positioning, wrapperState.expandedState.topId);
+  createPaths(node, positioning, wrapperState.expandedState.topId, navigationMode);
   // Scale and translate only needed when user cannot zoom
   // if (navigationMode !== 'free') {
   //   transform(nodes, width, height, svg, divBox, useTransitions);
