@@ -71,7 +71,7 @@ export default function box({
 }) {
   const { x, y } = positioning;
   const { cardWidth, cardHeight, buttonWidth, buttonHeight, cardPadding, rootDiameter } = constants;
-  const { topId, isExpanded } = wrapperState.expandedState;
+  const { topId } = wrapperState.expandedState;
   const topNode = nodes.find(node => node.data.id === topId);
   const ancestorIds = topNode && topNode.parent ? topNode.parent.ancestors().map(anc => anc.data.id) : [];
   const touchmode = document.getElementsByTagName('html')[0].classList.contains('touch-on');
