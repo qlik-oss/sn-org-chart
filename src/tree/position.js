@@ -40,7 +40,7 @@ export const depthTranslation = (d, depthSpacing, axis, initialZoomState, naviga
 };
 
 export default function position(orientation, element, initialZoomState, navigationMode) {
-  const { widthMargin, heightMargin, cardWidth, cardHeight } = constants;
+  const { widthMargin, heightMargin, cardWidth, cardHeight, cardPadding } = constants;
   let widthSpacing;
   let depthSpacing;
 
@@ -48,7 +48,7 @@ export default function position(orientation, element, initialZoomState, navigat
   switch (orientation) {
     case 'ttb':
       widthSpacing = cardWidth + widthMargin;
-      depthSpacing = navigationMode === 'expandAll' ? cardHeight + widthMargin : cardHeight + heightMargin;
+      depthSpacing = navigationMode === 'expandAll' ? cardHeight + 2 * cardPadding : cardHeight + heightMargin;
       orientations = {
         depthSpacing,
         isVertical: true,
