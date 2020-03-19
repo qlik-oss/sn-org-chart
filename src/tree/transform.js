@@ -127,7 +127,7 @@ export function setZooming({
           event.type !== 'dblclick' &&
           !(event.type === 'mousedown' && event.which === 3)
       )
-      .scaleExtent([navigationMode === 'expandAll' ? 1 : minZoom * scaleFactor, maxZoom * scaleFactor])
+      .scaleExtent([navigationMode === 'expandAll' ? 0.8 : minZoom * scaleFactor, maxZoom * scaleFactor])
       .on('start', bubbleEvent)
       .on('zoom', zoomed)
   );
