@@ -4,32 +4,24 @@ import constants from './size-constants';
 export const widthTranslation = (d, widthSpacing, element, axis, initialZoomState, navigationMode) => {
   const { buttonMargin } = constants;
   const initialX = (initialZoomState && initialZoomState.initialX) || 0;
-
-  switch (navigationMode) {
-    case 'expandAll':
-      d[axis] = d.x + initialX;
-      break;
-    default:
-      if (navigationMode === 'expandAll') {
-        d[axis] = d.x;
-        return d.x;
-      }
-      if (d.parent) {
-        if (!d.parent[axis]) {
-          d.parent[axis] = widthTranslation(d.parent, widthSpacing, element, axis, initialZoomState);
-        }
-        if (d.parent.data.id === 'Root') {
-          d[axis] = d.parent[axis] + (d.data.childNumber - (d.parent.children.length - 1) / 2) * widthSpacing;
-        } else {
-          d[axis] = haveNoChildren(d.parent.children)
-            ? d.parent[axis] + buttonMargin
-            : d.parent[axis] + (d.data.childNumber - (d.parent.children.length - 1) / 2) * widthSpacing;
-        }
-      } else {
-        // In case of zoom mode we need to have the tree moved to the right from the start
-        d[axis] = initialX;
-      }
-      break;
+  if (navigationMode === 'expandAll') {
+    d[axis] = d.x + initialX;
+    return d[axis];
+  }
+  if (d.parent) {
+    if (!d.parent[axis]) {
+      d.parent[axis] = widthTranslation(d.parent, widthSpacing, element, axis, initialZoomState);
+    }
+    if (d.parent.data.id === 'Root') {
+      d[axis] = d.parent[axis] + (d.data.childNumber - (d.parent.children.length - 1) / 2) * widthSpacing;
+    } else {
+      d[axis] = haveNoChildren(d.parent.children)
+        ? d.parent[axis] + buttonMargin
+        : d.parent[axis] + (d.data.childNumber - (d.parent.children.length - 1) / 2) * widthSpacing;
+    }
+  } else {
+    // In case of zoom mode we need to have the tree moved to the right from the start
+    d[axis] = initialX;
   }
 
   return d[axis];
