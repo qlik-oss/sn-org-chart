@@ -3,47 +3,7 @@ import { createSnapshotData, createViewState } from '../snapshot';
 
 describe('snapshot', () => {
   describe('createSnapshotData', () => {
-    const nodes = {
-      id: '1',
-      elemNo: 1,
-      rowNo: 0,
-      children: [
-        {
-          id: '2',
-          elemNo: 2,
-          rowNo: 1,
-          children: [
-            {
-              id: '3',
-              elemNo: 3,
-              rowNo: 2,
-              parent: {
-                data: {
-                  id: '2',
-                },
-              },
-              children: [
-                {
-                  id: '5',
-                  elemNo: 798,
-                  rowNo: 3,
-                  parent: {
-                    id: '3',
-                  },
-                },
-              ],
-            },
-          ],
-        },
-        {
-          id: '4',
-          elemNo: 88,
-          rowNo: 4,
-          children: [],
-        },
-      ],
-    };
-
+    let nodes;
     let topId;
     let isExpanded;
     let expandedChildren;
@@ -51,6 +11,46 @@ describe('snapshot', () => {
     let layout;
 
     beforeEach(() => {
+      nodes = {
+        id: '1',
+        elemNo: 1,
+        rowNo: 0,
+        children: [
+          {
+            id: '2',
+            elemNo: 2,
+            rowNo: 1,
+            children: [
+              {
+                id: '3',
+                elemNo: 3,
+                rowNo: 2,
+                parent: {
+                  data: {
+                    id: '2',
+                  },
+                },
+                children: [
+                  {
+                    id: '5',
+                    elemNo: 798,
+                    rowNo: 3,
+                    parent: {
+                      id: '3',
+                    },
+                  },
+                ],
+              },
+            ],
+          },
+          {
+            id: '4',
+            elemNo: 88,
+            rowNo: 4,
+            children: [],
+          },
+        ],
+      };
       topId = '1';
       isExpanded = true;
       expandedChildren = [];
@@ -78,6 +78,12 @@ describe('snapshot', () => {
       nodeTree.children[1].data.rowNo = undefined;
       const result = createSnapshotData({ topId, isExpanded, expandedChildren }, nodeTree, layout);
       expect(result).to.eql([0, 1, 2]);
+    });
+
+    it('should return all nodes when using expandAll navigation mode', () => {
+      layout.navigationMode = 'expandAll';
+      const result = createSnapshotData({ topId, isExpanded, expandedChildren }, nodeTree, layout);
+      expect(result).to.eql([0, 1, 4, 2, 3]);
     });
   });
 
