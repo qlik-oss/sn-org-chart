@@ -80,7 +80,7 @@ export const applyTransform = (eventTransform, svg, divBox, width, height) => {
 };
 
 export function setZooming({ containerData, setTransform, transformState, wrapperState, initialZoomState }) {
-  const { svg, divBox, width, height, zoomWrapper, element, tooltip } = containerData;
+  const { svg, divBox, width, height, zoomWrapper, element, tooltip, homeButton } = containerData;
   const { x = 0, y = 0 } = transformState;
   const { minZoom, maxZoom } = constants;
   const zoomFactor = (transformState && 1 / transformState.zoom) || initialZoomState.initialZoom;
@@ -94,6 +94,7 @@ export function setZooming({ containerData, setTransform, transformState, wrappe
   };
 
   const zoomed = () => {
+    select(homeButton).attr('class', 'sn-org-homebutton lui-fade-button lui-fade-button--large');
     setTransform({ zoom: event.transform.k / scaleFactor, x: event.transform.x, y: event.transform.y });
     bubbleEvent();
     closeTooltip(tooltip);

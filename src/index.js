@@ -26,6 +26,7 @@ import './styles/tooltip.less';
 import './styles/paths.less';
 import './styles/warnings.less';
 import './styles/nodes.less';
+import './styles/home-button.less';
 
 export default function supernova(env) {
   return {
@@ -50,6 +51,7 @@ export default function supernova(env) {
       const [wrapperState] = useState({
         transform: {},
         constraints,
+        expandedState,
       });
       const selectionObj = selectionHandler(translator);
 
@@ -64,6 +66,10 @@ export default function supernova(env) {
       useEffect(() => {
         wrapperState.transform = transform;
       }, [transform]);
+
+      useEffect(() => {
+        wrapperState.expandedState = expandedState;
+      }, [expandedState]);
 
       const setExpandedCallback = newExpandedState => {
         newExpandedState.useTransitions = true;
@@ -91,20 +97,17 @@ export default function supernova(env) {
       useEffect(() => {
         if (element && dataTree) {
           const viewState = viewStateUtil.getViewState(options, layout);
-          const container = createContainer({
+          createContainer({
             element,
             dataTree,
-            expandedState,
             viewState,
             wrapperState,
             selectionObj,
             setInitialZoom,
             setTransform,
             setExpandedState,
+            setContainerData,
           });
-          if (container) {
-            setContainerData(container);
-          }
         }
       }, [element, dataTree, constraints]);
 
@@ -121,7 +124,6 @@ export default function supernova(env) {
         if (containerData && expandedState && styling) {
           paintTree({
             containerData,
-            expandedState,
             styling,
             setExpandedCallback,
             wrapperState,
