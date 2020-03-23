@@ -39,8 +39,7 @@ export default (data, cardStyling, selectionObj) => {
   const borderColor = colorType === 'auto' ? colorUtils.getDarkColor(backgroundColor) : cardStyling.borderColor;
   const topBorder = top && !isSelected ? `3px solid ${borderColor}` : '';
   const borderStyle = fullBorder && !isSelected ? `1px solid ${borderColor}` : '';
-  const { cardHeight } = constants;
-  let newCardHeight = cardHeight;
+  let newCardHeight = constants.cardHeight;
   if (isSelected) {
     newCardHeight -= 8;
   } else if (fullBorder) {
