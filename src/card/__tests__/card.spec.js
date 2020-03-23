@@ -68,7 +68,7 @@ describe('card', () => {
         attributes: {},
         elemNo: 5,
       };
-      cardStyling = { backgroundColor: '#e6e6e6', fontColor: 'default', border: { show: 'top' } };
+      cardStyling = { backgroundColor: '#e6e6e6', fontColor: 'default', border: { top: true, colorType: 'auto' } };
       selections = { api: { isActive: () => false } };
     });
 
@@ -154,14 +154,14 @@ describe('card', () => {
     });
 
     it('should return html for card with all borders', () => {
-      cardStyling.border.show = 'all';
+      cardStyling.border.fullBorder = true;
       const result = card(data, cardStyling, selections);
       expect(result).to.include('border:1px solid #737373; border-top:3px solid #737373;');
       expect(result).to.include('height:60px;');
     });
 
     it('should return html for card with no borders', () => {
-      cardStyling.border.show = 'none';
+      cardStyling.border.top = false;
       const result = card(data, cardStyling, selections);
       expect(result).to.include('border:; border-top:;');
       expect(result).to.include('height:64px;');

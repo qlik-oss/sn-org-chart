@@ -1,13 +1,14 @@
 import stylingUtils, { getColor } from '../styling';
 
+const palette = ['firstColor', 'secondColor'];
+const defaultColor = '#e6e6e6';
+const Theme = {
+  getColorPickerColor: color => palette[color.index] || 'none',
+};
+
 describe('styling', () => {
   describe('getColor', () => {
     let reference;
-    const palette = ['firstColor', 'secondColor'];
-    const defaultColor = '#e6e6e6';
-    const Theme = {
-      getColorPickerColor: color => palette[color.index] || 'none',
-    };
     beforeEach(() => {
       reference = { colorType: 'auto', colorExpression: 'pink', color: { index: 1 } };
     });
@@ -37,27 +38,30 @@ describe('styling', () => {
   });
 
   describe('cardStyling', () => {
-    const layout = {
-      style: {
-        backgroundColor: { colorType: 'auto' },
-        fontColor: { colorType: 'auto' },
-        border: { show: 'top' },
-      },
-      qHyperCube: {
-        qMeasureInfo: [
-          {
-            qFallbackTitle: 'measureLabel',
-          },
-        ],
-      },
-    };
+    let layout;
+    beforeEach(() => {
+      layout = {
+        style: {
+          backgroundColor: { colorType: 'auto' },
+          fontColor: { colorType: 'auto' },
+        },
+        qHyperCube: {
+          qMeasureInfo: [
+            {
+              qFallbackTitle: 'measureLabel',
+            },
+          ],
+        },
+      };
+    });
     it('should return cardStyling', () => {
       const result = stylingUtils.cardStyling({ layout });
       expect(result).to.deep.equal({
         backgroundColor: '#e6e6e6',
         fontColor: 'default',
         measureLabel: 'measureLabel',
-        border: { show: 'top' },
+        border: { colorType: 'auto' },
+        borderColor: '#737373',
       });
     });
     it('should return cardStyling with no measureLabel', () => {
@@ -67,7 +71,20 @@ describe('styling', () => {
         backgroundColor: '#e6e6e6',
         fontColor: 'default',
         measureLabel: null,
-        border: { show: 'top' },
+        border: { colorType: 'auto' },
+        borderColor: '#737373',
+      });
+    });
+
+    it('should return cardStyling with borderColor from color picker', () => {
+      layout.style.border = { colorType: 'colorPicker', color: { index: 1 } };
+      const result = stylingUtils.cardStyling({ layout, Theme });
+      expect(result).to.deep.equal({
+        backgroundColor: '#e6e6e6',
+        fontColor: 'default',
+        measureLabel: 'measureLabel',
+        border: { colorType: 'colorPicker', color: { index: 1 } },
+        borderColor: 'secondColor',
       });
     });
   });

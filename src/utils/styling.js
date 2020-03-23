@@ -22,7 +22,7 @@ const stylingUtils = {
     const measureLabel = layout.qHyperCube.qMeasureInfo.length
       ? layout.qHyperCube.qMeasureInfo[0].qFallbackTitle
       : null;
-    const { border = { colorType: 'auto', top: true } } = layout.style;
+    const { border = { colorType: 'auto' } } = layout.style;
     const borderColor =
       border.colorType !== 'auto'
         ? getColor(border, Theme, colorUtils.getDarkColor(backgroundColor))
