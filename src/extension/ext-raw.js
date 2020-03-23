@@ -6,12 +6,6 @@ const colorOptions = [
   { value: 'byExpression', translation: 'properties.colorMode.byExpression' },
 ];
 
-const borderOptions = [
-  { value: 'none', translation: 'Common.None' },
-  { value: 'top', translation: 'Top border' },
-  { value: 'all', translation: 'All around' },
-];
-
 // Navigation options only needed when adding new option
 // const navigationOptions = [
 //   { value: 'regular', translation: '$Unlimited sizing' },
@@ -200,13 +194,46 @@ export default {
               border: {
                 type: 'items',
                 items: {
-                  showBorders: {
-                    ref: 'style.border.show',
-                    type: 'string',
-                    translation: '$Object.OrgChart.ShowBorder',
+                  appearanceHeader: {
+                    component: 'text',
+                    translation: 'Card appearance',
+                    style: 'pp-nm-hcd__list-header',
+                  },
+                  topBar: {
+                    type: 'boolean',
+                    ref: 'style.border.top',
+                    translation: 'Object.OrgChart.TopBar',
+                    defaultValue: true,
+                  },
+                  fullBorder: {
+                    type: 'boolean',
+                    ref: 'style.border.fullBorder',
+                    translation: 'properties.border',
+                    defaultValue: false,
+                  },
+                  colorType: {
                     component: 'dropdown',
-                    defaultValue: 'top',
-                    options: borderOptions,
+                    type: 'string',
+                    ref: 'style.border.colorType',
+                    translation: 'properties.border.color',
+                    defaultValue: 'auto',
+                    options: colorOptions,
+                  },
+                  colorPicker: {
+                    component: 'color-picker',
+                    type: 'object',
+                    ref: 'style.border.color',
+                    translation: 'properties.color',
+                    dualOutput: true,
+                    show: data => propertyResolver.getValue(data, 'style.border.colorType') === 'colorPicker',
+                  },
+                  colorExpression: {
+                    component: 'string',
+                    type: 'string',
+                    ref: 'style.border.colorExpression',
+                    translation: 'Common.Expression',
+                    expression: 'optional',
+                    show: data => propertyResolver.getValue(data, 'style.border.colorType') === 'byExpression',
                   },
                 },
               },

@@ -70,8 +70,33 @@ const properties = {
        */
       colorExpression: '',
     },
+    /**
+     * @type {object}
+     */
     border: {
-      show: 'top',
+      /**
+       * @type {boolean}
+       */
+      top: true,
+      /**
+       * @type {boolean}
+       */
+      fullBorder: false,
+      /**
+       * @type {string}
+       */
+      colorType: 'auto',
+      /**
+       * @type {object}
+       */
+      color: {
+        index: -1,
+        color: '#737373',
+      },
+      /**
+       * @type {string}
+       */
+      colorExpression: '',
     },
   },
 };
