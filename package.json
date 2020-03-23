@@ -57,6 +57,8 @@
     "@commitlint/cli": "8.3.5",
     "@commitlint/config-conventional": "8.3.4",
     "@nebula.js/cli": "0.2.1",
+    "@nebula.js/cli-build": "^0.2.1",
+    "@nebula.js/cli-serve": "^0.2.1",
     "babel-plugin-istanbul": "6.0.0",
     "d3": "^5.15.0",
     "eslint": "6.8.0",
