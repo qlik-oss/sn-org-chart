@@ -173,5 +173,12 @@ describe('card', () => {
       expect(result).to.include('border:; border-top:3px solid #737373;');
       expect(result).to.include('height:61px;');
     });
+
+    it('should use borderColor when colorType is not auto', () => {
+      cardStyling.border.colorType = 'colorPicker';
+      cardStyling.borderColor = 'myColor';
+      const result = card(data, cardStyling, selections);
+      expect(result).to.include('border:; border-top:3px solid myColor;');
+    });
   });
 });
