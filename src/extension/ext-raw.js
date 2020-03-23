@@ -120,22 +120,21 @@ export default {
             translation: 'properties.presentation',
             type: 'items',
             items: {
+              navigation: {
+                type: 'items',
+                items: {
+                  navigtaionMode: {
+                    ref: 'navigationMode',
+                    type: 'string',
+                    translation: 'Object.OrgChart.NavigationMode',
+                    component: 'dropdown',
+                    options: navigationOptions,
+                  },
+                },
+              },
               backgroundColor: {
                 type: 'items',
                 items: {
-                  // Dropdown for navigation options. Should only be activated when adding new options
-                  navigation: {
-                    type: 'items',
-                    items: {
-                      navigtaionMode: {
-                        ref: 'navigationMode',
-                        type: 'string',
-                        translation: 'Object.OrgChart.NavigationMode',
-                        component: 'dropdown',
-                        options: navigationOptions,
-                      },
-                    },
-                  },
                   useColorExpression: {
                     ref: 'style.backgroundColor.colorType',
                     type: 'string',
