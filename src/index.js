@@ -94,23 +94,26 @@ export default function supernova(env) {
       }, [layout, model, translator.language(), Theme.name()]);
 
       // Create d3 elements, calculate initial zoom and sets expandedState
-      useEffect(() => {
-        if (element && dataTree) {
-          const viewState = viewStateUtil.getViewState(options, layout);
-          createContainer({
-            element,
-            dataTree,
-            viewState,
-            wrapperState,
-            selectionObj,
-            setInitialZoom,
-            setTransform,
-            setExpandedState,
-            setContainerData,
-            layout,
-          });
-        }
-      }, [element, dataTree, constraints]);
+      useEffect(
+        () => {
+          if (element && dataTree) {
+            const viewState = viewStateUtil.getViewState(options, layout);
+            createContainer({
+              element,
+              dataTree,
+              viewState,
+              wrapperState,
+              selectionObj,
+              setInitialZoom,
+              setTransform,
+              setExpandedState,
+              setContainerData,
+              layout,
+            });
+          }
+        },
+        layout.resizeOnExpand ? [expandedState, element, dataTree, constraints] : [element, dataTree, constraints]
+      );
 
       // Updates snapshot when resizing
       useEffect(() => {
@@ -121,19 +124,22 @@ export default function supernova(env) {
       }, [rect, containerData]);
 
       // Call paintTree, currenly repaints all current nodes
-      useEffect(() => {
-        if (containerData && expandedState && styling) {
-          paintTree({
-            containerData,
-            styling,
-            setExpandedCallback,
-            wrapperState,
-            selectionObj,
-            useTransitions: expandedState.useTransitions,
-            element,
-          });
-        }
-      }, [expandedState, containerData, selectionObj.state]);
+      useEffect(
+        () => {
+          if (containerData && expandedState && styling) {
+            paintTree({
+              containerData,
+              styling,
+              setExpandedCallback,
+              wrapperState,
+              selectionObj,
+              useTransitions: expandedState.useTransitions,
+              element,
+            });
+          }
+        },
+        layout.resizeOnExpand ? [containerData, selectionObj.state] : [expandedState, containerData, selectionObj.state]
+      );
 
       snapshot(expandedState, containerData, layout, transform, initialZoom);
     },
