@@ -24,8 +24,9 @@ export const getBBoxOfNodes = nodes => {
   };
 };
 
-export const getInitialZoomState = (bBox, element) => {
-  const { widthMargin, cardHeight, minZoom, maxZoom } = constants;
+export const getInitialZoomState = (bBox, element, navigationMode) => {
+  const { widthMargin, cardHeight, minZoom } = constants;
+  const maxZoom = navigationMode === 'expandAll' ? Infinity : constants.maxZoom;
   const { width, height } = bBox;
   const { clientHeight, clientWidth } = element;
   const calcWidth = width + 2 * widthMargin;
@@ -79,12 +80,19 @@ export const applyTransform = (eventTransform, svg, divBox, width, height) => {
   );
 };
 
-export function setZooming({ containerData, setTransform, transformState, wrapperState, initialZoomState }) {
+export function setZooming({
+  containerData,
+  setTransform,
+  transformState,
+  wrapperState,
+  initialZoomState,
+  navigationMode,
+}) {
   const { svg, divBox, width, height, zoomWrapper, element, tooltip, homeButton } = containerData;
   const { x = 0, y = 0 } = transformState;
   const { minZoom, maxZoom } = constants;
   const zoomFactor = (transformState && 1 / transformState.zoom) || initialZoomState.initialZoom;
-  const scaleFactor = Math.max(Math.min(maxZoom, zoomFactor), minZoom);
+  const scaleFactor = navigationMode === 'expandAll' ? zoomFactor : Math.max(Math.min(maxZoom, zoomFactor), minZoom);
 
   // sends otherwise captured mouse event to handle context menu correctly in sense
   const bubbleEvent = () => {
@@ -119,7 +127,7 @@ export function setZooming({ containerData, setTransform, transformState, wrappe
           event.type !== 'dblclick' &&
           !(event.type === 'mousedown' && event.which === 3)
       )
-      .scaleExtent([minZoom * scaleFactor, maxZoom * scaleFactor])
+      .scaleExtent([navigationMode === 'expandAll' ? 0.8 : minZoom * scaleFactor, maxZoom * scaleFactor])
       .on('start', bubbleEvent)
       .on('zoom', zoomed)
   );

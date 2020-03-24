@@ -2,11 +2,15 @@ import { hierarchy, tree, select } from 'd3';
 import position from './position';
 import box from './box';
 import createPaths from './path';
-import transform, { getBBoxOfNodes, setZooming, getInitialZoomState } from './transform';
+import { getBBoxOfNodes, setZooming, getInitialZoomState } from './transform';
 import { createTooltip } from './tooltip';
 import { homeIcon } from '../utils/svg-icons';
+import constants from './size-constants';
 
-export const filterTree = ({ topId, isExpanded, expandedChildren }, nodeTree, extended) => {
+export const filterTree = ({ topId, isExpanded, expandedChildren }, nodeTree, extended, navigationMode) => {
+  if (navigationMode === 'expandAll') {
+    return nodeTree.descendants();
+  }
   const topNode = nodeTree.descendants().find(node => node.data.id === topId) || nodeTree;
   const subTree = [];
   if (isExpanded && topNode.children) {
@@ -51,21 +55,13 @@ export const filterTree = ({ topId, isExpanded, expandedChildren }, nodeTree, ex
   return subTree;
 };
 
-export const paintTree = ({
-  containerData,
-  styling,
-  setExpandedCallback,
-  wrapperState,
-  selectionObj,
-  useTransitions,
-  element,
-}) => {
-  const { svg, divBox, allNodes, positioning, width, height, tooltip } = containerData;
+export const paintTree = ({ containerData, styling, setExpandedCallback, wrapperState, selectionObj, element }) => {
+  const { svg, divBox, allNodes, positioning, tooltip } = containerData;
   const { navigationMode } = allNodes.data;
   divBox.selectAll('*').remove();
   svg.selectAll('*').remove();
   // filter the nodes the nodes
-  const nodes = filterTree(wrapperState.expandedState, allNodes);
+  const nodes = filterTree(wrapperState.expandedState, allNodes, false, navigationMode);
   // Create cards and naviagation buttons
   box({
     positioning,
@@ -84,11 +80,11 @@ export const paintTree = ({
     .selectAll('.sn-org-paths')
     .data(nodes)
     .enter();
-  createPaths(node, positioning, wrapperState.expandedState.topId);
-  // Scale and translate
-  if (navigationMode !== 'free') {
-    transform(nodes, width, height, svg, divBox, useTransitions);
-  }
+  createPaths(node, positioning, wrapperState.expandedState.topId, navigationMode);
+  // Scale and translate only needed when user cannot zoom
+  // if (navigationMode !== 'free') {
+  //   transform(nodes, width, height, svg, divBox, useTransitions);
+  // }
 };
 
 export const createContainer = ({
@@ -101,10 +97,12 @@ export const createContainer = ({
   setExpandedState,
   viewState,
   setContainerData,
+  layout,
 }) => {
   element.innerHTML = '';
   element.className = 'sn-org-chart';
-  let positioning = position('ttb', element, {});
+  const { navigationMode } = layout;
+  let positioning = position('ttb', element, {}, navigationMode);
   const { width, height } = element.getBoundingClientRect();
 
   const zoomWrapper = select(element)
@@ -138,7 +136,18 @@ export const createContainer = ({
     .append('button')
     .attr('class', 'sn-org-homebutton disabled')
     .on('click', () => {
-      createContainer({ element, dataTree, selectionObj, wrapperState, setInitialZoom, setTransform, setExpandedState, viewState, setContainerData });
+      createContainer({
+        element,
+        dataTree,
+        selectionObj,
+        wrapperState,
+        setInitialZoom,
+        setTransform,
+        setExpandedState,
+        viewState,
+        setContainerData,
+        layout,
+      });
     })
     .html(homeIcon)
     .node();
@@ -164,17 +173,18 @@ export const createContainer = ({
   // Here are the settings for the tree. For instance nodesize can be adjusted
   const treemap = tree()
     .size([width, height])
-    .nodeSize([0, positioning.depthSpacing]);
+    .nodeSize([constants.cardWidth + constants.cardPadding, positioning.depthSpacing]);
 
   const allNodes = treemap(hierarchy(dataTree));
 
   const resetExpandedState =
-    !wrapperState.expandedState || !allNodes.descendants().find(node => node.data.id === wrapperState.expandedState.topId);
+    !wrapperState.expandedState ||
+    !allNodes.descendants().find(node => node.data.id === wrapperState.expandedState.topId);
   const newExpandedState = resetExpandedState
     ? { topId: allNodes.data.id, isExpanded: true, expandedChildren: [], useTransitions: false }
     : wrapperState.expandedState;
 
-  const renderNodes = filterTree(newExpandedState, allNodes);
+  const renderNodes = filterTree(newExpandedState, allNodes, false, navigationMode);
   renderNodes.forEach(node => {
     if (!node.xActual || !node.yActual) {
       positioning.x(node);
@@ -183,19 +193,31 @@ export const createContainer = ({
   });
   const bBox = getBBoxOfNodes(renderNodes);
   const initialZoomState =
-    viewState && viewState.initialZoom ? viewState.initialZoom : getInitialZoomState(bBox, element);
+    viewState && viewState.initialZoom ? viewState.initialZoom : getInitialZoomState(bBox, element, navigationMode);
   setInitialZoom(initialZoomState);
-  positioning = position('ttb', element, initialZoomState);
+  positioning = position('ttb', element, initialZoomState, navigationMode);
   setZooming({
     containerData: { svg, divBox, width, height, zoomWrapper, element, tooltip, homeButton },
     setTransform,
     transformState: (viewState && viewState.transform) || {},
     wrapperState,
     initialZoomState,
+    navigationMode,
   });
   if (resetExpandedState) {
     setExpandedState(newExpandedState);
   }
 
-  return setContainerData({ svg, divBox, allNodes, positioning, width, height, element, zoomWrapper, tooltip, homeButton });
+  return setContainerData({
+    svg,
+    divBox,
+    allNodes,
+    positioning,
+    width,
+    height,
+    element,
+    zoomWrapper,
+    tooltip,
+    homeButton,
+  });
 };

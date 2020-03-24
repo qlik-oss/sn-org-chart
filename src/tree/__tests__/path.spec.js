@@ -27,6 +27,7 @@ describe('path', () => {
     let positioning;
     let expectedPoints;
     let topId;
+    let navigationMode;
 
     beforeEach(() => {
       topId = '0';
@@ -57,6 +58,7 @@ describe('path', () => {
         x: node => node.xActual,
         y: node => node.yActual,
       };
+      navigationMode = 'free';
     });
 
     it('should return points for vertical tree', () => {
@@ -66,7 +68,7 @@ describe('path', () => {
         { x: 76, y: 112 },
         { x: 76, y: 96 },
       ];
-      const points = getPoints(d, topId, positioning)[0];
+      const points = getPoints(d, topId, positioning, navigationMode)[0];
       expect(points).to.deep.equal(expectedPoints);
     });
 
@@ -79,7 +81,7 @@ describe('path', () => {
         { x: 250, y: 50 },
         { x: 100, y: 50 },
       ];
-      const points = getPoints(d, positioning, isVertical);
+      const points = getPoints(d, positioning, isVertical, navigationMode);
       expect(points).to.deep.equal(expectedPoints);
     });
 
@@ -92,7 +94,20 @@ describe('path', () => {
         { x: 76, y: 112 },
         { x: 76, y: 96 },
       ];
-      const points = getPoints(d, topId, positioning)[0];
+      const points = getPoints(d, topId, positioning, navigationMode)[0];
+      expect(points).to.deep.equal(expectedPoints);
+    });
+
+    it('should return points for vertical tree w only leafs in expandAll mode', () => {
+      navigationMode = 'expandAll';
+      parent.children = [{}];
+      expectedPoints = [
+        { x: 376, y: 120 },
+        { x: 376, y: 112 },
+        { x: 76, y: 112 },
+        { x: 76, y: 64 },
+      ];
+      const points = getPoints(d, topId, positioning, navigationMode)[0];
       expect(points).to.deep.equal(expectedPoints);
     });
 
@@ -107,7 +122,7 @@ describe('path', () => {
         { x: 250, y: 50 },
         { x: 100, y: 50 },
       ];
-      const points = getPoints(d, positioning, isVertical);
+      const points = getPoints(d, positioning, isVertical, navigationMode);
       expect(points).to.deep.equal(expectedPoints);
     });
 
@@ -117,7 +132,7 @@ describe('path', () => {
         { x: 76, y: 120 },
         { x: 76, y: 96 },
       ];
-      const points = getPoints(d, topId, positioning)[0];
+      const points = getPoints(d, topId, positioning, navigationMode)[0];
       expect(points).to.deep.equal(expectedPoints);
     });
 
@@ -127,7 +142,7 @@ describe('path', () => {
         { x: 400, y: 50 },
         { x: 100, y: 50 },
       ];
-      const points = getPoints(d, positioning, isVertical);
+      const points = getPoints(d, positioning, isVertical, navigationMode);
       expect(points).to.deep.equal(expectedPoints);
     });
 
@@ -137,7 +152,7 @@ describe('path', () => {
         { x: 376, y: 120 },
         { x: 376, y: 112 },
       ];
-      const points = getPoints(d, topId, positioning)[0];
+      const points = getPoints(d, topId, positioning, navigationMode)[0];
       expect(points).to.deep.equal(expectedPoints);
     });
 
@@ -147,7 +162,7 @@ describe('path', () => {
         { x: 376, y: 184 },
         { x: 376, y: 192 },
       ];
-      const points = getPoints(d, topId, positioning)[1];
+      const points = getPoints(d, topId, positioning, navigationMode)[1];
       expect(points).to.deep.equal(expectedPoints);
     });
 
@@ -158,13 +173,13 @@ describe('path', () => {
         { x: 376, y: 120 },
         { x: 376, y: 112 },
       ];
-      const points = getPoints(d, topId, positioning)[0];
+      const points = getPoints(d, topId, positioning, navigationMode)[0];
       expect(points).to.deep.equal(expectedPoints);
     });
 
     it('should return no points if no parent', () => {
       d.parent = undefined;
-      const points = getPoints(d, topId, positioning);
+      const points = getPoints(d, topId, positioning, navigationMode);
       expect(points).to.deep.equal([]);
     });
   });

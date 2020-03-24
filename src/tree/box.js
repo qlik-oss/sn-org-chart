@@ -71,7 +71,7 @@ export default function box({
 }) {
   const { x, y } = positioning;
   const { cardWidth, cardHeight, buttonWidth, buttonHeight, cardPadding, rootDiameter } = constants;
-  const { topId, isExpanded } = wrapperState.expandedState;
+  const { topId } = wrapperState.expandedState;
   const topNode = nodes.find(node => node.data.id === topId);
   const ancestorIds = topNode && topNode.parent ? topNode.parent.ancestors().map(anc => anc.data.id) : [];
   const touchmode = document.getElementsByTagName('html')[0].classList.contains('touch-on');
@@ -120,50 +120,51 @@ export default function box({
     });
 
   // expand/collapse
-  divBox
-    .selectAll('.sn-org-nodes')
-    .data(nodes.filter(node => !!node.children && node.data.id !== 'Root'))
-    .enter()
-    .append('div')
-    .attr('class', 'sn-org-traverse')
-    .attr(
-      'style',
-      d =>
-        `width:${buttonWidth}px;height:${buttonHeight}px;top:${y(d) + cardHeight + cardPadding}px;left:${x(d) +
-          (cardWidth - buttonWidth) / 2}px;`
-    )
-    .attr('id', d => `${d.data.id}-expand`)
-    .on('mouseenter', () => {
-      if (!wrapperState.constraints.active) event.target.style.cursor = 'pointer';
-    })
-    .on('click', d => {
-      if (!wrapperState.constraints.active) {
-        setExpandedCallback(getNewState(d, wrapperState.expandedState, ancestorIds));
-        event.stopPropagation();
-      }
-    })
-    .html(d => `${getSign(d, wrapperState.expandedState, ancestorIds)} ${d.data.children.length}`);
-
-  // go up
-  if (navigationMode !== 'free') {
+  if (navigationMode !== 'expandAll') {
     divBox
       .selectAll('.sn-org-nodes')
-      .data(nodes.filter(node => node.data.id === topId && node.parent))
+      .data(nodes.filter(node => !!node.children && node.data.id !== 'Root'))
       .enter()
       .append('div')
       .attr('class', 'sn-org-traverse')
       .attr(
         'style',
         d =>
-          `width:${buttonWidth}px;height:${buttonHeight}px;top:${y(d) - buttonHeight - cardPadding}px;left:${x(d) +
+          `width:${buttonWidth}px;height:${buttonHeight}px;top:${y(d) + cardHeight + cardPadding}px;left:${x(d) +
             (cardWidth - buttonWidth) / 2}px;`
       )
-      .attr('id', d => `${d.data.id}-up`)
+      .attr('id', d => `${d.data.id}-expand`)
+      .on('mouseenter', () => {
+        if (!wrapperState.constraints.active) event.target.style.cursor = 'pointer';
+      })
       .on('click', d => {
         if (!wrapperState.constraints.active) {
-          setExpandedCallback(getNewUpState(d, isExpanded));
+          setExpandedCallback(getNewState(d, wrapperState.expandedState, ancestorIds));
+          event.stopPropagation();
         }
       })
-      .html('↑');
+      .html(d => `${getSign(d, wrapperState.expandedState, ancestorIds)} ${d.data.children.length}`);
   }
+  // go up only necessary in page navigation mode
+  // if (navigationMode !== 'free') {
+  //   divBox
+  //     .selectAll('.sn-org-nodes')
+  //     .data(nodes.filter(node => node.data.id === topId && node.parent))
+  //     .enter()
+  //     .append('div')
+  //     .attr('class', 'sn-org-traverse')
+  //     .attr(
+  //       'style',
+  //       d =>
+  //         `width:${buttonWidth}px;height:${buttonHeight}px;top:${y(d) - buttonHeight - cardPadding}px;left:${x(d) +
+  //           (cardWidth - buttonWidth) / 2}px;`
+  //     )
+  //     .attr('id', d => `${d.data.id}-up`)
+  //     .on('click', d => {
+  //       if (!wrapperState.constraints.active) {
+  //         setExpandedCallback(getNewUpState(d, isExpanded));
+  //       }
+  //     })
+  //     .html('↑');
+  // }
 }

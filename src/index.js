@@ -107,6 +107,7 @@ export default function supernova(env) {
             setTransform,
             setExpandedState,
             setContainerData,
+            layout,
           });
         }
       }, [element, dataTree, constraints]);
