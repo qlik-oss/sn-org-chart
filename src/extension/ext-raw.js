@@ -123,7 +123,7 @@ export default {
               navigation: {
                 type: 'items',
                 items: {
-                  navigtaionMode: {
+                  navigationMode: {
                     ref: 'navigationMode',
                     type: 'string',
                     translation: 'Object.OrgChart.NavigationMode',
