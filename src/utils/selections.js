@@ -2,7 +2,7 @@ import { getAllTreeElemNo } from './tree-utils';
 
 export default {
   select: (node, selectionObj) => {
-    const { api, state, linked, setState } = selectionObj;
+    const { api, state, singleSelect, setState } = selectionObj;
     if (node && api) {
       let newState;
       if (node.data.elemNo < 0 && node.data.elemNo !== -3) {
@@ -22,13 +22,14 @@ export default {
       const activate = ind === -1;
       let linkedIds = [];
 
-      if (linked) {
+      if (!singleSelect) {
         linkedIds = getAllTreeElemNo(node, activate);
       }
       if (!activate) {
         newState.splice(ind, 1);
         linkedIds.forEach(id => {
-          newState.splice(newState.indexOf(id), 1);
+          const idInd = newState.indexOf(id);
+          idInd !== -1 && newState.splice(idInd, 1);
         });
       } else {
         newState.push(node.data.elemNo);

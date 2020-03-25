@@ -62,21 +62,36 @@ describe('transform', () => {
   describe('getInitialZoomState', () => {
     let element;
     let bBox;
+    let navigationMode;
     beforeEach(() => {
       element = { clientWidth: 1000, clientHeight: 1000 };
       bBox = { width: 1000, height: 1000, x: 0, y: 0 };
+      navigationMode = 'free';
     });
 
     it('should zoom in x direction', () => {
       bBox.width = 1936;
-      const result = getInitialZoomState(bBox, element);
+      const result = getInitialZoomState(bBox, element, navigationMode);
       expect(result).to.eql({ initialX: 32, initialY: 500, initialZoom: 2 });
     });
 
     it('should zoom in y direction', () => {
       bBox.height = 1936;
-      const result = getInitialZoomState(bBox, element);
+      const result = getInitialZoomState(bBox, element, navigationMode);
       expect(result).to.eql({ initialX: 500, initialY: 32, initialZoom: 2 });
+    });
+
+    it('should limit zoom to max zoom', () => {
+      bBox.height = 10000000;
+      const result = getInitialZoomState(bBox, element, navigationMode);
+      expect(result).to.eql({ initialX: 2500, initialY: 32, initialZoom: 6 });
+    });
+
+    it('should not limit zoom to max zoom in expandAll mode', () => {
+      bBox.height = 99999936;
+      navigationMode = 'expandAll';
+      const result = getInitialZoomState(bBox, element, navigationMode);
+      expect(result).to.eql({ initialX: 49999500, initialY: 32, initialZoom: 100000 });
     });
   });
 

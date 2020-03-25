@@ -1,10 +1,13 @@
 import { haveNoChildren } from '../utils/tree-utils';
 import constants from './size-constants';
 
-export const widthTranslation = (d, widthSpacing, element, axis, initialZoomState) => {
+export const widthTranslation = (d, widthSpacing, element, axis, initialZoomState, navigationMode) => {
   const { buttonMargin } = constants;
   const initialX = (initialZoomState && initialZoomState.initialX) || 0;
-
+  if (navigationMode === 'expandAll') {
+    d[axis] = d.x + initialX;
+    return d[axis];
+  }
   if (d.parent) {
     if (!d.parent[axis]) {
       d.parent[axis] = widthTranslation(d.parent, widthSpacing, element, axis, initialZoomState);
@@ -24,11 +27,11 @@ export const widthTranslation = (d, widthSpacing, element, axis, initialZoomStat
   return d[axis];
 };
 
-export const depthTranslation = (d, depthSpacing, axis, initialZoomState) => {
+export const depthTranslation = (d, depthSpacing, axis, initialZoomState, navigationMode) => {
   const { cardHeight, leafMargin } = constants;
   const initialY = (initialZoomState && initialZoomState.initialY) || 0;
 
-  if (d.parent && d.parent.data.id !== 'Root' && haveNoChildren(d.parent.children)) {
+  if (d.parent && d.parent.data.id !== 'Root' && navigationMode !== 'expandAll' && haveNoChildren(d.parent.children)) {
     d[axis] = d.parent.y + depthSpacing + d.data.childNumber * (cardHeight + leafMargin) + initialY;
   } else {
     d[axis] = d.y + initialY;
@@ -36,8 +39,8 @@ export const depthTranslation = (d, depthSpacing, axis, initialZoomState) => {
   return d[axis];
 };
 
-export default function position(orientation, element, initialZoomState) {
-  const { widthMargin, heightMargin, cardWidth, cardHeight } = constants;
+export default function position(orientation, element, initialZoomState, navigationMode) {
+  const { widthMargin, heightMargin, cardWidth, cardHeight, cardPadding } = constants;
   let widthSpacing;
   let depthSpacing;
 
@@ -45,12 +48,12 @@ export default function position(orientation, element, initialZoomState) {
   switch (orientation) {
     case 'ttb':
       widthSpacing = cardWidth + widthMargin;
-      depthSpacing = cardHeight + heightMargin;
+      depthSpacing = navigationMode === 'expandAll' ? cardHeight + 2 * cardPadding : cardHeight + heightMargin;
       orientations = {
         depthSpacing,
         isVertical: true,
-        x: d => widthTranslation(d, widthSpacing, element, 'xActual', initialZoomState),
-        y: d => depthTranslation(d, depthSpacing, 'yActual', initialZoomState),
+        x: d => widthTranslation(d, widthSpacing, element, 'xActual', initialZoomState, navigationMode),
+        y: d => depthTranslation(d, depthSpacing, 'yActual', initialZoomState, navigationMode),
       };
       break;
     // case 'btt':

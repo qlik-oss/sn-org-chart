@@ -7,7 +7,8 @@ export const createSnapshotData = (expandedState, allNodes, layout) => {
     return layout.snapshotData.dataMatrix;
   }
   // filter down to the visible nodes
-  const nodes = filterTree(expandedState, allNodes, true);
+  const { navigationMode } = layout;
+  const nodes = filterTree(expandedState, allNodes, true, navigationMode);
   const usedMatrix = [];
   const { qDataPages } = layout.qHyperCube;
   const dataMatrix = [];

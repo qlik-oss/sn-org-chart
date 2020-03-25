@@ -27,6 +27,10 @@ const properties = {
    */
   navigationMode: 'free',
   /**
+   * @type {boolean}
+   */
+  resizeOnExpand: false,
+  /**
    * @type {object}
    */
   style: {
