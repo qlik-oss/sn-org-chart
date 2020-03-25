@@ -17,7 +17,7 @@ describe('selections', () => {
           select: sinon.spy(),
           begin: sinon.spy(),
         },
-        linked: false,
+        singleSelect: true,
         setState: sinon.spy(),
         state: [],
       };
@@ -51,8 +51,8 @@ describe('selections', () => {
       expect(selectionObj.api.select).to.have.been.calledOnce;
       expect(selectionObj.setState).to.have.been.calledWith([2, 1]);
     });
-    it('should get all children when linked is true', () => {
-      selectionObj.linked = true;
+    it('should get all children when singleSelect is false', () => {
+      selectionObj.singleSelect = false;
       select(node, selectionObj);
       expect(selectionObj.api.select).to.have.been.calledOnce;
       expect(selectionObj.setState).to.have.been.calledWith([1, 2, 3, 798, 88]);
@@ -65,7 +65,7 @@ describe('selections', () => {
     });
     it('should deselect node and children', () => {
       isActive = true;
-      selectionObj.linked = true;
+      selectionObj.singleSelect = false;
       selectionObj.state = [1, 2];
       select(node, selectionObj);
       expect(selectionObj.api.clear).to.have.been.calledOnce;
