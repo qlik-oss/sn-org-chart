@@ -94,26 +94,54 @@ export default function supernova(env) {
       }, [layout, model, translator.language(), Theme.name()]);
 
       // Create d3 elements, calculate initial zoom and sets expandedState
-      useEffect(
-        () => {
-          if (element && dataTree) {
-            const viewState = viewStateUtil.getViewState(options, layout);
-            createContainer({
-              element,
-              dataTree,
-              viewState,
-              wrapperState,
-              selectionObj,
-              setInitialZoom,
-              setTransform,
-              setExpandedState,
-              setContainerData,
-              layout,
-            });
-          }
-        },
-        layout.resizeOnExpand ? [expandedState, element, dataTree, constraints] : [element, dataTree, constraints]
-      );
+      const fullReload = () => {
+        if (element && dataTree) {
+          const viewState = viewStateUtil.getViewState(options, layout);
+          createContainer({
+            element,
+            dataTree,
+            viewState,
+            wrapperState,
+            selectionObj,
+            setInitialZoom,
+            setTransform,
+            setExpandedState,
+            setContainerData,
+            layout,
+          });
+        }
+      };
+
+      // Call paintTree, currenly repaints all current nodes
+      const rePaint = () => {
+        if (containerData && expandedState && styling) {
+          paintTree({
+            containerData,
+            styling,
+            setExpandedCallback,
+            wrapperState,
+            selectionObj,
+            useTransitions: expandedState.useTransitions,
+            element,
+          });
+        }
+      };
+
+      useEffect(() => {
+        rePaint();
+      }, [containerData, selectionObj.state]);
+
+      useEffect(() => {
+        fullReload();
+      }, [element, dataTree, constraints]);
+
+      useEffect(() => {
+        if (layout.resizeOnExpand) {
+          fullReload();
+        } else {
+          rePaint();
+        }
+      }, [expandedState]);
 
       // Updates snapshot when resizing
       useEffect(() => {
@@ -122,24 +150,6 @@ export default function supernova(env) {
           applyTransform(snapshotZoom, containerData.svg, containerData.divBox, rect.width, rect.height);
         }
       }, [rect, containerData]);
-
-      // Call paintTree, currenly repaints all current nodes
-      useEffect(
-        () => {
-          if (containerData && expandedState && styling) {
-            paintTree({
-              containerData,
-              styling,
-              setExpandedCallback,
-              wrapperState,
-              selectionObj,
-              useTransitions: expandedState.useTransitions,
-              element,
-            });
-          }
-        },
-        layout.resizeOnExpand ? [containerData, selectionObj.state] : [expandedState, containerData, selectionObj.state]
-      );
 
       snapshot(expandedState, containerData, layout, transform, initialZoom);
     },

@@ -134,6 +134,7 @@ export default {
                     ref: 'resizeOnExpand',
                     type: 'boolean',
                     translation: 'Object.OrgChart.resizeOnExpand',
+                    show: data => propertyResolver.getValue(data, 'navigationMode') !== 'expandAll',
                   },
                 },
               },
