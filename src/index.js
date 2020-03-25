@@ -94,7 +94,7 @@ export default function supernova(env) {
       }, [layout, model, translator.language(), Theme.name()]);
 
       // Create d3 elements, calculate initial zoom and sets expandedState
-      useEffect(() => {
+      const fullReload = () => {
         if (element && dataTree) {
           const viewState = viewStateUtil.getViewState(options, layout);
           createContainer({
@@ -110,18 +110,10 @@ export default function supernova(env) {
             layout,
           });
         }
-      }, [element, dataTree, constraints]);
-
-      // Updates snapshot when resizing
-      useEffect(() => {
-        if (containerData && layout && layout.snapshotData) {
-          const snapshotZoom = getSnapshotZoom(rect, layout.snapshotData.viewState);
-          applyTransform(snapshotZoom, containerData.svg, containerData.divBox, rect.width, rect.height);
-        }
-      }, [rect, containerData]);
+      };
 
       // Call paintTree, currenly repaints all current nodes
-      useEffect(() => {
+      const rePaint = () => {
         if (containerData && expandedState && styling) {
           paintTree({
             containerData,
@@ -133,7 +125,31 @@ export default function supernova(env) {
             element,
           });
         }
-      }, [expandedState, containerData, selectionObj.state]);
+      };
+
+      useEffect(() => {
+        rePaint();
+      }, [containerData, selectionObj.state]);
+
+      useEffect(() => {
+        fullReload();
+      }, [element, dataTree, constraints]);
+
+      useEffect(() => {
+        if (layout.resizeOnExpand) {
+          fullReload();
+        } else {
+          rePaint();
+        }
+      }, [expandedState]);
+
+      // Updates snapshot when resizing
+      useEffect(() => {
+        if (containerData && layout && layout.snapshotData) {
+          const snapshotZoom = getSnapshotZoom(rect, layout.snapshotData.viewState);
+          applyTransform(snapshotZoom, containerData.svg, containerData.divBox, rect.width, rect.height);
+        }
+      }, [rect, containerData]);
 
       snapshot(expandedState, containerData, layout, transform, initialZoom);
     },

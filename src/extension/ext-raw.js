@@ -130,6 +130,12 @@ export default {
                     component: 'dropdown',
                     options: navigationOptions,
                   },
+                  resizeOnExpand: {
+                    ref: 'resizeOnExpand',
+                    type: 'boolean',
+                    translation: 'Object.OrgChart.resizeOnExpand',
+                    show: data => propertyResolver.getValue(data, 'navigationMode') !== 'expandAll',
+                  },
                 },
               },
               backgroundColor: {
