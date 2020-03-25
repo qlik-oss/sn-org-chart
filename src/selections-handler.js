@@ -1,6 +1,6 @@
 import { useEffect, useState, useSelections, useAction } from '@nebula.js/supernova';
 import autoRegister from './locale/translations';
-import { chainedSelectionIcon } from './utils/svg-icons';
+import { singleSelectionIcon } from './utils/svg-icons';
 
 export default function selectionHandler(translator) {
   const [singleSelect, setSingleSelect] = useState(false);
@@ -58,7 +58,7 @@ export default function selectionHandler(translator) {
           {
             type: 'path',
             attrs: {
-              d: chainedSelectionIcon,
+              d: singleSelectionIcon,
             },
           },
         ],
