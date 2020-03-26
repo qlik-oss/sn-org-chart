@@ -11,6 +11,9 @@ const navigationOptions = [
   { value: 'expandAll', translation: 'Object.OrgChart.ExpandAll' },
 ];
 
+const bordersActive = data =>
+  propertyResolver.getValue(data, 'style.border.top') || propertyResolver.getValue(data, 'style.border.fullBorder');
+
 export default {
   definition: {
     type: 'items',
@@ -221,6 +224,7 @@ export default {
                     translation: 'properties.border.color',
                     defaultValue: 'auto',
                     options: colorOptions,
+                    show: data => bordersActive(data),
                   },
                   colorPicker: {
                     component: 'color-picker',
@@ -228,7 +232,9 @@ export default {
                     ref: 'style.border.color',
                     translation: 'properties.color',
                     dualOutput: true,
-                    show: data => propertyResolver.getValue(data, 'style.border.colorType') === 'colorPicker',
+                    show: data =>
+                      bordersActive(data) &&
+                      propertyResolver.getValue(data, 'style.border.colorType') === 'colorPicker',
                   },
                   colorExpression: {
                     component: 'string',
@@ -236,7 +242,9 @@ export default {
                     ref: 'style.border.colorExpression',
                     translation: 'Common.Expression',
                     expression: 'optional',
-                    show: data => propertyResolver.getValue(data, 'style.border.colorType') === 'byExpression',
+                    show: data =>
+                      bordersActive(data) &&
+                      propertyResolver.getValue(data, 'style.border.colorType') === 'byExpression',
                   },
                 },
               },
