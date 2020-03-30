@@ -61,13 +61,13 @@ const properties = {
       /**
        * @type {'auto'|'colorPicker'|'byExpression'}
        */
-      colorType: 'auto',
+      colorType: 'colorPicker',
       /**
        * @type {object}
        */
       color: {
         index: -1,
-        color: '#e6e6e6',
+        color: '#ffffff',
       },
       /**
        * @type {string}
@@ -85,7 +85,7 @@ const properties = {
       /**
        * @type {boolean}
        */
-      fullBorder: false,
+      fullBorder: true,
       /**
        * @type {string}
        */
