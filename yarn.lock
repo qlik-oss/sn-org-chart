@@ -1574,10 +1574,10 @@
     mkdirp "^0.5.1"
     rimraf "^2.5.2"
 
-"@nebula.js/cli-build@0.3.0", "@nebula.js/cli-build@^0.3.0":
-  version "0.3.0"
-  resolved "https://registry.yarnpkg.com/@nebula.js/cli-build/-/cli-build-0.3.0.tgz#9a647f336ba5c80babd798697db1ba61960420ea"
-  integrity sha512-PR+dJV2YjGQiOjhq3tTYCHb4wmDunzijkfpEmh+4gXh55DpimsUr6txFpauMXKABZhQ4xCUhv/wh2xRgpq4KHQ==
+"@nebula.js/cli-build@0.4.0", "@nebula.js/cli-build@^0.4.0":
+  version "0.4.0"
+  resolved "https://registry.yarnpkg.com/@nebula.js/cli-build/-/cli-build-0.4.0.tgz#685f96b9229f41fada2f76cc6c37739fc19e53c5"
+  integrity sha512-PnN+JgG3R2ekr/T2VSZkdgQW9PylzNCGXqW9tepzOs7K3tTF+n2bYCwvwAmrN5ebLNxlfad+xC9qs67aKg+QXw==
   dependencies:
     "@babel/cli" "7.8.4"
     "@babel/core" "7.9.0"
@@ -1593,23 +1593,23 @@
     rollup-plugin-terser "5.2.0"
     yargs "15.1.0"
 
-"@nebula.js/cli-create@0.3.0":
-  version "0.3.0"
-  resolved "https://registry.yarnpkg.com/@nebula.js/cli-create/-/cli-create-0.3.0.tgz#f5ca84d496d34954c11ba13b712f26cf421131a2"
-  integrity sha512-g1v/1boY8nB8cPLMOQ64eLdg52Fv1YWk3xduhxCc8mhuEPiwq1LPeFP7T9ghpWgWGE5x3gH5xDyoDHb/NHZHgw==
+"@nebula.js/cli-create@0.4.0":
+  version "0.4.0"
+  resolved "https://registry.yarnpkg.com/@nebula.js/cli-create/-/cli-create-0.4.0.tgz#36d3833a29c015762a8ee31c7d0540831df7ba2b"
+  integrity sha512-PT7lVd8fdYf28bKkGN+eOh5fdS5dbvg90bR7aExyk7RgbGqszl8T1udkxneXHOHxG2DLDsY169X+ceIM7gyjnw==
   dependencies:
     chalk "3.0.0"
     ejs "3.0.1"
     fs-extra "8.1.0"
     inquirer "7.0.4"
 
-"@nebula.js/cli-serve@^0.3.0":
-  version "0.3.0"
-  resolved "https://registry.yarnpkg.com/@nebula.js/cli-serve/-/cli-serve-0.3.0.tgz#fcf7132e59429195ea2da0ffd1307ae41cdc7e8e"
-  integrity sha512-5rMsjeUV7hE2skbJ+ZJVHb88sVzRG05IXkA54mfEqM0FLa2Jpp4ZorQ8Lh2ocRSWyeIWs0NAqMFv9yLCk8zvvA==
+"@nebula.js/cli-serve@^0.4.0":
+  version "0.4.0"
+  resolved "https://registry.yarnpkg.com/@nebula.js/cli-serve/-/cli-serve-0.4.0.tgz#2b31af5ca8144b6b08e0a1d3e8f5a8c565bdbff9"
+  integrity sha512-g7hFbBQA1y0pFmv9DSa9NKo/96DkvpPPCkl/ItiL887Ddj/+MyFJpc6RlE8MIcGoW+5LHonBwNJMEBzuYdC+ZQ==
   dependencies:
-    "@nebula.js/cli-build" "0.3.0"
-    "@nebula.js/snapshooter" "0.3.0"
+    "@nebula.js/cli-build" "0.4.0"
+    "@nebula.js/snapshooter" "0.4.0"
     body-parser "1.19.0"
     chalk "3.0.0"
     chokidar "3.3.1"
@@ -1626,26 +1626,26 @@
     ws "7.2.1"
     yargs "15.1.0"
 
-"@nebula.js/cli@0.3.0":
-  version "0.3.0"
-  resolved "https://registry.yarnpkg.com/@nebula.js/cli/-/cli-0.3.0.tgz#97b6a4114c66b5dcec878dfc562f3c3de941ab25"
-  integrity sha512-vYU+0VciAePLg5GCPuOCQHTikTkyFbi6D1K58+7w3JUXbCK434bP4VWLKZXBbU47m2UZCF6f0TKYxAqsq+NmcA==
+"@nebula.js/cli@0.4.0":
+  version "0.4.0"
+  resolved "https://registry.yarnpkg.com/@nebula.js/cli/-/cli-0.4.0.tgz#4f329514207d179f23abf8bebb84ff950385601f"
+  integrity sha512-2E8Dzs/XAByAxUyo6t7XApzAXw4hgThq72mT/CjFL3sVOGIq66OIx+LrOaBN4VleRPl5XaxkH9wlvsLpcFgenw==
   dependencies:
-    "@nebula.js/cli-create" "0.3.0"
+    "@nebula.js/cli-create" "0.4.0"
     import-cwd "3.0.0"
     yargs "15.1.0"
 
-"@nebula.js/snapshooter@0.3.0":
-  version "0.3.0"
-  resolved "https://registry.yarnpkg.com/@nebula.js/snapshooter/-/snapshooter-0.3.0.tgz#23f46803435acca3b263a1131e6ca5c5ed431d24"
-  integrity sha512-9oqFiC8vuMW6X15Eyng/GSMIFAncKzg66z1Qf5vrz+XUaspoBirGOR4UQ1642h/i/AGVv1ihH/HTB8gkNqnrDg==
+"@nebula.js/snapshooter@0.4.0":
+  version "0.4.0"
+  resolved "https://registry.yarnpkg.com/@nebula.js/snapshooter/-/snapshooter-0.4.0.tgz#ac79f8dd592690d18dee7b0e82be20cb650235b4"
+  integrity sha512-oiXRf/fdUY57to+iKTKz25xkgrIpOmW/QBzP5eQY8rdxReg5v2PIZWhmWpEXTQDKqZ2dWUHmp0xYV6Mw+UK4PA==
   dependencies:
     puppeteer "2.0.0"
 
-"@nebula.js/supernova@^0.3.0":
-  version "0.3.0"
-  resolved "https://registry.yarnpkg.com/@nebula.js/supernova/-/supernova-0.3.0.tgz#2e8bd3fd3db2f816b904e214d1b9afd664829600"
-  integrity sha512-IHoT1GkflMENt6IGHujuH7BEUa5OAhWLp9qvSVx9+1FUpw2ZjHTJEcGcgw8NYGo2qYs9lQVL9BLWhLYLhCs/gg==
+"@nebula.js/supernova@^0.4.0":
+  version "0.4.0"
+  resolved "https://registry.yarnpkg.com/@nebula.js/supernova/-/supernova-0.4.0.tgz#7f29b126dc6a1c5e0403d85c077e4a0f4a33335c"
+  integrity sha512-v13sjUkcEEEocg7cEEV7yNZOAdVspXjQyo29Abgs7saltUZJbnYiCJ7KSvj0Pw1mAgbTfGrYcZQwZvS+Jhs4lA==
 
 "@nodelib/fs.scandir@2.1.3":
   version "2.1.3"
@@ -3853,10 +3853,10 @@ d3-zoom@1:
     d3-selection "1"
     d3-transition "1"
 
-d3@^5.15.0:
-  version "5.15.0"
-  resolved "https://registry.yarnpkg.com/d3/-/d3-5.15.0.tgz#ffd44958e6a3cb8a59a84429c45429b8bca5677a"
-  integrity sha512-C+E80SL2nLLtmykZ6klwYj5rPqB5nlfN5LdWEAVdWPppqTD8taoJi2PxLZjPeYT8FFRR2yucXq+kBlOnnvZeLg==
+d3@^5.15.1:
+  version "5.15.1"
+  resolved "https://registry.yarnpkg.com/d3/-/d3-5.15.1.tgz#7a8f32208559505bf1f56537a31c3fb8e76a519b"
+  integrity sha512-Xu9gT6Lm0jH3wWJJSRomFwqnGGi3YAfWIfxNFl4++YVgYOjo3F8V2idAG3nJBgpZOkD0/RHPZX6F4k6tzgOvYw==
   dependencies:
     d3-array "1"
     d3-axis "1"
@@ -6772,10 +6772,10 @@ lines-and-columns@^1.1.6:
   resolved "https://registry.yarnpkg.com/lines-and-columns/-/lines-and-columns-1.1.6.tgz#1c00c743b433cd0a4e80758f7b64a57440d9ff00"
   integrity sha1-HADHQ7QzzQpOgHWPe2SldEDZ/wA=
 
-lint-staged@10.1.1:
-  version "10.1.1"
-  resolved "https://registry.yarnpkg.com/lint-staged/-/lint-staged-10.1.1.tgz#1c8569b66d684e6e3553cd760c03053f41fca152"
-  integrity sha512-wAeu/ePaBAOfwM2+cVbgPWDtn17B0Sxiv0NvNEqDAIvB8Yhvl60vafKFiK4grcYn87K1iK+a0zVoETvKbdT9/Q==
+lint-staged@10.1.2:
+  version "10.1.2"
+  resolved "https://registry.yarnpkg.com/lint-staged/-/lint-staged-10.1.2.tgz#beaefc58037ea9e02fe7639cb323d584312a7957"
+  integrity sha512-Vtbe8rhWbJxPNlnXk6jczRh6wvAVjGg+VhELAIjLakOjTACdB4qJOD4W2R8oUXLRCqL1t9WMUsXbSlVK34A8Lg==
   dependencies:
     chalk "^3.0.0"
     commander "^4.0.1"
