@@ -11,7 +11,7 @@ const navigationOptions = [
   { value: 'expandAll', translation: 'Object.OrgChart.ExpandAll' },
 ];
 
-const bordersActive = data =>
+const bordersActive = (data) =>
   propertyResolver.getValue(data, 'style.border.top') || propertyResolver.getValue(data, 'style.border.fullBorder');
 
 export default {
@@ -137,7 +137,7 @@ export default {
                     ref: 'resizeOnExpand',
                     type: 'boolean',
                     translation: 'Object.OrgChart.resizeOnExpand',
-                    show: data => propertyResolver.getValue(data, 'navigationMode') !== 'expandAll',
+                    show: (data) => propertyResolver.getValue(data, 'navigationMode') !== 'expandAll',
                   },
                 },
               },
@@ -157,7 +157,8 @@ export default {
                     ref: 'style.backgroundColor.color',
                     translation: 'properties.color',
                     dualOutput: true,
-                    show: data => propertyResolver.getValue(data, 'style.backgroundColor.colorType') === 'colorPicker',
+                    show: (data) =>
+                      propertyResolver.getValue(data, 'style.backgroundColor.colorType') === 'colorPicker',
                   },
                   colorExpression: {
                     component: 'string',
@@ -165,7 +166,8 @@ export default {
                     ref: 'style.backgroundColor.colorExpression',
                     translation: 'Common.Expression',
                     expression: 'optional',
-                    show: data => propertyResolver.getValue(data, 'style.backgroundColor.colorType') === 'byExpression',
+                    show: (data) =>
+                      propertyResolver.getValue(data, 'style.backgroundColor.colorType') === 'byExpression',
                   },
                 },
               },
@@ -185,7 +187,7 @@ export default {
                     ref: 'style.fontColor.color',
                     translation: 'properties.color',
                     dualOutput: true,
-                    show: data => propertyResolver.getValue(data, 'style.fontColor.colorType') === 'colorPicker',
+                    show: (data) => propertyResolver.getValue(data, 'style.fontColor.colorType') === 'colorPicker',
                   },
                   colorExpression: {
                     component: 'string',
@@ -193,7 +195,7 @@ export default {
                     ref: 'style.fontColor.colorExpression',
                     translation: 'Common.Expression',
                     expression: 'optional',
-                    show: data => propertyResolver.getValue(data, 'style.fontColor.colorType') === 'byExpression',
+                    show: (data) => propertyResolver.getValue(data, 'style.fontColor.colorType') === 'byExpression',
                   },
                 },
               },
@@ -202,7 +204,7 @@ export default {
                 items: {
                   appearanceHeader: {
                     component: 'text',
-                    translation: 'Card appearance',
+                    translation: 'Object.OrgChart.CardAppearance',
                     style: 'pp-nm-hcd__list-header',
                   },
                   topBar: {
@@ -224,7 +226,7 @@ export default {
                     translation: 'properties.border.color',
                     defaultValue: 'auto',
                     options: colorOptions,
-                    show: data => bordersActive(data),
+                    show: (data) => bordersActive(data),
                   },
                   colorPicker: {
                     component: 'color-picker',
@@ -232,7 +234,7 @@ export default {
                     ref: 'style.border.color',
                     translation: 'properties.color',
                     dualOutput: true,
-                    show: data =>
+                    show: (data) =>
                       bordersActive(data) &&
                       propertyResolver.getValue(data, 'style.border.colorType') === 'colorPicker',
                   },
@@ -242,7 +244,7 @@ export default {
                     ref: 'style.border.colorExpression',
                     translation: 'Common.Expression',
                     expression: 'optional',
-                    show: data =>
+                    show: (data) =>
                       bordersActive(data) &&
                       propertyResolver.getValue(data, 'style.border.colorType') === 'byExpression',
                   },
