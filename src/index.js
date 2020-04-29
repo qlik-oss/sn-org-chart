@@ -32,7 +32,7 @@ export default function supernova(env) {
   return {
     qae: {
       properties,
-      data,
+      data: data(env),
     },
     component: () => {
       const layout = useStaleLayout();
@@ -71,7 +71,7 @@ export default function supernova(env) {
         wrapperState.expandedState = expandedState;
       }, [expandedState]);
 
-      const setExpandedCallback = newExpandedState => {
+      const setExpandedCallback = (newExpandedState) => {
         newExpandedState.useTransitions = true;
         setExpandedState(newExpandedState);
       };
@@ -85,7 +85,7 @@ export default function supernova(env) {
         viewState && viewState.expandedState && setExpandedState(viewState.expandedState);
         viewState && viewState.transform && setTransform(viewState.transform);
 
-        return treeTransform({ layout, model, translator }).then(transformed => {
+        return treeTransform({ layout, model, translator }).then((transformed) => {
           setStyling(stylingUtils.cardStyling({ Theme, layout }));
           selectionObj.setState([]);
           // Resolving the promise to indicate readiness for printing
@@ -153,6 +153,6 @@ export default function supernova(env) {
 
       snapshot(expandedState, containerData, layout, transform, initialZoom);
     },
-    ext: ext(env),
+    ext: ext(),
   };
 }
