@@ -10,7 +10,7 @@ import {
   useOptions,
   useConstraints,
   useTranslator,
-} from '@nebula.js/supernova';
+} from '@nebula.js/stardust';
 import properties from './object-properties';
 import data from './data';
 import ext from './extension/ext';

@@ -1,4 +1,4 @@
-import { useEffect, useState, useSelections, useAction } from '@nebula.js/supernova';
+import { useEffect, useState, useSelections, useAction } from '@nebula.js/stardust';
 import autoRegister from './locale/translations';
 import { singleSelectionIcon } from './utils/svg-icons';
 
