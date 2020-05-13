@@ -46,12 +46,9 @@ const colorUtils = {
       R = rgba ? parseInt(f[0].slice(5), 10) : parseInt(f[0].slice(4), 10);
       G = parseInt(f[1], 10);
       B = parseInt(f[2], 10);
-      return `
-        ${(rgba ? 'rgba(' : 'rgb(') + (Math.round((0 - R) * percent) + R)},
-        ${Math.round((0 - G) * percent) + G},
-        ${Math.round((0 - B) * percent) + B}
-        ${rgba ? `,${f[3]}` : ')'}
-      `;
+      return `${(rgba ? 'rgba(' : 'rgb(') + (Math.round((0 - R) * percent) + R)},${Math.round((0 - G) * percent) + G},${
+        Math.round((0 - B) * percent) + B
+      }${rgba ? `,${f[3]}` : ')'}`;
     }
     f = parseInt(color.slice(1), 16);
     R = f >> 16;

@@ -6,6 +6,10 @@ describe('color-utils', () => {
       const color = colorUtils.resolveExpression('RGB(255,255,0)');
       expect(color).to.equal('rgb(255,255,0)');
     });
+    it('should resolve color for rgba expression', () => {
+      const color = colorUtils.resolveExpression('rgba(255,255,0,100)');
+      expect(color).to.equal('rgba(255,255,0,0.39)');
+    });
     it('should resolve color for argb expression', () => {
       const color = colorUtils.resolveExpression('ARGB(100,255,255,0)');
       expect(color).to.equal('rgba(255,255,0,0.39)');
