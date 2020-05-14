@@ -11,8 +11,7 @@ const colorUtils = {
     // rgba
     matches = /^rgba\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})\s*\)$/i.exec(input);
     if (matches) {
-      const a = Math.round(matches[4] / 2.55) / 100;
-      return `rgba(${matches[1]},${matches[2]},${matches[3]},${a})`;
+      return `rgba(${matches[1]},${matches[2]},${matches[3]},${matches[4]})`;
     }
     // argb
     matches = /^argb\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})\s*\)$/i.exec(input);
