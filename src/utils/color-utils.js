@@ -9,7 +9,7 @@ const colorUtils = {
       return `rgb(${matches[1]},${matches[2]},${matches[3]})`;
     }
     // rgba
-    matches = /^rgba\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})\s*\)$/i.exec(input);
+    matches = /^rgba\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d(\.\d+)?)\s*\)$/i.exec(input);
     if (matches) {
       return `rgba(${matches[1]},${matches[2]},${matches[3]},${matches[4]})`;
     }
