@@ -5,5 +5,6 @@
   "preview": "preview.png",
   "author": "QlikTech International AB",
   "supernova": true,
-  "type": "visualization"
+  "type": "visualization",
+  "version": "0.9.0"
 }
