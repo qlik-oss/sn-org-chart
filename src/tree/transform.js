@@ -2,7 +2,7 @@ import { select, zoom, event, zoomIdentity } from 'd3';
 import constants from './size-constants';
 import { closeTooltip } from './tooltip';
 
-export const getBBoxOfNodes = nodes => {
+export const getBBoxOfNodes = (nodes) => {
   const { cardWidth, cardHeight, buttonHeight, buttonMargin } = constants;
   const bbox = {
     left: Infinity,
@@ -10,7 +10,7 @@ export const getBBoxOfNodes = nodes => {
     right: -Infinity,
     bottom: -Infinity,
   };
-  nodes.forEach(node => {
+  nodes.forEach((node) => {
     bbox.left = Math.min(node.xActual, bbox.left);
     bbox.top = Math.min(node.yActual, bbox.top);
     bbox.right = Math.max(node.xActual, bbox.right);
@@ -136,7 +136,10 @@ export function setZooming({
   applyTransform(zoomIdentity.translate(x, y).scale(1 / scaleFactor), svg, divBox, width, height);
 }
 
-export const getSnapshotZoom = (rect, viewState) => {
+export const getSnapshotZoom = (rect, viewState, initialTransform) => {
+  if (!viewState) {
+    return zoomIdentity.translate(initialTransform.x, initialTransform.y).scale(initialTransform.zoom);
+  }
   const { size } = viewState;
   const snapZoom = rect.width / size.w > rect.height / size.h ? rect.height / size.h : rect.width / size.w;
   const newX = viewState.transform.x * snapZoom;

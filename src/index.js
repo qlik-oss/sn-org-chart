@@ -71,7 +71,7 @@ export default function supernova(env) {
         wrapperState.expandedState = expandedState;
       }, [expandedState]);
 
-      const setExpandedCallback = newExpandedState => {
+      const setExpandedCallback = (newExpandedState) => {
         newExpandedState.useTransitions = true;
         setExpandedState(newExpandedState);
       };
@@ -85,7 +85,7 @@ export default function supernova(env) {
         viewState && viewState.expandedState && setExpandedState(viewState.expandedState);
         viewState && viewState.transform && setTransform(viewState.transform);
 
-        return treeTransform({ layout, model, translator }).then(transformed => {
+        return treeTransform({ layout, model, translator }).then((transformed) => {
           setStyling(stylingUtils.cardStyling({ Theme, layout }));
           selectionObj.setState([]);
           // Resolving the promise to indicate readiness for printing
@@ -146,7 +146,7 @@ export default function supernova(env) {
       // Updates snapshot when resizing
       useEffect(() => {
         if (containerData && layout && layout.snapshotData) {
-          const snapshotZoom = getSnapshotZoom(rect, layout.snapshotData.viewState);
+          const snapshotZoom = getSnapshotZoom(rect, layout.snapshotData.viewState, transform);
           applyTransform(snapshotZoom, containerData.svg, containerData.divBox, rect.width, rect.height);
         }
       }, [rect, containerData]);
