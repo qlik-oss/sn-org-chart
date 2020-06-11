@@ -127,6 +127,7 @@ describe('transform', () => {
   describe('getSnapshotZoom', () => {
     let rect;
     let viewState;
+    let initialTransform;
 
     beforeEach(() => {
       viewState = {
@@ -144,6 +145,11 @@ describe('transform', () => {
         width: 1000,
         height: 500,
       };
+      initialTransform = {
+        x: 100,
+        y: 200,
+        zoom: 2,
+      };
     });
 
     it('should return snapshotZoom object adjusted to height', () => {
@@ -158,6 +164,11 @@ describe('transform', () => {
       };
       const snapshotZoom = { ...getSnapshotZoom(rect, viewState) };
       expect(snapshotZoom).to.eql({ k: 10, x: 500, y: 1000 });
+    });
+
+    it('should return snapshotZoom object from transform when viewstate not present', () => {
+      const snapshotZoom = { ...getSnapshotZoom(rect, undefined, initialTransform) };
+      expect(snapshotZoom).to.eql({ k: 2, x: 100, y: 200 });
     });
   });
 });
