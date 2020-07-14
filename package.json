@@ -59,7 +59,7 @@
     "@commitlint/cli": "9.1.1",
     "@commitlint/config-conventional": "9.1.1",
     "@nebula.js/cli": "1.0.0",
-    "@nebula.js/cli-build": "0.6.0",
+    "@nebula.js/cli-build": "1.0.0",
     "@nebula.js/cli-serve": "1.0.1",
     "@nebula.js/stardust": "1.0.1",
     "babel-plugin-istanbul": "6.0.0",
