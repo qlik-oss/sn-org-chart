@@ -92,7 +92,7 @@ jobs:
   publish-dev:
     <<: *defaults
     docker:
-      - image: circleci/node:10.14.0
+      - image: circleci/node:10.14.2
     steps:
       - attach_workspace:
           at: ~/org
