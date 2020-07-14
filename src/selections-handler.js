@@ -1,10 +1,11 @@
-import { useEffect, useState, useSelections, useAction } from '@nebula.js/stardust';
+import { useEffect, useState, useSelections, useAction, useLayout } from '@nebula.js/stardust';
 import autoRegister from './locale/translations';
 import { singleSelectionIcon } from './utils/svg-icons';
 
 export default function selectionHandler(translator) {
   const [singleSelect, setSingleSelect] = useState(false);
   const selectionsAPI = useSelections();
+  const isInSelections = !!useLayout().qSelectionInfo.qInSelections;
   const [selectionObj] = useState({
     api: selectionsAPI,
     setState: state => {
@@ -64,9 +65,10 @@ export default function selectionHandler(translator) {
         ],
       },
       active: singleSelect,
+      hidden: !isInSelections,
       label: translator.get('Object.OrgChart.SingleSelect'),
     }),
-    [singleSelect]
+    [singleSelect, isInSelections]
   );
 
   useEffect(() => {
