@@ -122,7 +122,9 @@ export const createContainer = ({
     .attr('width', '100%')
     .attr('height', '100%');
 
-  const divBox = select(zoomWrapper).selectAll('div').data([{}]).enter().append('div').attr('class', 'sn-org-nodes');
+  const divBox = select(zoomWrapper).selectAll('div').data([{}]).enter()
+    .append('div')
+    .attr('class', 'sn-org-nodes');
 
   const homeButton = select(element)
     .append('button')
