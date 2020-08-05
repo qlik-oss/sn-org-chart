@@ -29,8 +29,8 @@ export const getNewState = (d, { topId, isExpanded, expandedChildren }, ancestor
   } else if (d.parent.data.id === topId) {
     // children
     const expandedHaveNoChildren = d.parent.children
-      .filter(sibling => expandedChildren.includes(sibling.data.id))
-      .every(n => haveNoChildren(n.children));
+      .filter((sibling) => expandedChildren.includes(sibling.data.id))
+      .every((n) => haveNoChildren(n.children));
     if (expandedChildren.includes(d.data.id)) {
       // Collapse if already exists in expandedChildren
       expandedChildren.splice(expandedChildren.indexOf(d.data.id), 1);
@@ -72,36 +72,36 @@ export default function box({
   const { x, y } = positioning;
   const { cardWidth, cardHeight, buttonWidth, buttonHeight, cardPadding, rootDiameter } = constants;
   const { topId } = wrapperState.expandedState;
-  const topNode = nodes.find(node => node.data.id === topId);
-  const ancestorIds = topNode && topNode.parent ? topNode.parent.ancestors().map(anc => anc.data.id) : [];
+  const topNode = nodes.find((node) => node.data.id === topId);
+  const ancestorIds = topNode && topNode.parent ? topNode.parent.ancestors().map((anc) => anc.data.id) : [];
   const touchmode = document.getElementsByTagName('html')[0].classList.contains('touch-on');
   // dummy root
   divBox
     .selectAll('.sn-org-nodes')
-    .data(nodes.filter(node => node.parent && node.parent.data.id === 'Root'))
+    .data(nodes.filter((node) => node.parent && node.parent.data.id === 'Root'))
     .enter()
     .append('div')
     .attr('class', 'sn-org-root')
-    .attr('style', d => `top:${y(d) - rootDiameter - cardPadding}px;left:${x(d) + (cardWidth - rootDiameter) / 2}px`)
-    .attr('id', d => d.data.id);
+    .attr('style', (d) => `top:${y(d) - rootDiameter - cardPadding}px;left:${x(d) + (cardWidth - rootDiameter) / 2}px`)
+    .attr('id', (d) => d.data.id);
 
   // cards
   divBox
     .selectAll('.sn-org-nodes')
-    .data(nodes.filter(node => node.data.id !== 'Root'))
+    .data(nodes.filter((node) => node.data.id !== 'Root'))
     .enter()
     .append('div')
     .attr('class', 'sn-org-card')
-    .attr('style', d => `width:${cardWidth}px;height:${cardHeight}px; top:${y(d)}px;left:${x(d)}px;`)
-    .attr('id', d => d.data.id)
-    .on('click', node => {
-      if (!wrapperState.constraints.active && node.data.id !== 'Root') {
+    .attr('style', (d) => `width:${cardWidth}px;height:${cardHeight}px; top:${y(d)}px;left:${x(d)}px;`)
+    .attr('id', (d) => d.data.id)
+    .on('click', (node) => {
+      if (!wrapperState.constraints.select && node.data.id !== 'Root') {
         touchmode && openTooltip(tooltip, node, element.clientHeight, styling, x, y, wrapperState.transform, 0);
         selections.select(node, selectionObj);
       }
     })
-    .html(d => card(d.data, styling, selectionObj))
-    .on('mouseenter', d => {
+    .html((d) => card(d.data, styling, selectionObj))
+    .on('mouseenter', (d) => {
       if (!touchmode && !wrapperState.constraints.active && event.buttons === 0) {
         openTooltip(tooltip, d, element.clientHeight, styling, x, y, wrapperState.transform);
       }
@@ -123,27 +123,28 @@ export default function box({
   if (navigationMode !== 'expandAll') {
     divBox
       .selectAll('.sn-org-nodes')
-      .data(nodes.filter(node => !!node.children && node.data.id !== 'Root'))
+      .data(nodes.filter((node) => !!node.children && node.data.id !== 'Root'))
       .enter()
       .append('div')
       .attr('class', 'sn-org-traverse')
       .attr(
         'style',
-        d =>
-          `width:${buttonWidth}px;height:${buttonHeight}px;top:${y(d) + cardHeight + cardPadding}px;left:${x(d) +
-            (cardWidth - buttonWidth) / 2}px;`
+        (d) =>
+          `width:${buttonWidth}px;height:${buttonHeight}px;top:${y(d) + cardHeight + cardPadding}px;left:${
+            x(d) + (cardWidth - buttonWidth) / 2
+          }px;`
       )
-      .attr('id', d => `${d.data.id}-expand`)
+      .attr('id', (d) => `${d.data.id}-expand`)
       .on('mouseenter', () => {
         if (!wrapperState.constraints.active) event.target.style.cursor = 'pointer';
       })
-      .on('click', d => {
+      .on('click', (d) => {
         if (!wrapperState.constraints.active) {
           setExpandedCallback(getNewState(d, wrapperState.expandedState, ancestorIds));
           event.stopPropagation();
         }
       })
-      .html(d => `${getSign(d, wrapperState.expandedState, ancestorIds)} ${d.data.children.length}`);
+      .html((d) => `${getSign(d, wrapperState.expandedState, ancestorIds)} ${d.data.children.length}`);
   }
   // go up only necessary in page navigation mode
   // if (navigationMode !== 'free') {
