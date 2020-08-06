@@ -11,18 +11,18 @@ export const filterTree = ({ topId, isExpanded, expandedChildren }, nodeTree, ex
   if (navigationMode === 'expandAll') {
     return nodeTree.descendants();
   }
-  const topNode = nodeTree.descendants().find(node => node.data.id === topId) || nodeTree;
+  const topNode = nodeTree.descendants().find((node) => node.data.id === topId) || nodeTree;
   const subTree = [];
   if (isExpanded && topNode.children) {
     // children
-    topNode.children.forEach(child => {
+    topNode.children.forEach((child) => {
       subTree.push(child);
       if (child.children) {
         if (expandedChildren.indexOf(child.data.id) !== -1 || extended) {
-          child.children.forEach(grandChild => {
+          child.children.forEach((grandChild) => {
             subTree.push(grandChild);
             if (expandedChildren.indexOf(child.data.id) !== -1 && extended && grandChild.children) {
-              grandChild.children.forEach(extendedChild => {
+              grandChild.children.forEach((extendedChild) => {
                 subTree.push(extendedChild);
               });
             }
@@ -34,10 +34,10 @@ export const filterTree = ({ topId, isExpanded, expandedChildren }, nodeTree, ex
 
   if (nodeTree.data.navigationMode === 'free' && topNode.parent) {
     const ancestors = topNode.parent.ancestors();
-    const ancestorIds = ancestors.map(anc => anc.data.id);
-    ancestors.forEach(ancestor => {
+    const ancestorIds = ancestors.map((anc) => anc.data.id);
+    ancestors.forEach((ancestor) => {
       if (extended) {
-        ancestor.children.forEach(child => {
+        ancestor.children.forEach((child) => {
           child.children &&
             ancestorIds.indexOf(child.data.id) === -1 &&
             child.data.id !== topNode.data.id &&
@@ -76,10 +76,7 @@ export const paintTree = ({ containerData, styling, setExpandedCallback, wrapper
     tooltip,
   });
   // Create the lines (links) between the nodes
-  const node = svg
-    .selectAll('.sn-org-paths')
-    .data(nodes)
-    .enter();
+  const node = svg.selectAll('.sn-org-paths').data(nodes).enter();
   createPaths(node, positioning, wrapperState.expandedState.topId, navigationMode);
   // Scale and translate only needed when user cannot zoom
   // if (navigationMode !== 'free') {
@@ -109,7 +106,7 @@ export const createContainer = ({
     .append('span')
     .attr('class', 'sn-org-zoomwrapper')
     .on('click', () => {
-      if (!wrapperState.constraints.active && (!selectionObj.api.isActive() || !selectionObj.state)) {
+      if (!wrapperState.constraints.select && (!selectionObj.api.isActive() || !selectionObj.state)) {
         selectionObj.api.begin('/qHyperCubeDef');
         selectionObj.setState([]);
       }
@@ -125,10 +122,7 @@ export const createContainer = ({
     .attr('width', '100%')
     .attr('height', '100%');
 
-  const divBox = select(zoomWrapper)
-    .selectAll('div')
-    .data([{}])
-    .enter()
+  const divBox = select(zoomWrapper).selectAll('div').data([{}]).enter()
     .append('div')
     .attr('class', 'sn-org-nodes');
 
@@ -155,10 +149,7 @@ export const createContainer = ({
   const tooltip = createTooltip(element);
 
   if (dataTree.error) {
-    select(zoomWrapper)
-      .append('div')
-      .attr('class', 'sn-org-error')
-      .html(dataTree.message);
+    select(zoomWrapper).append('div').attr('class', 'sn-org-error').html(dataTree.message);
     return false;
   }
 
@@ -179,13 +170,13 @@ export const createContainer = ({
 
   const resetExpandedState =
     !wrapperState.expandedState ||
-    !allNodes.descendants().find(node => node.data.id === wrapperState.expandedState.topId);
+    !allNodes.descendants().find((node) => node.data.id === wrapperState.expandedState.topId);
   const newExpandedState = resetExpandedState
     ? { topId: allNodes.data.id, isExpanded: true, expandedChildren: [], useTransitions: false }
     : wrapperState.expandedState;
 
   const renderNodes = filterTree(newExpandedState, allNodes, false, navigationMode);
-  renderNodes.forEach(node => {
+  renderNodes.forEach((node) => {
     if (!node.xActual || !node.yActual) {
       positioning.x(node);
       positioning.y(node);
