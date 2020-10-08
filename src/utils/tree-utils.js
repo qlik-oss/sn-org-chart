@@ -54,7 +54,7 @@ export async function fetchPage(dataPages, dataMatrix, model, fullHeight, curren
         qHeight: pageSize,
       },
     ])
-    .then(data => {
+    .then((data) => {
       dataPages.push(data[0]);
       dataMatrix.push(...data[0].qMatrix);
       // eslint-disable-next-line no-param-reassign
@@ -115,7 +115,7 @@ export function getAttributeIndecies(attrsInfo) {
 
 export function getAttributes(indecies, qAttrExps) {
   const attributes = {};
-  indecies.forEach(attr => {
+  indecies.forEach((attr) => {
     if (attr.prop === 'color') {
       attributes[attr.prop] = colorUtils.resolveExpression(qAttrExps.qValues[attr.index].qText);
     } else {
@@ -127,8 +127,8 @@ export function getAttributes(indecies, qAttrExps) {
 
 export function getAllTreeElemNo(node, activate) {
   const idList = [];
-  const pushChildrenIds = currentNode => {
-    currentNode.children.forEach(child => {
+  const pushChildrenIds = (currentNode) => {
+    currentNode.children.forEach((child) => {
       child.data.selected = activate;
       idList.push(child.data.elemNo);
       if (child.children && child.children.length > 0) {
@@ -149,6 +149,7 @@ export function haveNoChildren(nodes) {
       return false;
     }
   }
+
   return true;
 }
 
