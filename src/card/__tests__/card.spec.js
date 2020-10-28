@@ -1,4 +1,6 @@
+import sinon from 'sinon';
 import card, { getBackgroundColor, getFontColor } from '../card';
+import encodeUtils from '../../utils/encoder';
 
 describe('card', () => {
   describe('getBackgroundColor', () => {
@@ -62,6 +64,7 @@ describe('card', () => {
     let data;
     let cardStyling;
     let selections;
+    const sandbox = sinon.createSandbox();
     beforeEach(() => {
       data = {
         id: 'someId',
@@ -70,6 +73,11 @@ describe('card', () => {
       };
       cardStyling = { backgroundColor: '#e6e6e6', fontColor: 'default', border: { top: true, colorType: 'auto' } };
       selections = { api: { isActive: () => false } };
+      sandbox.replace(encodeUtils, 'encodeTitle', (input) => input);
+    });
+
+    afterEach(() => {
+      sandbox.verifyAndRestore();
     });
 
     it('should return html for node with only id', () => {
