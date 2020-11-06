@@ -30,7 +30,7 @@ export default (data, cardStyling, selectionObj) => {
   }
   if (data.measure) {
     const measureLabel = cardStyling.measureLabel ? `${cardStyling.measureLabel}: ` : '';
-    html += `<div class="sn-org-card-label">${encodeUtils.encodeTitle(measureLabel)}${data.measure}</div>`;
+    html += `<div class="sn-org-card-label">${encodeUtils.encodeTitle(measureLabel + data.measure)}</div>`;
   } else if (attributes.extraLabel) {
     html += `<div class="sn-org-card-label">${encodeUtils.encodeTitle(attributes.extraLabel)}</div>`;
   }
