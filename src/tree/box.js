@@ -95,7 +95,7 @@ export default function box({
     .attr('style', (d) => `width:${cardWidth}px;height:${cardHeight}px; top:${y(d)}px;left:${x(d)}px;`)
     .attr('id', (d) => d.data.id)
     .on('click', (node) => {
-      if (!wrapperState.constraints.select && node.data.id !== 'Root') {
+      if (!wrapperState.constraints.active && node.data.id !== 'Root') {
         touchmode && openTooltip(tooltip, node, element.clientHeight, styling, x, y, wrapperState.transform, 0);
         selections.select(node, selectionObj);
       }
