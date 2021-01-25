@@ -106,7 +106,7 @@ export const createContainer = ({
     .append('span')
     .attr('class', 'sn-org-zoomwrapper')
     .on('click', () => {
-      if (!wrapperState.constraints.select && (!selectionObj.api.isActive() || !selectionObj.state)) {
+      if (!wrapperState.constraints.active && (!selectionObj.api.isActive() || !selectionObj.state)) {
         selectionObj.api.begin('/qHyperCubeDef');
         selectionObj.setState([]);
       }
