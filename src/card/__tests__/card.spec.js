@@ -74,6 +74,7 @@ describe('card', () => {
       cardStyling = { backgroundColor: '#e6e6e6', fontColor: 'default', border: { top: true, colorType: 'auto' } };
       selections = { api: { isActive: () => false } };
       sandbox.replace(encodeUtils, 'encodeTitle', (input) => input);
+      sandbox.replace(encodeUtils, 'encodeCssColor', (input) => input);
     });
 
     afterEach(() => {

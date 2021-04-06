@@ -37,7 +37,7 @@ export default (data, cardStyling, selectionObj) => {
   const selectedClass = api && api.isActive() ? (isSelected ? ' selected' : ' not-selected') : '';
 
   const { top = true, fullBorder, colorType = 'auto' } = cardStyling.border;
-  const borderColor = colorType === 'auto' ? colorUtils.getDarkColor(backgroundColor) : cardStyling.borderColor;
+  const borderColor = encodeUtils.encodeCssColor(colorType === 'auto' ? colorUtils.getDarkColor(backgroundColor) : cardStyling.borderColor);
   const topBorder = top && !isSelected ? `3px solid ${borderColor}` : '';
   const borderStyle = fullBorder && !isSelected ? `1px solid ${borderColor}` : '';
   let newCardHeight = constants.cardHeight;
