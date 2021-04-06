@@ -1,4 +1,5 @@
 import { select } from 'd3';
+import encodeUtils from '../utils/encoder';
 import constants from './size-constants';
 
 export function createTooltip(element) {
@@ -24,7 +25,7 @@ export function getTooltipContent(d, styling) {
   const subLabel = d.data.attributes.subLabel ? `${d.data.attributes.subLabel}<br />` : '';
   const extraLabel = d.data.attributes.extraLabel ? `${d.data.attributes.extraLabel}<br />` : '';
   const measure = d.data.measure ? `${styling.measureLabel ? `${styling.measureLabel}: ` : ''}${d.data.measure}` : '';
-  return `<div class="sn-org-tooltip-inner"><div class="sn-org-tooltip-header">${label}</div>${subLabel}${extraLabel}${measure}</div>`;
+  return `<div class="sn-org-tooltip-inner"><div class="sn-org-tooltip-header">${encodeUtils.encodeTitle(label)}</div>${encodeUtils.encodeTitle(subLabel + extraLabel + measure)}</div>`;
 }
 
 export function openTooltip(tooltip, d, containerHeight, styling, x, y, transform, delay = 250) {

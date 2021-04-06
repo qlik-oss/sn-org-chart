@@ -1,4 +1,6 @@
+import sinon from 'sinon';
 import { getTooltipStyle, getTooltipContent } from '../tooltip';
+import encodeUtils from '../../utils/encoder';
 
 describe('tooltip', () => {
   describe('getTooltipStyle', () => {
@@ -27,6 +29,8 @@ describe('tooltip', () => {
     let d;
     let styling;
     let content;
+    const sandbox = sinon.createSandbox();
+    sandbox.replace(encodeUtils, 'encodeTitle', (input) => input);
 
     beforeEach(() => {
       d = {
