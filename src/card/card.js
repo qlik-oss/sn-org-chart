@@ -21,8 +21,8 @@ export function getFontColor(cardStyling, backgroundColor) {
 export default (data, cardStyling, selectionObj) => {
   const { api, state } = selectionObj;
   const isSelected = api && api.isActive() && state.indexOf(data.elemNo) !== -1;
-  const backgroundColor = getBackgroundColor(data, cardStyling);
-  const fontColor = getFontColor(cardStyling, backgroundColor);
+  const backgroundColor = encodeUtils.encodeCssColor(getBackgroundColor(data, cardStyling));
+  const fontColor = encodeUtils.encodeCssColor(getFontColor(cardStyling, backgroundColor));
   const attributes = data.attributes || {};
   let html = `<div class="sn-org-card-title">${encodeUtils.encodeTitle(attributes.label || data.id)}</div>`;
   if (attributes.subLabel) {
@@ -37,7 +37,7 @@ export default (data, cardStyling, selectionObj) => {
   const selectedClass = api && api.isActive() ? (isSelected ? ' selected' : ' not-selected') : '';
 
   const { top = true, fullBorder, colorType = 'auto' } = cardStyling.border;
-  const borderColor = colorType === 'auto' ? colorUtils.getDarkColor(backgroundColor) : cardStyling.borderColor;
+  const borderColor = encodeUtils.encodeCssColor(colorType === 'auto' ? colorUtils.getDarkColor(backgroundColor) : cardStyling.borderColor);
   const topBorder = top && !isSelected ? `3px solid ${borderColor}` : '';
   const borderStyle = fullBorder && !isSelected ? `1px solid ${borderColor}` : '';
   let newCardHeight = constants.cardHeight;
