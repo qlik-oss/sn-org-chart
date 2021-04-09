@@ -2,13 +2,19 @@ import colorUtils from '../utils/color-utils';
 import encodeUtils from '../utils/encoder';
 import constants from '../tree/size-constants';
 
+export function resolveColor(color) {
+  const resolvedColor = colorUtils.resolveExpression(color);
+  return resolvedColor !== 'none' ? resolvedColor : encodeUtils.encodeCssColor(color);
+}
+
 export function getBackgroundColor(data, cardStyling) {
-  const color = cardStyling.backgroundColor;
   if (data.attributes && data.attributes.color) {
     const resolvedColor = colorUtils.resolveExpression(data.attributes.color);
-    return resolvedColor !== 'none' ? resolvedColor : encodeUtils.encodeCssColor(color);
+    if (resolvedColor !== 'none') {
+      return resolvedColor;
+    }
   }
-  return encodeUtils.encodeCssColor(color);
+  return resolveColor(cardStyling.backgroundColor);
 }
 
 export function getFontColor(cardStyling, backgroundColor) {
@@ -16,11 +22,6 @@ export function getFontColor(cardStyling, backgroundColor) {
     return colorUtils.isDarkColor(backgroundColor) ? '#e6e6e6' : '#484848';
   }
   return cardStyling.fontColor;
-}
-
-export function resolveColor(color) {
-  const resolvedColor = colorUtils.resolveExpression(color);
-  return resolvedColor !== 'none' ? resolvedColor : encodeUtils.encodeCssColor(color);
 }
 
 export default (data, cardStyling, selectionObj) => {
