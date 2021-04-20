@@ -1,4 +1,6 @@
+import sinon from 'sinon';
 import { getTooltipStyle, getTooltipContent } from '../tooltip';
+import encodeUtils from '../../utils/encoder';
 
 describe('tooltip', () => {
   describe('getTooltipStyle', () => {
@@ -29,6 +31,7 @@ describe('tooltip', () => {
     let d;
     let cardStyling;
     let content;
+    const sandbox = sinon.createSandbox();
 
     beforeEach(() => {
       d = {
@@ -45,6 +48,11 @@ describe('tooltip', () => {
       cardStyling = {
         measureLabel: '',
       };
+      sandbox.replace(encodeUtils, 'encodeTitle', (input) => input);
+    });
+
+    afterEach(() => {
+      sandbox.verifyAndRestore();
     });
 
     it('Should return string containing id', () => {
