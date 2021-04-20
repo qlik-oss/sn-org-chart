@@ -2,10 +2,10 @@ import colorUtils from '../utils/color-utils';
 import encodeUtils from '../utils/encoder';
 
 export function getBackgroundColor(data, cardStyling) {
-  let color = cardStyling.backgroundColor;
+  let color = encodeUtils.encodeCssColor(cardStyling.backgroundColor);
   if (data.attributes && data.attributes.color) {
     const resolvedColor = colorUtils.resolveExpression(data.attributes.color);
-    color = resolvedColor !== 'none' ? resolvedColor : encodeUtils.encodeCssColor(color);
+    color = resolvedColor !== 'none' ? resolvedColor : color;
   }
   return color;
 }
@@ -14,7 +14,7 @@ export function getFontColor(cardStyling, backgroundColor) {
   if (cardStyling.fontColor === 'default') {
     return colorUtils.isDarkColor(backgroundColor) ? '#e6e6e6' : '#484848';
   }
-  return cardStyling.fontColor;
+  return encodeUtils.encodeCssColor(cardStyling.fontColor);
 }
 
 export default (data, cardStyling, sel, selectionState) => {
