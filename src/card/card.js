@@ -1,12 +1,19 @@
 import colorUtils from '../utils/color-utils';
+import encodeUtils from '../utils/encoder';
+
+export function resolveColor(color) {
+  const resolvedColor = colorUtils.resolveExpression(color);
+  return resolvedColor !== 'none' ? resolvedColor : encodeUtils.encodeCssColor(color);
+}
 
 export function getBackgroundColor(data, cardStyling) {
-  let color = cardStyling.backgroundColor;
   if (data.attributes && data.attributes.color) {
     const resolvedColor = colorUtils.resolveExpression(data.attributes.color);
-    color = resolvedColor !== 'none' ? resolvedColor : color;
+    if (resolvedColor !== 'none') {
+      return resolvedColor;
+    }
   }
-  return color;
+  return resolveColor(cardStyling.backgroundColor);
 }
 
 export function getFontColor(cardStyling, backgroundColor) {
@@ -21,17 +28,17 @@ export default (data, cardStyling, sel, selectionState) => {
   const isSelected = selections && selections.isActive() && selectionState.indexOf(data.elemNo) !== -1;
   const backgroundColor = getBackgroundColor(data, cardStyling);
   const topColor = colorUtils.getDarkColor(backgroundColor);
-  const fontColor = getFontColor(cardStyling, backgroundColor);
+  const fontColor = resolveColor(getFontColor(cardStyling, backgroundColor));
   const attributes = data.attributes || {};
-  let html = `<div class="sn-org-card-title">${attributes.label || data.id}</div>`;
+  let html = `<div class="sn-org-card-title">${encodeUtils.encodeTitle(attributes.label || data.id)}</div>`;
   if (attributes.subLabel) {
-    html += `<div class="sn-org-card-label">${attributes.subLabel}</div>`;
+    html += `<div class="sn-org-card-label">${encodeUtils.encodeTitle(attributes.subLabel)}</div>`;
   }
   if (data.measure) {
     const measureLabel = cardStyling.measureLabel ? `${cardStyling.measureLabel}: ` : '';
-    html += `<div class="sn-org-card-label">${measureLabel}${data.measure}</div>`;
+    html += `<div class="sn-org-card-label">${encodeUtils.encodeTitle(measureLabel + data.measure)}</div>`;
   } else if (attributes.extraLabel) {
-    html += `<div class="sn-org-card-label">${attributes.extraLabel}</div>`;
+    html += `<div class="sn-org-card-label">${encodeUtils.encodeTitle(attributes.extraLabel)}</div>`;
   }
   const topbar = isSelected ? '' : `<div class="sn-org-card-top" style="background-color:${topColor};"></div>`;
   const selectedClass = selections && selections.isActive() ? (isSelected ? ' selected' : ' not-selected') : '';
