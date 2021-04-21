@@ -1,20 +1,26 @@
 import colorUtils from '../utils/color-utils';
 import encodeUtils from '../utils/encoder';
 
+export function resolveColor(color) {
+  const resolvedColor = colorUtils.resolveExpression(color);
+  return resolvedColor !== 'none' ? resolvedColor : encodeUtils.encodeCssColor(color);
+}
+
 export function getBackgroundColor(data, cardStyling) {
-  let color = encodeUtils.encodeCssColor(cardStyling.backgroundColor);
   if (data.attributes && data.attributes.color) {
     const resolvedColor = colorUtils.resolveExpression(data.attributes.color);
-    color = resolvedColor !== 'none' ? resolvedColor : color;
+    if (resolvedColor !== 'none') {
+      return resolvedColor;
+    }
   }
-  return color;
+  return resolveColor(cardStyling.backgroundColor);
 }
 
 export function getFontColor(cardStyling, backgroundColor) {
   if (cardStyling.fontColor === 'default') {
     return colorUtils.isDarkColor(backgroundColor) ? '#e6e6e6' : '#484848';
   }
-  return encodeUtils.encodeCssColor(cardStyling.fontColor);
+  return cardStyling.fontColor;
 }
 
 export default (data, cardStyling, sel, selectionState) => {
@@ -22,7 +28,7 @@ export default (data, cardStyling, sel, selectionState) => {
   const isSelected = selections && selections.isActive() && selectionState.indexOf(data.elemNo) !== -1;
   const backgroundColor = getBackgroundColor(data, cardStyling);
   const topColor = colorUtils.getDarkColor(backgroundColor);
-  const fontColor = getFontColor(cardStyling, backgroundColor);
+  const fontColor = resolveColor(getFontColor(cardStyling, backgroundColor));
   const attributes = data.attributes || {};
   let html = `<div class="sn-org-card-title">${encodeUtils.encodeTitle(attributes.label || data.id)}</div>`;
   if (attributes.subLabel) {
