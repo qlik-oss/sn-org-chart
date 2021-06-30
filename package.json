@@ -64,7 +64,7 @@
     "@nebula.js/cli-serve": "1.4.0",
     "@nebula.js/stardust": "1.4.0",
     "babel-plugin-istanbul": "6.0.0",
-    "d3": "5.16.0",
+    "d3": "7.0.0",
     "eslint": "7.29.0",
     "eslint-config-airbnb-base": "14.2.1",
     "eslint-plugin-import": "2.23.4",
