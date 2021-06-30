@@ -2774,6 +2774,25 @@
     fs-extra "10.0.0"
     inquirer "8.1.0"
 
+"@nebula.js/cli-sense@1.4.0":
+  version "1.4.0"
+  resolved "https://registry.yarnpkg.com/@nebula.js/cli-sense/-/cli-sense-1.4.0.tgz#a99ed7e8b149254f6db30de2813598b4f6e7f995"
+  integrity sha512-lAVITTOCi51IHNDKZjmbBTOIVEpFmeSs69XwNRHJF8lbcqgCax+pKfQJbcnGfk7qHrfAB6XhKkTude42DTzPpQ==
+  dependencies:
+    "@babel/cli" "7.14.3"
+    "@babel/core" "7.14.3"
+    "@babel/preset-env" "7.14.4"
+    "@nebula.js/stardust" "^1.4.0"
+    "@rollup/plugin-commonjs" "19.0.0"
+    "@rollup/plugin-node-resolve" "13.0.0"
+    "@rollup/plugin-replace" "2.4.2"
+    fs-extra "10.0.0"
+    node-event-emitter "0.0.1"
+    rollup "2.50.6"
+    rollup-plugin-babel "4.4.0"
+    rollup-plugin-terser "7.0.2"
+    yargs "17.0.1"
+
 "@nebula.js/cli-serve@1.4.0":
   version "1.4.0"
   resolved "https://registry.yarnpkg.com/@nebula.js/cli-serve/-/cli-serve-1.4.0.tgz#2c2e64448363af13a9b716ab8fbba60318f85cdb"
@@ -2805,7 +2824,7 @@
     import-cwd "3.0.0"
     yargs "17.0.1"
 
-"@nebula.js/stardust@1.4.0":
+"@nebula.js/stardust@1.4.0", "@nebula.js/stardust@^1.4.0":
   version "1.4.0"
   resolved "https://registry.yarnpkg.com/@nebula.js/stardust/-/stardust-1.4.0.tgz#0b891d906ca71adb6d88946e67a16af99b0e91cb"
   integrity sha512-e7XL8hPpv1m7E7fLFQBS67mE6XMEb1YCXdRxvGN8hy+ETCy/wsJlsAdws3cB+T3Zgid8TNueg3c0HSeZA23gKg==
@@ -8473,6 +8492,11 @@ node-environment-flags@1.0.5:
   dependencies:
     object.getownpropertydescriptors "^2.0.3"
     semver "^5.7.0"
+
+node-event-emitter@0.0.1:
+  version "0.0.1"
+  resolved "https://registry.yarnpkg.com/node-event-emitter/-/node-event-emitter-0.0.1.tgz#8b597377d79a1d976f7d45f916d3d3643d73f8ce"
+  integrity sha1-i1lzd9eaHZdvfUX5FtPTZD1z+M4=
 
 node-fetch@2.6.1:
   version "2.6.1"

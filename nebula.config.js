@@ -1,5 +1,6 @@
 // nebula.config.js
 module.exports = {
+  build: {},
   serve: {
     snapshots: [
       {
@@ -13,15 +14,10 @@ module.exports = {
         layout: {
           qInfo: {
             qId: '1583311157530',
-            qType: 'sn-org-chart'
+            qType: 'sn-org-chart',
           },
           qMeta: {
-            privileges: [
-              'read',
-              'update',
-              'delete',
-              'exportdata'
-            ]
+            privileges: ['read', 'update', 'delete', 'exportdata'],
           },
           qSelectionInfo: {},
           visualization: 'sn-org-chart',
@@ -29,7 +25,7 @@ module.exports = {
           qHyperCube: {
             qSize: {
               qcx: 2,
-              qcy: 16
+              qcy: 16,
             },
             qDimensionInfo: [
               {
@@ -37,9 +33,7 @@ module.exports = {
                 qApprMaxGlyphCount: 4,
                 qCardinal: 16,
                 qSortIndicator: 'A',
-                qGroupFallbackTitles: [
-                  'Employee'
-                ],
+                qGroupFallbackTitles: ['Employee'],
                 qGroupPos: 0,
                 qStateCounts: {
                   qLocked: 0,
@@ -49,23 +43,18 @@ module.exports = {
                   qAlternative: 0,
                   qExcluded: 0,
                   qSelectedExcluded: 0,
-                  qLockedExcluded: 0
+                  qLockedExcluded: 0,
                 },
-                qTags: [
-                  '$ascii',
-                  '$text'
-                ],
+                qTags: ['$ascii', '$text'],
                 qDimensionType: 'D',
                 qGrouping: 'N',
                 qNumFormat: {
                   qType: 'U',
                   qnDec: 0,
-                  qUseThou: 0
+                  qUseThou: 0,
                 },
                 qIsAutoFormat: true,
-                qGroupFieldDefs: [
-                  'Employee'
-                ],
+                qGroupFieldDefs: ['Employee'],
                 qMin: 'NaN',
                 qMax: 'NaN',
                 qAttrExprInfo: [],
@@ -73,18 +62,16 @@ module.exports = {
                 qCardinalities: {
                   qCardinal: 16,
                   qHypercubeCardinal: 0,
-                  qAllValuesCardinal: -1
+                  qAllValuesCardinal: -1,
                 },
-                cId: 'th69np'
+                cId: 'th69np',
               },
               {
                 qFallbackTitle: 'Boss',
                 qApprMaxGlyphCount: 3,
                 qCardinal: 6,
                 qSortIndicator: 'A',
-                qGroupFallbackTitles: [
-                  'Boss'
-                ],
+                qGroupFallbackTitles: ['Boss'],
                 qGroupPos: 0,
                 qStateCounts: {
                   qLocked: 0,
@@ -94,23 +81,18 @@ module.exports = {
                   qAlternative: 0,
                   qExcluded: 0,
                   qSelectedExcluded: 0,
-                  qLockedExcluded: 0
+                  qLockedExcluded: 0,
                 },
-                qTags: [
-                  '$ascii',
-                  '$text'
-                ],
+                qTags: ['$ascii', '$text'],
                 qDimensionType: 'D',
                 qGrouping: 'N',
                 qNumFormat: {
                   qType: 'U',
                   qnDec: 0,
-                  qUseThou: 0
+                  qUseThou: 0,
                 },
                 qIsAutoFormat: true,
-                qGroupFieldDefs: [
-                  'Boss'
-                ],
+                qGroupFieldDefs: ['Boss'],
                 qMin: 'NaN',
                 qMax: 'NaN',
                 qAttrExprInfo: [],
@@ -118,16 +100,13 @@ module.exports = {
                 qCardinalities: {
                   qCardinal: 6,
                   qHypercubeCardinal: 0,
-                  qAllValuesCardinal: -1
+                  qAllValuesCardinal: -1,
                 },
-                cId: 'hpu7ln'
-              }
+                cId: 'hpu7ln',
+              },
             ],
             qMeasureInfo: [],
-            qEffectiveInterColumnSortOrder: [
-              0,
-              1
-            ],
+            qEffectiveInterColumnSortOrder: [0, 1],
             qGrandTotalRow: [],
             qDataPages: [
               {
@@ -137,75 +116,75 @@ module.exports = {
                       qText: 'CEO',
                       qNum: 'NaN',
                       qElemNumber: 2,
-                      qState: 'O'
+                      qState: 'O',
                     },
                     {
                       qText: 'CO',
                       qNum: 'NaN',
                       qElemNumber: 1,
-                      qState: 'O'
-                    }
+                      qState: 'O',
+                    },
                   ],
                   [
                     {
                       qText: 'CMO',
                       qNum: 'NaN',
                       qElemNumber: 3,
-                      qState: 'O'
+                      qState: 'O',
                     },
                     {
                       qText: 'CO',
                       qNum: 'NaN',
                       qElemNumber: 1,
-                      qState: 'O'
-                    }
+                      qState: 'O',
+                    },
                   ],
                   [
                     {
                       qText: 'CO',
                       qNum: 'NaN',
                       qElemNumber: 0,
-                      qState: 'O'
+                      qState: 'O',
                     },
                     {
                       qText: '-',
                       qNum: 'NaN',
                       qElemNumber: 0,
-                      qState: 'O'
-                    }
+                      qState: 'O',
+                    },
                   ],
                   [
                     {
                       qText: 'CTO',
                       qNum: 'NaN',
                       qElemNumber: 1,
-                      qState: 'O'
+                      qState: 'O',
                     },
                     {
                       qText: 'CO',
                       qNum: 'NaN',
                       qElemNumber: 1,
-                      qState: 'O'
-                    }
+                      qState: 'O',
+                    },
                   ],
                 ],
                 qTails: [
                   {
                     qUp: 0,
-                    qDown: 0
+                    qDown: 0,
                   },
                   {
                     qUp: 0,
-                    qDown: 0
-                  }
+                    qDown: 0,
+                  },
                 ],
                 qArea: {
                   qLeft: 0,
                   qTop: 0,
                   qWidth: 2,
-                  qHeight: 16
-                }
-              }
+                  qHeight: 16,
+                },
+              },
             ],
             qPivotDataPages: [],
             qStackedDataPages: [],
@@ -213,7 +192,7 @@ module.exports = {
             qNoOfLeftDims: -1,
             qTreeNodesOnDim: [],
             qColumnOrder: [],
-            qExpansionState: []
+            qExpansionState: [],
           },
           title: '',
           subtitle: '',
@@ -224,18 +203,18 @@ module.exports = {
               colorType: 'auto',
               color: {
                 index: -1,
-                color: '#484848'
+                color: '#484848',
               },
-              colorExpression: ''
+              colorExpression: '',
             },
             backgroundColor: {
               colorType: 'auto',
               color: {
                 index: -1,
-                color: '#e6e6e6'
+                color: '#e6e6e6',
               },
-              colorExpression: ''
-            }
+              colorExpression: '',
+            },
           },
           snapshotData: {
             viewState: {
@@ -243,22 +222,22 @@ module.exports = {
                 topId: 'CO',
                 isExpanded: true,
                 expandedChildren: [],
-                useTransitions: false
+                useTransitions: false,
               },
               transform: {
                 zoom: 2.222560975609756,
                 x: 0,
-                y: 0
+                y: 0,
               },
               size: {
                 w: 2254,
-                h: 729
+                h: 729,
               },
               initialZoom: {
                 initialX: 431.07270233196164,
                 initialY: 32,
-                initialZoom: 0.4499314128943759
-              }
+                initialZoom: 0.4499314128943759,
+              },
             },
             dataMatrix: [
               [
@@ -266,55 +245,55 @@ module.exports = {
                   qText: 'CEO',
                   qNum: 'NaN',
                   qElemNumber: 2,
-                  qState: 'O'
+                  qState: 'O',
                 },
                 {
                   qText: 'CO',
                   qNum: 'NaN',
                   qElemNumber: 1,
-                  qState: 'O'
-                }
+                  qState: 'O',
+                },
               ],
               [
                 {
                   qText: 'CMO',
                   qNum: 'NaN',
                   qElemNumber: 3,
-                  qState: 'O'
+                  qState: 'O',
                 },
                 {
                   qText: 'CO',
                   qNum: 'NaN',
                   qElemNumber: 1,
-                  qState: 'O'
-                }
+                  qState: 'O',
+                },
               ],
               [
                 {
                   qText: 'CO',
                   qNum: 'NaN',
                   qElemNumber: 0,
-                  qState: 'O'
+                  qState: 'O',
                 },
                 {
                   qText: '-',
                   qNum: 'NaN',
                   qElemNumber: 0,
-                  qState: 'O'
-                }
+                  qState: 'O',
+                },
               ],
               [
                 {
                   qText: 'CTO',
                   qNum: 'NaN',
                   qElemNumber: 1,
-                  qState: 'O'
+                  qState: 'O',
                 },
                 {
                   qText: 'CO',
                   qNum: 'NaN',
                   qElemNumber: 1,
-                  qState: 'O'
+                  qState: 'O',
                 },
               ],
             ],
