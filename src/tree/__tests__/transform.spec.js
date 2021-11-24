@@ -41,7 +41,6 @@ describe('transform', () => {
         expected = {
           scaleFactor: 1,
           divTranslation: '250px, 0px',
-          svgTranslation: '250 0',
         };
         expect(translatoions).to.deep.equal(expected);
       });
@@ -52,7 +51,6 @@ describe('transform', () => {
         expected = {
           scaleFactor: 0.5,
           divTranslation: '0px, 250px',
-          svgTranslation: '0 250',
         };
         expect(translatoions).to.deep.equal(expected);
       });

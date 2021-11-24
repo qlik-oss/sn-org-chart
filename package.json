@@ -29,7 +29,7 @@
   "main": "dist/sn-org-chart.js",
   "module": "dist/sn-org-chart.esm.js",
   "scripts": {
-    "build": "nebula build --sourcemap false && shx cp assets/* dist",
+    "build": "nebula build && shx cp assets/* dist",
     "sense": "nebula sense --ext ./src/extension/ext-raw.js --meta ./src/extension/meta.json",
     "lint": "eslint src",
     "start": "nebula serve --type sn-org-chart",
