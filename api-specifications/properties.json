@@ -1,0 +1,215 @@
+{
+  "scriptappy": "1.0.0",
+  "info": {
+    "name": "@nebula.js/sn-org-chart:properties",
+    "description": "Org chart generic object definition",
+    "version": "0.15.0",
+    "license": "MIT",
+    "stability": "experimental",
+    "x-qlik-visibility": "public"
+  },
+  "entries": {},
+  "definitions": {
+    "properties.footnote": {
+      "description": "Visualization footnote",
+      "defaultValue": "",
+      "type": "string"
+    },
+    "properties.navigationMode": {
+      "defaultValue": "free",
+      "kind": "union",
+      "items": [
+        {
+          "kind": "literal",
+          "value": "'regular'"
+        },
+        {
+          "kind": "literal",
+          "value": "'scroll'"
+        },
+        {
+          "kind": "literal",
+          "value": "'free'"
+        }
+      ],
+      "type": "string"
+    },
+    "properties.resizeOnExpand": {
+      "description": "Resize and pan chart when a node's list of children is expanded",
+      "defaultValue": false,
+      "type": "boolean"
+    },
+    "properties.showTitles": {
+      "description": "Show title for the visualization",
+      "defaultValue": true,
+      "type": "boolean"
+    },
+    "properties.style": {
+      "description": "Holds chart styling",
+      "kind": "object",
+      "entries": {
+        "backgroundColor": {
+          "description": "Hold background color details",
+          "kind": "object",
+          "entries": {
+            "color": {
+              "description": "Background color",
+              "kind": "object",
+              "entries": {
+                "color": {
+                  "description": "Color defined by rgb, argb or html",
+                  "defaultValue": "#ffffff",
+                  "type": "string"
+                },
+                "index": {
+                  "description": "Index of theme color",
+                  "defaultValue": -1,
+                  "type": "number"
+                }
+              }
+            },
+            "colorExpression": {
+              "description": "An expression to decide background color",
+              "defaultValue": "",
+              "type": "string"
+            },
+            "colorType": {
+              "description": "How the background color is input",
+              "defaultValue": "colorPicker",
+              "kind": "union",
+              "items": [
+                {
+                  "kind": "literal",
+                  "value": "'auto'"
+                },
+                {
+                  "kind": "literal",
+                  "value": "'colorPicker'"
+                },
+                {
+                  "kind": "literal",
+                  "value": "'byExpression'"
+                }
+              ],
+              "type": "string"
+            }
+          }
+        },
+        "border": {
+          "description": "Holds border details",
+          "kind": "object",
+          "entries": {
+            "color": {
+              "description": "Border color",
+              "kind": "object",
+              "entries": {
+                "color": {
+                  "description": "Color defined by rgb, argb or html",
+                  "defaultValue": "#737373",
+                  "type": "string"
+                },
+                "index": {
+                  "description": "Index of theme color",
+                  "defaultValue": -1,
+                  "type": "number"
+                }
+              }
+            },
+            "colorExpression": {
+              "description": "An expression to decide border color",
+              "defaultValue": "",
+              "type": "string"
+            },
+            "colorType": {
+              "description": "How the border color is input",
+              "defaultValue": "auto",
+              "kind": "union",
+              "items": [
+                {
+                  "kind": "literal",
+                  "value": "'auto'"
+                },
+                {
+                  "kind": "literal",
+                  "value": "'colorPicker'"
+                },
+                {
+                  "kind": "literal",
+                  "value": "'byExpression'"
+                }
+              ],
+              "type": "string"
+            },
+            "fullBorder": {
+              "description": "Show full border",
+              "defaultValue": true,
+              "type": "boolean"
+            },
+            "top": {
+              "description": "Shop top border",
+              "defaultValue": true,
+              "type": "boolean"
+            }
+          }
+        },
+        "fontColor": {
+          "description": "Holds font color details",
+          "kind": "object",
+          "entries": {
+            "color": {
+              "description": "Font color",
+              "kind": "object",
+              "entries": {
+                "color": {
+                  "description": "Color defined by rgb, argb or html",
+                  "defaultValue": "#484848",
+                  "type": "string"
+                },
+                "index": {
+                  "description": "Index of theme color",
+                  "defaultValue": -1,
+                  "type": "number"
+                }
+              }
+            },
+            "colorExpression": {
+              "description": "An expression to decide font color",
+              "defaultValue": "",
+              "type": "string"
+            },
+            "colorType": {
+              "description": "How the font color is input",
+              "defaultValue": "auto",
+              "kind": "union",
+              "items": [
+                {
+                  "kind": "literal",
+                  "value": "'auto'"
+                },
+                {
+                  "kind": "literal",
+                  "value": "'colorPicker'"
+                },
+                {
+                  "kind": "literal",
+                  "value": "'byExpression'"
+                }
+              ],
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "properties.subtitle": {
+      "description": "Visualization subtitle",
+      "defaultValue": "",
+      "type": "string"
+    },
+    "properties.title": {
+      "description": "Visualization title",
+      "defaultValue": "",
+      "type": "string"
+    }
+  }
+}
