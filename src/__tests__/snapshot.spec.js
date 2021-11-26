@@ -66,24 +66,24 @@ describe('snapshot', () => {
     it('should return matrix from snapshotData', () => {
       layout.snapshotData.dataMatrix = 'someMatrix';
       const result = createSnapshotData({ topId, isExpanded, expandedChildren }, nodeTree, layout);
-      expect(result).to.equal('someMatrix');
+      expect(result).toEqual('someMatrix');
     });
 
     it('should return usedMatrix', () => {
       const result = createSnapshotData({ topId, isExpanded, expandedChildren }, nodeTree, layout);
-      expect(result).to.eql([0, 1, 2, 4]);
+      expect(result).toEqual([0, 1, 2, 4]);
     });
 
     it('should return usedMatrix except node with missing rowNo', () => {
       nodeTree.children[1].data.rowNo = undefined;
       const result = createSnapshotData({ topId, isExpanded, expandedChildren }, nodeTree, layout);
-      expect(result).to.eql([0, 1, 2]);
+      expect(result).toEqual([0, 1, 2]);
     });
 
     it('should return all nodes when using expandAll navigation mode', () => {
       layout.navigationMode = 'expandAll';
       const result = createSnapshotData({ topId, isExpanded, expandedChildren }, nodeTree, layout);
-      expect(result).to.eql([0, 1, 4, 2, 3]);
+      expect(result).toEqual([0, 1, 4, 2, 3]);
     });
   });
 
@@ -104,7 +104,7 @@ describe('snapshot', () => {
         size: { w: 200, h: 100 },
         initialZoom,
       };
-      expect(result).to.eql(expected);
+      expect(result).toEqual(expected);
     });
   });
 });

@@ -14,18 +14,18 @@ describe('viewstateUtiils', () => {
     });
     it('should return viewState from opts object', () => {
       viewState = getViewState(opts, layout);
-      expect(viewState).to.equal('optsViewState');
+      expect(viewState).toEqual('optsViewState');
     });
     it('should return viewState from layout object', () => {
       opts = {};
       viewState = getViewState(opts, layout);
-      expect(viewState).to.equal('layoutViewState');
+      expect(viewState).toEqual('layoutViewState');
     });
     it('should return undefined when no viewState on either layout or opts', () => {
       opts = {};
       layout = {};
       viewState = getViewState(opts, layout);
-      expect(viewState).to.equal(undefined);
+      expect(viewState).toEqual(undefined);
     });
   });
 });
