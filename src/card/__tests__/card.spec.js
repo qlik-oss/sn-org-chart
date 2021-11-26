@@ -76,7 +76,6 @@ describe('card', () => {
     });
 
     afterEach(() => {
-      // sandbox.verifyAndRestore();
       jest.resetAllMocks();
     });
 
