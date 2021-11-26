@@ -58,30 +58,30 @@ describe('render', () => {
 
     it('should return the only top node', () => {
       const result = filterTree({ topId, isExpanded, expandedChildren }, nodeTree);
-      expect(result.length).to.equal(1);
-      expect(result[0].data.id).to.equal('1');
+      expect(result.length).toEqual(1);
+      expect(result[0].data.id).toEqual('1');
     });
 
     it('should return only the top node when topId not found', () => {
       topId = 'someInsaneId';
       const result = filterTree({ topId, isExpanded, expandedChildren }, nodeTree);
-      expect(result.length).to.equal(1);
-      expect(result[0].data.id).to.equal('1');
+      expect(result.length).toEqual(1);
+      expect(result[0].data.id).toEqual('1');
     });
 
     it('should return the top node and children', () => {
       isExpanded = true;
       const result = filterTree({ topId, isExpanded, expandedChildren }, nodeTree);
-      expect(result.length).to.equal(3);
-      expect(result.map(node => node.data.id)).to.deep.equal(['1', '2', '4']);
+      expect(result.length).toEqual(3);
+      expect(result.map((node) => node.data.id)).toEqual(['1', '2', '4']);
     });
 
     it('should return the top node and children and grandchildren of expanded', () => {
       isExpanded = true;
       expandedChildren = ['2'];
       const result = filterTree({ topId, isExpanded, expandedChildren }, nodeTree);
-      expect(result.length).to.equal(4);
-      expect(result.map(node => node.data.id)).to.deep.equal(['1', '2', '3', '4']);
+      expect(result.length).toEqual(4);
+      expect(result.map((node) => node.data.id)).toEqual(['1', '2', '3', '4']);
     });
 
     it('should return the top node and children with navigation mode free', () => {
@@ -89,8 +89,8 @@ describe('render', () => {
       isExpanded = true;
       topId = '2';
       const result = filterTree({ topId, isExpanded, expandedChildren }, nodeTree);
-      expect(result.length).to.equal(4);
-      expect(result.map(node => node.data.id)).to.deep.equal(['1', '2', '4', '3']);
+      expect(result.length).toEqual(4);
+      expect(result.map((node) => node.data.id)).toEqual(['1', '2', '4', '3']);
     });
 
     it('should return the top node and parents children with navigation mode free', () => {
@@ -98,8 +98,8 @@ describe('render', () => {
       isExpanded = true;
       topId = '5';
       const result = filterTree({ topId, isExpanded, expandedChildren }, nodeTree);
-      expect(result.length).to.equal(5);
-      expect(result.map(node => node.data.id)).to.deep.equal(['1', '2', '4', '3', '5']);
+      expect(result.length).toEqual(5);
+      expect(result.map((node) => node.data.id)).toEqual(['1', '2', '4', '3', '5']);
     });
   });
 });
