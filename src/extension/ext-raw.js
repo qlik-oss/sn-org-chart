@@ -131,11 +131,13 @@ export default {
                     type: 'string',
                     translation: 'Object.OrgChart.NavigationMode',
                     component: 'dropdown',
+                    defaultValue: 'free',
                     options: navigationOptions,
                   },
                   resizeOnExpand: {
                     ref: 'resizeOnExpand',
                     type: 'boolean',
+                    defaultValue: false,
                     translation: 'Object.OrgChart.resizeOnExpand',
                     show: (data) => propertyResolver.getValue(data, 'navigationMode') !== 'expandAll',
                   },
@@ -149,6 +151,7 @@ export default {
                     type: 'string',
                     translation: 'Object.OrgChart.BackgroundColor',
                     component: 'dropdown',
+                    defaultValue: 'colorPicker',
                     options: colorOptions,
                   },
                   colorPicker: {
@@ -157,6 +160,7 @@ export default {
                     ref: 'style.backgroundColor.color',
                     translation: 'properties.color',
                     dualOutput: true,
+                    defaultValue: { index: -1, color: '#ffffff' },
                     show: (data) =>
                       propertyResolver.getValue(data, 'style.backgroundColor.colorType') === 'colorPicker',
                   },
@@ -166,6 +170,7 @@ export default {
                     ref: 'style.backgroundColor.colorExpression',
                     translation: 'Common.Expression',
                     expression: 'optional',
+                    defaultValue: '',
                     show: (data) =>
                       propertyResolver.getValue(data, 'style.backgroundColor.colorType') === 'byExpression',
                   },
@@ -179,6 +184,7 @@ export default {
                     type: 'string',
                     translation: 'Object.OrgChart.FontColor',
                     component: 'dropdown',
+                    defaultValue: 'auto',
                     options: colorOptions,
                   },
                   colorPicker: {
@@ -187,6 +193,7 @@ export default {
                     ref: 'style.fontColor.color',
                     translation: 'properties.color',
                     dualOutput: true,
+                    defaultValue: { index: -1, color: '#484848' },
                     show: (data) => propertyResolver.getValue(data, 'style.fontColor.colorType') === 'colorPicker',
                   },
                   colorExpression: {
@@ -195,6 +202,7 @@ export default {
                     ref: 'style.fontColor.colorExpression',
                     translation: 'Common.Expression',
                     expression: 'optional',
+                    defaultValue: '',
                     show: (data) => propertyResolver.getValue(data, 'style.fontColor.colorType') === 'byExpression',
                   },
                 },
@@ -234,6 +242,7 @@ export default {
                     ref: 'style.border.color',
                     translation: 'properties.color',
                     dualOutput: true,
+                    defaultValue: { index: -1, color: '#737373' },
                     show: (data) =>
                       bordersActive(data) &&
                       propertyResolver.getValue(data, 'style.border.colorType') === 'colorPicker',
@@ -244,6 +253,7 @@ export default {
                     ref: 'style.border.colorExpression',
                     translation: 'Common.Expression',
                     expression: 'optional',
+                    defaultValue: '',
                     show: (data) =>
                       bordersActive(data) &&
                       propertyResolver.getValue(data, 'style.border.colorType') === 'byExpression',
