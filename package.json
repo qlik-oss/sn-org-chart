@@ -35,6 +35,7 @@
     "start": "nebula serve --type sn-org-chart",
     "test:unit": "aw -c aw.config.js",
     "test:integration": "aw puppet --glob 'test/integration/**/*.spec.js' --chrome.headless true --chrome.slowMo 10",
+    "test:rendering": "aw puppet --testExt '*.spec.js' --glob 'test/rendering/**/*.spec.js' --mocha.bail false --mocha.timeout 30000",
     "prepublishOnly": "rm -rf dist && npm run build",
     "version": "node ./scripts/version-qext.js && git add -A"
   },
