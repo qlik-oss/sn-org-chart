@@ -1,6 +1,7 @@
 import colorUtils from '../utils/color-utils';
 import encodeUtils from '../utils/encoder';
 import constants from '../tree/size-constants';
+import DEFAULTS from '../style-defaults';
 
 export function resolveColor(color) {
   const resolvedColor = colorUtils.resolveExpression(color);
@@ -19,7 +20,7 @@ export function getBackgroundColor(data, cardStyling) {
 
 export function getFontColor(cardStyling, backgroundColor) {
   if (cardStyling.fontColor === 'default') {
-    return colorUtils.isDarkColor(backgroundColor) ? '#e6e6e6' : '#484848';
+    return colorUtils.isDarkColor(backgroundColor) ? DEFAULTS.FONT_COLOR_LIGHT : DEFAULTS.FONT_COLOR_DARK;
   }
   return cardStyling.fontColor;
 }
@@ -42,7 +43,7 @@ export default (data, cardStyling, selectionObj) => {
   }
   const selectedClass = api && api.isActive() ? (isSelected ? ' selected' : ' not-selected') : '';
 
-  const { top = true, fullBorder, colorType = 'auto' } = cardStyling.border;
+  const { top = DEFAULTS.BORDER_TOP, fullBorder = DEFAULTS.BORDER_FULL, colorType = DEFAULTS.BORDER_COLOR_TYPE } = cardStyling.border;
   const borderColor =
     colorType === 'auto' ? colorUtils.getDarkColor(backgroundColor) : resolveColor(cardStyling.borderColor);
 
