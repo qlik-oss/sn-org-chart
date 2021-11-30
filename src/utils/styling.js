@@ -18,7 +18,7 @@ export function getColor(reference, Theme, defaultColor) {
 
 const stylingUtils = {
   cardStyling: ({ Theme, layout }) => {
-    const backgroundColor = getColor(layout.style.backgroundColor, Theme, DEFAULTS.BACKGROUND_COLOR);
+    const backgroundColor = getColor(layout.style.backgroundColor, Theme, DEFAULTS.BACKGROUND_COLOR.color);
     const fontColor = getColor(layout.style.fontColor, Theme, 'default');
     const measureLabel = layout.qHyperCube.qMeasureInfo.length
       ? layout.qHyperCube.qMeasureInfo[0].qFallbackTitle

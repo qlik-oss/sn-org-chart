@@ -20,7 +20,7 @@ export function getBackgroundColor(data, cardStyling) {
 
 export function getFontColor(cardStyling, backgroundColor) {
   if (cardStyling.fontColor === 'default') {
-    return colorUtils.isDarkColor(backgroundColor) ? DEFAULTS.FONT_COLOR_LIGHT : DEFAULTS.FONT_COLOR_DARK;
+    return colorUtils.isDarkColor(backgroundColor) ? DEFAULTS.FONT_COLOR_LIGHT.color : DEFAULTS.FONT_COLOR_DARK.color;
   }
   return cardStyling.fontColor;
 }

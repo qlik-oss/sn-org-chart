@@ -1,4 +1,5 @@
 import propertyResolver from '../utils/property-resolver';
+import DEFAULTS from '../style-defaults';
 
 const colorOptions = [
   { value: 'auto', translation: 'Common.Auto' },
@@ -151,7 +152,7 @@ export default {
                     type: 'string',
                     translation: 'Object.OrgChart.BackgroundColor',
                     component: 'dropdown',
-                    defaultValue: 'colorPicker',
+                    defaultValue: DEFAULTS.BACKGROUND_COLOR_TYPE,
                     options: colorOptions,
                   },
                   colorPicker: {
@@ -160,7 +161,7 @@ export default {
                     ref: 'style.backgroundColor.color',
                     translation: 'properties.color',
                     dualOutput: true,
-                    defaultValue: { index: -1, color: '#ffffff' },
+                    defaultValue: DEFAULTS.BACKGROUND_COLOR,
                     show: (data) =>
                       propertyResolver.getValue(data, 'style.backgroundColor.colorType') === 'colorPicker',
                   },
@@ -184,7 +185,7 @@ export default {
                     type: 'string',
                     translation: 'Object.OrgChart.FontColor',
                     component: 'dropdown',
-                    defaultValue: 'auto',
+                    defaultValue: DEFAULTS.FONT_COLOR_TYPE,
                     options: colorOptions,
                   },
                   colorPicker: {
@@ -193,7 +194,7 @@ export default {
                     ref: 'style.fontColor.color',
                     translation: 'properties.color',
                     dualOutput: true,
-                    defaultValue: { index: -1, color: '#484848' },
+                    defaultValue: DEFAULTS.FONT_COLOR_DARK,
                     show: (data) => propertyResolver.getValue(data, 'style.fontColor.colorType') === 'colorPicker',
                   },
                   colorExpression: {
@@ -219,20 +220,20 @@ export default {
                     type: 'boolean',
                     ref: 'style.border.top',
                     translation: 'Object.OrgChart.TopBar',
-                    defaultValue: true,
+                    defaultValue: DEFAULTS.BORDER_TOP,
                   },
                   fullBorder: {
                     type: 'boolean',
                     ref: 'style.border.fullBorder',
                     translation: 'properties.border',
-                    defaultValue: false,
+                    defaultValue: DEFAULTS.BORDER_FULL,
                   },
                   colorType: {
                     component: 'dropdown',
                     type: 'string',
                     ref: 'style.border.colorType',
                     translation: 'properties.border.color',
-                    defaultValue: 'auto',
+                    defaultValue: DEFAULTS.BORDER_COLOR_TYPE,
                     options: colorOptions,
                     show: (data) => bordersActive(data),
                   },
@@ -242,7 +243,7 @@ export default {
                     ref: 'style.border.color',
                     translation: 'properties.color',
                     dualOutput: true,
-                    defaultValue: { index: -1, color: '#737373' },
+                    defaultValue: DEFAULTS.BORDER_COLOR,
                     show: (data) =>
                       bordersActive(data) &&
                       propertyResolver.getValue(data, 'style.border.colorType') === 'colorPicker',
