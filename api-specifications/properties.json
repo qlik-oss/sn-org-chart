@@ -10,6 +10,152 @@
   },
   "entries": {},
   "definitions": {
+    "Background": {
+      "kind": "object",
+      "entries": {
+        "colorType": {
+          "description": "How the font color is defined, defaults to colorPicker",
+          "optional": true,
+          "kind": "union",
+          "items": [
+            {
+              "kind": "literal",
+              "value": "'auto'"
+            },
+            {
+              "kind": "literal",
+              "value": "'colorPicker'"
+            },
+            {
+              "kind": "literal",
+              "value": "'byExpression'"
+            }
+          ],
+          "type": "string"
+        },
+        "color": {
+          "description": "Color defined by index or hex code, needed if colorType is colorPicker",
+          "optional": true,
+          "type": "#/definitions/PaletteColor"
+        },
+        "colorExpression": {
+          "description": "Color defined by expression, needed if colorType is byExpression",
+          "optional": true,
+          "type": "#/definitions/ColorExpression"
+        }
+      }
+    },
+    "Border": {
+      "kind": "object",
+      "entries": {
+        "top": {
+          "description": "Set to true to show thicker top border, default is true",
+          "optional": true,
+          "type": "boolean"
+        },
+        "fullBorder": {
+          "description": "Set to true to show full border, default is true",
+          "optional": true,
+          "type": "boolean"
+        },
+        "colorType": {
+          "description": "How the border color is defined, defaults to auto",
+          "optional": true,
+          "kind": "union",
+          "items": [
+            {
+              "kind": "literal",
+              "value": "'auto'"
+            },
+            {
+              "kind": "literal",
+              "value": "'colorPicker'"
+            },
+            {
+              "kind": "literal",
+              "value": "'byExpression'"
+            }
+          ],
+          "type": "string"
+        },
+        "color": {
+          "description": "Color defined by index or hex code, needed if colorType is colorPicker",
+          "optional": true,
+          "type": "#/definitions/PaletteColor"
+        },
+        "colorExpression": {
+          "description": "Color defined by expression, needed if colorType is byExpression",
+          "optional": true,
+          "type": "#/definitions/ColorExpression"
+        }
+      }
+    },
+    "ColorExpression": {
+      "description": "Format for using color expressions",
+      "kind": "object",
+      "entries": {
+        "qStringExpression": {
+          "kind": "object",
+          "entries": {
+            "qExpr": {
+              "description": "expression that resolves to a supported color format",
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "FontColor": {
+      "kind": "object",
+      "entries": {
+        "colorType": {
+          "description": "How the font color is defined, defaults to auto",
+          "optional": true,
+          "kind": "union",
+          "items": [
+            {
+              "kind": "literal",
+              "value": "'auto'"
+            },
+            {
+              "kind": "literal",
+              "value": "'colorPicker'"
+            },
+            {
+              "kind": "literal",
+              "value": "'byExpression'"
+            }
+          ],
+          "type": "string"
+        },
+        "color": {
+          "description": "Color defined by index or hex code, needed if colorType is colorPicker",
+          "optional": true,
+          "type": "#/definitions/PaletteColor"
+        },
+        "colorExpression": {
+          "description": "Color defined by expression, needed if colorType is byExpression",
+          "optional": true,
+          "type": "#/definitions/ColorExpression"
+        }
+      }
+    },
+    "PaletteColor": {
+      "description": "Color information structure. Holds the actual color and index in palette.",
+      "kind": "object",
+      "entries": {
+        "color": {
+          "description": "Color as hex string (only used if index: -1)",
+          "optional": true,
+          "type": "string"
+        },
+        "index": {
+          "description": "Index in palette",
+          "optional": true,
+          "type": "number"
+        }
+      }
+    },
     "properties.footnote": {
       "description": "Visualization footnote",
       "defaultValue": "",
@@ -46,160 +192,7 @@
     },
     "properties.style": {
       "description": "Holds chart styling",
-      "kind": "object",
-      "entries": {
-        "backgroundColor": {
-          "description": "Hold background color details",
-          "kind": "object",
-          "entries": {
-            "color": {
-              "description": "Background color",
-              "kind": "object",
-              "entries": {
-                "color": {
-                  "description": "Color defined by rgb, argb or html",
-                  "defaultValue": "#ffffff",
-                  "type": "string"
-                },
-                "index": {
-                  "description": "Index of theme color",
-                  "defaultValue": -1,
-                  "type": "number"
-                }
-              }
-            },
-            "colorExpression": {
-              "description": "An expression to decide background color",
-              "defaultValue": "",
-              "type": "string"
-            },
-            "colorType": {
-              "description": "How the background color is input",
-              "defaultValue": "colorPicker",
-              "kind": "union",
-              "items": [
-                {
-                  "kind": "literal",
-                  "value": "'auto'"
-                },
-                {
-                  "kind": "literal",
-                  "value": "'colorPicker'"
-                },
-                {
-                  "kind": "literal",
-                  "value": "'byExpression'"
-                }
-              ],
-              "type": "string"
-            }
-          }
-        },
-        "border": {
-          "description": "Holds border details",
-          "kind": "object",
-          "entries": {
-            "color": {
-              "description": "Border color",
-              "kind": "object",
-              "entries": {
-                "color": {
-                  "description": "Color defined by rgb, argb or html",
-                  "defaultValue": "#737373",
-                  "type": "string"
-                },
-                "index": {
-                  "description": "Index of theme color",
-                  "defaultValue": -1,
-                  "type": "number"
-                }
-              }
-            },
-            "colorExpression": {
-              "description": "An expression to decide border color",
-              "defaultValue": "",
-              "type": "string"
-            },
-            "colorType": {
-              "description": "How the border color is input",
-              "defaultValue": "auto",
-              "kind": "union",
-              "items": [
-                {
-                  "kind": "literal",
-                  "value": "'auto'"
-                },
-                {
-                  "kind": "literal",
-                  "value": "'colorPicker'"
-                },
-                {
-                  "kind": "literal",
-                  "value": "'byExpression'"
-                }
-              ],
-              "type": "string"
-            },
-            "fullBorder": {
-              "description": "Show full border",
-              "defaultValue": true,
-              "type": "boolean"
-            },
-            "top": {
-              "description": "Shop top border",
-              "defaultValue": true,
-              "type": "boolean"
-            }
-          }
-        },
-        "fontColor": {
-          "description": "Holds font color details",
-          "kind": "object",
-          "entries": {
-            "color": {
-              "description": "Font color",
-              "kind": "object",
-              "entries": {
-                "color": {
-                  "description": "Color defined by rgb, argb or html",
-                  "defaultValue": "#484848",
-                  "type": "string"
-                },
-                "index": {
-                  "description": "Index of theme color",
-                  "defaultValue": -1,
-                  "type": "number"
-                }
-              }
-            },
-            "colorExpression": {
-              "description": "An expression to decide font color",
-              "defaultValue": "",
-              "type": "string"
-            },
-            "colorType": {
-              "description": "How the font color is input",
-              "defaultValue": "auto",
-              "kind": "union",
-              "items": [
-                {
-                  "kind": "literal",
-                  "value": "'auto'"
-                },
-                {
-                  "kind": "literal",
-                  "value": "'colorPicker'"
-                },
-                {
-                  "kind": "literal",
-                  "value": "'byExpression'"
-                }
-              ],
-              "type": "string"
-            }
-          }
-        }
-      }
+      "type": "#/definitions/Style"
     },
     "properties.subtitle": {
       "description": "Visualization subtitle",
@@ -210,6 +203,27 @@
       "description": "Visualization title",
       "defaultValue": "",
       "type": "string"
+    },
+    "Style": {
+      "description": "Holds styling options",
+      "kind": "object",
+      "entries": {
+        "fontColor": {
+          "description": "Color of the text, by default #484848",
+          "optional": true,
+          "type": "#/definitions/FontColor"
+        },
+        "backgroundColor": {
+          "description": "Color of the background, by default #e6e6e6",
+          "optional": true,
+          "type": "#/definitions/Background"
+        },
+        "border": {
+          "description": "Styling for border, by default #737373",
+          "optional": true,
+          "type": "#/definitions/Border"
+        }
+      }
     }
   }
 }
