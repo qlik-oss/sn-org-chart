@@ -16,7 +16,7 @@ describe('transform', () => {
         width: 552,
         height: 344,
       };
-      expect(bbox).to.deep.equal(expected);
+      expect(bbox).toEqual(expected);
     });
 
     describe('getTranslations', () => {
@@ -43,7 +43,7 @@ describe('transform', () => {
           divTranslation: '250px, 0px',
           svgTranslation: '250 0',
         };
-        expect(translatoions).to.deep.equal(expected);
+        expect(translatoions).toEqual(expected);
       });
 
       it('should return correct translations when scaleToWidth', () => {
@@ -54,7 +54,7 @@ describe('transform', () => {
           divTranslation: '0px, 250px',
           svgTranslation: '0 250',
         };
-        expect(translatoions).to.deep.equal(expected);
+        expect(translatoions).toEqual(expected);
       });
     });
   });
@@ -72,26 +72,26 @@ describe('transform', () => {
     it('should zoom in x direction', () => {
       bBox.width = 1936;
       const result = getInitialZoomState(bBox, element, navigationMode);
-      expect(result).to.eql({ initialX: 32, initialY: 500, initialZoom: 2 });
+      expect(result).toEqual({ initialX: 32, initialY: 500, initialZoom: 2 });
     });
 
     it('should zoom in y direction', () => {
       bBox.height = 1936;
       const result = getInitialZoomState(bBox, element, navigationMode);
-      expect(result).to.eql({ initialX: 500, initialY: 32, initialZoom: 2 });
+      expect(result).toEqual({ initialX: 500, initialY: 32, initialZoom: 2 });
     });
 
     it('should limit zoom to max zoom', () => {
       bBox.height = 10000000;
       const result = getInitialZoomState(bBox, element, navigationMode);
-      expect(result).to.eql({ initialX: 2500, initialY: 32, initialZoom: 6 });
+      expect(result).toEqual({ initialX: 2500, initialY: 32, initialZoom: 6 });
     });
 
     it('should not limit zoom to max zoom in expandAll mode', () => {
       bBox.height = 99999936;
       navigationMode = 'expandAll';
       const result = getInitialZoomState(bBox, element, navigationMode);
-      expect(result).to.eql({ initialX: 49999500, initialY: 32, initialZoom: 100000 });
+      expect(result).toEqual({ initialX: 49999500, initialY: 32, initialZoom: 100000 });
     });
   });
 
@@ -102,25 +102,25 @@ describe('transform', () => {
       y: 200,
     };
     const svg = {
-      attr: sinon.spy(),
-      classed: sinon.spy(),
+      attr: jest.fn(),
+      classed: jest.fn(),
     };
     const divBox = {
-      attr: sinon.spy(),
-      classed: sinon.spy(),
+      attr: jest.fn(),
+      classed: jest.fn(),
     };
     const height = 500;
     const width = 1000;
 
     it('should add classes, set transform and style attributes', () => {
       applyTransform(eventTransform, svg, divBox, width, height);
-      expect(svg.attr).to.be.calledWith('transform', eventTransform);
-      expect(svg.classed).to.be.calledWith('org-disable-transition', true);
-      expect(divBox.attr).to.be.calledWith(
+      expect(svg.attr).toHaveBeenCalledWith('transform', eventTransform);
+      expect(svg.classed).toHaveBeenCalledWith('org-disable-transition', true);
+      expect(divBox.attr).toHaveBeenCalledWith(
         'style',
         `width:${width}px;height:${height}px; transform: translate(100px, 200px) scale(2)`
       );
-      expect(divBox.classed).to.be.calledWith('org-disable-transition', true);
+      expect(divBox.classed).toHaveBeenCalledWith('org-disable-transition', true);
     });
   });
 
@@ -154,7 +154,7 @@ describe('transform', () => {
 
     it('should return snapshotZoom object adjusted to height', () => {
       const snapshotZoom = { ...getSnapshotZoom(rect, viewState) };
-      expect(snapshotZoom).to.eql({ k: 5, x: 250, y: 500 });
+      expect(snapshotZoom).toEqual({ k: 5, x: 250, y: 500 });
     });
 
     it('should return snapshotZoom object adjusted to width', () => {
@@ -163,12 +163,12 @@ describe('transform', () => {
         height: 1000,
       };
       const snapshotZoom = { ...getSnapshotZoom(rect, viewState) };
-      expect(snapshotZoom).to.eql({ k: 10, x: 500, y: 1000 });
+      expect(snapshotZoom).toEqual({ k: 10, x: 500, y: 1000 });
     });
 
     it('should return snapshotZoom object from transform when viewstate not present', () => {
       const snapshotZoom = { ...getSnapshotZoom(rect, undefined, initialTransform) };
-      expect(snapshotZoom).to.eql({ k: 2, x: 100, y: 200 });
+      expect(snapshotZoom).toEqual({ k: 2, x: 100, y: 200 });
     });
   });
 });

@@ -13,7 +13,7 @@ describe('path', () => {
 
     it('should return a path', () => {
       const path = getPath(points);
-      expect(path).to.equal(expected);
+      expect(path).toEqual(expected);
     });
   });
 
@@ -55,8 +55,8 @@ describe('path', () => {
         nodeSize,
         isVertical: true,
         depthSpacing: cardHeight + heightMargin,
-        x: node => node.xActual,
-        y: node => node.yActual,
+        x: (node) => node.xActual,
+        y: (node) => node.yActual,
       };
       navigationMode = 'free';
     });
@@ -69,7 +69,7 @@ describe('path', () => {
         { x: 76, y: 96 },
       ];
       const points = getPoints(d, topId, positioning, navigationMode)[0];
-      expect(points).to.deep.equal(expectedPoints);
+      expect(points).toEqual(expectedPoints);
     });
 
     it.skip('should return points for horizontal tree', () => {
@@ -82,7 +82,7 @@ describe('path', () => {
         { x: 100, y: 50 },
       ];
       const points = getPoints(d, positioning, isVertical, navigationMode);
-      expect(points).to.deep.equal(expectedPoints);
+      expect(points).toEqual(expectedPoints);
     });
 
     it('should return points for vertical tree w only leafs', () => {
@@ -95,7 +95,7 @@ describe('path', () => {
         { x: 76, y: 96 },
       ];
       const points = getPoints(d, topId, positioning, navigationMode)[0];
-      expect(points).to.deep.equal(expectedPoints);
+      expect(points).toEqual(expectedPoints);
     });
 
     it('should return points for vertical tree w only leafs in expandAll mode', () => {
@@ -108,7 +108,7 @@ describe('path', () => {
         { x: 76, y: 64 },
       ];
       const points = getPoints(d, topId, positioning, navigationMode)[0];
-      expect(points).to.deep.equal(expectedPoints);
+      expect(points).toEqual(expectedPoints);
     });
 
     it.skip('should return points for horizontal tree w only leafs', () => {
@@ -123,7 +123,7 @@ describe('path', () => {
         { x: 100, y: 50 },
       ];
       const points = getPoints(d, positioning, isVertical, navigationMode);
-      expect(points).to.deep.equal(expectedPoints);
+      expect(points).toEqual(expectedPoints);
     });
 
     it('should return points for a straight vertical line', () => {
@@ -133,7 +133,7 @@ describe('path', () => {
         { x: 76, y: 96 },
       ];
       const points = getPoints(d, topId, positioning, navigationMode)[0];
-      expect(points).to.deep.equal(expectedPoints);
+      expect(points).toEqual(expectedPoints);
     });
 
     it.skip('should return points for a straight horizontal line', () => {
@@ -143,7 +143,7 @@ describe('path', () => {
         { x: 100, y: 50 },
       ];
       const points = getPoints(d, positioning, isVertical, navigationMode);
-      expect(points).to.deep.equal(expectedPoints);
+      expect(points).toEqual(expectedPoints);
     });
 
     it.skip('should return points for line to up button', () => {
@@ -153,7 +153,7 @@ describe('path', () => {
         { x: 376, y: 112 },
       ];
       const points = getPoints(d, topId, positioning, navigationMode)[0];
-      expect(points).to.deep.equal(expectedPoints);
+      expect(points).toEqual(expectedPoints);
     });
 
     it('should return points for line to expand button', () => {
@@ -163,7 +163,7 @@ describe('path', () => {
         { x: 376, y: 192 },
       ];
       const points = getPoints(d, topId, positioning, navigationMode)[1];
-      expect(points).to.deep.equal(expectedPoints);
+      expect(points).toEqual(expectedPoints);
     });
 
     it('should return points for line to dummy', () => {
@@ -174,13 +174,13 @@ describe('path', () => {
         { x: 376, y: 112 },
       ];
       const points = getPoints(d, topId, positioning, navigationMode)[0];
-      expect(points).to.deep.equal(expectedPoints);
+      expect(points).toEqual(expectedPoints);
     });
 
     it('should return no points if no parent', () => {
       d.parent = undefined;
       const points = getPoints(d, topId, positioning, navigationMode);
-      expect(points).to.deep.equal([]);
+      expect(points).toEqual([]);
     });
   });
 });
