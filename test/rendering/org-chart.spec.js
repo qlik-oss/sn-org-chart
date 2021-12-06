@@ -30,7 +30,7 @@ describe('sn org chart: Rendering tests', () => {
   });
 
   after(async () => {
-    // s.close();
+    s.close();
   });
 
   beforeEach(() => {
