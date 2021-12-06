@@ -1,4 +1,5 @@
 import colorUtils from './color-utils';
+import DEFAULTS from '../style-defaults';
 
 export function getColor(reference, Theme, defaultColor) {
   let color;
@@ -17,12 +18,12 @@ export function getColor(reference, Theme, defaultColor) {
 
 const stylingUtils = {
   cardStyling: ({ Theme, layout }) => {
-    const backgroundColor = getColor(layout.style.backgroundColor, Theme, '#e6e6e6');
+    const backgroundColor = getColor(layout.style.backgroundColor, Theme, DEFAULTS.BACKGROUND_COLOR.color);
     const fontColor = getColor(layout.style.fontColor, Theme, 'default');
     const measureLabel = layout.qHyperCube.qMeasureInfo.length
       ? layout.qHyperCube.qMeasureInfo[0].qFallbackTitle
       : null;
-    const { border = { colorType: 'auto' } } = layout.style;
+    const { border = { colorType: DEFAULTS.BORDER_COLOR_TYPE } } = layout.style;
     const borderColor =
       border.colorType !== 'auto'
         ? getColor(border, Theme, colorUtils.getDarkColor(backgroundColor))
