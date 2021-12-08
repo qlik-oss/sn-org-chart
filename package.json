@@ -24,7 +24,7 @@
     "dist"
   ],
   "engines": {
-    "node": ">=12"
+    "node": ">=16"
   },
   "main": "dist/sn-org-chart.js",
   "module": "dist/sn-org-chart.esm.js",
