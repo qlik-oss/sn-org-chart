@@ -14,8 +14,9 @@
       "kind": "object",
       "entries": {
         "colorType": {
-          "description": "How the font color is defined, defaults to colorPicker",
+          "description": "colorType - How the font color is defined",
           "optional": true,
+          "defaultValue": "'colorPicker'",
           "kind": "union",
           "items": [
             {
@@ -49,18 +50,21 @@
       "kind": "object",
       "entries": {
         "top": {
-          "description": "Set to true to show thicker top border, default is true",
+          "description": "top - Set to true to show thicker top border",
           "optional": true,
+          "defaultValue": true,
           "type": "boolean"
         },
         "fullBorder": {
-          "description": "Set to true to show full border, default is true",
+          "description": "fullBorder - Set to true to show full border, default is false",
           "optional": true,
+          "defaultValue": false,
           "type": "boolean"
         },
         "colorType": {
-          "description": "How the border color is defined, defaults to auto",
+          "description": "colorType - How the border color is defined",
           "optional": true,
+          "defaultValue": "'auto'",
           "kind": "union",
           "items": [
             {
@@ -109,8 +113,9 @@
       "kind": "object",
       "entries": {
         "colorType": {
-          "description": "How the font color is defined, defaults to auto",
+          "description": "colorType - How the font color is defined",
           "optional": true,
+          "defaultValue": "'auto'",
           "kind": "union",
           "items": [
             {

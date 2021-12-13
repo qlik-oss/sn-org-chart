@@ -52,23 +52,23 @@ const properties = {
 
 /**
  * @typedef {object} FontColor
- * @property {('auto'|'colorPicker'|'byExpression')=} colorType - How the font color is defined, defaults to auto
+ * @property {('auto'|'colorPicker'|'byExpression')=} [colorType='auto'] colorType - How the font color is defined
  * @property {PaletteColor=} color - Color defined by index or hex code, needed if colorType is colorPicker
  * @property {ColorExpression=} colorExpression - Color defined by expression, needed if colorType is byExpression
  */
 
 /**
  * @typedef {object} Background
- * @property {('auto'|'colorPicker'|'byExpression')=} colorType - How the font color is defined, defaults to colorPicker
+ * @property {('auto'|'colorPicker'|'byExpression')=} [colorType='colorPicker'] colorType - How the font color is defined
  * @property {PaletteColor=} color - Color defined by index or hex code, needed if colorType is colorPicker
  * @property {ColorExpression=} colorExpression - Color defined by expression, needed if colorType is byExpression
  */
 
 /**
  * @typedef {object} Border
- * @property {boolean=} top - Set to true to show thicker top border, default is true
- * @property {boolean=} fullBorder - Set to true to show full border, default is true
-  * @property {('auto'|'colorPicker'|'byExpression')=} colorType - How the border color is defined, defaults to auto
+ * @property {boolean=} [top=true] top - Set to true to show thicker top border
+ * @property {boolean=} [fullBorder=false] fullBorder - Set to true to show full border, default is false
+ * @property {('auto'|'colorPicker'|'byExpression')=} [colorType='auto'] colorType - How the border color is defined
  * @property {PaletteColor=} color - Color defined by index or hex code, needed if colorType is colorPicker
  * @property {ColorExpression=} colorExpression - Color defined by expression, needed if colorType is byExpression
  */
