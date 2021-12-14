@@ -1,3 +1,8 @@
+/**
+ * @extends {qae.GenericObjectProperties}
+ * @entry
+ */
+
 const properties = {
   qHyperCubeDef: {
     qDimensions: [],
@@ -27,6 +32,7 @@ const properties = {
    */
   footnote: '',
   /**
+   * How the org chart is navigated
    * @type {'regular'|'scroll'|'free'}
    */
   navigationMode: 'free',
@@ -52,23 +58,23 @@ const properties = {
 
 /**
  * @typedef {object} FontColor
- * @property {('auto'|'colorPicker'|'byExpression')=} [colorType='auto'] colorType - How the font color is defined
+ * @property {('auto'|'colorPicker'|'byExpression')=} [colorType='auto'] How the font color is defined
  * @property {PaletteColor=} color - Color defined by index or hex code, needed if colorType is colorPicker
  * @property {ColorExpression=} colorExpression - Color defined by expression, needed if colorType is byExpression
  */
 
 /**
  * @typedef {object} Background
- * @property {('auto'|'colorPicker'|'byExpression')=} [colorType='colorPicker'] colorType - How the font color is defined
+ * @property {('auto'|'colorPicker'|'byExpression')=} [colorType='colorPicker'] How the font color is defined
  * @property {PaletteColor=} color - Color defined by index or hex code, needed if colorType is colorPicker
  * @property {ColorExpression=} colorExpression - Color defined by expression, needed if colorType is byExpression
  */
 
 /**
  * @typedef {object} Border
- * @property {boolean=} [top=true] top - Set to true to show thicker top border
- * @property {boolean=} [fullBorder=false] fullBorder - Set to true to show full border, default is false
- * @property {('auto'|'colorPicker'|'byExpression')=} [colorType='auto'] colorType - How the border color is defined
+ * @property {boolean=} [top=true] Set to true to show thicker top border
+ * @property {boolean=} [fullBorder=false] Set to true to show full border
+ * @property {('auto'|'colorPicker'|'byExpression')=} [colorType='auto'] How the border color is defined
  * @property {PaletteColor=} color - Color defined by index or hex code, needed if colorType is colorPicker
  * @property {ColorExpression=} colorExpression - Color defined by expression, needed if colorType is byExpression
  */

@@ -18,4 +18,9 @@ module.exports = {
   output: {
     file: path.resolve(__dirname, '../api-specifications/properties.json'),
   },
+  parse: {
+    types: {
+      'qae.GenericObjectProperties': {},
+    },
+  },
 };
