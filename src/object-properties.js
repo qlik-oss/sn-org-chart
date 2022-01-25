@@ -25,8 +25,7 @@ const properties = {
    */
   footnote: '',
   /**
-   * How the org chart is navigated
-   * @type {'expandAll'|'free'}
+   * @type {'regular'|'scroll'|'free'}
    */
   navigationMode: 'free',
   /**
