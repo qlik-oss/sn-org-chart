@@ -57,22 +57,22 @@ describe('styling', () => {
     it('should return cardStyling', () => {
       const result = stylingUtils.cardStyling({ layout });
       expect(result).toEqual({
-        backgroundColor: '#e6e6e6',
+        backgroundColor: '#ffffff',
         fontColor: 'default',
         measureLabel: 'measureLabel',
         border: { colorType: 'auto' },
-        borderColor: '#737373',
+        borderColor: '#808080',
       });
     });
     it('should return cardStyling with no measureLabel', () => {
       layout.qHyperCube.qMeasureInfo = [];
       const result = stylingUtils.cardStyling({ layout });
       expect(result).toEqual({
-        backgroundColor: '#e6e6e6',
+        backgroundColor: '#ffffff',
         fontColor: 'default',
         measureLabel: null,
         border: { colorType: 'auto' },
-        borderColor: '#737373',
+        borderColor: '#808080',
       });
     });
 
@@ -80,7 +80,7 @@ describe('styling', () => {
       layout.style.border = { colorType: 'colorPicker', color: { index: 1 } };
       const result = stylingUtils.cardStyling({ layout, Theme });
       expect(result).toEqual({
-        backgroundColor: '#e6e6e6',
+        backgroundColor: '#ffffff',
         fontColor: 'default',
         measureLabel: 'measureLabel',
         border: { colorType: 'colorPicker', color: { index: 1 } },
