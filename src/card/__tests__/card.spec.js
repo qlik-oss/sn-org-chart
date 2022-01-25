@@ -83,7 +83,7 @@ describe('card', () => {
       data.attributes = null;
       const result = card(data, cardStyling, selections);
       expect(result).toEqual(
-        '<div class="sn-org-card-text" style="background-color:#e6e6e6;color:#484848; border:1px solid #737373; border-top:3px solid #737373; height:61px;"><div class="sn-org-card-title">someId</div></div>'
+        '<div class="sn-org-card-text" style="background-color:#e6e6e6;color:#484848; border:1px solid #737373; border-top:3px solid #737373; height:60px;"><div class="sn-org-card-title">someId</div></div>'
       );
     });
 
@@ -157,14 +157,14 @@ describe('card', () => {
       const result = card(data, cardStyling, selections);
       expect(result).toMatch('<div class="sn-org-card-text not-selected"');
       expect(result).toMatch('border:1px solid #737373; border-top:3px solid #737373;');
-      expect(result).toMatch('height:61px;');
+      expect(result).toMatch('height:60px;');
     });
 
     it('should return html for card with only top border', () => {
       cardStyling.border.fullBorder = false;
       const result = card(data, cardStyling, selections);
       expect(result).toMatch('border:; border-top:3px solid #737373;');
-      expect(result).toMatch('height:60px;');
+      expect(result).toMatch('height:61px;');
     });
 
     it('should return html for card with no borders', () => {
@@ -179,7 +179,7 @@ describe('card', () => {
       cardStyling.border = {};
       const result = card(data, cardStyling, selections);
       expect(result).toMatch('border:1px solid #737373; border-top:3px solid #737373;');
-      expect(result).toMatch('height:61px;');
+      expect(result).toMatch('height:60px;');
     });
 
     it('should use borderColor when colorType is not auto', () => {
