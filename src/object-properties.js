@@ -1,3 +1,5 @@
+import DEFAULTS from './style-defaults';
+
 const properties = {
   qHyperCubeDef: {
     qDimensions: [],
@@ -23,7 +25,8 @@ const properties = {
    */
   footnote: '',
   /**
-   * @type {'regular'|'scroll'|'free'}
+   * How the org chart is navigated
+   * @type {'expandAll'|'free'}
    */
   navigationMode: 'free',
   /**
@@ -33,7 +36,25 @@ const properties = {
   /**
    * @type {object}
    */
-  style: {},
+  style: {
+    fontColor: {
+      colorType: DEFAULTS.FONT_COLOR_TYPE,
+      color: DEFAULTS.FONT_COLOR_DARK,
+      colorExpression: '',
+    },
+    backgroundColor: {
+      colorType: DEFAULTS.BACKGROUND_COLOR_TYPE,
+      color: DEFAULTS.BACKGROUND_COLOR,
+      colorExpression: '',
+    },
+    border: {
+      top: DEFAULTS.BORDER_TOP,
+      fullBorder: DEFAULTS.BORDER_FULL,
+      colorType: DEFAULTS.BORDER_COLOR_TYPE,
+      color: DEFAULTS.BORDER_COLOR,
+      colorExpression: '',
+    },
+  },
 };
 
 export default properties;
