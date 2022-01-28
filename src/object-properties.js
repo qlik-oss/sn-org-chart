@@ -85,7 +85,7 @@ const properties = {
 
 /**
  * @typedef {object} Background
- * @property {('auto'|'colorPicker'|'byExpression')=} [colorType='colorPicker'] How the font color is defined
+ * @property {('auto'|'colorPicker'|'byExpression')=} [colorType='colorPicker'] How the background color is defined
  * @property {PaletteColor=} color - Color defined by index or hex code, needed if colorType is colorPicker
  * @property {ColorExpression=} colorExpression - Color defined by expression, needed if colorType is byExpression
  */

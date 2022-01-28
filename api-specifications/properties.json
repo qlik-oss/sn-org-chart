@@ -14,7 +14,7 @@
       "kind": "object",
       "entries": {
         "colorType": {
-          "description": "How the font color is defined",
+          "description": "How the background color is defined",
           "optional": true,
           "defaultValue": "'colorPicker'",
           "kind": "union",
