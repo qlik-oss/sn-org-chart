@@ -1,0 +1,231 @@
+{
+  "scriptappy": "1.0.0",
+  "info": {
+    "name": "@nebula.js/sn-org-chart:properties",
+    "description": "Org chart generic object definition",
+    "version": "0.16.0",
+    "license": "MIT",
+    "stability": "experimental",
+    "x-qlik-visibility": "public"
+  },
+  "entries": {},
+  "definitions": {
+    "Background": {
+      "kind": "object",
+      "entries": {
+        "colorType": {
+          "description": "How the background color is defined",
+          "optional": true,
+          "defaultValue": "'colorPicker'",
+          "kind": "union",
+          "items": [
+            {
+              "kind": "literal",
+              "value": "'auto'"
+            },
+            {
+              "kind": "literal",
+              "value": "'colorPicker'"
+            },
+            {
+              "kind": "literal",
+              "value": "'byExpression'"
+            }
+          ],
+          "type": "string"
+        },
+        "color": {
+          "description": "Color defined by index or hex code, needed if colorType is colorPicker",
+          "optional": true,
+          "type": "#/definitions/PaletteColor"
+        },
+        "colorExpression": {
+          "description": "Color defined by expression, needed if colorType is byExpression",
+          "optional": true,
+          "type": "#/definitions/ColorExpression"
+        }
+      }
+    },
+    "Border": {
+      "kind": "object",
+      "entries": {
+        "top": {
+          "description": "Set to true to show thicker top border",
+          "optional": true,
+          "defaultValue": true,
+          "type": "boolean"
+        },
+        "fullBorder": {
+          "description": "Set to true to show full border",
+          "optional": true,
+          "defaultValue": true,
+          "type": "boolean"
+        },
+        "colorType": {
+          "description": "How the border color is defined",
+          "optional": true,
+          "defaultValue": "'auto'",
+          "kind": "union",
+          "items": [
+            {
+              "kind": "literal",
+              "value": "'auto'"
+            },
+            {
+              "kind": "literal",
+              "value": "'colorPicker'"
+            },
+            {
+              "kind": "literal",
+              "value": "'byExpression'"
+            }
+          ],
+          "type": "string"
+        },
+        "color": {
+          "description": "Color defined by index or hex code, needed if colorType is colorPicker",
+          "optional": true,
+          "type": "#/definitions/PaletteColor"
+        },
+        "colorExpression": {
+          "description": "Color defined by expression, needed if colorType is byExpression",
+          "optional": true,
+          "type": "#/definitions/ColorExpression"
+        }
+      }
+    },
+    "ColorExpression": {
+      "description": "Format for using color expressions",
+      "kind": "object",
+      "entries": {
+        "qStringExpression": {
+          "kind": "object",
+          "entries": {
+            "qExpr": {
+              "description": "expression that resolves to a supported color format",
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "FontColor": {
+      "kind": "object",
+      "entries": {
+        "colorType": {
+          "description": "How the font color is defined",
+          "optional": true,
+          "defaultValue": "'auto'",
+          "kind": "union",
+          "items": [
+            {
+              "kind": "literal",
+              "value": "'auto'"
+            },
+            {
+              "kind": "literal",
+              "value": "'colorPicker'"
+            },
+            {
+              "kind": "literal",
+              "value": "'byExpression'"
+            }
+          ],
+          "type": "string"
+        },
+        "color": {
+          "description": "Color defined by index or hex code, needed if colorType is colorPicker",
+          "optional": true,
+          "type": "#/definitions/PaletteColor"
+        },
+        "colorExpression": {
+          "description": "Color defined by expression, needed if colorType is byExpression",
+          "optional": true,
+          "type": "#/definitions/ColorExpression"
+        }
+      }
+    },
+    "PaletteColor": {
+      "description": "Color information structure. Holds the actual color and index in palette.",
+      "kind": "object",
+      "entries": {
+        "color": {
+          "description": "Color as hex string (only used if index: -1)",
+          "optional": true,
+          "type": "string"
+        },
+        "index": {
+          "description": "Index in palette",
+          "optional": true,
+          "type": "number"
+        }
+      }
+    },
+    "properties.footnote": {
+      "description": "Visualization footnote",
+      "defaultValue": "",
+      "type": "string"
+    },
+    "properties.navigationMode": {
+      "description": "How the org chart is navigated",
+      "defaultValue": "free",
+      "kind": "union",
+      "items": [
+        {
+          "kind": "literal",
+          "value": "'expandAll'"
+        },
+        {
+          "kind": "literal",
+          "value": "'free'"
+        }
+      ],
+      "type": "string"
+    },
+    "properties.resizeOnExpand": {
+      "description": "Resize and pan chart when a node's list of children is expanded",
+      "defaultValue": false,
+      "type": "boolean"
+    },
+    "properties.showTitles": {
+      "description": "Show title for the visualization",
+      "defaultValue": true,
+      "type": "boolean"
+    },
+    "properties.style": {
+      "description": "Holds chart styling",
+      "type": "#/definitions/Style"
+    },
+    "properties.subtitle": {
+      "description": "Visualization subtitle",
+      "defaultValue": "",
+      "type": "string"
+    },
+    "properties.title": {
+      "description": "Visualization title",
+      "defaultValue": "",
+      "type": "string"
+    },
+    "Style": {
+      "description": "Holds styling options",
+      "kind": "object",
+      "entries": {
+        "fontColor": {
+          "description": "Color of the text, by default #484848",
+          "optional": true,
+          "type": "#/definitions/FontColor"
+        },
+        "backgroundColor": {
+          "description": "Color of the background, by default #ffffff",
+          "optional": true,
+          "type": "#/definitions/Background"
+        },
+        "border": {
+          "description": "Styling for border, by default #737373",
+          "optional": true,
+          "type": "#/definitions/Border"
+        }
+      }
+    }
+  }
+}
