@@ -3,6 +3,8 @@
  * @entry
  */
 
+import DEFAULTS from './style-defaults';
+
 const properties = {
   qHyperCubeDef: {
     qDimensions: [],
@@ -45,7 +47,25 @@ const properties = {
    * Holds chart styling
    * @type {Style}
    */
-  style: {},
+  style: {
+    fontColor: {
+      colorType: DEFAULTS.FONT_COLOR_TYPE,
+      color: DEFAULTS.FONT_COLOR_DARK,
+      colorExpression: '',
+    },
+    backgroundColor: {
+      colorType: DEFAULTS.BACKGROUND_COLOR_TYPE,
+      color: DEFAULTS.BACKGROUND_COLOR,
+      colorExpression: '',
+    },
+    border: {
+      top: DEFAULTS.BORDER_TOP,
+      fullBorder: DEFAULTS.BORDER_FULL,
+      colorType: DEFAULTS.BORDER_COLOR_TYPE,
+      color: DEFAULTS.BORDER_COLOR,
+      colorExpression: '',
+    },
+  },
 };
 
 /**
