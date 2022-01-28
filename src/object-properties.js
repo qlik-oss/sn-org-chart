@@ -35,7 +35,7 @@ const properties = {
   footnote: '',
   /**
    * How the org chart is navigated
-   * @type {'regular'|'scroll'|'free'}
+   * @type {'expandAll'|'free'}
    */
   navigationMode: 'free',
   /**
@@ -72,7 +72,7 @@ const properties = {
  * Holds styling options
  * @typedef {object} Style
  * @property {FontColor=} fontColor - Color of the text, by default #484848
- * @property {Background=} backgroundColor - Color of the background, by default #e6e6e6
+ * @property {Background=} backgroundColor - Color of the background, by default #ffffff
  * @property {Border=} border - Styling for border, by default #737373
  */
 
@@ -93,7 +93,7 @@ const properties = {
 /**
  * @typedef {object} Border
  * @property {boolean=} [top=true] Set to true to show thicker top border
- * @property {boolean=} [fullBorder=false] Set to true to show full border
+ * @property {boolean=} [fullBorder=true] Set to true to show full border
  * @property {('auto'|'colorPicker'|'byExpression')=} [colorType='auto'] How the border color is defined
  * @property {PaletteColor=} color - Color defined by index or hex code, needed if colorType is colorPicker
  * @property {ColorExpression=} colorExpression - Color defined by expression, needed if colorType is byExpression
