@@ -81,7 +81,7 @@ jobs:
           paths:
             - dist
             - package.json
-            -core
+            - core
 
 #  publish-dev:
 #    <<: *defaults
