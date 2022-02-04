@@ -113,7 +113,7 @@ jobs:
             set -euo pipefail
             PROJ_VER=v$(cat package.json | jq -r '.version')
             TAG_NAME=$(git tag --points-at HEAD)
-            
+
             if [ "$TAG_NAME" == "$PROJ_VER" ]
             then
               echo "Running >> npm publish"
