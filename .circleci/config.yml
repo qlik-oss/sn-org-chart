@@ -100,20 +100,20 @@ jobs:
       - image: circleci/node:16.7.0
     steps:
       - attach_workspace:
-          at: /org
+          at: ~/org
       - run:
           name: Setup npm
           command: |
             set -eo pipefail
-            # Amend auth token for access to public npm registry for @ nebula.js packages
-            echo "//registry.npmjs. org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
+            # Amend auth token for access to public npm registry for @nebula.js packages
+            echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
       - run:
           name: Publish
           command: |
             set -euo pipefail
             PROJ_VER=v$(cat package.json | jq -r '.version')
             TAG_NAME=$(git tag --points-at HEAD)
-
+            
             if [ "$TAG_NAME" == "$PROJ_VER" ]
             then
               echo "Running >> npm publish"
