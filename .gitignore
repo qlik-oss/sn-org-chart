@@ -9,6 +9,7 @@
 node_modules
 coverage
 dist/
+core/esm
 sn-org-chart-ext/
 
 **/test/*/__artifacts__/diff
