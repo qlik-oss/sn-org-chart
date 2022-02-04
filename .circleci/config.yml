@@ -57,6 +57,9 @@ jobs:
           name: Lint
           command: yarn run lint
       - run:
+          name: Update spec
+          command: yarn run spec
+      - run:
           name: Unit tests
           command: |
             yarn jest --coverage --reporters=default --reporters=jest-junit
@@ -77,17 +80,84 @@ jobs:
           root: ~/org
           paths:
             - dist
+            - package.json
+            - core
 
-  publish-dev:
+#  publish-dev:
+#    <<: *defaults
+#    docker:
+#      - image: circleci/node:16.7.0
+#    steps:
+#      - attach_workspace:
+#          at: ~/org
+#      - run: mv ./dist sn-org-chart && zip -r "sn-org-chart.zip" "./sn-org-chart"
+#      - store_artifacts:
+#          path: ./sn-org-chart.zip
+
+  publish:
     <<: *defaults
     docker:
       - image: circleci/node:16.7.0
     steps:
       - attach_workspace:
-          at: ~/org
-      - run: mv ./dist sn-org-chart && zip -r "sn-org-chart.zip" "./sn-org-chart"
-      - store_artifacts:
-          path: ./sn-org-chart.zip
+          at: /org
+      - run:
+          name: Setup npm
+          command: |
+            set -eo pipefail
+            # Amend auth token for access to public npm registry for @ nebula.js packages
+            echo "//registry.npmjs. org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
+      - run:
+          name: Publish
+          command: |
+            set -euo pipefail
+            PROJ_VER=v$(cat package.json | jq -r '.version')
+            TAG_NAME=$(git tag --points-at HEAD)
+
+            if [ "$TAG_NAME" == "$PROJ_VER" ]
+            then
+              echo "Running >> npm publish"
+              npm publish
+            fi
+
+  api-governance:
+    machine: true
+    working_directory: ~/project
+    steps:
+      - checkout
+      - attach_workspace:
+          at: ~/project
+      - run:
+          name: Create version-txt
+          command: |
+              set -x
+              if [ -n "${CIRCLE_TAG}" ]; then
+                  version=${CIRCLE_TAG#v}
+              else
+                  version=$(git describe --tags --abbrev=7 --match "v*")
+                  version=${version#v}
+              fi
+              echo "$version" > ./version.txt
+              echo "Building $version"
+      - run:
+          name: Prepare API Compliance
+          command: |
+              docker pull ghcr.io/qlik-download/api-compliance
+              docker create -v /specs --name specs alpine:3.4 /bin/true
+              docker cp ./api-specifications/properties.json specs:/specs
+      - run:
+          name: Run API Compliance
+          command: >
+            VER=$(cat ./version.txt)
+            
+            docker run --volumes-from specs
+            -e SPEC_PATHS="245cb876-11a2-4af2-a416-380b5446bb9d@/specs/properties.json"
+            -e COMMIT_SHA="$CIRCLE_SHA1"
+            -e RELEASE_TAG="$VER"
+            -e CREDENTIALS_S3_SECRETKEY="$APICULTURIST_S3"
+            -e CREDENTIALS_GITHUB="$APICULTURIST_GITHUB"
+            -e CREDENTIALS_COLONY="$APICULTURIST_TOKEN"
+            ghcr.io/qlik-download/api-compliance
 
 workflows:
   version: 2
@@ -97,7 +167,19 @@ workflows:
       - build:
           requires:
             - install
-      - publish-dev:
+      - api-governance:
+          context: api-compliance
+          filters:
+            branches:
+              # Forked pull requests have CIRCLE_BRANCH set to pull/XXX
+              ignore: /pull\/[0-9]+/
+            tags:
+              only:
+                - /v.*/
+      # - publish-dev:
+      #     requires:
+      #       - build
+      - publish:
           requires:
             - build
           filters:

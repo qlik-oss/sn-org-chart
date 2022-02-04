@@ -1,7 +1,7 @@
 {
   "name": "@nebula.js/sn-org-chart",
   "version": "0.16.0",
-  "description": "",
+  "description": "Org chart supernova",
   "license": "MIT",
   "author": "QlikTech International AB",
   "keywords": [
@@ -20,8 +20,10 @@
     "url": "https://github.com/qlik-oss/sn-org-chart.git"
   },
   "files": [
-    "assets",
-    "dist"
+    "dist",
+    "api-specifications",
+    "core",
+    "sn-org-chart-ext"
   ],
   "engines": {
     "node": ">=16"
@@ -29,7 +31,9 @@
   "main": "dist/sn-org-chart.js",
   "module": "dist/sn-org-chart.esm.js",
   "scripts": {
-    "build": "nebula build --sourcemap false && shx cp assets/* dist",
+    "build": "node ./tools/build.js --core --ext",
+    "build:dev": "node ./tools/build.js --core --ext --mode development",
+    "build:watch": "node ./tools/build.js --ext --mode development -w",
     "sense": "nebula sense --ext ./src/extension/ext-raw.js --meta ./src/extension/meta.json",
     "lint": "eslint src",
     "start": "nebula serve --type sn-org-chart",
@@ -37,8 +41,10 @@
     "test:unit": "jest",
     "test:integration": "aw puppet --glob 'test/integration/**/*.spec.js' --chrome.headless true --chrome.slowMo 10",
     "test:rendering": "aw puppet --testExt '*.spec.js' --glob 'test/rendering/**/*.spec.js' --mocha.bail false --mocha.timeout 30000",
-    "prepublishOnly": "rm -rf dist && npm run build",
-    "version": "node ./scripts/version-qext.js && git add -A"
+    "prepublishOnly": "NODE_ENV=production yarn run build && yarn spec",
+    "prepack": "./tools/prepare-sn-pack.js",
+    "preversion": "yarn build",
+    "version": "yarn spec && git add api-specifications"
   },
   "husky": {
     "hooks": {
@@ -71,6 +77,7 @@
     "eslint-config-airbnb-base": "14.2.1",
     "eslint-plugin-import": "2.25.4",
     "eslint-plugin-mocha": "9.0.0",
+    "fs-extra": "10.0.0",
     "husky": "4.3.8",
     "jest": "^27.4.7",
     "jest-junit": "^13.0.0",
@@ -78,6 +85,7 @@
     "lint-staged": "11.2.6",
     "mocha-junit-reporter": "2.0.2",
     "shx": "0.3.4",
+    "yargs": "17.1.1",
     "scriptappy-from-jsdoc": "0.7.0"
   }
 }
