@@ -1,9 +1,9 @@
+import DEFAULTS from './style-defaults';
+
 /**
  * @extends {qae.GenericObjectProperties}
  * @entry
  */
-
-import DEFAULTS from './style-defaults';
 
 const properties = {
   qHyperCubeDef: {

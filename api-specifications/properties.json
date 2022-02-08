@@ -8,7 +8,63 @@
     "stability": "experimental",
     "x-qlik-visibility": "public"
   },
-  "entries": {},
+  "entries": {
+    "properties": {
+      "extends": [
+        {
+          "type": "qae.GenericObjectProperties"
+        }
+      ],
+      "kind": "object",
+      "entries": {
+        "footnote": {
+          "description": "Visualization footnote",
+          "defaultValue": "",
+          "type": "string"
+        },
+        "navigationMode": {
+          "description": "How the org chart is navigated",
+          "defaultValue": "free",
+          "kind": "union",
+          "items": [
+            {
+              "kind": "literal",
+              "value": "'expandAll'"
+            },
+            {
+              "kind": "literal",
+              "value": "'free'"
+            }
+          ],
+          "type": "string"
+        },
+        "resizeOnExpand": {
+          "description": "Resize and pan chart when a node's list of children is expanded",
+          "defaultValue": false,
+          "type": "boolean"
+        },
+        "showTitles": {
+          "description": "Show title for the visualization",
+          "defaultValue": true,
+          "type": "boolean"
+        },
+        "style": {
+          "description": "Holds chart styling",
+          "type": "#/definitions/Style"
+        },
+        "subtitle": {
+          "description": "Visualization subtitle",
+          "defaultValue": "",
+          "type": "string"
+        },
+        "title": {
+          "description": "Visualization title",
+          "defaultValue": "",
+          "type": "string"
+        }
+      }
+    }
+  },
   "definitions": {
     "Background": {
       "kind": "object",
@@ -160,51 +216,6 @@
           "type": "number"
         }
       }
-    },
-    "properties.footnote": {
-      "description": "Visualization footnote",
-      "defaultValue": "",
-      "type": "string"
-    },
-    "properties.navigationMode": {
-      "description": "How the org chart is navigated",
-      "defaultValue": "free",
-      "kind": "union",
-      "items": [
-        {
-          "kind": "literal",
-          "value": "'expandAll'"
-        },
-        {
-          "kind": "literal",
-          "value": "'free'"
-        }
-      ],
-      "type": "string"
-    },
-    "properties.resizeOnExpand": {
-      "description": "Resize and pan chart when a node's list of children is expanded",
-      "defaultValue": false,
-      "type": "boolean"
-    },
-    "properties.showTitles": {
-      "description": "Show title for the visualization",
-      "defaultValue": true,
-      "type": "boolean"
-    },
-    "properties.style": {
-      "description": "Holds chart styling",
-      "type": "#/definitions/Style"
-    },
-    "properties.subtitle": {
-      "description": "Visualization subtitle",
-      "defaultValue": "",
-      "type": "string"
-    },
-    "properties.title": {
-      "description": "Visualization title",
-      "defaultValue": "",
-      "type": "string"
     },
     "Style": {
       "description": "Holds styling options",
