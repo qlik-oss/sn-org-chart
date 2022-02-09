@@ -42,7 +42,6 @@
     "test:integration": "aw puppet --glob 'test/integration/**/*.spec.js' --chrome.headless true --chrome.slowMo 10",
     "test:rendering": "aw puppet --testExt '*.spec.js' --glob 'test/rendering/**/*.spec.js' --mocha.bail false --mocha.timeout 30000",
     "prepublishOnly": "NODE_ENV=production yarn run build && yarn spec",
-    "prepack": "./tools/prepare-sn-pack.js",
     "preversion": "yarn build",
     "version": "yarn spec && git add api-specifications"
   },
