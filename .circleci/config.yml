@@ -26,7 +26,7 @@ jobs:
   install:
     <<: *defaults
     docker:
-      - image: circleci/node:16.7.0
+      - image: circleci/node:16.10.0
     steps:
       - checkout
       - restore_cache: *restore_yarn_cache
@@ -42,7 +42,7 @@ jobs:
   build:
     <<: *defaults
     docker:
-      - image: circleci/node:16.7.0-browsers
+      - image: circleci/node:16.10.0-browsers
       - image: browserless/chrome:1.53.0-puppeteer-1.20.0
     steps:
       - attach_workspace:
@@ -97,7 +97,7 @@ jobs:
   publish:
     <<: *defaults
     docker:
-      - image: circleci/node:16.7.0
+      - image: circleci/node:16.10.0
     steps:
       - attach_workspace:
           at: ~/org
@@ -149,7 +149,6 @@ jobs:
           name: Run API Compliance
           command: >
             VER=$(cat ./version.txt)
-            
             docker run --volumes-from specs
             -e SPEC_PATHS="245cb876-11a2-4af2-a416-380b5446bb9d@/specs/properties.json"
             -e COMMIT_SHA="$CIRCLE_SHA1"
