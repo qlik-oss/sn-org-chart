@@ -9,4 +9,8 @@
 node_modules
 coverage
 dist/
-nebula.js-sn-org-chart-ext/
+core/esm
+sn-org-chart-ext/
+
+**/test/*/__artifacts__/diff
+**/test/*/__artifacts__/regression

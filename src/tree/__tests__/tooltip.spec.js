@@ -1,4 +1,3 @@
-import sinon from 'sinon';
 import { getTooltipStyle, getTooltipContent } from '../tooltip';
 import encodeUtils from '../../utils/encoder';
 
@@ -20,7 +19,7 @@ describe('tooltip', () => {
 
     it('Should return string containing style', () => {
       const style = getTooltipStyle(d, constainerHeight, x, y, transform);
-      expect(style).to.equal('bottom:1014px;left:77px;');
+      expect(style).toEqual('bottom:1014px;left:77px;');
     });
   });
 
@@ -29,8 +28,7 @@ describe('tooltip', () => {
     let d;
     let styling;
     let content;
-    const sandbox = sinon.createSandbox();
-    sandbox.replace(encodeUtils, 'encodeTitle', (input) => input);
+    encodeUtils.encodeTitle = jest.fn().mockImplementation((input) => input);
 
     beforeEach(() => {
       d = {
@@ -51,34 +49,34 @@ describe('tooltip', () => {
 
     it('Should return string containing id', () => {
       content = getTooltipContent(d, styling);
-      expect(content).to.equal(`${htmlBegining}someId</div></div>`);
+      expect(content).toEqual(`${htmlBegining}someId</div></div>`);
     });
     it('Should return string containing label', () => {
       d.data.attributes.label = 'someLabel';
       content = getTooltipContent(d, styling);
-      expect(content).to.equal(`${htmlBegining}someLabel</div></div>`);
+      expect(content).toEqual(`${htmlBegining}someLabel</div></div>`);
     });
     it('Should return string containing id and subLabel', () => {
       d.data.attributes.subLabel = 'someSubLabel';
       content = getTooltipContent(d, styling);
-      expect(content).to.equal(`${htmlBegining}someId</div>someSubLabel<br /></div>`);
+      expect(content).toEqual(`${htmlBegining}someId</div>someSubLabel<br /></div>`);
     });
     it('Should return string containing id, subLabel and extraLabel', () => {
       d.data.attributes.subLabel = 'someSubLabel';
       d.data.attributes.extraLabel = 'someExtraLabel';
       content = getTooltipContent(d, styling);
-      expect(content).to.equal(`${htmlBegining}someId</div>someSubLabel<br />someExtraLabel<br /></div>`);
+      expect(content).toEqual(`${htmlBegining}someId</div>someSubLabel<br />someExtraLabel<br /></div>`);
     });
     it('Should return string containing id and measure', () => {
       d.data.measure = 'someMeasure';
       content = getTooltipContent(d, styling);
-      expect(content).to.equal(`${htmlBegining}someId</div>someMeasure</div>`);
+      expect(content).toEqual(`${htmlBegining}someId</div>someMeasure</div>`);
     });
     it('Should return string containing id and measure', () => {
       d.data.measure = 'someMeasure';
       styling.measureLabel = 'someMeasureLabel';
       content = getTooltipContent(d, styling);
-      expect(content).to.equal(`${htmlBegining}someId</div>someMeasureLabel: someMeasure</div>`);
+      expect(content).toEqual(`${htmlBegining}someId</div>someMeasureLabel: someMeasure</div>`);
     });
   });
 });
