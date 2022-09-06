@@ -56,11 +56,9 @@ export const getTranslations = (bBox, height, width) => {
   if (scaleToWidth) {
     const yTrans = -bBox.y + (height * scaleFactor - bBox.height) / 2;
     translations.divTranslation = `${-bBox.x}px, ${yTrans}px`;
-    translations.svgTranslation = `${-bBox.x} ${yTrans}`;
   } else {
     const xTrans = -bBox.x + (width * scaleFactor - bBox.width) / 2;
     translations.divTranslation = `${xTrans}px, ${-bBox.y}px`;
-    translations.svgTranslation = `${xTrans} ${-bBox.y}`;
   }
 
   return translations;
@@ -151,20 +149,11 @@ export const getSnapshotZoom = (rect, viewState, initialTransform) => {
 export default function transform(nodes, width, height, svg, divBox, useTransitions) {
   // Zooming and positioning of the tree
   const bBox = getBBoxOfNodes(nodes);
-  const { divTranslation, svgTranslation, scaleFactor } = getTranslations(bBox, height, width);
-  const isIE11 = !!window.MSInputMethodContext && !!document.documentMode;
-  if (isIE11) {
-    // Transition using d3 + svg transform, for IE11
-    svg.attr('transform', `scale(${1 / scaleFactor}) translate(${svgTranslation})`);
-    divBox.classed('org-disable-transition', true);
-    svg.classed('org-disable-transition', true);
-  } else {
-    // Transition using css, does not work in IE11
-    svg.attr('style', `transform: scale(${1 / scaleFactor}) translate(${divTranslation});`);
-    divBox.classed('org-disable-transition', !useTransitions);
-    svg.classed('org-disable-transition', !useTransitions);
-  }
+  const { divTranslation, scaleFactor } = getTranslations(bBox, height, width);
 
+  svg.attr('style', `transform: scale(${1 / scaleFactor}) translate(${divTranslation});`);
+  divBox.classed('org-disable-transition', !useTransitions);
+  svg.classed('org-disable-transition', !useTransitions);
   divBox.attr(
     'style',
     `width:${width}px;height:${height}px;
