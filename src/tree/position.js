@@ -27,33 +27,34 @@ export const widthTranslation = (d, widthSpacing, element, axis, initialZoomStat
   return d[axis];
 };
 
-export const depthTranslation = (d, depthSpacing, axis, initialZoomState, navigationMode) => {
-  const { cardHeight, leafMargin } = constants;
+export const depthTranslation = (d, depthSpacing, axis, initialZoomState, navigationMode, styling) => {
+  const { cardHeight, cardHeightLarge, leafMargin } = constants;
   const initialY = (initialZoomState && initialZoomState.initialY) || 0;
 
   if (d.parent && d.parent.data.id !== 'Root' && navigationMode !== 'expandAll' && haveNoChildren(d.parent.children)) {
-    d[axis] = d.parent.y + depthSpacing + d.data.childNumber * (cardHeight + leafMargin) + initialY;
+    d[axis] = d.parent.y + depthSpacing + d.data.childNumber * (([undefined, 'left', 'right'].includes(styling.alignment) ? cardHeight : cardHeightLarge) + leafMargin) + initialY;
   } else {
     d[axis] = d.y + initialY;
   }
   return d[axis];
 };
 
-export default function position(orientation, element, initialZoomState, navigationMode) {
-  const { widthMargin, heightMargin, cardWidth, cardHeight, cardPadding } = constants;
+export default function position(orientation, element, initialZoomState, navigationMode, styling) {
+  const { widthMargin, heightMargin, cardWidth, cardHeight, cardHeightLarge, cardPadding } = constants;
   let widthSpacing;
   let depthSpacing;
 
   let orientations;
+  const actualCardHeight = styling ? [undefined, 'left', 'right'].includes(styling.alignment) ? cardHeight : cardHeightLarge : cardHeight;
   switch (orientation) {
     case 'ttb':
       widthSpacing = cardWidth + widthMargin;
-      depthSpacing = navigationMode === 'expandAll' ? cardHeight + 2 * cardPadding : cardHeight + heightMargin;
+      depthSpacing = navigationMode === 'expandAll' ? actualCardHeight + 2 * cardPadding : actualCardHeight + heightMargin;
       orientations = {
         depthSpacing,
         isVertical: true,
         x: d => widthTranslation(d, widthSpacing, element, 'xActual', initialZoomState, navigationMode),
-        y: d => depthTranslation(d, depthSpacing, 'yActual', initialZoomState, navigationMode),
+        y: d => depthTranslation(d, depthSpacing, 'yActual', initialZoomState, navigationMode, styling),
       };
       break;
     // case 'btt':

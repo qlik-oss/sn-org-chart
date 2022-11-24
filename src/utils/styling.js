@@ -28,12 +28,15 @@ const stylingUtils = {
       border.colorType !== 'auto'
         ? getColor(border, Theme, colorUtils.getDarkColor(backgroundColor))
         : colorUtils.getDarkColor(backgroundColor);
+    const { location, alignment } = layout.style.image || {};
     return {
       backgroundColor,
       fontColor,
       measureLabel,
       border,
       borderColor,
+      location,
+      alignment
     };
   },
 };

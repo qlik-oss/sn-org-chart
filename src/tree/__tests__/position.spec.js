@@ -5,15 +5,18 @@ describe('position', () => {
   describe('position', () => {
     const orientation = 'ttb';
     const element = '';
+    const initialZoomState = { initialX: 0, initialY: 0 };
+    const navigationMode = 'free';
+    const styling = {};
     it('should return position object', () => {
-      const { depthSpacing, isVertical, x, y } = position(orientation, element);
+      const { depthSpacing, isVertical, x, y } = position(orientation, element, initialZoomState, navigationMode, styling);
       expect(depthSpacing).toEqual(120);
       expect(isVertical).toEqual(true);
       expect(x).toBeInstanceOf(Function);
       expect(y).toBeInstanceOf(Function);
     });
     it('should not return position when incorrect orientation', () => {
-      expect(position('someOrientation', element)).toBeUndefined();
+      expect(position('someOrientation', element, initialZoomState, navigationMode, styling)).toBeUndefined();
     });
   });
 
@@ -23,29 +26,31 @@ describe('position', () => {
     let d;
     let initialZoomState;
     let navigationMode;
+    let styling;
     beforeEach(() => {
       axis = 'xActual';
       d = JSON.parse(JSON.stringify(defaultValues.nodes));
       initialZoomState = { initialX: 0, initialY: 0 };
       navigationMode = 'free';
+      styling = {};
     });
     it('should return yActual for node with initial offset', () => {
       initialZoomState.initialY = 100;
-      const yActual = depthTranslation(d, depthSpacing, axis, initialZoomState, navigationMode);
+      const yActual = depthTranslation(d, depthSpacing, axis, initialZoomState, navigationMode, styling);
       expect(yActual).toEqual(224);
     });
     it('should return yActual for node', () => {
-      const yActual = depthTranslation(d, depthSpacing, axis, initialZoomState, navigationMode);
+      const yActual = depthTranslation(d, depthSpacing, axis, initialZoomState, navigationMode, styling);
       expect(yActual).toEqual(124);
     });
     it('should return yActual for leaf node', () => {
       d.parent.children = undefined;
-      const yActual = depthTranslation(d, depthSpacing, axis, initialZoomState, navigationMode);
+      const yActual = depthTranslation(d, depthSpacing, axis, initialZoomState, navigationMode, styling);
       expect(yActual).toEqual(205);
     });
     it('should return yActual for leaf node in expandAll navigation mode', () => {
       navigationMode = 'expandAll';
-      const yActual = depthTranslation(d, depthSpacing, axis, initialZoomState, navigationMode);
+      const yActual = depthTranslation(d, depthSpacing, axis, initialZoomState, navigationMode, styling);
       expect(yActual).toEqual(124);
     });
   });

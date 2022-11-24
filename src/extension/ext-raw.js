@@ -65,7 +65,14 @@ export default {
                     id: 'extraLabelExpression',
                     tid: 'extraLabelExpression',
                   },
-
+                  {
+                    component: 'expression',
+                    ref: 'qExpression',
+                    translation: 'Image',
+                    defaultValue: '',
+                    id: 'imageExpression',
+                    tid: 'imageExpression',
+                  },
                   {
                     component: 'expression',
                     ref: 'qExpression',
@@ -258,6 +265,39 @@ export default {
                     show: (data) =>
                       bordersActive(data) &&
                       propertyResolver.getValue(data, 'style.border.colorType') === 'byExpression',
+                  },
+                },
+              },
+              image: {
+                type: 'items',
+                items: {
+                  appearanceHeader: {
+                    component: 'text',
+                    translation: 'Image options',
+                    style: 'pp-nm-hcd__list-header',
+                  },
+                  topBar: {
+                    component: 'dropdown',
+                    ref: 'style.image.location',
+                    translation: 'Location',
+                    options: [
+                      { value: 'card', translation: 'Card only' },
+                      { value: 'tooltip', translation: 'Tooltip only' },
+                      { value: 'both', translation: 'Card and tooltip' },
+                    ],
+                    defaultValue: 'both',
+                  },
+                  fullBorder: {
+                    component: 'dropdown',
+                    ref: 'style.image.alignment',
+                    translation: 'Alignment',
+                    options: [
+                      { value: 'left', translation: 'Left' },
+                      { value: 'right', translation: 'Right' },
+                      { value: 'top', translation: 'Top' },
+                      { value: 'bottom', translation: 'Bottom' },
+                    ],
+                    defaultValue: 'left',
                   },
                 },
               },

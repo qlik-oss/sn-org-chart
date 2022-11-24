@@ -2,10 +2,7 @@
   .sn-org-tooltip {
     visibility: hidden;
     opacity: 0;
-    /* Unsupported in IE, so there we set width explicitly */
-    width: 230px;
-    width: -moz-max-content;
-    width: fit-content;
+    width: max-content;
 
     /* Position the tooltip text */
     position: absolute;
@@ -34,6 +31,7 @@
     right: 50%;
     font-family: 'QlikView Sans', sans-serif;
     position: relative;
+    display: flex;
 
     max-height: 150px;
     background-color: #404040;
@@ -48,6 +46,10 @@
     word-wrap: break-word;
     word-break: break-word;
     overflow: hidden;
+
+    .sn-org-tooltip-image {
+      height: 50px;
+    }
 
     .sn-org-tooltip-header {
       font-weight: bold;
