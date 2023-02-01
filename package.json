@@ -36,6 +36,7 @@
     "build:watch": "node ./tools/build.js --ext --mode development -w",
     "sense": "nebula sense --ext ./src/extension/ext-raw.js --meta ./src/extension/meta.json",
     "lint": "eslint src",
+    "prepare": "husky install",
     "start": "nebula serve --type sn-org-chart",
     "spec": "scriptappy-from-jsdoc -c ./spec-configs/props.conf.js",
     "test:unit": "jest",
@@ -44,11 +45,6 @@
     "prepublishOnly": "NODE_ENV=production yarn run build && yarn spec",
     "preversion": "yarn build",
     "version": "yarn spec && git add api-specifications"
-  },
-  "husky": {
-    "hooks": {
-      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS && lint-staged"
-    }
   },
   "lint-staged": {
     "*.{js, jsx}": [
