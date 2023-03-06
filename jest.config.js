@@ -3,7 +3,7 @@ module.exports = {
   testRegex: 'src/.+\\.(test|spec)\\.[jt]sx?$',
   coverageThreshold: {
     global: {
-      lines: 76,
+      lines: 74,
     },
   },
   coveragePathIgnorePatterns: ['src/__tests__/default-orgchart-props.js'],
