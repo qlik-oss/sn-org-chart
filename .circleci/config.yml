@@ -26,7 +26,7 @@ jobs:
   install:
     <<: *defaults
     docker:
-      - image: circleci/node:16.10.0
+      - image: circleci/node:18.10.0
     steps:
       - checkout
       - restore_cache: *restore_yarn_cache
@@ -42,7 +42,7 @@ jobs:
   build:
     <<: *defaults
     docker:
-      - image: circleci/node:16.10.0-browsers
+      - image: circleci/node:18.10.0-browsers
       - image: browserless/chrome:1.54.0-puppeteer-1.20.0
     steps:
       - attach_workspace:
@@ -83,21 +83,21 @@ jobs:
             - package.json
             - core
 
-#  publish-dev:
-#    <<: *defaults
-#    docker:
-#      - image: circleci/node:16.7.0
-#    steps:
-#      - attach_workspace:
-#          at: ~/org
-#      - run: mv ./dist sn-org-chart && zip -r "sn-org-chart.zip" "./sn-org-chart"
-#      - store_artifacts:
-#          path: ./sn-org-chart.zip
+  #  publish-dev:
+  #    <<: *defaults
+  #    docker:
+  #      - image: circleci/node:16.7.0
+  #    steps:
+  #      - attach_workspace:
+  #          at: ~/org
+  #      - run: mv ./dist sn-org-chart && zip -r "sn-org-chart.zip" "./sn-org-chart"
+  #      - store_artifacts:
+  #          path: ./sn-org-chart.zip
 
   publish:
     <<: *defaults
     docker:
-      - image: circleci/node:16.10.0
+      - image: circleci/node:18.10.0
     steps:
       - attach_workspace:
           at: ~/org
@@ -130,21 +130,21 @@ jobs:
       - run:
           name: Create version-txt
           command: |
-              set -x
-              if [ -n "${CIRCLE_TAG}" ]; then
-                  version=${CIRCLE_TAG#v}
-              else
-                  version=$(git describe --tags --abbrev=7 --match "v*")
-                  version=${version#v}
-              fi
-              echo "$version" > ./version.txt
-              echo "Building $version"
+            set -x
+            if [ -n "${CIRCLE_TAG}" ]; then
+                version=${CIRCLE_TAG#v}
+            else
+                version=$(git describe --tags --abbrev=7 --match "v*")
+                version=${version#v}
+            fi
+            echo "$version" > ./version.txt
+            echo "Building $version"
       - run:
           name: Prepare API Compliance
           command: |
-              docker pull ghcr.io/qlik-download/api-compliance
-              docker create -v /specs --name specs alpine:3.4 /bin/true
-              docker cp ./api-specifications/properties.json specs:/specs
+            docker pull ghcr.io/qlik-download/api-compliance
+            docker create -v /specs --name specs alpine:3.4 /bin/true
+            docker cp ./api-specifications/properties.json specs:/specs
       - run:
           name: Run API Compliance
           command: >
