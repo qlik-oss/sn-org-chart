@@ -7,4 +7,5 @@ module.exports = {
     },
   },
   coveragePathIgnorePatterns: ['src/__tests__/default-orgchart-props.js'],
+  collectCoverageFrom: ['src/**'],
 };
