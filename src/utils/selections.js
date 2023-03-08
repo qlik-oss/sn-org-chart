@@ -27,13 +27,13 @@ export default {
       }
       if (!activate) {
         newState.splice(ind, 1);
-        linkedIds.forEach(id => {
+        linkedIds.forEach((id) => {
           const idInd = newState.indexOf(id);
           idInd !== -1 && newState.splice(idInd, 1);
         });
       } else {
         newState.push(node.data.elemNo);
-        linkedIds.forEach(id => {
+        linkedIds.forEach((id) => {
           if (newState.indexOf(id) === -1) {
             newState.push(id);
           }

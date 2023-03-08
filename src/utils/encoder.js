@@ -20,7 +20,7 @@ const encodeUtils = {
       }
     }
     return encoded;
-  }
+  },
 };
 
 export default encodeUtils;

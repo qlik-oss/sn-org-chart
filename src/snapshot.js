@@ -12,10 +12,10 @@ export const createSnapshotData = (expandedState, allNodes, layout) => {
   const usedMatrix = [];
   const { qDataPages } = layout.qHyperCube;
   const dataMatrix = [];
-  qDataPages.forEach(page => {
+  qDataPages.forEach((page) => {
     dataMatrix.push(...page.qMatrix);
   });
-  nodes.forEach(n => {
+  nodes.forEach((n) => {
     if (n.data.rowNo !== undefined) {
       usedMatrix.push(dataMatrix[n.data.rowNo]);
     }
@@ -37,7 +37,7 @@ export const createViewState = (expandedState, transform, initialZoom, element) 
 
 export default function snapshot(expandedState, containerData, layout, transform, initialZoom) {
   const element = useElement();
-  onTakeSnapshot(snapshotLayout => {
+  onTakeSnapshot((snapshotLayout) => {
     if (!snapshotLayout.snapshotData) {
       snapshotLayout.snapshotData = {};
     }
