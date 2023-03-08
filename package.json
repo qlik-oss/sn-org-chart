@@ -37,7 +37,6 @@
     "sense": "nebula sense --ext ./src/extension/ext-raw.js --meta ./src/extension/meta.json",
     "lint": "eslint src",
     "format": "prettier --write 'src/**'",
-    "format:check": "prettier --check src/**",
     "start": "nebula serve --type sn-org-chart",
     "spec": "scriptappy-from-jsdoc -c ./spec-configs/props.conf.js",
     "test:unit": "jest",
@@ -54,7 +53,8 @@
   },
   "lint-staged": {
     "*.{js, jsx}": [
-      "eslint"
+      "eslint",
+      "prettier --check src/**"
     ]
   },
   "peerDependencies": {
