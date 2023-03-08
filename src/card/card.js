@@ -43,7 +43,11 @@ export default (data, cardStyling, selectionObj) => {
   }
   const selectedClass = api && api.isActive() ? (isSelected ? ' selected' : ' not-selected') : '';
 
-  const { top = DEFAULTS.BORDER_TOP, fullBorder = DEFAULTS.BORDER_FULL, colorType = DEFAULTS.BORDER_COLOR_TYPE } = cardStyling.border;
+  const {
+    top = DEFAULTS.BORDER_TOP,
+    fullBorder = DEFAULTS.BORDER_FULL,
+    colorType = DEFAULTS.BORDER_COLOR_TYPE,
+  } = cardStyling.border;
   const borderColor =
     colorType === 'auto' ? colorUtils.getDarkColor(backgroundColor) : resolveColor(cardStyling.borderColor);
 

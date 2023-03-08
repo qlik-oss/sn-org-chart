@@ -10,7 +10,7 @@ export default function autoRegister(translator) {
       return;
     }
 
-    Object.keys(en).forEach(key => {
+    Object.keys(en).forEach((key) => {
       translator.add({
         id: key,
         locale: {

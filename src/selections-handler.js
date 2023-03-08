@@ -8,7 +8,7 @@ export default function selectionHandler(translator) {
   const isInSelections = !!useLayout().qSelectionInfo.qInSelections;
   const [selectionObj] = useState({
     api: selectionsAPI,
-    setState: state => {
+    setState: (state) => {
       selectionObj.state = state;
     },
     state: [],
@@ -72,13 +72,13 @@ export default function selectionHandler(translator) {
   );
 
   useEffect(() => {
-    const addKeyPress = event => {
+    const addKeyPress = (event) => {
       if (event.key === 'Shift') {
         setSingleSelect(true);
       }
     };
 
-    const removeKeyPress = event => {
+    const removeKeyPress = (event) => {
       if (event.key === 'Shift') {
         setSingleSelect(false);
       }

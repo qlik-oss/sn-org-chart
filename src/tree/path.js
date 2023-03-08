@@ -19,19 +19,19 @@ export function getPoints(d, topId, { depthSpacing, isVertical, x, y }, navigati
       points.push(
         isVertical
           ? [
-            { x: start.x, y: start.y + halfCard.y },
-            { x: end.x - halfCard.x, y: start.y + halfCard.y },
-            { x: end.x - halfCard.x, y: end.y + buttonMargin },
-            { x: end.x, y: end.y + buttonMargin },
-            { x: end.x, y: end.y },
-          ]
+              { x: start.x, y: start.y + halfCard.y },
+              { x: end.x - halfCard.x, y: start.y + halfCard.y },
+              { x: end.x - halfCard.x, y: end.y + buttonMargin },
+              { x: end.x, y: end.y + buttonMargin },
+              { x: end.x, y: end.y },
+            ]
           : [
-            { x: start.x, y: start.y },
-            { x: start.x, y: end.y - halfCard.y },
-            { x: end.x + halfDepth, y: end.y - halfCard.y },
-            { x: end.x + halfDepth, y: end.y },
-            { x: end.x, y: end.y },
-          ]
+              { x: start.x, y: start.y },
+              { x: start.x, y: end.y - halfCard.y },
+              { x: end.x + halfDepth, y: end.y - halfCard.y },
+              { x: end.x + halfDepth, y: end.y },
+              { x: end.x, y: end.y },
+            ]
       );
     } else if (start.x === x(d.parent) || start.y === y(d.parent)) {
       // straight line
@@ -44,17 +44,17 @@ export function getPoints(d, topId, { depthSpacing, isVertical, x, y }, navigati
       points.push(
         isVertical
           ? [
-            { x: start.x + halfCard.x, y: start.y },
-            { x: start.x + halfCard.x, y: start.y - cardPadding },
-            { x: end.x, y: start.y - cardPadding },
-            { x: end.x, y: end.y },
-          ]
+              { x: start.x + halfCard.x, y: start.y },
+              { x: start.x + halfCard.x, y: start.y - cardPadding },
+              { x: end.x, y: start.y - cardPadding },
+              { x: end.x, y: end.y },
+            ]
           : [
-            { x: start.x, y: start.y },
-            { x: start.x - cardPadding, y: start.y },
-            { x: start.x - cardPadding, y: end.y },
-            { x: end.x, y: end.y },
-          ]
+              { x: start.x, y: start.y },
+              { x: start.x - cardPadding, y: start.y },
+              { x: start.x - cardPadding, y: end.y },
+              { x: end.x, y: end.y },
+            ]
       );
     }
   } else if (d.parent) {
@@ -81,7 +81,7 @@ export function getPath(points) {
   const { r } = constants;
   let pathString = `M ${points[0].x} ${points[0].y} `;
   let dir;
-  const setDir = i => {
+  const setDir = (i) => {
     const delta = { x: points[i].x - points[i - 1].x, y: points[i].y - points[i - 1].y };
     dir = {
       x: (delta.x > 0) - (delta.x < 0) || +delta.x,
@@ -108,11 +108,11 @@ export default function createPaths(node, positioning, topId, navigationMode) {
   node
     .append('path')
     .attr('class', 'sn-org-path')
-    .attr('id', d => d.data.id)
-    .attr('d', d => {
+    .attr('id', (d) => d.data.id)
+    .attr('d', (d) => {
       let path = '';
       const pointSets = getPoints(d, topId, positioning, navigationMode);
-      pointSets.forEach(points => {
+      pointSets.forEach((points) => {
         path += getPath(points).slice(0, -1);
       });
 

@@ -52,8 +52,8 @@ export default function position(orientation, element, initialZoomState, navigat
       orientations = {
         depthSpacing,
         isVertical: true,
-        x: d => widthTranslation(d, widthSpacing, element, 'xActual', initialZoomState, navigationMode),
-        y: d => depthTranslation(d, depthSpacing, 'yActual', initialZoomState, navigationMode),
+        x: (d) => widthTranslation(d, widthSpacing, element, 'xActual', initialZoomState, navigationMode),
+        y: (d) => depthTranslation(d, depthSpacing, 'yActual', initialZoomState, navigationMode),
       };
       break;
     // case 'btt':
