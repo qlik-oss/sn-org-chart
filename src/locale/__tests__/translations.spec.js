@@ -1,5 +1,5 @@
-import autoRegister from '../translations';
-import en from '../en-US';
+import autoRegister from '../src/translations';
+import en from '../locales/en-US.json';
 
 describe('translations', () => {
   describe('autoRegister', () => {
