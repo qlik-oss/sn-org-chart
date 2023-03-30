@@ -37,7 +37,7 @@
     "sense": "nebula sense --ext ./src/extension/ext-raw.js --meta ./src/extension/meta.json",
     "lint": "eslint src",
     "locale:generate": "node src/locale/scripts/generate-all.mjs",
-    "locale:verify": "node src/locale/tools/verify-translations.ts",
+    "locale:verify": "node src/locale/tools/verify-translations.js",
     "format": "prettier --write 'src/**'",
     "start": "nebula serve --type sn-org-chart",
     "spec": "scriptappy-from-jsdoc -c ./spec-configs/props.conf.js",
