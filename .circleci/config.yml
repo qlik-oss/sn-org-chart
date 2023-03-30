@@ -82,6 +82,7 @@ jobs:
             - dist
             - package.json
             - core
+            - src/locale/all.json
 
   #  publish-dev:
   #    <<: *defaults
