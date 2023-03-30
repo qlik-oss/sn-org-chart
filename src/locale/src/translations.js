@@ -1,8 +1,6 @@
-import { stardust } from '@nebula.js/stardust';
-
 import all from '../all.json';
 
-export default function autoRegister(translator: stardust.Translator) {
+export default function autoRegister(translator) {
   if (translator && translator.get && translator.add) {
     const t = 'Object.OrgChart.MaxData';
     const g = translator.get(t);
@@ -13,7 +11,7 @@ export default function autoRegister(translator: stardust.Translator) {
     }
 
     Object.keys(all).forEach(key => {
-      translator.add(all[key as keyof typeof all]);
+      translator.add(all[key]);
     });
   }
 }
