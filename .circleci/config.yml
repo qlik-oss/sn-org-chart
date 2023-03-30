@@ -94,6 +94,15 @@ jobs:
   #      - store_artifacts:
   #          path: ./sn-org-chart.zip
 
+  locale:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: ~/table
+      - run:
+          name: Verify locale
+          command: yarn run locale:verify
+
   publish:
     <<: *defaults
     docker:
@@ -178,6 +187,9 @@ workflows:
       # - publish-dev:
       #     requires:
       #       - build
+      - locale:
+          requires:
+            - build
       - publish:
           requires:
             - build
