@@ -1,5 +1,5 @@
 import { useEffect, useState, useSelections, useAction, useLayout } from '@nebula.js/stardust';
-import autoRegister from './locale/src/translations';
+import autoRegister from './locale/src/translations.ts';
 import { singleSelectionIcon } from './utils/svg-icons';
 
 export default function selectionHandler(translator) {

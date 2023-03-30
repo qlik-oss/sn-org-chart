@@ -21,7 +21,7 @@ import stylingUtils from './utils/styling';
 import treeTransform from './utils/tree-utils';
 import viewStateUtil from './utils/viewstate-utils';
 import { getSnapshotZoom, applyTransform } from './tree/transform';
-import autoRegister from './locale/src/translations';
+import autoRegister from './locale/src/translations.ts';
 import './styles/tooltip.less';
 import './styles/paths.less';
 import './styles/warnings.less';
