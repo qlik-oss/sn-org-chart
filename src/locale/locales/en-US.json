@@ -1,0 +1,90 @@
+{
+  "Object.OrgChart": {
+    "value": "Org chart",
+    "comment": "Name of chart, noun."
+  },
+  "Object.OrgChart.Description": {
+    "value": "Displays the relations of an organization or similarly structured data. Starts at the top and allows for navigation through the hierarchy.",
+    "comment": "Description of chart."
+  },
+  "Object.OrgChart.MaxData": {
+    "value": "The maximum data limit is reached. The tree may display incorrectly.",
+    "comment": "Warning in Org chart for when the max data limit has been reached (rnt 200218)"
+  },
+  "Object.OrgChart.DummyWarn": {
+    "value": "The data contains multiple root nodes.",
+    "comment": "Warning for when a single root node is missing"
+  },
+  "Object.OrgChart.CycleWarning": {
+    "value": "Data contains circular references, nodes are omitted.",
+    "comment": "Warning for data that contains cycles, meaning some data will not be displayed (rnt 200218)"
+  },
+  "Object.OrgChart.MissingRoot": {
+    "value": "No root node, check data for circular references.",
+    "comment": "Error for when all data is cyclic, so no root nodes can be used (rnt 200218)"
+  },
+  "Object.OrgChart.MaxChildren": {
+    "value": "Maximum number of child nodes reached, nodes are omitted.",
+    "comment": "Warning for reaching the maximun number of child nodes to a single parent (rnt 200218)"
+  },
+  "Object.OrgChart.LabelExpression": {
+    "value": "Card title",
+    "comment": "Label for card label expressions in property panel (rnt 200218)"
+  },
+  "Object.OrgChart.SubLabelExpression": {
+    "value": "Card sub-title",
+    "comment": "Label for card sub-label expressions for in property panel (rnt 200218)"
+  },
+  "Object.OrgChart.ExtraLabelExpression": {
+    "value": "Card description",
+    "comment": "Label for extra label expressions in property panel (rnt 200218)"
+  },
+  "Object.OrgChart.ColorLabelExpression": {
+    "value": "Card background color",
+    "comment": "Label for color expressions in property panel (rnt 200218)"
+  },
+  "Object.OrgChart.ExtraLabelDesc": {
+    "value": "Description is only visible when a measure is not used",
+    "comment": "Clarification for when the description field is used (rnt 200218)"
+  },
+  "Object.OrgChart.BackgroundColor": {
+    "value": "Background color",
+    "comment": "Label for background color in property panel (rnt 200218)"
+  },
+  "Object.OrgChart.FontColor": {
+    "value": "Font color",
+    "comment": "Label for font color in property panel (rnt 200218)"
+  },
+  "Object.OrgChart.IncludeDescendants": {
+    "value": "Include all children",
+    "comment": "Tooltip for the select descendants toggle button (rnt 200218)"
+  },
+  "Object.OrgChart.SingleSelect": {
+    "value": "Select single node",
+    "comment": "Tooltip for the select single node toggle button (rnt 200325)"
+  },
+  "Object.OrgChart.NavigationMode": {
+    "value": "Presentation mode",
+    "comment": "Label for presentation mode in property panel (rnt 200325)"
+  },
+  "Object.OrgChart.FreeMode": {
+    "value": "Expand/collapse",
+    "comment": "Option Expand/Collapse for presentation mode (rnt 200325)"
+  },
+  "Object.OrgChart.ExpandAll": {
+    "value": "Entire tree",
+    "comment": "Option entire tree for presentation mode (rnt 200325)"
+  },
+  "Object.OrgChart.resizeOnExpand": {
+    "value": "Resize on expand/collapse",
+    "comment": "Option for resizing on expanding collapsing nodes (rnt 200325)"
+  },
+  "Object.OrgChart.TopBar": {
+    "value": "Top bar",
+    "comment": "Option for top bar (rnt 200325)"
+  },
+  "Object.OrgChart.CardAppearance": {
+    "value": "Card appearance",
+    "comment": "Title for card appearance section (rnt 200421)"
+  }
+}

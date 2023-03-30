@@ -1,0 +1,102 @@
+{
+  "Object.OrgChart.BackgroundColor": {
+    "value": "Bakgrundsfärg",
+    "comment": "Label for background color in property panel (rnt 200218)",
+    "version": "9KpHzr1x7HEhTq99yu2row=="
+  },
+  "Object.OrgChart.CardAppearance": {
+    "value": "Kortets utseende",
+    "comment": "Title for card appearance section (rnt 200421)",
+    "version": "O+tO9o3UzbzM8LSHYJ1fGA=="
+  },
+  "Object.OrgChart.ColorLabelExpression": {
+    "value": "Kortets bakgrundsfärg",
+    "comment": "Label for color expressions in property panel (rnt 200218)",
+    "version": "fii4lDu8O4v7TTsbh1yXIA=="
+  },
+  "Object.OrgChart.CycleWarning": {
+    "value": "Data innehåller cirkelreferenser. Noder utelämnas.",
+    "comment": "Warning for data that contains cycles, meaning some data will not be displayed (rnt 200218)",
+    "version": "An8ujeYJOfiAlViO2ifl3w=="
+  },
+  "Object.OrgChart.DummyWarn": {
+    "value": "Data innehåller flera rotnoder.",
+    "comment": "Warning for when a single root node is missing",
+    "version": "EtCdF9I5qbwNeoz2FnWiWg=="
+  },
+  "Object.OrgChart.ExpandAll": {
+    "value": "Hela trädet",
+    "comment": "Option entire tree for presentation mode (rnt 200325)",
+    "version": "TGwKsCT1ElIk9nl00H7Otg=="
+  },
+  "Object.OrgChart.ExtraLabelDesc": {
+    "value": "Beskrivning används bara när ett mått inte används",
+    "comment": "Clarification for when the description field is used (rnt 200218)",
+    "version": "mEs19lGvF/AU0xAL3pDEVQ=="
+  },
+  "Object.OrgChart.ExtraLabelExpression": {
+    "value": "Kortets beskrivning",
+    "comment": "Label for extra label expressions in property panel (rnt 200218)",
+    "version": "MmmOJ00IS0tvu8VIMxDDkg=="
+  },
+  "Object.OrgChart.FontColor": {
+    "value": "Teckenfärg",
+    "comment": "Label for font color in property panel (rnt 200218)",
+    "version": "9Fb0xiVfphbzFdlbgBYGxQ=="
+  },
+  "Object.OrgChart.FreeMode": {
+    "value": "Visa/dölj",
+    "comment": "Option Expand/Collapse for presentation mode (rnt 200325)",
+    "version": "R2QvmbOfCKLdMonQg97oQQ=="
+  },
+  "Object.OrgChart.IncludeDescendants": {
+    "value": "Inkludera alla underordnade",
+    "comment": "Tooltip for the select descendants toggle button (rnt 200218)",
+    "version": "wmQ7xBKPGI1787K36vWh9A=="
+  },
+  "Object.OrgChart.LabelExpression": {
+    "value": "Kortets rubrik",
+    "comment": "Label for card label expressions in property panel (rnt 200218)",
+    "version": "5N8hKFjUF7tpKOnaiCGfLg=="
+  },
+  "Object.OrgChart.MaxChildren": {
+    "value": "Maximalt antal underordnade noder har uppnåtts. Noder utelämnas.",
+    "comment": "Warning for reaching the maximun number of child nodes to a single parent (rnt 200218)",
+    "version": "zap0vozLLXFNbfyfVsYqqg=="
+  },
+  "Object.OrgChart.MaxData": {
+    "value": "Maxgränsen för data har nåtts. Trädet kanske inte visas på rätt sätt.",
+    "comment": "Warning in Org chart for when the max data limit has been reached (rnt 200218)",
+    "version": "1ICYA1Lzd9IxkSBHY85HyA=="
+  },
+  "Object.OrgChart.MissingRoot": {
+    "value": "Ingen rotnod. Kontrollera om det finns cirkelreferenser i data.",
+    "comment": "Error for when all data is cyclic, so no root nodes can be used (rnt 200218)",
+    "version": "v41CIRIJG9oOWNLUy3l1wA=="
+  },
+  "Object.OrgChart.NavigationMode": {
+    "value": "Presentationsläge",
+    "comment": "Label for presentation mode in property panel (rnt 200325)",
+    "version": "zT2fNErt5+llDMuyJIaGEA=="
+  },
+  "Object.OrgChart.SingleSelect": {
+    "value": "Välj enskild nod",
+    "comment": "Tooltip for the select single node toggle button (rnt 200325)",
+    "version": "4qoeyCm/2QeoklTtImJ72A=="
+  },
+  "Object.OrgChart.SubLabelExpression": {
+    "value": "Kortets underrubrik",
+    "comment": "Label for card sub-label expressions for in property panel (rnt 200218)",
+    "version": "/IAh7g4HgTohzllZomPWjg=="
+  },
+  "Object.OrgChart.TopBar": {
+    "value": "Övre fältet",
+    "comment": "Option for top bar (rnt 200325)",
+    "version": "4u15qSSvkaQLtarNpz1vew=="
+  },
+  "Object.OrgChart.resizeOnExpand": {
+    "value": "Ändra storlek vid visa/dölj",
+    "comment": "Option for resizing on expanding collapsing nodes (rnt 200325)",
+    "version": "tgah9JLMAPsKZ7ZeCBq50Q=="
+  }
+}
