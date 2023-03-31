@@ -6,6 +6,6 @@ module.exports = {
       lines: 64,
     },
   },
-  coveragePathIgnorePatterns: ['src/__tests__/default-orgchart-props.js', 'src/styles', 'src/extension', 'src/data.js', '**/locales/**', '**/all.json', '**/*.mjs'],
+  coveragePathIgnorePatterns: ['src/__tests__/default-orgchart-props.js', 'src/styles', 'src/extension', 'src/data.js', 'src/locale/locales/.+', 'src/locale/all.json', 'src/locale/scripts/generate-all.mjs'],
   collectCoverageFrom: ['src/**'],
 };
