@@ -99,7 +99,7 @@ jobs:
     <<: *defaults
     steps:
       - attach_workspace:
-          at: ~/table
+          at: ~/org
       - run:
           name: Verify locale
           command: yarn run locale:verify
