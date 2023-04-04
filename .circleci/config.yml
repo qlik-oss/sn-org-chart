@@ -82,6 +82,7 @@ jobs:
             - dist
             - package.json
             - core
+            - src/locale/all.json
 
   #  publish-dev:
   #    <<: *defaults
@@ -93,6 +94,15 @@ jobs:
   #      - run: mv ./dist sn-org-chart && zip -r "sn-org-chart.zip" "./sn-org-chart"
   #      - store_artifacts:
   #          path: ./sn-org-chart.zip
+
+  locale:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: ~/org
+      - run:
+          name: Verify locale
+          command: yarn run locale:verify
 
   publish:
     <<: *defaults
@@ -178,6 +188,9 @@ workflows:
       # - publish-dev:
       #     requires:
       #       - build
+      - locale:
+          requires:
+            - build
       - publish:
           requires:
             - build

@@ -1,0 +1,38 @@
+const a = require('../all.json');
+
+const l = [
+  'en-US',
+  'it-IT',
+  'zh-CN',
+  'zh-TW',
+  'ko-KR',
+  'de-DE',
+  'sv-SE',
+  'es-ES',
+  'pt-BR',
+  'ja-JP',
+  'fr-FR',
+  'nl-NL',
+  'tr-TR',
+  'pl-PL',
+  'ru-RU',
+];
+
+const verifyTranslations = (all, languages) => {
+  Object.keys(all).forEach((key) => {
+    const supportLanguagesForString = Object.keys(all[key].locale);
+    if (supportLanguagesForString.indexOf('en-US') === -1)
+      // en-US must exist
+      throw new Error(`String '${all[key].id}' is missing value for 'en-US'`);
+  
+    for (let i = 0; i < languages.length; i++) {
+      if (supportLanguagesForString.indexOf(languages[i]) === -1)
+        // eslint-disable-next-line no-console
+        console.warn(`String '${all[key].id}' is missing value for '${languages[i]}'`);
+    }
+  });
+};
+
+verifyTranslations(a, l);
+
+export default verifyTranslations;

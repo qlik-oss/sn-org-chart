@@ -1,4 +1,4 @@
-import en from './en-US';
+import all from '../all.json';
 
 export default function autoRegister(translator) {
   if (translator && translator.get && translator.add) {
@@ -10,13 +10,8 @@ export default function autoRegister(translator) {
       return;
     }
 
-    Object.keys(en).forEach((key) => {
-      translator.add({
-        id: key,
-        locale: {
-          'en-US': en[key],
-        },
-      });
+    Object.keys(all).forEach(key => {
+      translator.add(all[key]);
     });
   }
 }

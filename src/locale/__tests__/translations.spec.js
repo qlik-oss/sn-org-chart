@@ -1,12 +1,12 @@
-import autoRegister from '../translations';
-import en from '../en-US';
+import autoRegister from '../src/translations';
+import all from '../all.json';
 
 describe('translations', () => {
   describe('autoRegister', () => {
     let translator;
     beforeEach(() => {
       translator = {
-        get: (t) => t === 'Object.OrgChart.MaxData' && 'Object.OrgChart.MaxData',
+        get: () => 'Object.OrgChart.MaxData',
         add: jest.fn(),
       };
     });
@@ -30,7 +30,7 @@ describe('translations', () => {
 
     it('Should call add for every key', () => {
       autoRegister(translator);
-      expect(translator.add).toHaveBeenCalledTimes(Object.keys(en).length);
+      expect(translator.add).toHaveBeenCalledTimes(Object.keys(all).length);
     });
   });
 });

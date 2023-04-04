@@ -2,6 +2,7 @@ import {
   useStaleLayout,
   useEffect,
   useElement,
+  useMemo,
   useModel,
   useState,
   usePromise,
@@ -21,7 +22,7 @@ import stylingUtils from './utils/styling';
 import treeTransform from './utils/tree-utils';
 import viewStateUtil from './utils/viewstate-utils';
 import { getSnapshotZoom, applyTransform } from './tree/transform';
-import autoRegister from './locale/translations';
+import autoRegister from './locale/src/translations';
 import './styles/tooltip.less';
 import './styles/paths.less';
 import './styles/warnings.less';
@@ -55,9 +56,9 @@ export default function supernova(env) {
       });
       const selectionObj = selectionHandler(translator);
 
-      useEffect(() => {
+      useMemo(() => {
         autoRegister(translator);
-      }, [translator.language()]);
+      }, [element, translator.language()]);
 
       useEffect(() => {
         wrapperState.constraints = constraints;
