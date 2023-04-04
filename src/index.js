@@ -2,6 +2,7 @@ import {
   useStaleLayout,
   useEffect,
   useElement,
+  useMemo,
   useModel,
   useState,
   usePromise,
@@ -55,9 +56,9 @@ export default function supernova(env) {
       });
       const selectionObj = selectionHandler(translator);
 
-      useEffect(() => {
+      useMemo(() => {
         autoRegister(translator);
-      }, [translator.language()]);
+      }, [element, translator.language()]);
 
       useEffect(() => {
         wrapperState.constraints = constraints;
