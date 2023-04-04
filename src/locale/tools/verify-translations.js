@@ -1,6 +1,6 @@
-const all = require('../all.json');
+const a = require('../all.json');
 
-const languages = [
+const l = [
   'en-US',
   'it-IT',
   'zh-CN',
@@ -18,15 +18,21 @@ const languages = [
   'ru-RU',
 ];
 
-Object.keys(all).forEach((key) => {
-  const supportLanguagesForString = Object.keys(all[key].locale);
-  if (supportLanguagesForString.indexOf('en-US') === -1)
-    // en-US must exist
-    throw new Error(`String '${all[key].id}' is missing value for 'en-US'`);
+const verifyTranslations = (all, languages) => {
+  Object.keys(all).forEach((key) => {
+    const supportLanguagesForString = Object.keys(all[key].locale);
+    if (supportLanguagesForString.indexOf('en-US') === -1)
+      // en-US must exist
+      throw new Error(`String '${all[key].id}' is missing value for 'en-US'`);
+  
+    for (let i = 0; i < languages.length; i++) {
+      if (supportLanguagesForString.indexOf(languages[i]) === -1)
+        // eslint-disable-next-line no-console
+        console.warn(`String '${all[key].id}' is missing value for '${languages[i]}'`);
+    }
+  });
+};
 
-  for (let i = 0; i < languages.length; i++) {
-    if (supportLanguagesForString.indexOf(languages[i]) === -1)
-      // eslint-disable-next-line no-console
-      console.warn(`String '${all[key].id}' is missing value for '${languages[i]}'`);
-  }
-});
+verifyTranslations(a, l);
+
+export default verifyTranslations;
