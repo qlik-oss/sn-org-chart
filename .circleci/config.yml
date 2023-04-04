@@ -182,9 +182,6 @@ workflows:
       # - publish-dev:
       #     requires:
       #       - build
-      - locale:
-          requires:
-            - build
       - publish:
           requires:
             - build
