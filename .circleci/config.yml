@@ -71,7 +71,9 @@ jobs:
             JEST_JUNIT_OUTPUT_DIR: ./coverage/junit/
       - run:
           name: Rendering tests
-          command: yarn run test:rendering
+          command: |
+            npx playwright install
+            yarn run test:rendering
       - store_artifacts:
           path: ./test/rendering/__artifacts__
       - store_test_results:
