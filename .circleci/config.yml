@@ -86,17 +86,6 @@ jobs:
             - core
             - src/locale/all.json
 
-  #  publish-dev:
-  #    <<: *defaults
-  #    docker:
-  #      - image: circleci/node:16.7.0
-  #    steps:
-  #      - attach_workspace:
-  #          at: ~/org
-  #      - run: mv ./dist sn-org-chart && zip -r "sn-org-chart.zip" "./sn-org-chart"
-  #      - store_artifacts:
-  #          path: ./sn-org-chart.zip
-
   locale:
     <<: *defaults
     steps:
@@ -187,9 +176,6 @@ workflows:
             tags:
               only:
                 - /v.*/
-      # - publish-dev:
-      #     requires:
-      #       - build
       - locale:
           requires:
             - build
