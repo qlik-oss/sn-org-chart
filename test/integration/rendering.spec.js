@@ -1,32 +1,33 @@
-const artifacts = {
-  artifactsPath: 'test/integration/__artifacts__',
-};
+import { test, expect } from '@playwright/test';
+import serve from '@nebula.js/cli-serve';
+import createNebulaRoutes from './utils/routes';
 
-describe('should render', () => {
-  const content = '.sn-org-chart';
-  const app = encodeURIComponent(process.env.APP_ID || '/apps/org-chart-test.qvf');
-  describe.skip('from app', () => {
-    before(async () => {
-      await page.goto(`${process.testServer.url}/render/?app=${app}&object=EjGZmXS`);
-      await page.waitForSelector(content, { visible: true });
-    });
+test.describe('should render', () => {
+  let nebulaServer;
+  let route;
 
-    it('basic example', async () => {
-      const elem = await page.$(content);
-      const img = await elem.screenshot();
-      return expect(img).to.matchImageOf('app-basic', artifacts);
+  test.beforeAll(async () => {
+    console.log('Hello setting up the server here....');
+    nebulaServer = await serve({
+      build: false,
+      open: false,
+      type: 'sn-org-chart',
     });
+    route = createNebulaRoutes(nebulaServer.url);
   });
-  describe('from snapshot', () => {
-    before(async () => {
-      await page.goto(`${process.testServer.url}/render/?snapshot=basic`);
-      await page.waitForSelector(content, { visible: true });
-    });
 
-    it('basic example', async () => {
+  test.afterAll(() => {
+    nebulaServer.close();
+  });
+  const content = '.sn-org-chart';
+
+  test.describe('from snapshot', () => {
+    test('basic example', async ({ page }) => {
+      await page.goto(route.renderSnapshot('basic'));
+      await page.waitForSelector(content, { visible: true });
       const elem = await page.$(content);
       const img = await elem.screenshot();
-      return expect(img).to.matchImageOf('snapshot-basic', artifacts);
+      expect(img).toMatchSnapshot('basic-snapshot.png');
     });
   });
 });
