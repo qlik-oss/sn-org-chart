@@ -1,7 +1,8 @@
 import fs from 'fs';
 import path from 'path';
 import serve from '@nebula.js/cli-serve';
-import createPuppet from './utils/puppet';
+import { test, expect } from '@playwright/test';
+import createPlaywright from './utils/playwright';
 import events from './utils/events';
 import createNebulaRoutes from './utils/routes';
 
@@ -10,13 +11,13 @@ const paths = {
   fixtures: path.join(__dirname, '__fixtures__'),
 };
 
-describe('sn org chart: Rendering tests', () => {
-  let s;
-  let puppet;
+test.describe('sn org chart: Rendering tests', () => {
+  let nebulaServer;
+  let playwright;
   let route;
 
-  before(async () => {
-    s = await serve({
+  test.beforeAll(async () => {
+    nebulaServer = await serve({
       entry: path.resolve(__dirname, '../../'),
       type: 'sn-org-chart',
       open: false,
@@ -25,35 +26,31 @@ describe('sn org chart: Rendering tests', () => {
       fixturePath: 'test/rendering/__fixtures__',
     });
 
-    puppet = createPuppet(page);
-    route = createNebulaRoutes(s.url);
+    route = createNebulaRoutes(nebulaServer.url);
   });
 
-  after(async () => {
-    s.close();
+  test.afterAll(async () => {
+    nebulaServer.close();
   });
 
-  beforeEach(() => {
+  test.beforeEach(({ page }) => {
     events.addListeners(page);
   });
 
-  afterEach(() => {
+  test.afterEach(({ page }) => {
     events.removeListeners(page);
   });
 
   fs.readdirSync(paths.fixtures).forEach((file) => {
     const name = file.replace('.fix.js', '');
     const fixturePath = `./${file}`;
-
-    it(name, async () => {
+    test(name, async ({ page }) => {
+      playwright = createPlaywright(page);
       const renderUrl = await route.renderFixture(fixturePath);
-      console.log({ renderUrl });
-      // Open page in Nebula which renders fixture
-      await puppet.open(renderUrl);
+      await playwright.open(renderUrl);
       // Capture screenshot
-      const img = await puppet.screenshot();
-
-      expect(img).to.matchImageOf(name, { artifactsPath: paths.artifacts }, 0.01);
+      const img = await playwright.screenshot();
+      expect(img).toMatchSnapshot(`${name}.png`);
     });
   });
 });
