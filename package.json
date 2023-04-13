@@ -63,7 +63,6 @@
     "@nebula.js/stardust": ">=3.2.2"
   },
   "devDependencies": {
-    "@after-work.js/aw": "6.0.14",
     "@babel/preset-env": "7.14.7",
     "@commitlint/cli": "17.1.1",
     "@commitlint/config-conventional": "17.1.0",
