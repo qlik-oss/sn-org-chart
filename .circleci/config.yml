@@ -70,12 +70,15 @@ jobs:
           environment:
             JEST_JUNIT_OUTPUT_DIR: ./coverage/junit/
       - run:
+          name: Install playwright
+          command: npx playwright install
+      - run:
           name: Rendering tests
-          command: |
-            npx playwright install
-            yarn run test:rendering
+          command: yarn run test:rendering
       - store_artifacts:
-          path: ./test/rendering/__artifacts__
+          path: ./test/rendering/org-chart.spec.js-snapshots
+      - store_artifacts:
+          path: ./test/rendering/test-report
       - store_test_results:
           path: coverage/junit
       - persist_to_workspace:
