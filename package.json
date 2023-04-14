@@ -42,8 +42,7 @@
     "start": "nebula serve --type sn-org-chart",
     "spec": "scriptappy-from-jsdoc -c ./spec-configs/props.conf.js",
     "test:unit": "jest",
-    "test:integration": "playwright test -c test/integration/playwright.config.js",
-    "test:rendering": "playwright test -c test/rendering/playwright.config.js",
+    "test:rendering": "playwright test",
     "prepublishOnly": "NODE_ENV=production yarn run build && yarn spec",
     "preversion": "yarn build",
     "version": "yarn spec && git add api-specifications"

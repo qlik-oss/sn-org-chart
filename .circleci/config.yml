@@ -69,6 +69,8 @@ jobs:
             fi
           environment:
             JEST_JUNIT_OUTPUT_DIR: ./coverage/junit/
+      - store_test_results:
+          path: coverage/junit
       - run:
           name: Install playwright
           command: npx playwright install
@@ -78,16 +80,7 @@ jobs:
       - store_artifacts:
           path: ./test/rendering/org-chart.spec.js-snapshots
       - store_artifacts:
-          path: ./test/rendering/test-results
-      - run:
-          name: Integration tests
-          command: yarn run test:integration
-      - store_artifacts:
-          path: ./test/integration/integration.spec.js-snapshots
-      - store_artifacts:
-          path: ./test/integration/test-results
-      - store_test_results:
-          path: coverage/junit
+          path: ./test-results
       - persist_to_workspace:
           root: ~/org
           paths:

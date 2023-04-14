@@ -5,7 +5,7 @@ test.describe('should render', () => {
 
   test.describe('from snapshot', () => {
     test('basic example', async ({ page }) => {
-      await page.goto('/render?snapshot=basic');
+      await page.goto('/render?snapshot=basic', { waitUntil: 'networkidle' });
       await page.waitForSelector('.sn-org-chart-snapshot', { visible: true });
       const elem = await page.$(content);
       const img = await elem.screenshot();
