@@ -78,14 +78,14 @@ jobs:
       - store_artifacts:
           path: ./test/rendering/org-chart.spec.js-snapshots
       - store_artifacts:
-          path: ./test/rendering/test-report
+          path: ./test/rendering/test-results
       - run:
           name: Integration tests
           command: yarn run test:integration
       - store_artifacts:
-          path: ./test/integration/org-chart.spec.js-snapshots
+          path: ./test/integration/integration.spec.js-snapshots
       - store_artifacts:
-          path: ./test/integration/test-report
+          path: ./test/integration/test-results
       - store_test_results:
           path: coverage/junit
       - persist_to_workspace:

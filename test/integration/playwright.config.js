@@ -1,5 +1,6 @@
 const config = {
   testDir: './',
+  outputDir: 'test-results',
   testMatch: /.*\.spec\.js/,
   webServer: {
     command: 'yarn start --port 8077',
