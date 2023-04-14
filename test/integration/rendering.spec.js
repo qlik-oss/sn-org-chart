@@ -7,7 +7,6 @@ test.describe('should render', () => {
   let route;
 
   test.beforeAll(async () => {
-    console.log('Hello setting up the server here....');
     nebulaServer = await serve({
       build: false,
       open: false,
