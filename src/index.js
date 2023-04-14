@@ -148,7 +148,8 @@ export default function supernova(env) {
       useEffect(() => {
         if (containerData && layout && layout.snapshotData) {
           const snapshotZoom = getSnapshotZoom(rect, layout.snapshotData.viewState, transform);
-          applyTransform(snapshotZoom, containerData.svg, containerData.divBox, rect.width, rect.height);
+          applyTransform(snapshotZoom, containerData.svg, containerData.divBox, rect.width, rect.height, true);
+          containerData.divBox.classed('sn-org-chart-snapshot', true);
         }
       }, [rect, containerData]);
 
