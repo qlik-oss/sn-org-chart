@@ -1,4 +1,9 @@
 {
+  "Object.OrgChart": {
+    "value": "Organisationsdiagram",
+    "comment": "Name of chart, noun.",
+    "version": "IMkAYY1OSslBbNBRMJaPHg=="
+  },
   "Object.OrgChart.BackgroundColor": {
     "value": "Bakgrundsfärg",
     "comment": "Label for background color in property panel (rnt 200218)",
@@ -18,6 +23,11 @@
     "value": "Data innehåller cirkelreferenser. Noder utelämnas.",
     "comment": "Warning for data that contains cycles, meaning some data will not be displayed (rnt 200218)",
     "version": "An8ujeYJOfiAlViO2ifl3w=="
+  },
+  "Object.OrgChart.Description": {
+    "value": "Visar relationerna i en organisation eller data som är strukturerat på liknande sätt. Startar högst upp och möjliggör navigering genom hierarkin.",
+    "comment": "Description of chart.",
+    "version": "/KWGDqvQY0Kk8qjFD/k8Eg=="
   },
   "Object.OrgChart.DummyWarn": {
     "value": "Data innehåller flera rotnoder.",

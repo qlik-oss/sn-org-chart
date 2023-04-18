@@ -1,4 +1,9 @@
 {
+  "Object.OrgChart": {
+    "value": "Quadro organizacional",
+    "comment": "Name of chart, noun.",
+    "version": "IMkAYY1OSslBbNBRMJaPHg=="
+  },
   "Object.OrgChart.BackgroundColor": {
     "value": "Cor de fundo",
     "comment": "Label for background color in property panel (rnt 200218)",
@@ -18,6 +23,11 @@
     "value": "Os dados contêm referências circulares, os nós são omitidos.",
     "comment": "Warning for data that contains cycles, meaning some data will not be displayed (rnt 200218)",
     "version": "An8ujeYJOfiAlViO2ifl3w=="
+  },
+  "Object.OrgChart.Description": {
+    "value": "Exibe as relações de uma organização ou dados estruturados de forma semelhante. Começa no topo e permite a navegação pela hierarquia.",
+    "comment": "Description of chart.",
+    "version": "/KWGDqvQY0Kk8qjFD/k8Eg=="
   },
   "Object.OrgChart.DummyWarn": {
     "value": "Os dados contêm vários nós raiz.",

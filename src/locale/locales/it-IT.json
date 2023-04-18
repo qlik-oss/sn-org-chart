@@ -1,4 +1,9 @@
 {
+  "Object.OrgChart": {
+    "value": "Organigramma",
+    "comment": "Name of chart, noun.",
+    "version": "IMkAYY1OSslBbNBRMJaPHg=="
+  },
   "Object.OrgChart.BackgroundColor": {
     "value": "Colore sfondo",
     "comment": "Label for background color in property panel (rnt 200218)",
@@ -18,6 +23,11 @@
     "value": "Impossibile visualizzare i nodi: i dati contengono riferimenti incrociati.",
     "comment": "Warning for data that contains cycles, meaning some data will not be displayed (rnt 200218)",
     "version": "An8ujeYJOfiAlViO2ifl3w=="
+  },
+  "Object.OrgChart.Description": {
+    "value": "Visualizza le relazioni di un'organizzazione o dati strutturati in modo analogo. Inizia dall'alto e consente la navigazione attraverso la gerarchia.",
+    "comment": "Description of chart.",
+    "version": "/KWGDqvQY0Kk8qjFD/k8Eg=="
   },
   "Object.OrgChart.DummyWarn": {
     "value": "I dati contengono più nodi principali.",

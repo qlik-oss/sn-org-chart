@@ -1,4 +1,9 @@
 {
+  "Object.OrgChart": {
+    "value": "Organisatiediagram",
+    "comment": "Name of chart, noun.",
+    "version": "IMkAYY1OSslBbNBRMJaPHg=="
+  },
   "Object.OrgChart.BackgroundColor": {
     "value": "Achtergrondkleur",
     "comment": "Label for background color in property panel (rnt 200218)",
@@ -18,6 +23,11 @@
     "value": "Gegevens bevatten cirkelreferenties, knooppunten worden weggelaten.",
     "comment": "Warning for data that contains cycles, meaning some data will not be displayed (rnt 200218)",
     "version": "An8ujeYJOfiAlViO2ifl3w=="
+  },
+  "Object.OrgChart.Description": {
+    "value": "Geeft de relaties van een organisatie of vergelijkbaar gestructureerde gegevens weer. Begint bovenaan en maakt navigatie door de hiërarchie mogelijk.",
+    "comment": "Description of chart.",
+    "version": "/KWGDqvQY0Kk8qjFD/k8Eg=="
   },
   "Object.OrgChart.DummyWarn": {
     "value": "De gegevens bevatten meerdere hoofdknooppunten.",

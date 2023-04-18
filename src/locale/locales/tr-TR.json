@@ -1,4 +1,9 @@
 {
+  "Object.OrgChart": {
+    "value": "Kuruluş grafiği",
+    "comment": "Name of chart, noun.",
+    "version": "IMkAYY1OSslBbNBRMJaPHg=="
+  },
   "Object.OrgChart.BackgroundColor": {
     "value": "Arka plan rengi",
     "comment": "Label for background color in property panel (rnt 200218)",
@@ -18,6 +23,11 @@
     "value": "Veriler döngüsel referanslar içeriyor; düğümler atlandı.",
     "comment": "Warning for data that contains cycles, meaning some data will not be displayed (rnt 200218)",
     "version": "An8ujeYJOfiAlViO2ifl3w=="
+  },
+  "Object.OrgChart.Description": {
+    "value": "Bir kuruluşun ilişkilerini veya benzer yapılanan verileri gösterir. En üstte açılır ve hiyerarşide hareket etmenize olanak sağlar.",
+    "comment": "Description of chart.",
+    "version": "/KWGDqvQY0Kk8qjFD/k8Eg=="
   },
   "Object.OrgChart.DummyWarn": {
     "value": "Veriler birden çok kök düğümü içeriyor.",
