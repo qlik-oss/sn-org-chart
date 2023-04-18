@@ -1,4 +1,9 @@
 {
+  "Object.OrgChart": {
+    "value": "조직도",
+    "comment": "Name of chart, noun.",
+    "version": "IMkAYY1OSslBbNBRMJaPHg=="
+  },
   "Object.OrgChart.BackgroundColor": {
     "value": "배경색",
     "comment": "Label for background color in property panel (rnt 200218)",
@@ -18,6 +23,11 @@
     "value": "데이터가 순환 참조를 포함합니다. 노드는 생략됩니다.",
     "comment": "Warning for data that contains cycles, meaning some data will not be displayed (rnt 200218)",
     "version": "An8ujeYJOfiAlViO2ifl3w=="
+  },
+  "Object.OrgChart.Description": {
+    "value": "조직 또는 유사하게 구조화된 데이터의 관계를 표시합니다. 맨 위에서 시작하여 계층 구조를 탐색할 수 있습니다.",
+    "comment": "Description of chart.",
+    "version": "/KWGDqvQY0Kk8qjFD/k8Eg=="
   },
   "Object.OrgChart.DummyWarn": {
     "value": "데이터가 여러 루트 노드를 포함합니다.",

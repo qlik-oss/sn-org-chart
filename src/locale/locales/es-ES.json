@@ -1,4 +1,9 @@
 {
+  "Object.OrgChart": {
+    "value": "Organigrama",
+    "comment": "Name of chart, noun.",
+    "version": "IMkAYY1OSslBbNBRMJaPHg=="
+  },
   "Object.OrgChart.BackgroundColor": {
     "value": "Color de fondo",
     "comment": "Label for background color in property panel (rnt 200218)",
@@ -18,6 +23,11 @@
     "value": "Los datos contienen referencias circulares, se omiten los nodos.",
     "comment": "Warning for data that contains cycles, meaning some data will not be displayed (rnt 200218)",
     "version": "An8ujeYJOfiAlViO2ifl3w=="
+  },
+  "Object.OrgChart.Description": {
+    "value": "Muestra las relaciones jerárquicas de una organización o datos estructurados de manera similar. Comienza en la parte superior y permite la navegación a través de la jerarquía.",
+    "comment": "Description of chart.",
+    "version": "/KWGDqvQY0Kk8qjFD/k8Eg=="
   },
   "Object.OrgChart.DummyWarn": {
     "value": "Los datos contienen múltiples nodos raíz.",

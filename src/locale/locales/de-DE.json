@@ -1,4 +1,9 @@
 {
+  "Object.OrgChart": {
+    "value": "Organisationsdiagramm",
+    "comment": "Name of chart, noun.",
+    "version": "IMkAYY1OSslBbNBRMJaPHg=="
+  },
   "Object.OrgChart.BackgroundColor": {
     "value": "Hintergrundfarbe",
     "comment": "Label for background color in property panel (rnt 200218)",
@@ -18,6 +23,11 @@
     "value": "Die Daten enthalten Zirkelbezüge, Knoten werden ausgelassen.",
     "comment": "Warning for data that contains cycles, meaning some data will not be displayed (rnt 200218)",
     "version": "An8ujeYJOfiAlViO2ifl3w=="
+  },
+  "Object.OrgChart.Description": {
+    "value": "Zeigt die Beziehungen einer Organisation oder ähnlich strukturierter Daten an. Startet oben und ermöglicht die Navigation durch die Hierarchie.",
+    "comment": "Description of chart.",
+    "version": "/KWGDqvQY0Kk8qjFD/k8Eg=="
   },
   "Object.OrgChart.DummyWarn": {
     "value": "Die Daten enthalten mehrere Root-Knoten.",
