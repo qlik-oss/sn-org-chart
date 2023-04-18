@@ -1,111 +1,111 @@
 {
   "Object.OrgChart": {
-    "value": "組織圖",
+    "value": "Organisatiediagram",
     "comment": "Name of chart, noun.",
     "version": "IMkAYY1OSslBbNBRMJaPHg=="
   },
   "Object.OrgChart.BackgroundColor": {
-    "value": "背景顏色",
+    "value": "Achtergrondkleur",
     "comment": "Label for background color in property panel (rnt 200218)",
     "version": "9KpHzr1x7HEhTq99yu2row=="
   },
   "Object.OrgChart.CardAppearance": {
-    "value": "卡片外觀",
+    "value": "Uiterlijk van de kaart",
     "comment": "Title for card appearance section (rnt 200421)",
     "version": "O+tO9o3UzbzM8LSHYJ1fGA=="
   },
   "Object.OrgChart.ColorLabelExpression": {
-    "value": "卡片背景顏色",
+    "value": "Achtergrondkleur kaart",
     "comment": "Label for color expressions in property panel (rnt 200218)",
     "version": "fii4lDu8O4v7TTsbh1yXIA=="
   },
   "Object.OrgChart.CycleWarning": {
-    "value": "資料包含循環參照，已省略節點。",
+    "value": "Gegevens bevatten cirkelreferenties, knooppunten worden weggelaten.",
     "comment": "Warning for data that contains cycles, meaning some data will not be displayed (rnt 200218)",
     "version": "An8ujeYJOfiAlViO2ifl3w=="
   },
   "Object.OrgChart.Description": {
-    "value": "顯示組織的關係或類似結構的資料。在頂端開始並允許瀏覽階層。",
+    "value": "Geeft de relaties van een organisatie of vergelijkbaar gestructureerde gegevens weer. Begint bovenaan en maakt navigatie door de hiërarchie mogelijk.",
     "comment": "Description of chart.",
     "version": "/KWGDqvQY0Kk8qjFD/k8Eg=="
   },
   "Object.OrgChart.DummyWarn": {
-    "value": "資料包含多個根節點。",
+    "value": "De gegevens bevatten meerdere hoofdknooppunten.",
     "comment": "Warning for when a single root node is missing",
     "version": "EtCdF9I5qbwNeoz2FnWiWg=="
   },
   "Object.OrgChart.ExpandAll": {
-    "value": "整個樹狀結構",
+    "value": "Volledige structuur",
     "comment": "Option entire tree for presentation mode (rnt 200325)",
     "version": "TGwKsCT1ElIk9nl00H7Otg=="
   },
   "Object.OrgChart.ExtraLabelDesc": {
-    "value": "只有在不使用量值時才會顯示描述",
+    "value": "Beschrijving is alleen zichtbaar wanneer een meting niet wordt gebruikt",
     "comment": "Clarification for when the description field is used (rnt 200218)",
     "version": "mEs19lGvF/AU0xAL3pDEVQ=="
   },
   "Object.OrgChart.ExtraLabelExpression": {
-    "value": "卡片描述",
+    "value": "Beschrijving kaart",
     "comment": "Label for extra label expressions in property panel (rnt 200218)",
     "version": "MmmOJ00IS0tvu8VIMxDDkg=="
   },
   "Object.OrgChart.FontColor": {
-    "value": "字型色彩",
+    "value": "Tekstkleur",
     "comment": "Label for font color in property panel (rnt 200218)",
     "version": "9Fb0xiVfphbzFdlbgBYGxQ=="
   },
   "Object.OrgChart.FreeMode": {
-    "value": "展開/摺疊",
+    "value": "Uitvouwen/alles samenvouwen",
     "comment": "Option Expand/Collapse for presentation mode (rnt 200325)",
     "version": "R2QvmbOfCKLdMonQg97oQQ=="
   },
   "Object.OrgChart.IncludeDescendants": {
-    "value": "包括所有子項",
+    "value": "Alle onderliggende elementen opnemen",
     "comment": "Tooltip for the select descendants toggle button (rnt 200218)",
     "version": "wmQ7xBKPGI1787K36vWh9A=="
   },
   "Object.OrgChart.LabelExpression": {
-    "value": "卡片標題",
+    "value": "Titel kaart",
     "comment": "Label for card label expressions in property panel (rnt 200218)",
     "version": "5N8hKFjUF7tpKOnaiCGfLg=="
   },
   "Object.OrgChart.MaxChildren": {
-    "value": "已達子節點數量上限，已省略節點。",
+    "value": "Maximaal aantal onderliggende knooppunten bereikt, knooppunten worden weggelaten.",
     "comment": "Warning for reaching the maximun number of child nodes to a single parent (rnt 200218)",
     "version": "zap0vozLLXFNbfyfVsYqqg=="
   },
   "Object.OrgChart.MaxData": {
-    "value": "已達資料上限。樹狀目錄的顯示方式可能不正確。",
+    "value": "Het maximale datalimiet is bereikt. De boom kan incorrect worden weergegeven.",
     "comment": "Warning in Org chart for when the max data limit has been reached (rnt 200218)",
     "version": "1ICYA1Lzd9IxkSBHY85HyA=="
   },
   "Object.OrgChart.MissingRoot": {
-    "value": "沒有根節點，請檢查循環參照的資料。",
+    "value": "Geen hoofdknooppunt, controleer of de gegevens cirkelreferenties bevatten.",
     "comment": "Error for when all data is cyclic, so no root nodes can be used (rnt 200218)",
     "version": "v41CIRIJG9oOWNLUy3l1wA=="
   },
   "Object.OrgChart.NavigationMode": {
-    "value": "呈現模式",
+    "value": "Presentatiemodus",
     "comment": "Label for presentation mode in property panel (rnt 200325)",
     "version": "zT2fNErt5+llDMuyJIaGEA=="
   },
   "Object.OrgChart.SingleSelect": {
-    "value": "選取單一節點",
+    "value": "Enkel knooppunt selecteren",
     "comment": "Tooltip for the select single node toggle button (rnt 200325)",
     "version": "4qoeyCm/2QeoklTtImJ72A=="
   },
   "Object.OrgChart.SubLabelExpression": {
-    "value": "卡片子標題",
+    "value": "Ondertitel kaart",
     "comment": "Label for card sub-label expressions for in property panel (rnt 200218)",
     "version": "/IAh7g4HgTohzllZomPWjg=="
   },
   "Object.OrgChart.TopBar": {
-    "value": "頂端列",
+    "value": "Bovenste balk",
     "comment": "Option for top bar (rnt 200325)",
     "version": "4u15qSSvkaQLtarNpz1vew=="
   },
   "Object.OrgChart.resizeOnExpand": {
-    "value": "調整展開/摺疊大小",
+    "value": "Formaat wijzigen bij uitvouwen/alles samenvouwen",
     "comment": "Option for resizing on expanding collapsing nodes (rnt 200325)",
     "version": "tgah9JLMAPsKZ7ZeCBq50Q=="
   }
