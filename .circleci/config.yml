@@ -69,13 +69,18 @@ jobs:
             fi
           environment:
             JEST_JUNIT_OUTPUT_DIR: ./coverage/junit/
+      - store_test_results:
+          path: coverage/junit
+      - run:
+          name: Install playwright
+          command: npx playwright install
       - run:
           name: Rendering tests
           command: yarn run test:rendering
       - store_artifacts:
-          path: ./test/rendering/__artifacts__
-      - store_test_results:
-          path: coverage/junit
+          path: ./test/rendering/org-chart.spec.js-snapshots
+      - store_artifacts:
+          path: ./test-results
       - persist_to_workspace:
           root: ~/org
           paths:
@@ -83,17 +88,6 @@ jobs:
             - package.json
             - core
             - src/locale/all.json
-
-  #  publish-dev:
-  #    <<: *defaults
-  #    docker:
-  #      - image: circleci/node:16.7.0
-  #    steps:
-  #      - attach_workspace:
-  #          at: ~/org
-  #      - run: mv ./dist sn-org-chart && zip -r "sn-org-chart.zip" "./sn-org-chart"
-  #      - store_artifacts:
-  #          path: ./sn-org-chart.zip
 
   locale:
     <<: *defaults
@@ -185,9 +179,6 @@ workflows:
             tags:
               only:
                 - /v.*/
-      # - publish-dev:
-      #     requires:
-      #       - build
       - locale:
           requires:
             - build

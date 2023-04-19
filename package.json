@@ -35,9 +35,7 @@
     "prepublishOnly": "NODE_ENV=production yarn run build && yarn spec",
     "sense": "nebula sense --ext ./src/extension/ext-raw.js --meta ./src/extension/meta.json",
     "spec": "scriptappy-from-jsdoc -c ./spec-configs/props.conf.js",
-    "start": "nebula serve --type sn-org-chart",
-    "test:integration": "aw puppet --glob 'test/integration/**/*.spec.js' --chrome.headless true --chrome.slowMo 10",
-    "test:rendering": "aw puppet --testExt '*.spec.js' --glob 'test/rendering/**/*.spec.js' --mocha.bail false --mocha.timeout 30000",
+    "test:rendering": "playwright test",
     "test:unit": "jest",
     "preversion": "yarn build",
     "version": "yarn spec && git add api-specifications"
@@ -81,7 +79,6 @@
     }
   },
   "devDependencies": {
-    "@after-work.js/aw": "6.0.14",
     "@babel/preset-env": "7.14.7",
     "@commitlint/cli": "17.1.1",
     "@commitlint/config-conventional": "17.1.0",
@@ -90,6 +87,7 @@
     "@nebula.js/cli-sense": "3.0.4",
     "@nebula.js/cli-serve": "3.0.4",
     "@nebula.js/stardust": "3.0.4",
+    "@playwright/test": "1.32.3",
     "@qlik/eslint-config": "0.0.9",
     "@qlik/prettier-config": "0.1.1",
     "babel-plugin-dynamic-import-node": "2.3.3",
@@ -104,6 +102,7 @@
     "less": "4.1.3",
     "lint-staged": "13.0.3",
     "mocha-junit-reporter": "2.0.2",
+    "playwright": "1.32.3",
     "prettier": "2.8.4",
     "scriptappy-from-jsdoc": "0.7.0",
     "shx": "0.3.4",
