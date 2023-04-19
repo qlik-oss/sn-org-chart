@@ -2,6 +2,7 @@
 module.exports = {
   build: {},
   serve: {
+    open: false,
     snapshots: [
       {
         key: 'basic',
