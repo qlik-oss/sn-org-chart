@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 import { useAction, useEffect, useLayout, useSelections, useState } from "@nebula.js/stardust";
 import autoRegister from "./locale/src/translations";
 import { singleSelectionIcon } from "./utils/svg-icons";

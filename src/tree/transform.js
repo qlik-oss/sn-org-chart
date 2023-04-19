@@ -94,6 +94,7 @@ export function setZooming({
 
   // sends otherwise captured mouse event to handle context menu correctly in sense
   const bubbleEvent = () => {
+    // eslint-disable-next-line no-undef
     const newEvent = document.createEvent("MouseEvents");
     newEvent.initEvent("mousedown", true, false);
     element.dispatchEvent(newEvent);

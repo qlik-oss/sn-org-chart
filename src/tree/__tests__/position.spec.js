@@ -100,7 +100,7 @@ describe("position", () => {
       const xActual = widthTranslation(d, widthSpacing, element, axis, initialZoomState, navigationMode);
       expect(xActual).toEqual(0);
     });
-    it("should return xActual for node without parent and no initialX", () => {
+    it("should return xActual for node without parent and no initialX in expandAll mode", () => {
       navigationMode = "expandAll";
       const xActual = widthTranslation(d, widthSpacing, element, axis, initialZoomState, navigationMode);
       expect(xActual).toEqual(100);

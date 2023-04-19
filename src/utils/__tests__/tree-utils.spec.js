@@ -148,7 +148,7 @@ describe("tree-utils", () => {
       indecies = getAttributeIndecies(attrsInfo);
       expect(indecies).toEqual([]);
     });
-    it("should return empty array when attrsInfo is empty", () => {
+    it("should return attribute indecies", () => {
       attrsInfo = [{ id: "colorByExpression" }, {}, { id: "labelExpression" }];
       const expected = [
         { prop: "color", index: 0 },
@@ -225,6 +225,7 @@ describe("tree-utils", () => {
       try {
         await transform({ layout, model, translator });
       } catch (error) {
+        // eslint-disable-next-line jest/no-conditional-expect
         expect(error).toBeInstanceOf(Error);
       }
     });

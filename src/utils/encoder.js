@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 const encodeUtils = {
   encodeTitle: (input) => {
     const encodingDiv = document.createElement("div");

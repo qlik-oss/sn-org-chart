@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 import card from "../card/card";
 import selections from "../utils/selections";
 import { haveNoChildren } from "../utils/tree-utils";

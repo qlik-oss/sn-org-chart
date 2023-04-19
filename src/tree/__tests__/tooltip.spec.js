@@ -72,7 +72,7 @@ describe("tooltip", () => {
       content = getTooltipContent(d, styling);
       expect(content).toEqual(`${htmlBegining}someId</div>someMeasure</div>`);
     });
-    it("Should return string containing id and measure", () => {
+    it("Should return string containing id and measure and label", () => {
       d.data.measure = "someMeasure";
       styling.measureLabel = "someMeasureLabel";
       content = getTooltipContent(d, styling);
