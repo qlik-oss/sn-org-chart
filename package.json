@@ -35,6 +35,7 @@
     "prepublishOnly": "NODE_ENV=production yarn run build && yarn spec",
     "sense": "nebula sense --ext ./src/extension/ext-raw.js --meta ./src/extension/meta.json",
     "spec": "scriptappy-from-jsdoc -c ./spec-configs/props.conf.js",
+    "start": "nebula serve --type sn-org-chart",
     "test:rendering": "playwright test",
     "test:unit": "jest",
     "preversion": "yarn build",
