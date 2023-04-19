@@ -21,8 +21,7 @@ test.describe('sn org chart: Rendering tests', () => {
       await page.goto(fixturePath, { waitUntil: 'networkidle' });
       await page.waitForSelector('.sn-org-chart');
       // Capture screenshot
-      const img = await page.screenshot();
-      expect(img).toMatchSnapshot(`${name}.png`);
+      await expect(page).toHaveScreenshot();
     });
   });
 });
