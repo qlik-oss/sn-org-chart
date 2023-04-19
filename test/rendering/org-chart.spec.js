@@ -1,28 +1,28 @@
-import fs from 'fs';
-import path from 'path';
-import serve from '@nebula.js/cli-serve';
-import createPuppet from './utils/puppet';
-import events from './utils/events';
-import createNebulaRoutes from './utils/routes';
+import serve from "@nebula.js/cli-serve";
+import fs from "fs";
+import path from "path";
+import events from "./utils/events";
+import createPuppet from "./utils/puppet";
+import createNebulaRoutes from "./utils/routes";
 
 const paths = {
-  artifacts: path.join(__dirname, '__artifacts__'),
-  fixtures: path.join(__dirname, '__fixtures__'),
+  artifacts: path.join(__dirname, "__artifacts__"),
+  fixtures: path.join(__dirname, "__fixtures__"),
 };
 
-describe('sn org chart: Rendering tests', () => {
+describe("sn org chart: Rendering tests", () => {
   let s;
   let puppet;
   let route;
 
   before(async () => {
     s = await serve({
-      entry: path.resolve(__dirname, '../../'),
-      type: 'sn-org-chart',
+      entry: path.resolve(__dirname, "../../"),
+      type: "sn-org-chart",
       open: false,
       build: false,
       themes: [],
-      fixturePath: 'test/rendering/__fixtures__',
+      fixturePath: "test/rendering/__fixtures__",
     });
 
     puppet = createPuppet(page);
@@ -42,7 +42,7 @@ describe('sn org chart: Rendering tests', () => {
   });
 
   fs.readdirSync(paths.fixtures).forEach((file) => {
-    const name = file.replace('.fix.js', '');
+    const name = file.replace(".fix.js", "");
     const fixturePath = `./${file}`;
 
     it(name, async () => {

@@ -1,90 +1,90 @@
-import stylingUtils, { getColor } from '../styling';
+import stylingUtils, { getColor } from "../styling";
 
-const palette = ['firstColor', 'secondColor'];
-const defaultColor = '#e6e6e6';
+const palette = ["firstColor", "secondColor"];
+const defaultColor = "#e6e6e6";
 const Theme = {
-  getColorPickerColor: (color) => palette[color.index] || 'none',
+  getColorPickerColor: (color) => palette[color.index] || "none",
 };
 
-describe('styling', () => {
-  describe('getColor', () => {
+describe("styling", () => {
+  describe("getColor", () => {
     let reference;
     beforeEach(() => {
-      reference = { colorType: 'auto', colorExpression: 'pink', color: { index: 1 } };
+      reference = { colorType: "auto", colorExpression: "pink", color: { index: 1 } };
     });
-    it('should return default color', () => {
+    it("should return default color", () => {
       const result = getColor(reference, Theme, defaultColor);
       expect(result).toEqual(defaultColor);
     });
 
-    it('should return color from expression', () => {
-      reference.colorType = 'byExpression';
+    it("should return color from expression", () => {
+      reference.colorType = "byExpression";
       const result = getColor(reference, Theme, defaultColor);
-      expect(result).toEqual('rgba(255,192,203,1)');
+      expect(result).toEqual("rgba(255,192,203,1)");
     });
 
-    it('should return color from colorPicker', () => {
-      reference.colorType = 'colorPicker';
+    it("should return color from colorPicker", () => {
+      reference.colorType = "colorPicker";
       const result = getColor(reference, Theme, defaultColor);
-      expect(result).toEqual('secondColor');
+      expect(result).toEqual("secondColor");
     });
 
-    it('should return default color from colorPicker', () => {
-      reference.colorType = 'colorPicker';
+    it("should return default color from colorPicker", () => {
+      reference.colorType = "colorPicker";
       reference.color.index = 10;
       const result = getColor(reference, Theme, defaultColor);
-      expect(result).toEqual('#e6e6e6');
+      expect(result).toEqual("#e6e6e6");
     });
   });
 
-  describe('cardStyling', () => {
+  describe("cardStyling", () => {
     let layout;
     beforeEach(() => {
       layout = {
         style: {
-          backgroundColor: { colorType: 'auto' },
-          fontColor: { colorType: 'auto' },
+          backgroundColor: { colorType: "auto" },
+          fontColor: { colorType: "auto" },
         },
         qHyperCube: {
           qMeasureInfo: [
             {
-              qFallbackTitle: 'measureLabel',
+              qFallbackTitle: "measureLabel",
             },
           ],
         },
       };
     });
-    it('should return cardStyling', () => {
+    it("should return cardStyling", () => {
       const result = stylingUtils.cardStyling({ layout });
       expect(result).toEqual({
-        backgroundColor: '#ffffff',
-        fontColor: 'default',
-        measureLabel: 'measureLabel',
-        border: { colorType: 'auto' },
-        borderColor: '#808080',
+        backgroundColor: "#ffffff",
+        fontColor: "default",
+        measureLabel: "measureLabel",
+        border: { colorType: "auto" },
+        borderColor: "#808080",
       });
     });
-    it('should return cardStyling with no measureLabel', () => {
+    it("should return cardStyling with no measureLabel", () => {
       layout.qHyperCube.qMeasureInfo = [];
       const result = stylingUtils.cardStyling({ layout });
       expect(result).toEqual({
-        backgroundColor: '#ffffff',
-        fontColor: 'default',
+        backgroundColor: "#ffffff",
+        fontColor: "default",
         measureLabel: null,
-        border: { colorType: 'auto' },
-        borderColor: '#808080',
+        border: { colorType: "auto" },
+        borderColor: "#808080",
       });
     });
 
-    it('should return cardStyling with borderColor from color picker', () => {
-      layout.style.border = { colorType: 'colorPicker', color: { index: 1 } };
+    it("should return cardStyling with borderColor from color picker", () => {
+      layout.style.border = { colorType: "colorPicker", color: { index: 1 } };
       const result = stylingUtils.cardStyling({ layout, Theme });
       expect(result).toEqual({
-        backgroundColor: '#ffffff',
-        fontColor: 'default',
-        measureLabel: 'measureLabel',
-        border: { colorType: 'colorPicker', color: { index: 1 } },
-        borderColor: 'secondColor',
+        backgroundColor: "#ffffff",
+        fontColor: "default",
+        measureLabel: "measureLabel",
+        border: { colorType: "colorPicker", color: { index: 1 } },
+        borderColor: "secondColor",
       });
     });
   });

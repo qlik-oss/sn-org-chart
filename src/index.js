@@ -1,33 +1,33 @@
 import {
-  useStaleLayout,
+  useConstraints,
   useEffect,
   useElement,
   useMemo,
   useModel,
-  useState,
-  usePromise,
-  useTheme,
-  useRect,
   useOptions,
-  useConstraints,
+  usePromise,
+  useRect,
+  useStaleLayout,
+  useState,
+  useTheme,
   useTranslator,
-} from '@nebula.js/stardust';
-import properties from './object-properties';
-import data from './data';
-import ext from './extension/ext';
-import snapshot from './snapshot';
-import selectionHandler from './selections-handler';
-import { paintTree, createContainer } from './tree/render';
-import stylingUtils from './utils/styling';
-import treeTransform from './utils/tree-utils';
-import viewStateUtil from './utils/viewstate-utils';
-import { getSnapshotZoom, applyTransform } from './tree/transform';
-import autoRegister from './locale/src/translations';
-import './styles/tooltip.less';
-import './styles/paths.less';
-import './styles/warnings.less';
-import './styles/nodes.less';
-import './styles/home-button.less';
+} from "@nebula.js/stardust";
+import data from "./data";
+import ext from "./extension/ext";
+import autoRegister from "./locale/src/translations";
+import properties from "./object-properties";
+import selectionHandler from "./selections-handler";
+import snapshot from "./snapshot";
+import "./styles/home-button.less";
+import "./styles/nodes.less";
+import "./styles/paths.less";
+import "./styles/tooltip.less";
+import "./styles/warnings.less";
+import { createContainer, paintTree } from "./tree/render";
+import { applyTransform, getSnapshotZoom } from "./tree/transform";
+import stylingUtils from "./utils/styling";
+import treeTransform from "./utils/tree-utils";
+import viewStateUtil from "./utils/viewstate-utils";
 
 export default function supernova(env) {
   return {

@@ -1,6 +1,6 @@
-import { select, zoom, event, zoomIdentity } from 'd3';
-import constants from './size-constants';
-import { closeTooltip } from './tooltip';
+import { event, select, zoom, zoomIdentity } from "d3";
+import constants from "./size-constants";
+import { closeTooltip } from "./tooltip";
 
 export const getBBoxOfNodes = (nodes) => {
   const { cardWidth, cardHeight, buttonHeight, buttonMargin } = constants;
@@ -26,7 +26,7 @@ export const getBBoxOfNodes = (nodes) => {
 
 export const getInitialZoomState = (bBox, element, navigationMode) => {
   const { widthMargin, cardHeight, minZoom } = constants;
-  const maxZoom = navigationMode === 'expandAll' ? Infinity : constants.maxZoom;
+  const maxZoom = navigationMode === "expandAll" ? Infinity : constants.maxZoom;
   const { width, height } = bBox;
   const { clientHeight, clientWidth } = element;
   const calcWidth = width + 2 * widthMargin;
@@ -68,12 +68,12 @@ export const applyTransform = (eventTransform, svg, divBox, width, height) => {
   const scaleFactor = eventTransform.k;
   const translation = `${eventTransform.x}px, ${eventTransform.y}px`;
 
-  svg.attr('transform', eventTransform);
-  divBox.classed('org-disable-transition', true);
-  svg.classed('org-disable-transition', true);
+  svg.attr("transform", eventTransform);
+  divBox.classed("org-disable-transition", true);
+  svg.classed("org-disable-transition", true);
 
   divBox.attr(
-    'style',
+    "style",
     `width:${width}px;height:${height}px; transform: translate(${translation}) scale(${scaleFactor})`
   );
 };
@@ -90,17 +90,17 @@ export function setZooming({
   const { x = 0, y = 0 } = transformState;
   const { minZoom, maxZoom } = constants;
   const zoomFactor = (transformState && 1 / transformState.zoom) || initialZoomState.initialZoom;
-  const scaleFactor = navigationMode === 'expandAll' ? zoomFactor : Math.max(Math.min(maxZoom, zoomFactor), minZoom);
+  const scaleFactor = navigationMode === "expandAll" ? zoomFactor : Math.max(Math.min(maxZoom, zoomFactor), minZoom);
 
   // sends otherwise captured mouse event to handle context menu correctly in sense
   const bubbleEvent = () => {
-    const newEvent = document.createEvent('MouseEvents');
-    newEvent.initEvent('mousedown', true, false);
+    const newEvent = document.createEvent("MouseEvents");
+    newEvent.initEvent("mousedown", true, false);
     element.dispatchEvent(newEvent);
   };
 
   const zoomed = () => {
-    select(homeButton).attr('class', 'sn-org-homebutton lui-fade-button lui-fade-button--large');
+    select(homeButton).attr("class", "sn-org-homebutton lui-fade-button lui-fade-button--large");
     setTransform({ zoom: event.transform.k / scaleFactor, x: event.transform.x, y: event.transform.y });
     bubbleEvent();
     closeTooltip(tooltip);
@@ -122,12 +122,12 @@ export function setZooming({
       .filter(
         () =>
           !wrapperState.constraints.active &&
-          event.type !== 'dblclick' &&
-          !(event.type === 'mousedown' && event.which === 3)
+          event.type !== "dblclick" &&
+          !(event.type === "mousedown" && event.which === 3)
       )
-      .scaleExtent([navigationMode === 'expandAll' ? 0.8 : minZoom * scaleFactor, maxZoom * scaleFactor])
-      .on('start', bubbleEvent)
-      .on('zoom', zoomed)
+      .scaleExtent([navigationMode === "expandAll" ? 0.8 : minZoom * scaleFactor, maxZoom * scaleFactor])
+      .on("start", bubbleEvent)
+      .on("zoom", zoomed)
   );
 
   setTransform({ zoom: 1 / scaleFactor, x, y });
@@ -151,11 +151,11 @@ export default function transform(nodes, width, height, svg, divBox, useTransiti
   const bBox = getBBoxOfNodes(nodes);
   const { divTranslation, scaleFactor } = getTranslations(bBox, height, width);
 
-  svg.attr('style', `transform: scale(${1 / scaleFactor}) translate(${divTranslation});`);
-  divBox.classed('org-disable-transition', !useTransitions);
-  svg.classed('org-disable-transition', !useTransitions);
+  svg.attr("style", `transform: scale(${1 / scaleFactor}) translate(${divTranslation});`);
+  divBox.classed("org-disable-transition", !useTransitions);
+  svg.classed("org-disable-transition", !useTransitions);
   divBox.attr(
-    'style',
+    "style",
     `width:${width}px;height:${height}px;
       transform: scale(${1 / scaleFactor}) translate(${divTranslation});`
   );

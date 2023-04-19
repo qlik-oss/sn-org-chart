@@ -1,8 +1,8 @@
-import { hierarchy } from 'd3';
-import { createSnapshotData, createViewState } from '../snapshot';
+import { hierarchy } from "d3";
+import { createSnapshotData, createViewState } from "../snapshot";
 
-describe('snapshot', () => {
-  describe('createSnapshotData', () => {
+describe("snapshot", () => {
+  describe("createSnapshotData", () => {
     let nodes;
     let topId;
     let isExpanded;
@@ -12,31 +12,31 @@ describe('snapshot', () => {
 
     beforeEach(() => {
       nodes = {
-        id: '1',
+        id: "1",
         elemNo: 1,
         rowNo: 0,
         children: [
           {
-            id: '2',
+            id: "2",
             elemNo: 2,
             rowNo: 1,
             children: [
               {
-                id: '3',
+                id: "3",
                 elemNo: 3,
                 rowNo: 2,
                 parent: {
                   data: {
-                    id: '2',
+                    id: "2",
                   },
                 },
                 children: [
                   {
-                    id: '5',
+                    id: "5",
                     elemNo: 798,
                     rowNo: 3,
                     parent: {
-                      id: '3',
+                      id: "3",
                     },
                   },
                 ],
@@ -44,14 +44,14 @@ describe('snapshot', () => {
             ],
           },
           {
-            id: '4',
+            id: "4",
             elemNo: 88,
             rowNo: 4,
             children: [],
           },
         ],
       };
-      topId = '1';
+      topId = "1";
       isExpanded = true;
       expandedChildren = [];
       nodeTree = hierarchy(nodes);
@@ -63,40 +63,40 @@ describe('snapshot', () => {
       };
     });
 
-    it('should return matrix from snapshotData', () => {
-      layout.snapshotData.dataMatrix = 'someMatrix';
+    it("should return matrix from snapshotData", () => {
+      layout.snapshotData.dataMatrix = "someMatrix";
       const result = createSnapshotData({ topId, isExpanded, expandedChildren }, nodeTree, layout);
-      expect(result).toEqual('someMatrix');
+      expect(result).toEqual("someMatrix");
     });
 
-    it('should return usedMatrix', () => {
+    it("should return usedMatrix", () => {
       const result = createSnapshotData({ topId, isExpanded, expandedChildren }, nodeTree, layout);
       expect(result).toEqual([0, 1, 2, 4]);
     });
 
-    it('should return usedMatrix except node with missing rowNo', () => {
+    it("should return usedMatrix except node with missing rowNo", () => {
       nodeTree.children[1].data.rowNo = undefined;
       const result = createSnapshotData({ topId, isExpanded, expandedChildren }, nodeTree, layout);
       expect(result).toEqual([0, 1, 2]);
     });
 
-    it('should return all nodes when using expandAll navigation mode', () => {
-      layout.navigationMode = 'expandAll';
+    it("should return all nodes when using expandAll navigation mode", () => {
+      layout.navigationMode = "expandAll";
       const result = createSnapshotData({ topId, isExpanded, expandedChildren }, nodeTree, layout);
       expect(result).toEqual([0, 1, 4, 2, 3]);
     });
   });
 
-  describe('createViewState', () => {
+  describe("createViewState", () => {
     const expandedState = {};
-    const transform = 'someTransform';
-    const initialZoom = 'someZoom';
+    const transform = "someTransform";
+    const initialZoom = "someZoom";
     const element = {
       clientHeight: 100,
       clientWidth: 200,
     };
 
-    it('should return correct viewstate', () => {
+    it("should return correct viewstate", () => {
       const result = createViewState(expandedState, transform, initialZoom, element);
       const expected = {
         expandedState: { useTransitions: false },

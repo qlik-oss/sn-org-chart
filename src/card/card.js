@@ -1,17 +1,17 @@
-import colorUtils from '../utils/color-utils';
-import encodeUtils from '../utils/encoder';
-import constants from '../tree/size-constants';
-import DEFAULTS from '../style-defaults';
+import DEFAULTS from "../style-defaults";
+import constants from "../tree/size-constants";
+import colorUtils from "../utils/color-utils";
+import encodeUtils from "../utils/encoder";
 
 export function resolveColor(color) {
   const resolvedColor = colorUtils.resolveExpression(color);
-  return resolvedColor !== 'none' ? resolvedColor : encodeUtils.encodeCssColor(color);
+  return resolvedColor !== "none" ? resolvedColor : encodeUtils.encodeCssColor(color);
 }
 
 export function getBackgroundColor(data, cardStyling) {
   if (data.attributes && data.attributes.color) {
     const resolvedColor = colorUtils.resolveExpression(data.attributes.color);
-    if (resolvedColor !== 'none') {
+    if (resolvedColor !== "none") {
       return resolvedColor;
     }
   }
@@ -19,7 +19,7 @@ export function getBackgroundColor(data, cardStyling) {
 }
 
 export function getFontColor(cardStyling, backgroundColor) {
-  if (cardStyling.fontColor === 'default') {
+  if (cardStyling.fontColor === "default") {
     return colorUtils.isDarkColor(backgroundColor) ? DEFAULTS.FONT_COLOR_LIGHT.color : DEFAULTS.FONT_COLOR_DARK.color;
   }
   return cardStyling.fontColor;
@@ -36,12 +36,12 @@ export default (data, cardStyling, selectionObj) => {
     html += `<div class="sn-org-card-label">${encodeUtils.encodeTitle(attributes.subLabel)}</div>`;
   }
   if (data.measure) {
-    const measureLabel = cardStyling.measureLabel ? `${cardStyling.measureLabel}: ` : '';
+    const measureLabel = cardStyling.measureLabel ? `${cardStyling.measureLabel}: ` : "";
     html += `<div class="sn-org-card-label">${encodeUtils.encodeTitle(measureLabel + data.measure)}</div>`;
   } else if (attributes.extraLabel) {
     html += `<div class="sn-org-card-label">${encodeUtils.encodeTitle(attributes.extraLabel)}</div>`;
   }
-  const selectedClass = api && api.isActive() ? (isSelected ? ' selected' : ' not-selected') : '';
+  const selectedClass = api && api.isActive() ? (isSelected ? " selected" : " not-selected") : "";
 
   const {
     top = DEFAULTS.BORDER_TOP,
@@ -49,10 +49,10 @@ export default (data, cardStyling, selectionObj) => {
     colorType = DEFAULTS.BORDER_COLOR_TYPE,
   } = cardStyling.border;
   const borderColor =
-    colorType === 'auto' ? colorUtils.getDarkColor(backgroundColor) : resolveColor(cardStyling.borderColor);
+    colorType === "auto" ? colorUtils.getDarkColor(backgroundColor) : resolveColor(cardStyling.borderColor);
 
-  const topBorder = top && !isSelected ? `3px solid ${borderColor}` : '';
-  const borderStyle = fullBorder && !isSelected ? `1px solid ${borderColor}` : '';
+  const topBorder = top && !isSelected ? `3px solid ${borderColor}` : "";
+  const borderStyle = fullBorder && !isSelected ? `1px solid ${borderColor}` : "";
   let newCardHeight = constants.cardHeight;
   if (isSelected) {
     newCardHeight -= 8;

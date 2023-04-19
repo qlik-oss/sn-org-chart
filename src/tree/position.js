@@ -1,10 +1,10 @@
-import { haveNoChildren } from '../utils/tree-utils';
-import constants from './size-constants';
+import { haveNoChildren } from "../utils/tree-utils";
+import constants from "./size-constants";
 
 export const widthTranslation = (d, widthSpacing, element, axis, initialZoomState, navigationMode) => {
   const { buttonMargin } = constants;
   const initialX = (initialZoomState && initialZoomState.initialX) || 0;
-  if (navigationMode === 'expandAll') {
+  if (navigationMode === "expandAll") {
     d[axis] = d.x + initialX;
     return d[axis];
   }
@@ -12,7 +12,7 @@ export const widthTranslation = (d, widthSpacing, element, axis, initialZoomStat
     if (!d.parent[axis]) {
       d.parent[axis] = widthTranslation(d.parent, widthSpacing, element, axis, initialZoomState);
     }
-    if (d.parent.data.id === 'Root') {
+    if (d.parent.data.id === "Root") {
       d[axis] = d.parent[axis] + (d.data.childNumber - (d.parent.children.length - 1) / 2) * widthSpacing;
     } else {
       d[axis] = haveNoChildren(d.parent.children)
@@ -31,7 +31,7 @@ export const depthTranslation = (d, depthSpacing, axis, initialZoomState, naviga
   const { cardHeight, leafMargin } = constants;
   const initialY = (initialZoomState && initialZoomState.initialY) || 0;
 
-  if (d.parent && d.parent.data.id !== 'Root' && navigationMode !== 'expandAll' && haveNoChildren(d.parent.children)) {
+  if (d.parent && d.parent.data.id !== "Root" && navigationMode !== "expandAll" && haveNoChildren(d.parent.children)) {
     d[axis] = d.parent.y + depthSpacing + d.data.childNumber * (cardHeight + leafMargin) + initialY;
   } else {
     d[axis] = d.y + initialY;
@@ -46,14 +46,14 @@ export default function position(orientation, element, initialZoomState, navigat
 
   let orientations;
   switch (orientation) {
-    case 'ttb':
+    case "ttb":
       widthSpacing = cardWidth + widthMargin;
-      depthSpacing = navigationMode === 'expandAll' ? cardHeight + 2 * cardPadding : cardHeight + heightMargin;
+      depthSpacing = navigationMode === "expandAll" ? cardHeight + 2 * cardPadding : cardHeight + heightMargin;
       orientations = {
         depthSpacing,
         isVertical: true,
-        x: (d) => widthTranslation(d, widthSpacing, element, 'xActual', initialZoomState, navigationMode),
-        y: (d) => depthTranslation(d, depthSpacing, 'yActual', initialZoomState, navigationMode),
+        x: (d) => widthTranslation(d, widthSpacing, element, "xActual", initialZoomState, navigationMode),
+        y: (d) => depthTranslation(d, depthSpacing, "yActual", initialZoomState, navigationMode),
       };
       break;
     // case 'btt':
