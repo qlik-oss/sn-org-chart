@@ -1,4 +1,4 @@
-import DEFAULTS from './style-defaults';
+import DEFAULTS from "./style-defaults";
 
 /**
  * @extends {qae.GenericObjectProperties}
@@ -22,22 +22,22 @@ const properties = {
    * Visualization title
    * @type {string}
    */
-  title: '',
+  title: "",
   /**
    * Visualization subtitle
    * @type {string}
    */
-  subtitle: '',
+  subtitle: "",
   /**
    * Visualization footnote
    * @type {string}
    */
-  footnote: '',
+  footnote: "",
   /**
    * How the org chart is navigated
    * @type {'expandAll'|'free'}
    */
-  navigationMode: 'free',
+  navigationMode: "free",
   /**
    * Resize and pan chart when a node's list of children is expanded
    * @type {boolean}
@@ -51,19 +51,19 @@ const properties = {
     fontColor: {
       colorType: DEFAULTS.FONT_COLOR_TYPE,
       color: DEFAULTS.FONT_COLOR_DARK,
-      colorExpression: '',
+      colorExpression: "",
     },
     backgroundColor: {
       colorType: DEFAULTS.BACKGROUND_COLOR_TYPE,
       color: DEFAULTS.BACKGROUND_COLOR,
-      colorExpression: '',
+      colorExpression: "",
     },
     border: {
       top: DEFAULTS.BORDER_TOP,
       fullBorder: DEFAULTS.BORDER_FULL,
       colorType: DEFAULTS.BORDER_COLOR_TYPE,
       color: DEFAULTS.BORDER_COLOR,
-      colorExpression: '',
+      colorExpression: "",
     },
   },
 };

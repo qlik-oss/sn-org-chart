@@ -1,13 +1,13 @@
 const config = {
-  testDir: './test/rendering',
+  testDir: "./test/rendering",
   testMatch: /.*\.spec\.js/,
   webServer: {
-    command: 'yarn start --port 8077',
+    command: "yarn start --port 8077",
     reuseExistingServer: !process.env.CI,
-    port: '8077',
+    port: "8077",
   },
   use: {
-    baseURL: 'http://localhost:8077',
+    baseURL: "http://localhost:8077",
   },
 };
 

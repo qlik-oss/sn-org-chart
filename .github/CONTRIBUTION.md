@@ -1,4 +1,3 @@
-
 1. Install with `yarn`
 1. Transpile code: `yarn build` (or `yarn build:watch`)
 1. Run it using nebula with `yarn start`
