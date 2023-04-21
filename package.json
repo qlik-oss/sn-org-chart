@@ -92,7 +92,7 @@
     "@qlik/eslint-config": "0.0.9",
     "@qlik/prettier-config": "0.1.1",
     "babel-plugin-dynamic-import-node": "2.3.3",
-    "d3": "5.16.0",
+    "d3": "7.8.4",
     "eslint": "8.23.0",
     "fs-extra": "11.1.0",
     "globby": "13.1.3",
