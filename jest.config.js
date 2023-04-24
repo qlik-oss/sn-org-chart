@@ -16,4 +16,7 @@ module.exports = {
     "src/locale/scripts/generate-all.mjs",
   ],
   collectCoverageFrom: ["src/**"],
+  moduleNameMapper: {
+    d3: "<rootDir>/node_modules/d3/dist/d3.min.js",
+  },
 };
