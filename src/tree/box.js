@@ -95,14 +95,14 @@ export default function box({
     .attr("class", "sn-org-card")
     .attr("style", (d) => `width:${cardWidth}px;height:${cardHeight}px; top:${y(d)}px;left:${x(d)}px;`)
     .attr("id", (d) => d.data.id)
-    .on("click", (node) => {
+    .on("click", (event, node) => {
       if (!wrapperState.constraints.active && node.data.id !== "Root") {
         touchmode && openTooltip(tooltip, node, element.clientHeight, styling, x, y, wrapperState.transform, 0);
         selections.select(node, selectionObj);
       }
     })
     .html((d) => card(d.data, styling, selectionObj))
-    .on("mouseenter", (d) => {
+    .on("mouseenter", (event, d) => {
       if (!touchmode && !wrapperState.constraints.active && event.buttons === 0) {
         openTooltip(tooltip, d, element.clientHeight, styling, x, y, wrapperState.transform);
       }
@@ -139,7 +139,7 @@ export default function box({
       .on("mouseenter", () => {
         if (!wrapperState.constraints.active) event.target.style.cursor = "pointer";
       })
-      .on("click", (d) => {
+      .on("click", (event, d) => {
         if (!wrapperState.constraints.active) {
           setExpandedCallback(getNewState(d, wrapperState.expandedState, ancestorIds));
           event.stopPropagation();
