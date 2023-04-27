@@ -1,4 +1,9 @@
 {
+  "Object.OrgChart": {
+    "value": "Wykres organizacyjny",
+    "comment": "Name of chart, noun.",
+    "version": "IMkAYY1OSslBbNBRMJaPHg=="
+  },
   "Object.OrgChart.BackgroundColor": {
     "value": "Kolor tła",
     "comment": "Label for background color in property panel (rnt 200218)",
@@ -18,6 +23,11 @@
     "value": "Dane zawierają odwołania cykliczne, węzły są pomijane.",
     "comment": "Warning for data that contains cycles, meaning some data will not be displayed (rnt 200218)",
     "version": "An8ujeYJOfiAlViO2ifl3w=="
+  },
+  "Object.OrgChart.Description": {
+    "value": "Wyświetla relacje organizacji lub dane o podobnej strukturze. Zaczyna się od góry i umożliwia nawigację w hierarchii.",
+    "comment": "Description of chart.",
+    "version": "/KWGDqvQY0Kk8qjFD/k8Eg=="
   },
   "Object.OrgChart.DummyWarn": {
     "value": "Dane zawierają wiele węzłów głównych.",

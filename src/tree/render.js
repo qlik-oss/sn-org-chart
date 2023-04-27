@@ -1,14 +1,14 @@
-import { hierarchy, tree, select } from 'd3';
-import position from './position';
-import box from './box';
-import createPaths from './path';
-import { getBBoxOfNodes, setZooming, getInitialZoomState } from './transform';
-import { createTooltip } from './tooltip';
-import { homeIcon } from '../utils/svg-icons';
-import constants from './size-constants';
+import { hierarchy, select, tree } from "d3";
+import { homeIcon } from "../utils/svg-icons";
+import box from "./box";
+import createPaths from "./path";
+import position from "./position";
+import constants from "./size-constants";
+import { createTooltip } from "./tooltip";
+import { getBBoxOfNodes, getInitialZoomState, setZooming } from "./transform";
 
 export const filterTree = ({ topId, isExpanded, expandedChildren }, nodeTree, extended, navigationMode) => {
-  if (navigationMode === 'expandAll') {
+  if (navigationMode === "expandAll") {
     return nodeTree.descendants();
   }
   const topNode = nodeTree.descendants().find((node) => node.data.id === topId) || nodeTree;
@@ -32,7 +32,7 @@ export const filterTree = ({ topId, isExpanded, expandedChildren }, nodeTree, ex
     });
   }
 
-  if (nodeTree.data.navigationMode === 'free' && topNode.parent) {
+  if (nodeTree.data.navigationMode === "free" && topNode.parent) {
     const ancestors = topNode.parent.ancestors();
     const ancestorIds = ancestors.map((anc) => anc.data.id);
     ancestors.forEach((ancestor) => {
@@ -58,8 +58,8 @@ export const filterTree = ({ topId, isExpanded, expandedChildren }, nodeTree, ex
 export const paintTree = ({ containerData, styling, setExpandedCallback, wrapperState, selectionObj, element }) => {
   const { svg, divBox, allNodes, positioning, tooltip } = containerData;
   const { navigationMode } = allNodes.data;
-  divBox.selectAll('*').remove();
-  svg.selectAll('*').remove();
+  divBox.selectAll("*").remove();
+  svg.selectAll("*").remove();
   // filter the nodes the nodes
   const nodes = filterTree(wrapperState.expandedState, allNodes, false, navigationMode);
   // Create cards and naviagation buttons
@@ -76,7 +76,7 @@ export const paintTree = ({ containerData, styling, setExpandedCallback, wrapper
     tooltip,
   });
   // Create the lines (links) between the nodes
-  const node = svg.selectAll('.sn-org-paths').data(nodes).enter();
+  const node = svg.selectAll(".sn-org-paths").data(nodes).enter();
   createPaths(node, positioning, wrapperState.expandedState.topId, navigationMode);
   // Scale and translate only needed when user cannot zoom
   // if (navigationMode !== 'free') {
@@ -96,38 +96,38 @@ export const createContainer = ({
   setContainerData,
   layout,
 }) => {
-  element.innerHTML = '';
-  element.className = 'sn-org-chart';
+  element.innerHTML = "";
+  element.className = "sn-org-chart";
   const { navigationMode } = layout;
-  let positioning = position('ttb', element, {}, navigationMode);
+  let positioning = position("ttb", element, {}, navigationMode);
   const { width, height } = element.getBoundingClientRect();
 
   const zoomWrapper = select(element)
-    .append('span')
-    .attr('class', 'sn-org-zoomwrapper')
-    .on('click', () => {
+    .append("span")
+    .attr("class", "sn-org-zoomwrapper")
+    .on("click", () => {
       if (!wrapperState.constraints.active && (!selectionObj.api.isActive() || !selectionObj.state)) {
-        selectionObj.api.begin('/qHyperCubeDef');
+        selectionObj.api.begin("/qHyperCubeDef");
         selectionObj.setState([]);
       }
     })
     .node();
 
   const svgBox = select(zoomWrapper)
-    .selectAll('svg')
+    .selectAll("svg")
     .data([{}])
     .enter()
-    .append('svg')
-    .attr('class', 'sn-org-svg')
-    .attr('width', '100%')
-    .attr('height', '100%');
+    .append("svg")
+    .attr("class", "sn-org-svg")
+    .attr("width", "100%")
+    .attr("height", "100%");
 
-  const divBox = select(zoomWrapper).selectAll('div').data([{}]).enter().append('div').attr('class', 'sn-org-nodes');
+  const divBox = select(zoomWrapper).selectAll("div").data([{}]).enter().append("div").attr("class", "sn-org-nodes");
 
   const homeButton = select(element)
-    .append('button')
-    .attr('class', 'sn-org-homebutton disabled')
-    .on('click', () => {
+    .append("button")
+    .attr("class", "sn-org-homebutton disabled")
+    .on("click", () => {
       createContainer({
         element,
         dataTree,
@@ -147,18 +147,18 @@ export const createContainer = ({
   const tooltip = createTooltip(element);
 
   if (dataTree.error) {
-    select(zoomWrapper).append('div').attr('class', 'sn-org-error').html(dataTree.message);
+    select(zoomWrapper).append("div").attr("class", "sn-org-error").html(dataTree.message);
     return false;
   }
 
   if (dataTree.warn && dataTree.warn.length) {
     select(zoomWrapper)
-      .append('span')
-      .attr('class', 'sn-org-warning')
-      .html(`*${dataTree.warn.join(' ')}`);
+      .append("span")
+      .attr("class", "sn-org-warning")
+      .html(`*${dataTree.warn.join(" ")}`);
   }
 
-  const svg = svgBox.append('g').attr('class', 'sn-org-paths');
+  const svg = svgBox.append("g").attr("class", "sn-org-paths");
   // Here are the settings for the tree. For instance nodesize can be adjusted
   const treemap = tree()
     .size([width, height])
@@ -184,7 +184,7 @@ export const createContainer = ({
   const initialZoomState =
     viewState && viewState.initialZoom ? viewState.initialZoom : getInitialZoomState(bBox, element, navigationMode);
   setInitialZoom(initialZoomState);
-  positioning = position('ttb', element, initialZoomState, navigationMode);
+  positioning = position("ttb", element, initialZoomState, navigationMode);
   setZooming({
     containerData: { svg, divBox, width, height, zoomWrapper, element, tooltip, homeButton },
     setTransform,

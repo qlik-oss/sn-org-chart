@@ -1,5 +1,5 @@
-import { haveNoChildren } from '../utils/tree-utils';
-import constants from './size-constants';
+import { haveNoChildren } from "../utils/tree-utils";
+import constants from "./size-constants";
 
 export function getPoints(d, topId, { depthSpacing, isVertical, x, y }, navigationMode) {
   // TODO: Generalize to make all directions work, currently on only ttb working
@@ -9,12 +9,12 @@ export function getPoints(d, topId, { depthSpacing, isVertical, x, y }, navigati
   const start = { x: d.xActual, y: d.yActual };
 
   // TODO: fix so auto mode does not get a path to parent not showing
-  if (d.parent && d.parent.data.id !== 'Root') {
+  if (d.parent && d.parent.data.id !== "Root") {
     const halfDepth = depthSpacing / 2;
-    const yOffset = navigationMode === 'expandAll' ? cardHeight : cardHeight + cardPadding + buttonHeight;
+    const yOffset = navigationMode === "expandAll" ? cardHeight : cardHeight + cardPadding + buttonHeight;
     const end = { x: x(d.parent) + halfCard.x, y: y(d.parent) + yOffset };
 
-    if (navigationMode !== 'expandAll' && haveNoChildren(d.parent.children)) {
+    if (navigationMode !== "expandAll" && haveNoChildren(d.parent.children)) {
       // to leafs
       points.push(
         isVertical
@@ -65,7 +65,7 @@ export function getPoints(d, topId, { depthSpacing, isVertical, x, y }, navigati
     ]);
   }
 
-  if (d.children && d.data.id !== 'Root') {
+  if (d.children && d.data.id !== "Root") {
     // to expand button
     points.push([
       { x: start.x + halfCard.x, y: start.y + cardHeight },
@@ -106,11 +106,11 @@ export function getPath(points) {
 
 export default function createPaths(node, positioning, topId, navigationMode) {
   node
-    .append('path')
-    .attr('class', 'sn-org-path')
-    .attr('id', (d) => d.data.id)
-    .attr('d', (d) => {
-      let path = '';
+    .append("path")
+    .attr("class", "sn-org-path")
+    .attr("id", (d) => d.data.id)
+    .attr("d", (d) => {
+      let path = "";
       const pointSets = getPoints(d, topId, positioning, navigationMode);
       pointSets.forEach((points) => {
         path += getPath(points).slice(0, -1);

@@ -1,12 +1,12 @@
-import props from '../object-properties';
+import props from "../object-properties";
 
 const defaultValues = {
   Theme: {
     getCurrent: () => ({
       properties: {
-        palettes: { ui: [{ colors: ['none', 'color1', 'color2'] }] },
-        dataColors: { primaryColor: 'myPrimaryColor' },
-        fontFamily: 'myFont',
+        palettes: { ui: [{ colors: ["none", "color1", "color2"] }] },
+        dataColors: { primaryColor: "myPrimaryColor" },
+        fontFamily: "myFont",
       },
     }),
   },
@@ -15,7 +15,7 @@ const defaultValues = {
     x: 0,
     y: 124,
     data: {
-      id: '1',
+      id: "1",
       elemNo: 1,
       childNumber: 1,
       isLocked: false,
@@ -25,7 +25,7 @@ const defaultValues = {
       y: 1,
       xActual: 1,
       data: {
-        id: '0',
+        id: "0",
       },
       children: [
         {
@@ -36,17 +36,17 @@ const defaultValues = {
     children: [
       {
         data: {
-          id: '2',
+          id: "2",
           elemNo: 2,
         },
         parent: {
           data: {
-            id: '1',
+            id: "1",
           },
           children: [
             {
               data: {
-                id: '2',
+                id: "2",
               },
             },
           ],
@@ -54,23 +54,23 @@ const defaultValues = {
         children: [
           {
             data: {
-              id: '3',
+              id: "3",
               elemNo: 3,
             },
             parent: {
               data: {
-                id: '2',
+                id: "2",
               },
             },
             children: [
               {
                 data: {
-                  id: 'fake',
+                  id: "fake",
                   elemNo: 798,
                 },
                 parent: {
                   data: {
-                    id: '3',
+                    id: "3",
                   },
                 },
               },
@@ -80,17 +80,17 @@ const defaultValues = {
       },
       {
         data: {
-          id: '4',
+          id: "4",
           elemNo: 88,
         },
         parent: {
           data: {
-            id: '1',
+            id: "1",
           },
           children: [
             {
               data: {
-                id: '2',
+                id: "2",
                 elemNo: 2,
               },
               children: [
@@ -101,7 +101,7 @@ const defaultValues = {
             },
             {
               data: {
-                id: '4',
+                id: "4",
                 elemNo: 88,
               },
             },

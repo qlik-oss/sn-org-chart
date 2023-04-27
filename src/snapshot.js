@@ -1,5 +1,5 @@
-import { onTakeSnapshot, useImperativeHandle, useElement } from '@nebula.js/stardust';
-import { filterTree } from './tree/render';
+import { onTakeSnapshot, useElement, useImperativeHandle } from "@nebula.js/stardust";
+import { filterTree } from "./tree/render";
 
 export const createSnapshotData = (expandedState, allNodes, layout) => {
   if (layout.snapshotData && layout.snapshotData.dataMatrix) {

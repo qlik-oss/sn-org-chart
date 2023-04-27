@@ -1,4 +1,9 @@
 {
+  "Object.OrgChart": {
+    "value": "Организационная диаграмма",
+    "comment": "Name of chart, noun.",
+    "version": "IMkAYY1OSslBbNBRMJaPHg=="
+  },
   "Object.OrgChart.BackgroundColor": {
     "value": "Цвет фона",
     "comment": "Label for background color in property panel (rnt 200218)",
@@ -18,6 +23,11 @@
     "value": "В данных содержатся циклические ссылки, узлы опущены.",
     "comment": "Warning for data that contains cycles, meaning some data will not be displayed (rnt 200218)",
     "version": "An8ujeYJOfiAlViO2ifl3w=="
+  },
+  "Object.OrgChart.Description": {
+    "value": "Отображает отношения организации или аналогично структурированные данные. Начинается сверху и позволяет перемещаться по иерархии.",
+    "comment": "Description of chart.",
+    "version": "/KWGDqvQY0Kk8qjFD/k8Eg=="
   },
   "Object.OrgChart.DummyWarn": {
     "value": "В данных содержится несколько корневых узлов.",

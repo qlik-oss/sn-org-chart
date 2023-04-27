@@ -1,23 +1,23 @@
-import { getPoints, getPath } from '../path';
-import constants from '../size-constants';
+import { getPath, getPoints } from "../path";
+import constants from "../size-constants";
 
-describe('path', () => {
-  describe('getPath', () => {
+describe("path", () => {
+  describe("getPath", () => {
     const points = [
       { x: 0, y: 0 },
       { x: 100, y: 0 },
       { x: 100, y: 200 },
       { x: 200, y: 200 },
     ];
-    const expected = 'M 0 0 L 96 0 Q 100 0 100 4 L 100 196 Q 100 200 104 200 L 200 200 ';
+    const expected = "M 0 0 L 96 0 Q 100 0 100 4 L 100 196 Q 100 200 104 200 L 200 200 ";
 
-    it('should return a path', () => {
+    it("should return a path", () => {
       const path = getPath(points);
       expect(path).toEqual(expected);
     });
   });
 
-  describe('getPoints', () => {
+  describe("getPoints", () => {
     // TODO: update tests when all directions work
     const { heightMargin, cardHeight } = constants;
     let isVertical;
@@ -30,10 +30,10 @@ describe('path', () => {
     let navigationMode;
 
     beforeEach(() => {
-      topId = '0';
+      topId = "0";
       parent = {
         data: {
-          id: '0',
+          id: "0",
         },
         xActual: 0,
         yActual: 0,
@@ -48,7 +48,7 @@ describe('path', () => {
         xActual: 300,
         yActual: cardHeight + heightMargin,
         data: {
-          id: '1',
+          id: "1",
         },
       };
       positioning = {
@@ -58,10 +58,10 @@ describe('path', () => {
         x: (node) => node.xActual,
         y: (node) => node.yActual,
       };
-      navigationMode = 'free';
+      navigationMode = "free";
     });
 
-    it('should return points for vertical tree', () => {
+    it("should return points for vertical tree", () => {
       expectedPoints = [
         { x: 376, y: 120 },
         { x: 376, y: 112 },
@@ -72,7 +72,7 @@ describe('path', () => {
       expect(points).toEqual(expectedPoints);
     });
 
-    it.skip('should return points for horizontal tree', () => {
+    it.skip("should return points for horizontal tree", () => {
       isVertical = false;
       positioning.depthSpacing = nodeSize.width + 100;
       expectedPoints = [
@@ -85,7 +85,7 @@ describe('path', () => {
       expect(points).toEqual(expectedPoints);
     });
 
-    it('should return points for vertical tree w only leafs', () => {
+    it("should return points for vertical tree w only leafs", () => {
       parent.children = [{}];
       expectedPoints = [
         { x: 300, y: 152 },
@@ -98,8 +98,8 @@ describe('path', () => {
       expect(points).toEqual(expectedPoints);
     });
 
-    it('should return points for vertical tree w only leafs in expandAll mode', () => {
-      navigationMode = 'expandAll';
+    it("should return points for vertical tree w only leafs in expandAll mode", () => {
+      navigationMode = "expandAll";
       parent.children = [{}];
       expectedPoints = [
         { x: 376, y: 120 },
@@ -111,7 +111,7 @@ describe('path', () => {
       expect(points).toEqual(expectedPoints);
     });
 
-    it.skip('should return points for horizontal tree w only leafs', () => {
+    it.skip("should return points for horizontal tree w only leafs", () => {
       isVertical = false;
       positioning.depthSpacing = nodeSize.width + 100;
       parent.children = [{}];
@@ -126,7 +126,7 @@ describe('path', () => {
       expect(points).toEqual(expectedPoints);
     });
 
-    it('should return points for a straight vertical line', () => {
+    it("should return points for a straight vertical line", () => {
       d.xActual = 0;
       expectedPoints = [
         { x: 76, y: 120 },
@@ -136,7 +136,7 @@ describe('path', () => {
       expect(points).toEqual(expectedPoints);
     });
 
-    it.skip('should return points for a straight horizontal line', () => {
+    it.skip("should return points for a straight horizontal line", () => {
       d.yActual = 0;
       expectedPoints = [
         { x: 400, y: 50 },
@@ -146,8 +146,8 @@ describe('path', () => {
       expect(points).toEqual(expectedPoints);
     });
 
-    it.skip('should return points for line to up button', () => {
-      topId = '1';
+    it.skip("should return points for line to up button", () => {
+      topId = "1";
       expectedPoints = [
         { x: 376, y: 120 },
         { x: 376, y: 112 },
@@ -156,7 +156,7 @@ describe('path', () => {
       expect(points).toEqual(expectedPoints);
     });
 
-    it('should return points for line to expand button', () => {
+    it("should return points for line to expand button", () => {
       d.children = [{}];
       expectedPoints = [
         { x: 376, y: 184 },
@@ -166,9 +166,9 @@ describe('path', () => {
       expect(points).toEqual(expectedPoints);
     });
 
-    it('should return points for line to dummy', () => {
-      topId = 'Root';
-      d.parent.data.id = 'Root';
+    it("should return points for line to dummy", () => {
+      topId = "Root";
+      d.parent.data.id = "Root";
       expectedPoints = [
         { x: 376, y: 120 },
         { x: 376, y: 112 },
@@ -177,7 +177,7 @@ describe('path', () => {
       expect(points).toEqual(expectedPoints);
     });
 
-    it('should return no points if no parent', () => {
+    it("should return no points if no parent", () => {
       d.parent = undefined;
       const points = getPoints(d, topId, positioning, navigationMode);
       expect(points).toEqual([]);

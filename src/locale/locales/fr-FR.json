@@ -1,4 +1,9 @@
 {
+  "Object.OrgChart": {
+    "value": "Organigramme",
+    "comment": "Name of chart, noun.",
+    "version": "IMkAYY1OSslBbNBRMJaPHg=="
+  },
   "Object.OrgChart.BackgroundColor": {
     "value": "Couleur d'arrière-plan",
     "comment": "Label for background color in property panel (rnt 200218)",
@@ -18,6 +23,11 @@
     "value": "Les données contiennent des références circulaires. Les nœuds sont omis.",
     "comment": "Warning for data that contains cycles, meaning some data will not be displayed (rnt 200218)",
     "version": "An8ujeYJOfiAlViO2ifl3w=="
+  },
+  "Object.OrgChart.Description": {
+    "value": "Affiche les relations d'une entreprise ou de données structurées de manière similaire. Démarre au sommet et permet la navigation à travers la hiérarchie.",
+    "comment": "Description of chart.",
+    "version": "/KWGDqvQY0Kk8qjFD/k8Eg=="
   },
   "Object.OrgChart.DummyWarn": {
     "value": "Les données contiennent plusieurs nœuds racines.",

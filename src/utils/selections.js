@@ -1,4 +1,4 @@
-import { getAllTreeElemNo } from './tree-utils';
+import { getAllTreeElemNo } from "./tree-utils";
 
 export default {
   select: (node, selectionObj) => {
@@ -12,7 +12,7 @@ export default {
         return;
       }
       if (!api.isActive() || !state) {
-        api.begin('/qHyperCubeDef');
+        api.begin("/qHyperCubeDef");
         newState = [];
       } else {
         newState = state.concat();
@@ -44,8 +44,8 @@ export default {
         api.clear();
       } else {
         api.select({
-          method: 'selectHyperCubeValues',
-          params: ['/qHyperCubeDef', 0, newState, false],
+          method: "selectHyperCubeValues",
+          params: ["/qHyperCubeDef", 0, newState, false],
         });
       }
       setState(newState);

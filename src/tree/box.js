@@ -1,8 +1,9 @@
-import card from '../card/card';
-import selections from '../utils/selections';
-import { haveNoChildren } from '../utils/tree-utils';
-import constants from './size-constants';
-import { openTooltip, closeTooltip } from './tooltip';
+/* eslint-disable no-undef */
+import card from "../card/card";
+import selections from "../utils/selections";
+import { haveNoChildren } from "../utils/tree-utils";
+import constants from "./size-constants";
+import { closeTooltip, openTooltip } from "./tooltip";
 
 export const getSign = (d, { topId, isExpanded, expandedChildren }, ancestorIds) => {
   if (
@@ -10,10 +11,10 @@ export const getSign = (d, { topId, isExpanded, expandedChildren }, ancestorIds)
     (d.parent && d.parent.data.id === topId && expandedChildren.includes(d.data.id)) ||
     ancestorIds.includes(d.data.id)
   ) {
-    return '-';
+    return "-";
   }
 
-  return '+';
+  return "+";
 };
 
 export const getNewState = (d, { topId, isExpanded, expandedChildren }, ancestorIds) => {
@@ -74,71 +75,71 @@ export default function box({
   const { topId } = wrapperState.expandedState;
   const topNode = nodes.find((node) => node.data.id === topId);
   const ancestorIds = topNode && topNode.parent ? topNode.parent.ancestors().map((anc) => anc.data.id) : [];
-  const touchmode = document.getElementsByTagName('html')[0].classList.contains('touch-on');
+  const touchmode = document.getElementsByTagName("html")[0].classList.contains("touch-on");
   // dummy root
   divBox
-    .selectAll('.sn-org-nodes')
-    .data(nodes.filter((node) => node.parent && node.parent.data.id === 'Root'))
+    .selectAll(".sn-org-nodes")
+    .data(nodes.filter((node) => node.parent && node.parent.data.id === "Root"))
     .enter()
-    .append('div')
-    .attr('class', 'sn-org-root')
-    .attr('style', (d) => `top:${y(d) - rootDiameter - cardPadding}px;left:${x(d) + (cardWidth - rootDiameter) / 2}px`)
-    .attr('id', (d) => d.data.id);
+    .append("div")
+    .attr("class", "sn-org-root")
+    .attr("style", (d) => `top:${y(d) - rootDiameter - cardPadding}px;left:${x(d) + (cardWidth - rootDiameter) / 2}px`)
+    .attr("id", (d) => d.data.id);
 
   // cards
   divBox
-    .selectAll('.sn-org-nodes')
-    .data(nodes.filter((node) => node.data.id !== 'Root'))
+    .selectAll(".sn-org-nodes")
+    .data(nodes.filter((node) => node.data.id !== "Root"))
     .enter()
-    .append('div')
-    .attr('class', 'sn-org-card')
-    .attr('style', (d) => `width:${cardWidth}px;height:${cardHeight}px; top:${y(d)}px;left:${x(d)}px;`)
-    .attr('id', (d) => d.data.id)
-    .on('click', (node) => {
-      if (!wrapperState.constraints.active && node.data.id !== 'Root') {
+    .append("div")
+    .attr("class", "sn-org-card")
+    .attr("style", (d) => `width:${cardWidth}px;height:${cardHeight}px; top:${y(d)}px;left:${x(d)}px;`)
+    .attr("id", (d) => d.data.id)
+    .on("click", (node) => {
+      if (!wrapperState.constraints.active && node.data.id !== "Root") {
         touchmode && openTooltip(tooltip, node, element.clientHeight, styling, x, y, wrapperState.transform, 0);
         selections.select(node, selectionObj);
       }
     })
     .html((d) => card(d.data, styling, selectionObj))
-    .on('mouseenter', (d) => {
+    .on("mouseenter", (d) => {
       if (!touchmode && !wrapperState.constraints.active && event.buttons === 0) {
         openTooltip(tooltip, d, element.clientHeight, styling, x, y, wrapperState.transform);
       }
     })
-    .on('mouseleave', () => {
+    .on("mouseleave", () => {
       !touchmode && closeTooltip(tooltip);
     })
-    .on('mousedown', () => {
+    .on("mousedown", () => {
       closeTooltip(tooltip);
     })
-    .on('touchmove', () => {
+    .on("touchmove", () => {
       closeTooltip(tooltip);
     })
-    .on('wheel', () => {
+    .on("wheel", () => {
       closeTooltip(tooltip);
     });
 
   // expand/collapse
-  if (navigationMode !== 'expandAll') {
+  if (navigationMode !== "expandAll") {
     divBox
-      .selectAll('.sn-org-nodes')
-      .data(nodes.filter((node) => !!node.children && node.data.id !== 'Root'))
+      .selectAll(".sn-org-nodes")
+      .data(nodes.filter((node) => !!node.children && node.data.id !== "Root"))
       .enter()
-      .append('div')
-      .attr('class', 'sn-org-traverse')
+      .append("div")
+      .attr("class", "sn-org-traverse")
       .attr(
-        'style',
+        "style",
         (d) =>
           `width:${buttonWidth}px;height:${buttonHeight}px;top:${y(d) + cardHeight + cardPadding}px;left:${
             x(d) + (cardWidth - buttonWidth) / 2
           }px;`
       )
-      .attr('id', (d) => `${d.data.id}-expand`)
-      .on('mouseenter', () => {
-        if (!wrapperState.constraints.active) event.target.style.cursor = 'pointer';
+      .attr("id", (d) => `${d.data.id}-expand`)
+      .on("mouseenter", () => {
+        if (!wrapperState.constraints.active) event.target.style.cursor = "pointer";
       })
-      .on('click', (d) => {
+      .on("click", (d) => {
         if (!wrapperState.constraints.active) {
           setExpandedCallback(getNewState(d, wrapperState.expandedState, ancestorIds));
           event.stopPropagation();
