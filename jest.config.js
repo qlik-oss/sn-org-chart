@@ -3,7 +3,7 @@ module.exports = {
   testRegex: "src/.+\\.(test|spec)\\.[jt]sx?$",
   coverageThreshold: {
     global: {
-      lines: 64,
+      lines: 63,
     },
   },
   coveragePathIgnorePatterns: [

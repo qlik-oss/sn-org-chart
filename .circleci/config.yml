@@ -60,6 +60,9 @@ jobs:
           name: Update spec
           command: yarn run spec
       - run:
+          name: Verify locale
+          command: yarn run locale:verify
+      - run:
           name: Unit tests
           command: |
             yarn jest --coverage --reporters=default --reporters=jest-junit
@@ -89,14 +92,6 @@ jobs:
             - core
             - src/locale/all.json
 
-  locale:
-    <<: *defaults
-    steps:
-      - attach_workspace:
-          at: ~/org
-      - run:
-          name: Verify locale
-          command: yarn run locale:verify
 
   publish:
     <<: *defaults
@@ -179,9 +174,7 @@ workflows:
             tags:
               only:
                 - /v.*/
-      - locale:
-          requires:
-            - build
+
       - publish:
           requires:
             - build
