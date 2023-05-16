@@ -86,7 +86,7 @@
     "@nebula.js/cli": "4.0.3",
     "@nebula.js/cli-build": "4.0.3",
     "@nebula.js/cli-sense": "4.0.3",
-    "@nebula.js/cli-serve": "3.3.0",
+    "@nebula.js/cli-serve": "4.0.3",
     "@nebula.js/stardust": "4.0.3",
     "@playwright/test": "1.33.0",
     "@qlik/eslint-config": "0.0.16",
