@@ -26,7 +26,7 @@ jobs:
   install:
     <<: *defaults
     docker:
-      - image: cimg/node:18.15.0
+      - image: cimg/node:18.16.0
     steps:
       - checkout
       - restore_cache: *restore_yarn_cache
@@ -42,8 +42,8 @@ jobs:
   build:
     <<: *defaults
     docker:
-      - image: cimg/node:18.15.0-browsers
-      - image: browserless/chrome:1.54.0-puppeteer-1.20.0
+      - image: cimg/node:18.16.0-browsers
+      - image: browserless/chrome:1.58.0-puppeteer-1.20.0
     steps:
       - attach_workspace:
           at: ~/org
@@ -96,7 +96,7 @@ jobs:
   publish:
     <<: *defaults
     docker:
-      - image: cimg/node:18.15.0
+      - image: cimg/node:18.16.0
     steps:
       - attach_workspace:
           at: ~/org
