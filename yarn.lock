@@ -1825,25 +1825,25 @@
     fs-extra "11.1.1"
     inquirer "8.2.5"
 
-"@nebula.js/cli-sense@3.3.0":
-  version "3.3.0"
-  resolved "https://registry.yarnpkg.com/@nebula.js/cli-sense/-/cli-sense-3.3.0.tgz#fdbc6699b10336e199b211e8e07c4c95cdec0741"
-  integrity sha512-HkF6sIp3azQTM7bMjvFXBqyGA2cGaFn+YG7ZZYSk2mV/mU13pNEH12TFyoi5a0HtgeSqVvVQoWDC2EsFS63Dcw==
+"@nebula.js/cli-sense@4.0.3":
+  version "4.0.3"
+  resolved "https://registry.yarnpkg.com/@nebula.js/cli-sense/-/cli-sense-4.0.3.tgz#5f04f7158c96b4ac4b8256248d9fb3c2e6fe67d8"
+  integrity sha512-miiw6Q7G1m7FAoUtAwetkXgNCh6kcpkFMbvxM2uQkjAR60gs+mEZ69mlbfQxmOmLs7aejhycx2HlQSqVb/Ukeg==
   dependencies:
-    "@babel/cli" "7.21.0"
-    "@babel/core" "7.21.0"
-    "@babel/preset-env" "7.20.2"
-    "@nebula.js/stardust" "^3.3.0"
+    "@babel/cli" "7.21.5"
+    "@babel/core" "7.21.8"
+    "@babel/preset-env" "7.21.5"
+    "@nebula.js/stardust" "^4.0.3"
     "@rollup/plugin-babel" "6.0.3"
-    "@rollup/plugin-commonjs" "24.0.1"
-    "@rollup/plugin-node-resolve" "15.0.1"
+    "@rollup/plugin-commonjs" "25.0.0"
+    "@rollup/plugin-node-resolve" "15.0.2"
     "@rollup/plugin-replace" "5.0.2"
-    "@rollup/plugin-terser" "0.4.0"
+    "@rollup/plugin-terser" "0.4.1"
     extend "3.0.2"
-    fs-extra "11.1.0"
+    fs-extra "11.1.1"
     node-event-emitter "0.0.1"
-    rollup "3.17.3"
-    yargs "17.7.1"
+    rollup "3.21.7"
+    yargs "17.7.2"
 
 "@nebula.js/cli-serve@3.3.0":
   version "3.3.0"
@@ -1878,17 +1878,10 @@
     import-cwd "3.0.0"
     yargs "17.7.2"
 
-"@nebula.js/stardust@4.0.3":
+"@nebula.js/stardust@4.0.3", "@nebula.js/stardust@^4.0.3":
   version "4.0.3"
   resolved "https://registry.yarnpkg.com/@nebula.js/stardust/-/stardust-4.0.3.tgz#cc992dc76277cc90bc181d0c26df94e5972ea818"
   integrity sha512-wx9rNYfRyxRY+SmjgKeL213mkItG51nc1zHBDh5iXYFV8p8BFe6Im4YkFihsAUEbulR7gcgcXffLZMbx9A3YFg==
-  dependencies:
-    "@types/qlik-engineapi" "12.67.12"
-
-"@nebula.js/stardust@^3.3.0":
-  version "3.3.0"
-  resolved "https://registry.yarnpkg.com/@nebula.js/stardust/-/stardust-3.3.0.tgz#8705317fa655049432e04c296e98b9dc85c1ca78"
-  integrity sha512-BSKQJLzbT6NZB4ceE9KXWPjScZ73GwRjfpi8W4qcKgFrM6gOV68nXkdnGOrqA/OEzQPE1esXKX9/wqr+7/mOlQ==
   dependencies:
     "@types/qlik-engineapi" "12.67.12"
 
@@ -5419,15 +5412,6 @@ fs-constants@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/fs-constants/-/fs-constants-1.0.0.tgz#6be0de9be998ce16af8afc24497b9ee9b7ccd9ad"
   integrity sha512-y6OAwoSIf7FyjMIv94u+b5rdheZEjzR63GTyZJm5qh4Bi+2YgwLCcI/fPFZkL5PSixOt6ZNKm+w+Hfp/Bciwow==
-
-fs-extra@11.1.0:
-  version "11.1.0"
-  resolved "https://registry.yarnpkg.com/fs-extra/-/fs-extra-11.1.0.tgz#5784b102104433bb0e090f48bfc4a30742c357ed"
-  integrity sha512-0rcTq621PD5jM/e0a3EJoGC/1TC5ZBCERW82LQuwfGnCa1V8w7dpYH1yNu+SLb6E5dkeCBzKEyLGlFrnr+dUyw==
-  dependencies:
-    graceful-fs "^4.2.0"
-    jsonfile "^6.0.1"
-    universalify "^2.0.0"
 
 fs-extra@11.1.1, fs-extra@^11.0.0:
   version "11.1.1"
