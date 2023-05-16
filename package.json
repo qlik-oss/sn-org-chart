@@ -113,7 +113,7 @@
     "@nebula.js/stardust": ">=3.2.2"
   },
   "engines": {
-    "node": ">=16"
+    "node": ">=18"
   },
   "publishConfig": {
     "access": "public"
