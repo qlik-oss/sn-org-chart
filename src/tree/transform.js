@@ -1,4 +1,4 @@
-import { event, select, zoom, zoomIdentity } from "d3";
+import { select, zoom, zoomIdentity } from "d3";
 import constants from "./size-constants";
 import { closeTooltip } from "./tooltip";
 
@@ -100,7 +100,7 @@ export function setZooming({
     element.dispatchEvent(newEvent);
   };
 
-  const zoomed = () => {
+  const zoomed = (event) => {
     select(homeButton).attr("class", "sn-org-homebutton lui-fade-button lui-fade-button--large");
     setTransform({ zoom: event.transform.k / scaleFactor, x: event.transform.x, y: event.transform.y });
     bubbleEvent();
@@ -121,7 +121,7 @@ export function setZooming({
         [width, height],
       ])
       .filter(
-        () =>
+        (event) =>
           !wrapperState.constraints.active &&
           event.type !== "dblclick" &&
           !(event.type === "mousedown" && event.which === 3)
