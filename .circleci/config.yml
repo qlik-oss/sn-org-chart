@@ -92,7 +92,6 @@ jobs:
             - core
             - src/locale/all.json
 
-
   publish:
     <<: *defaults
     docker:
