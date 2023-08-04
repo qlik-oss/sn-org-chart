@@ -31,7 +31,7 @@ export function getPoints(d, topId, { depthSpacing, isVertical, x, y }, navigati
               { x: end.x + halfDepth, y: end.y - halfCard.y },
               { x: end.x + halfDepth, y: end.y },
               { x: end.x, y: end.y },
-            ]
+            ],
       );
     } else if (start.x === x(d.parent) || start.y === y(d.parent)) {
       // straight line
@@ -54,7 +54,7 @@ export function getPoints(d, topId, { depthSpacing, isVertical, x, y }, navigati
               { x: start.x - cardPadding, y: start.y },
               { x: start.x - cardPadding, y: end.y },
               { x: end.x, y: end.y },
-            ]
+            ],
       );
     }
   } else if (d.parent) {
