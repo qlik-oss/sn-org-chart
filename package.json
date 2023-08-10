@@ -89,7 +89,7 @@
     "@nebula.js/cli-serve": "4.3.0",
     "@nebula.js/stardust": "4.3.0",
     "@playwright/test": "1.36.2",
-    "@qlik/eslint-config": "0.4.12",
+    "@qlik/eslint-config": "0.0.16",
     "@qlik/prettier-config": "0.2.4",
     "babel-plugin-dynamic-import-node": "2.3.3",
     "d3": "7.8.5",
