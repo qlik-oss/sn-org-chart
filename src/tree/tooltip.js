@@ -27,7 +27,7 @@ export function getTooltipContent(d, styling) {
     ? `${encodeUtils.encodeTitle(d.data.attributes.extraLabel)}<br />`
     : "";
   const measure = encodeUtils.encodeTitle(
-    d.data.measure ? `${styling.measureLabel ? `${styling.measureLabel}: ` : ""}${d.data.measure}` : "",
+    d.data.measure ? `${styling.measureLabel ? `${styling.measureLabel}: ` : ""}${d.data.measure}` : ""
   );
   return `<div class="sn-org-tooltip-inner"><div class="sn-org-tooltip-header">${label}</div>${subLabel}${extraLabel}${measure}</div>`;
 }
