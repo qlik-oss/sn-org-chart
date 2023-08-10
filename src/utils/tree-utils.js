@@ -90,7 +90,7 @@ export const getDataMatrix = async (layout, model) => {
       fullHeight,
       loadedHeight,
       0,
-      layout.rowLimit / pageSize || 10,
+      layout.rowLimit / pageSize || 10
     );
   } else {
     dataPages.forEach((page, i) => {

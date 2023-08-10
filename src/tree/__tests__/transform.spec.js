@@ -116,7 +116,7 @@ describe("transform", () => {
       expect(svg.classed).toHaveBeenCalledWith("org-disable-transition", true);
       expect(divBox.attr).toHaveBeenCalledWith(
         "style",
-        `width:${width}px;height:${height}px; transform: translate(100px, 200px) scale(2)`,
+        `width:${width}px;height:${height}px; transform: translate(100px, 200px) scale(2)`
       );
       expect(divBox.classed).toHaveBeenCalledWith("org-disable-transition", true);
     });
