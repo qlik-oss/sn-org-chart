@@ -80,7 +80,7 @@
     }
   },
   "devDependencies": {
-    "@babel/preset-env": "7.22.14",
+    "@babel/preset-env": "7.22.15",
     "@commitlint/cli": "17.7.1",
     "@commitlint/config-conventional": "17.7.0",
     "@nebula.js/cli": "4.4.0",
@@ -89,11 +89,11 @@
     "@nebula.js/cli-serve": "4.4.0",
     "@nebula.js/stardust": "4.4.0",
     "@playwright/test": "1.37.1",
-    "@qlik/eslint-config": "0.4.16",
+    "@qlik/eslint-config": "0.4.17",
     "@qlik/prettier-config": "0.3.0",
     "babel-plugin-dynamic-import-node": "2.3.3",
     "d3": "7.8.5",
-    "eslint": "8.48.0",
+    "eslint": "8.49.0",
     "fs-extra": "11.1.1",
     "globby": "13.2.2",
     "husky": "8.0.3",
