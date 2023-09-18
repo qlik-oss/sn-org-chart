@@ -29,7 +29,7 @@
     "build:watch": "yarn run locale:generate && node ./tools/build.js --ext --mode development -w",
     "format": "prettier --write '**'",
     "format:check": "prettier --check '**'",
-    "lint": "eslint src",
+    "lint": "yarn run locale:generate && eslint src",
     "locale:generate": "node src/locale/scripts/generate-all.mjs",
     "locale:verify": "node src/locale/tools/verify-translations.js",
     "prepublishOnly": "NODE_ENV=production yarn run build && yarn spec",
