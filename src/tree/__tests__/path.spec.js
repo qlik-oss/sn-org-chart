@@ -20,7 +20,6 @@ describe("path", () => {
   describe("getPoints", () => {
     // TODO: update tests when all directions work
     const { heightMargin, cardHeight } = constants;
-    let isVertical;
     let nodeSize;
     let parent;
     let d;
@@ -72,19 +71,6 @@ describe("path", () => {
       expect(points).toEqual(expectedPoints);
     });
 
-    it.skip("should return points for horizontal tree", () => {
-      isVertical = false;
-      positioning.depthSpacing = nodeSize.width + 100;
-      expectedPoints = [
-        { x: 400, y: 250 },
-        { x: 250, y: 250 },
-        { x: 250, y: 50 },
-        { x: 100, y: 50 },
-      ];
-      const points = getPoints(d, positioning, isVertical, navigationMode);
-      expect(points).toEqual(expectedPoints);
-    });
-
     it("should return points for vertical tree w only leafs", () => {
       parent.children = [{}];
       expectedPoints = [
@@ -111,46 +97,11 @@ describe("path", () => {
       expect(points).toEqual(expectedPoints);
     });
 
-    it.skip("should return points for horizontal tree w only leafs", () => {
-      isVertical = false;
-      positioning.depthSpacing = nodeSize.width + 100;
-      parent.children = [{}];
-      expectedPoints = [
-        { x: 400, y: 250 },
-        { x: 400, y: 0 },
-        { x: 250, y: 0 },
-        { x: 250, y: 50 },
-        { x: 100, y: 50 },
-      ];
-      const points = getPoints(d, positioning, isVertical, navigationMode);
-      expect(points).toEqual(expectedPoints);
-    });
-
     it("should return points for a straight vertical line", () => {
       d.xActual = 0;
       expectedPoints = [
         { x: 76, y: 120 },
         { x: 76, y: 96 },
-      ];
-      const points = getPoints(d, topId, positioning, navigationMode)[0];
-      expect(points).toEqual(expectedPoints);
-    });
-
-    it.skip("should return points for a straight horizontal line", () => {
-      d.yActual = 0;
-      expectedPoints = [
-        { x: 400, y: 50 },
-        { x: 100, y: 50 },
-      ];
-      const points = getPoints(d, positioning, isVertical, navigationMode);
-      expect(points).toEqual(expectedPoints);
-    });
-
-    it.skip("should return points for line to up button", () => {
-      topId = "1";
-      expectedPoints = [
-        { x: 376, y: 120 },
-        { x: 376, y: 112 },
       ];
       const points = getPoints(d, topId, positioning, navigationMode)[0];
       expect(points).toEqual(expectedPoints);

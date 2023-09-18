@@ -90,7 +90,7 @@ export const getDataMatrix = async (layout, model) => {
       fullHeight,
       loadedHeight,
       0,
-      layout.rowLimit / pageSize || 10
+      layout.rowLimit / pageSize || 10,
     );
   } else {
     dataPages.forEach((page, i) => {
@@ -182,7 +182,10 @@ export function createNodes(matrix, attributeIndecies, status, navigationMode, t
     if (parentNode) {
       parentNode.children.length > 98
         ? (maxNodeWarning = true)
-        : parentNode.children.push({ childNumber: parentNode.children.length, ...node });
+        : parentNode.children.push({
+            childNumber: parentNode.children.length,
+            ...node,
+          });
     } else {
       rootNodes.length > 98 ? (maxNodeWarning = true) : rootNodes.push(node);
     }
@@ -191,7 +194,10 @@ export function createNodes(matrix, attributeIndecies, status, navigationMode, t
   // We might be able to use the rootnodes lenght as well
   if (rootNodes.length === 0) {
     // The only way to have no root noot is to have a single cycle, which means we cannot break it
-    return { error: NO_ROOT, message: translator.get("Object.OrgChart.MissingRoot") };
+    return {
+      error: NO_ROOT,
+      message: translator.get("Object.OrgChart.MissingRoot"),
+    };
   }
   const warn = [];
   if (status === MAX_DATA) {

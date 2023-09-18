@@ -170,7 +170,12 @@ export const createContainer = ({
     !wrapperState.expandedState ||
     !allNodes.descendants().find((node) => node.data.id === wrapperState.expandedState.topId);
   const newExpandedState = resetExpandedState
-    ? { topId: allNodes.data.id, isExpanded: true, expandedChildren: [], useTransitions: false }
+    ? {
+        topId: allNodes.data.id,
+        isExpanded: true,
+        expandedChildren: [],
+        useTransitions: false,
+      }
     : wrapperState.expandedState;
 
   const renderNodes = filterTree(newExpandedState, allNodes, false, navigationMode);
@@ -186,7 +191,16 @@ export const createContainer = ({
   setInitialZoom(initialZoomState);
   positioning = position("ttb", element, initialZoomState, navigationMode);
   setZooming({
-    containerData: { svg, divBox, width, height, zoomWrapper, element, tooltip, homeButton },
+    containerData: {
+      svg,
+      divBox,
+      width,
+      height,
+      zoomWrapper,
+      element,
+      tooltip,
+      homeButton,
+    },
     setTransform,
     transformState: (viewState && viewState.transform) || {},
     wrapperState,

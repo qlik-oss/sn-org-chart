@@ -41,7 +41,9 @@ describe("tree-utils", () => {
   });
 
   describe("fetchPage", () => {
-    const model = { getHyperCubeData: async () => [{ qMatrix: [{}], qArea: { qHeight: 1 } }] };
+    const model = {
+      getHyperCubeData: async () => [{ qMatrix: [{}], qArea: { qHeight: 1 } }],
+    };
     it("should return empty string when fetch correctly", async () => {
       const result = await fetchPage([], [], model, 1, 1, 1, 10);
       expect(result).toEqual("");
@@ -54,9 +56,16 @@ describe("tree-utils", () => {
 
   describe("getDataMatrix", () => {
     let layout;
-    const model = { getHyperCubeData: async () => [{ qMatrix: [{}], qArea: { qHeight: 1 } }] };
+    const model = {
+      getHyperCubeData: async () => [{ qMatrix: [{}], qArea: { qHeight: 1 } }],
+    };
     beforeEach(() => {
-      layout = { qHyperCube: { qDataPages: [{ qArea: { qHeight: 1 }, qMatrix: [{}] }], qSize: { qcy: 1 } } };
+      layout = {
+        qHyperCube: {
+          qDataPages: [{ qArea: { qHeight: 1 }, qMatrix: [{}] }],
+          qSize: { qcy: 1 },
+        },
+      };
     });
     it("should return snapshotData", async () => {
       const dataMatrix = { dataMatrix: "SomeFakeSnapshotData" };
@@ -89,7 +98,10 @@ describe("tree-utils", () => {
     });
 
     it("should handle multiple datapages", async () => {
-      layout.qHyperCube.qDataPages.push({ qArea: { qHeight: 1 }, qMatrix: [{}] });
+      layout.qHyperCube.qDataPages.push({
+        qArea: { qHeight: 1 },
+        qMatrix: [{}],
+      });
       const result = await getDataMatrix(layout, model);
       expect(result.status).toEqual("");
       expect(result.dataMatrix.length).toEqual(2);
@@ -249,7 +261,12 @@ describe("tree-utils", () => {
       layout = {
         qHyperCube: {
           qDimensionInfo: [{}, {}],
-          qDataPages: [{ qArea: { qHeight: 1 }, qMatrix: [[{ qText: "node" }, { qText: "parent" }]] }],
+          qDataPages: [
+            {
+              qArea: { qHeight: 1 },
+              qMatrix: [[{ qText: "node" }, { qText: "parent" }]],
+            },
+          ],
           qSize: { qcy: 1 },
         },
       };

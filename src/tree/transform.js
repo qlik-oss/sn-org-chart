@@ -74,7 +74,7 @@ export const applyTransform = (eventTransform, svg, divBox, width, height) => {
 
   divBox.attr(
     "style",
-    `width:${width}px;height:${height}px; transform: translate(${translation}) scale(${scaleFactor})`
+    `width:${width}px;height:${height}px; transform: translate(${translation}) scale(${scaleFactor})`,
   );
 };
 
@@ -102,7 +102,11 @@ export function setZooming({
 
   const zoomed = (event) => {
     select(homeButton).attr("class", "sn-org-homebutton lui-fade-button lui-fade-button--large");
-    setTransform({ zoom: event.transform.k / scaleFactor, x: event.transform.x, y: event.transform.y });
+    setTransform({
+      zoom: event.transform.k / scaleFactor,
+      x: event.transform.x,
+      y: event.transform.y,
+    });
     bubbleEvent();
     closeTooltip(tooltip);
     applyTransform(
@@ -110,7 +114,7 @@ export function setZooming({
       svg,
       divBox,
       width,
-      height
+      height,
     );
   };
 
@@ -124,11 +128,11 @@ export function setZooming({
         (event) =>
           !wrapperState.constraints.active &&
           event.type !== "dblclick" &&
-          !(event.type === "mousedown" && event.which === 3)
+          !(event.type === "mousedown" && event.which === 3),
       )
       .scaleExtent([navigationMode === "expandAll" ? 0.8 : minZoom * scaleFactor, maxZoom * scaleFactor])
       .on("start", bubbleEvent)
-      .on("zoom", zoomed)
+      .on("zoom", zoomed),
   );
 
   setTransform({ zoom: 1 / scaleFactor, x, y });
@@ -158,6 +162,6 @@ export default function transform(nodes, width, height, svg, divBox, useTransiti
   divBox.attr(
     "style",
     `width:${width}px;height:${height}px;
-      transform: scale(${1 / scaleFactor}) translate(${divTranslation});`
+      transform: scale(${1 / scaleFactor}) translate(${divTranslation});`,
   );
 }
