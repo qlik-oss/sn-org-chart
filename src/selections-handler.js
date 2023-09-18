@@ -69,7 +69,7 @@ export default function selectionHandler(translator) {
       hidden: !isInSelections,
       label: translator.get("Object.OrgChart.SingleSelect"),
     }),
-    [singleSelect, isInSelections]
+    [singleSelect, isInSelections],
   );
 
   useEffect(() => {

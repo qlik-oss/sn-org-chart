@@ -89,7 +89,11 @@ describe("transform", () => {
       bBox.height = 99999936;
       navigationMode = "expandAll";
       const result = getInitialZoomState(bBox, element, navigationMode);
-      expect(result).toEqual({ initialX: 49999500, initialY: 32, initialZoom: 100000 });
+      expect(result).toEqual({
+        initialX: 49999500,
+        initialY: 32,
+        initialZoom: 100000,
+      });
     });
   });
 
@@ -116,7 +120,7 @@ describe("transform", () => {
       expect(svg.classed).toHaveBeenCalledWith("org-disable-transition", true);
       expect(divBox.attr).toHaveBeenCalledWith(
         "style",
-        `width:${width}px;height:${height}px; transform: translate(100px, 200px) scale(2)`
+        `width:${width}px;height:${height}px; transform: translate(100px, 200px) scale(2)`,
       );
       expect(divBox.classed).toHaveBeenCalledWith("org-disable-transition", true);
     });
@@ -165,7 +169,9 @@ describe("transform", () => {
     });
 
     it("should return snapshotZoom object from transform when viewstate not present", () => {
-      const snapshotZoom = { ...getSnapshotZoom(rect, undefined, initialTransform) };
+      const snapshotZoom = {
+        ...getSnapshotZoom(rect, undefined, initialTransform),
+      };
       expect(snapshotZoom).toEqual({ k: 2, x: 100, y: 200 });
     });
   });

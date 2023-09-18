@@ -10,7 +10,11 @@ describe("styling", () => {
   describe("getColor", () => {
     let reference;
     beforeEach(() => {
-      reference = { colorType: "auto", colorExpression: "pink", color: { index: 1 } };
+      reference = {
+        colorType: "auto",
+        colorExpression: "pink",
+        color: { index: 1 },
+      };
     });
     it("should return default color", () => {
       const result = getColor(reference, Theme, defaultColor);
