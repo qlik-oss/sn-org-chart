@@ -1,7 +1,7 @@
 # sn-org-chart
 
-[![CircleCI](https://circleci.com/gh/qlik-oss/sn-org-chart.svg?style=svg)](https://circleci.com/gh/qlik-oss/sn-org-chart)
-[![Coverage Status](https://coveralls.io/repos/github/qlik-oss/sn-org-chart/badge.svg)](https://coveralls.io/github/qlik-oss/sn-org-chart)
+[![Maintainability](https://api.codeclimate.com/v1/badges/f9da7b608828c8a9478d/maintainability)](https://codeclimate.com/github/qlik-oss/sn-org-chart/maintainability)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/f9da7b608828c8a9478d/test_coverage)](https://codeclimate.com/github/qlik-oss/sn-org-chart/test_coverage)
 
 Organizational chart for use with Qlik's Analytics Platform.
 
