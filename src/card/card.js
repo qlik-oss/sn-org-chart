@@ -41,7 +41,8 @@ export default (data, cardStyling, selectionObj) => {
   } else if (attributes.extraLabel) {
     html += `<div class="sn-org-card-label">${encodeUtils.encodeTitle(attributes.extraLabel)}</div>`;
   }
-  const selectedClass = api && api.isActive() ? (isSelected ? " selected" : " not-selected") : "";
+  const isSelectedClass = isSelected ? " selected" : " not-selected";
+  const selectedClass = api && api.isActive() ? isSelectedClass : "";
 
   const {
     top = DEFAULTS.BORDER_TOP,

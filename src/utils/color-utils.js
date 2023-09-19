@@ -1,3 +1,4 @@
+/* eslint-disable no-bitwise */
 /* eslint-disable no-cond-assign */
 import CSSColors from "./css-colors";
 

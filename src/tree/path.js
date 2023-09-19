@@ -31,7 +31,7 @@ export function getPoints(d, topId, { depthSpacing, isVertical, x, y }, navigati
               { x: end.x + halfDepth, y: end.y - halfCard.y },
               { x: end.x + halfDepth, y: end.y },
               { x: end.x, y: end.y },
-            ]
+            ],
       );
     } else if (start.x === x(d.parent) || start.y === y(d.parent)) {
       // straight line
@@ -54,7 +54,7 @@ export function getPoints(d, topId, { depthSpacing, isVertical, x, y }, navigati
               { x: start.x - cardPadding, y: start.y },
               { x: start.x - cardPadding, y: end.y },
               { x: end.x, y: end.y },
-            ]
+            ],
       );
     }
   } else if (d.parent) {
@@ -82,7 +82,10 @@ export function getPath(points) {
   let pathString = `M ${points[0].x} ${points[0].y} `;
   let dir;
   const setDir = (i) => {
-    const delta = { x: points[i].x - points[i - 1].x, y: points[i].y - points[i - 1].y };
+    const delta = {
+      x: points[i].x - points[i - 1].x,
+      y: points[i].y - points[i - 1].y,
+    };
     dir = {
       x: (delta.x > 0) - (delta.x < 0) || +delta.x,
       y: (delta.y > 0) - (delta.y < 0) || +delta.y,

@@ -133,10 +133,10 @@ export default function box({
         (d) =>
           `width:${buttonWidth}px;height:${buttonHeight}px;top:${y(d) + cardHeight + cardPadding}px;left:${
             x(d) + (cardWidth - buttonWidth) / 2
-          }px;`
+          }px;`,
       )
       .attr("id", (d) => `${d.data.id}-expand`)
-      .on("mouseenter", () => {
+      .on("mouseenter", (event) => {
         if (!wrapperState.constraints.active) event.target.style.cursor = "pointer";
       })
       .on("click", (event, d) => {
