@@ -32,14 +32,11 @@
     "lint": "yarn run locale:generate && eslint src",
     "locale:generate": "node src/locale/scripts/generate-all.mjs",
     "locale:verify": "node src/locale/tools/verify-translations.js",
-    "prepublishOnly": "NODE_ENV=production yarn run build && yarn spec",
     "sense": "nebula sense --ext ./src/extension/ext-raw.js --meta ./src/extension/meta.json",
     "spec": "sy from-jsdoc -c ./spec-configs/props.conf.js",
     "start": "nebula serve --type sn-org-chart",
     "test:e2e": "playwright test",
-    "test:unit": "jest",
-    "preversion": "yarn build",
-    "version": "yarn spec && git add api-specifications"
+    "test:unit": "jest"
   },
   "husky": {
     "hooks": {
