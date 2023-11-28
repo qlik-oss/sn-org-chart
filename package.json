@@ -100,5 +100,10 @@
   "publishConfig": {
     "access": "public"
   },
+  "qext": {
+    "name": "Org chart",
+    "icon": "extension",
+    "preview": "assets/preview.png"
+  },
   "systemjs": "dist/sn-org-chart.systemjs.js"
 }
