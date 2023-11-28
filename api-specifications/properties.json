@@ -3,7 +3,7 @@
   "info": {
     "name": "@nebula.js/sn-org-chart:properties",
     "description": "Org chart generic object definition",
-    "version": "1.1.1",
+    "version": "1.1.0",
     "license": "MIT",
     "stability": "experimental",
     "x-qlik-visibility": "public"
