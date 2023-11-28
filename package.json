@@ -23,6 +23,11 @@
     "core",
     "sn-org-chart-ext"
   ],
+  "qext": {
+    "name": "Org chart",
+    "icon": "extension",
+    "preview": "assets/preview.png"
+  },
   "scripts": {
     "build": "yarn run locale:generate && node ./tools/build.js --core --ext",
     "build:dev": "yarn run locale:generate && node ./tools/build.js --core --ext --mode development",
