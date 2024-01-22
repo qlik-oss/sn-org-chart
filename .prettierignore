@@ -10,7 +10,7 @@ core
 dist/
 node_modules
 properties.json
-yarn.lock
+pnpm-lock.yaml
 *.html
 *.png
 *.sh

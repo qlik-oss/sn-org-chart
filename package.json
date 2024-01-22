@@ -24,12 +24,12 @@
     "sn-org-chart-ext"
   ],
   "scripts": {
-    "build": "yarn run locale:generate && node ./tools/build.js --core --ext",
-    "build:dev": "yarn run locale:generate && node ./tools/build.js --core --ext --mode development",
-    "build:watch": "yarn run locale:generate && node ./tools/build.js --ext --mode development -w",
+    "build": "pnpm locale:generate && node ./tools/build.js --core --ext",
+    "build:dev": "pnpm locale:generate && node ./tools/build.js --core --ext --mode development",
+    "build:watch": "pnpm locale:generate && node ./tools/build.js --ext --mode development -w",
     "format": "prettier --write '**'",
     "format:check": "prettier --check '**'",
-    "lint": "yarn run locale:generate && eslint src",
+    "lint": "pnpm locale:generate && eslint src",
     "locale:generate": "node src/locale/scripts/generate-all.mjs",
     "locale:verify": "node src/locale/tools/verify-translations.js",
     "sense": "nebula sense --ext ./src/extension/ext-raw.js --meta ./src/extension/meta.json",
