@@ -2,6 +2,35 @@ function labelStylingDefinition(path, fontResolver, theme) {
   const pathFontFamily = `${path}.fontFamily`;
   const pathFontSize = `${path}.fontSize`;
 
+return {
+  fontWrapperItem: {
+    component: 'inline-wrapper',
+    items: {
+      fontFamilyItem: {
+        component: 'dropdown',
+        ref: pathFontFamily,
+        options: () => {
+          return fontResolver.getOptions(pathFontFamily);
+        },
+        defaultValue: () => {
+          return fontResolver.getDefaultValue(pathFontFamily);
+        },
+      },
+      fontSizeItem: {
+        component: 'dropdown',
+        ref: pathFontSize,
+        options: () => {
+          return fontResolver.getOptions(pathFontSize);
+        },
+        defaultValue: () => {
+          return fontResolver.getDefaultValue(pathFontSize);
+        },
+      },
+    },
+  },
+};
+
+  /*
   return {
     fontFamilyItem: {
       component: 'dropdown',
@@ -37,6 +66,8 @@ function labelStylingDefinition(path, fontResolver, theme) {
       },
     },
   };
+}
+*/
 }
 
 export default labelStylingDefinition;
