@@ -159,13 +159,15 @@ function createStylingDefinition(theme, flags, translator, propertyResolver, DEF
       },
       border: {
         component: 'panel-section',
-        type: 'items',
+        translation: 'Object.OrgChart.CardAppearance',
         items: {
+          /*
           appearanceHeader: {
             component: 'text',
             translation: 'Object.OrgChart.CardAppearance',
             style: 'pp-nm-hcd__list-header',
           },
+          */
           topBar: {
             //type: 'boolean',
             component: 'checkbox',
@@ -180,25 +182,32 @@ function createStylingDefinition(theme, flags, translator, propertyResolver, DEF
             translation: 'properties.border',
             defaultValue: DEFAULTS.BORDER_FULL,
           },
-          colorType: {
-            component: 'dropdown',
-            type: 'string',
-            ref: 'style.border.colorType',
-            translation: 'properties.border.color',
-            defaultValue: DEFAULTS.BORDER_COLOR_TYPE,
-            options: colorOptions,
-            show: (data) => bordersActive(data),
-          },
-          colorPicker: {
-            component: 'color-picker',
-            type: 'object',
-            ref: 'style.border.color',
-            translation: 'properties.color',
-            dualOutput: true,
-            defaultValue: DEFAULTS.BORDER_COLOR,
-            show: (data) =>
-              bordersActive(data) &&
-              propertyResolver.getValue(data, 'style.border.colorType') === 'colorPicker',
+          fontColorWrapperItem: {
+            component: 'inline-wrapper',
+            items: {
+              colorType: {
+                component: 'dropdown',
+                type: 'string',
+                ref: 'style.border.colorType',
+                width: 9,
+                translation: 'properties.border.color',
+                defaultValue: DEFAULTS.BORDER_COLOR_TYPE,
+                options: colorOptions,
+                show: (data) => bordersActive(data),
+              },
+              colorPicker: {
+                component: 'color-picker',
+                type: 'object',
+                ref: 'style.border.color',
+                width: 3,
+                translation: 'properties.color',
+                dualOutput: true,
+                defaultValue: DEFAULTS.BORDER_COLOR,
+                show: (data) =>
+                  bordersActive(data) &&
+                  propertyResolver.getValue(data, 'style.border.colorType') === 'colorPicker',
+              },
+            },
           },
           colorExpression: {
             component: 'input-field-expression',
