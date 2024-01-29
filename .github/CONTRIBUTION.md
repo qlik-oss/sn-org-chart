@@ -1,26 +1,26 @@
-1. Install with `yarn`
-1. Transpile code: `yarn build` (or `yarn build:watch`)
-1. Run it using nebula with `yarn start`
+1. Install with `pnpm install`
+1. Transpile code: `pnpm build` (or `pnpm build:watch`)
+1. Run it using nebula with `pnpm start`
 
 ## Testing
 
 Run unit tests with:
 
-`yarn test:unit`
+`pnpm test:unit`
 
 Run integration tests with:
 
-`yarn test:integration`
+`pnpm test:integration`
 
 Run rendering tests with:
 
-`yarn test:rendering`
+`pnpm test:rendering`
 
 ## Linting
 
 Run lint with:
 
-`yarn lint`
+`pnpm lint`
 
 ## Releasing
 
@@ -35,7 +35,7 @@ Currently only admins are able to create a release. A release consists of the fo
 ### Step-By-Step
 
 1. Check out master and run `git pull`.
-1. Run `yarn` to make sure depenencies are up-to-date.
+1. Run `pnpm install` to make sure depenencies are up-to-date.
 1. Run `npm version [major | minor | patch] -m "chore(release): v%s"`. Use semver string based on conventional commits since last release. Ex: `npm version patch -m "chore(release): v%s"`.
 1. Run `git push && git push --tags` to push commit and tag.
 1. Make sure all checks pass, then Circle CI automatically publishes to NPM.
