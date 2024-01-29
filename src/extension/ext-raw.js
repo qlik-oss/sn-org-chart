@@ -126,7 +126,7 @@ const getSettings = (translator, flags, anything) => {
         type: "items",
         items: {
           ...(flags?.isEnabled('SENSECLIENT_IM_5036_VIZBUNDLE_STYLING') && {
-            orgChartStyling: createStylingDefinition(theme, flags, translator, propertyResolver, DEFAULTS, data),
+            orgChartStyling: createStylingDefinition(theme, flags, translator),
           }),
           navigation: {
             type: "items",

@@ -1,5 +1,7 @@
 import { fontResolver as createFontResolver } from 'qlik-chart-modules';
 import labelStylingDefinition from './styling-utils';
+import DEFAULTS from "../../style-defaults";
+import propertyResolver from "../../utils/property-resolver";
 
 
 const colorOptions = [
@@ -9,14 +11,14 @@ const colorOptions = [
 ];
 
 
-function createStylingDefinition(theme, flags, translator, propertyResolver, DEFAULTS, data) {
+function createStylingDefinition(theme, flags, translator) {
   const fontResolver = createFontResolver({
     theme,
     translator,
     flags,
     config: {
       id: 'orgChart',
-      paths: ['axis.title', 'axis.label.name', 'label.value', 'legend.title', 'legend.label'],
+      paths: ['axis.label.name', 'label.value'],
     },
   });
 
