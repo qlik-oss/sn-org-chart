@@ -89,7 +89,8 @@
     "prettier": "3.1.1",
     "shx": "0.3.4",
     "typescript": "5.3.3",
-    "yargs": "17.7.2"
+    "yargs": "17.7.2",
+    "qlik-chart-modules": "0.59.0"
   },
   "peerDependencies": {
     "@nebula.js/stardust": ">=4.9.0"
@@ -105,5 +106,8 @@
     "icon": "extension",
     "preview": "assets/preview.png"
   },
-  "systemjs": "dist/sn-org-chart.systemjs.js"
+  "systemjs": "dist/sn-org-chart.systemjs.js",
+  "dependencies": {
+    "@nebula.js/sn-org-chart": "^1.1.1"
+  }
 }
