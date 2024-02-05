@@ -28,8 +28,12 @@ import { applyTransform, getSnapshotZoom } from "./tree/transform";
 import stylingUtils from "./utils/styling";
 import treeTransform from "./utils/tree-utils";
 import viewStateUtil from "./utils/viewstate-utils";
+import createStyleModel from './models/style-model';
+import { themeService as createThemeService } from 'qlik-chart-modules';
+
 
 export default function supernova(env) {
+  const { flags, theme } = env;
   return {
     qae: {
       properties,
@@ -77,17 +81,43 @@ export default function supernova(env) {
         setExpandedState(newExpandedState);
       };
 
+      /*
+      const themeService = createThemeService({
+        Theme,
+        config: {
+          id: 'orgChart',
+          transform: [['label.value.fontSize', (v) => parseInt(v, 10)]],
+        },
+      });
+
+      const styleModel= createStyleModel({ layout, themeService });
+      */
+      
       // Get and transform the data into a tree structure, get styling, reset active selections
       const [dataTree] = usePromise(() => {
+
         if (!layout) {
           return Promise.resolve();
         }
+        const themeService = createThemeService({
+          theme,
+          config: {
+            id: 'orgChart',
+          },
+        });
+
+        console.log('Theme is', Theme);
+        console.log('Style from Theme is', Theme.getStyle('object.orgChart', 'axis.label.name', 'fontFamily'));
+        console.log('ThemeService is', themeService.getStyles());
+        
+        const styleModel= createStyleModel({ layout, themeService });
+
         const viewState = viewStateUtil.getViewState(options, layout);
         viewState && viewState.expandedState && setExpandedState(viewState.expandedState);
         viewState && viewState.transform && setTransform(viewState.transform);
 
         return treeTransform({ layout, model, translator }).then((transformed) => {
-          setStyling(stylingUtils.cardStyling({ Theme, layout }));
+          setStyling(stylingUtils.cardStyling({ Theme, layout , flags, styleModel }));
           selectionObj.setState([]);
           // Resolving the promise to indicate readiness for printing
           return transformed;
@@ -131,6 +161,10 @@ export default function supernova(env) {
       useEffect(() => {
         rePaint();
       }, [containerData, selectionObj.state]);
+
+
+
+
 
       useEffect(() => {
         fullReload();

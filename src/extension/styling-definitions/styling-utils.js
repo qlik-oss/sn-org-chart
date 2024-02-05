@@ -3,29 +3,24 @@ function labelStylingDefinition(path, fontResolver, theme) {
   const pathFontSize = `${path}.fontSize`;
 
 return {
-  fontWrapperItem: {
-    component: 'inline-wrapper',
-    items: {
-      fontFamilyItem: {
-        component: 'dropdown',
-        ref: pathFontFamily,
-        options: () => {
-          return fontResolver.getOptions(pathFontFamily);
-        },
-        defaultValue: () => {
-          return fontResolver.getDefaultValue(pathFontFamily);
-        },
-      },
-      fontSizeItem: {
-        component: 'dropdown',
-        ref: pathFontSize,
-        options: () => {
-          return fontResolver.getOptions(pathFontSize);
-        },
-        defaultValue: () => {
-          return fontResolver.getDefaultValue(pathFontSize);
-        },
-      },
+  fontFamilyItem: {
+    component: 'dropdown',
+    ref: pathFontFamily,
+    options: () => {
+      return fontResolver.getOptions(pathFontFamily);
+    },
+    defaultValue: () => {
+      return fontResolver.getDefaultValue(pathFontFamily);
+    },
+  },
+  fontSizeItem: {
+    component: 'dropdown',
+    ref: pathFontSize,
+    options: () => {
+      return fontResolver.getOptions(pathFontSize);
+    },
+    defaultValue: () => {
+      return fontResolver.getDefaultValue(pathFontSize);
     },
   },
 };

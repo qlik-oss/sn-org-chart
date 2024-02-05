@@ -77,7 +77,7 @@ function createStylingDefinition(theme, flags, translator) {
                 component: 'inline-wrapper',
                 items: {
                   useColorExpression: {
-                    ref: 'label.value.fontColor.colorType',
+                    ref: 'label.value.colorType',
                     width: 9,
                     //type: 'string',
                     //translation: 'Object.OrgChart.FontColor',
@@ -89,23 +89,28 @@ function createStylingDefinition(theme, flags, translator) {
                   colorPicker: {
                     component: 'color-picker',
                     //type: 'object',
-                    ref: 'label.value.fontColor.color',
+                    ref: 'label.value.color',
                     width: 3,
                     //translation: 'properties.color',
                     dualOutput: true,
-                    defaultValue: DEFAULTS.FONT_COLOR_DARK,
-                    show: (data) => (propertyResolver.getValue(data, 'label.value.fontColor.colorType') ?? DEFAULTS.FONT_COLOR_TYPE) === 'colorPicker',
+                    defaultValue: () => {
+                      return {
+                        index: -1, 
+                        color: theme.getStyle('object.orgChart', 'label.value', 'color') ?? DEFAULTS.FONT_COLOR_DARK,
+                      };
+                    },  
+                    show: (data) => (propertyResolver.getValue(data, 'label.value.colorType') ?? DEFAULTS.FONT_COLOR_TYPE) === 'colorPicker',
                   },
                 },
               },
               colorExpression: {
                 component: 'input-field-expression',
                 type: 'string',
-                ref: 'label.value.fontColor.colorExpression',
+                ref: 'label.value.colorExpression',
                 //translation: 'Common.Expression',
                 expression: 'optional',
                 defaultValue: '',
-                show: (data) => (propertyResolver.getValue(data, 'label.value.fontColor.colorType') ?? DEFAULTS.FONT_COLOR_TYPE) === 'byExpression',
+                show: (data) => (propertyResolver.getValue(data, 'label.value.colorType') ?? DEFAULTS.FONT_COLOR_TYPE) === 'byExpression',
               },
             },
           },
@@ -141,8 +146,11 @@ function createStylingDefinition(theme, flags, translator) {
                     //translation: 'properties.color',
                     dualOutput: true,
                     defaultValue: DEFAULTS.BACKGROUND_COLOR,
-                    show: (data) =>
-                      (propertyResolver.getValue(data, 'card.backgroundColor.colorType') ?? DEFAULTS.BACKGROUND_COLOR_TYPE) === 'colorPicker',
+                    show: (data) => {
+                      //console.log('data is ', data);
+                      //console.log('colorPicker is ', propertyResolver.getValue(data, 'card.backgroundColor.colorType') ?? DEFAULTS.BACKGROUND_COLOR_TYPE);
+                      return (propertyResolver.getValue(data, 'card.backgroundColor.colorType') ?? DEFAULTS.BACKGROUND_COLOR_TYPE) === 'colorPicker';
+                    },  
                   },
                 },
               },
@@ -206,7 +214,7 @@ function createStylingDefinition(theme, flags, translator) {
                   colorPicker: {
                     component: 'color-picker',
                     type: 'object',
-                    ref: 'style.border.color',
+                    ref: 'card.border.color',
                     width: 3,
                     translation: 'properties.color',
                     dualOutput: true,
@@ -220,13 +228,13 @@ function createStylingDefinition(theme, flags, translator) {
               colorExpression: {
                 component: 'input-field-expression',
                 type: 'string',
-                ref: 'style.border.colorExpression',
+                ref: 'card.border.colorExpression',
                 translation: 'Common.Expression',
                 expression: 'optional',
                 defaultValue: '',
                 show: (data) =>
                   bordersActive(data) &&
-                  (propertyResolver.getValue(data, 'style.border.colorType') ?? DEFAULTS.BORDER_COLOR_TYPE) === 'byExpression',
+                  (propertyResolver.getValue(data, 'card.border.colorType') ?? DEFAULTS.BORDER_COLOR_TYPE) === 'byExpression',
              },
             },
           },
