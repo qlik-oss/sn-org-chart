@@ -99,16 +99,13 @@ export default function supernova(env) {
         if (!layout) {
           return Promise.resolve();
         }
+
         const themeService = createThemeService({
-          theme,
+          theme: Theme,
           config: {
             id: 'orgChart',
           },
         });
-
-        console.log('Theme is', Theme);
-        console.log('Style from Theme is', Theme.getStyle('object.orgChart', 'axis.label.name', 'fontFamily'));
-        console.log('ThemeService is', themeService.getStyles());
         
         const styleModel= createStyleModel({ layout, themeService });
 

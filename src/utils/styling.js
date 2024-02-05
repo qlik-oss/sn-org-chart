@@ -58,13 +58,7 @@ const stylingUtils = {
     const cardBackgrounStyle = styleModel.card.backgroundColor.getStyle();
     const cardBorderStyle = styleModel.card.border.getStyle();
 
-    //const refBackgroundColor = findComponent('card', layout)?.card?.backgroundColor ?? layout.style.backgroundColor;
-    //const colorType = refBackgroundColor.colorType ?? DEFAULTS.BACKGROUND_COLOR_TYPE;
-
-
     console.log('************ in stylingUtils *****************');
-
-    console.log ('Theme name is', Theme.name());
 
     console.log ('axisLabelStyle font size', axisLabelStyle.fontSize);
     console.log ('axisLabelStyle font family', axisLabelStyle.fontFamily);
@@ -80,12 +74,14 @@ const stylingUtils = {
     console.log ('cardBackgrounStyle color expression', cardBackgrounStyle.colorExpression);
 
     console.log ('cardBorderStyle top', cardBorderStyle.top);
-    console.log ('cardBorderStyle full border', cardBorderStyle.borderFull);
+    console.log ('cardBorderStyle full border', cardBorderStyle.fullBorder);
     console.log ('cardBorderStyle color type', cardBorderStyle.colorType);
     console.log ('cardBorderStyle color', cardBorderStyle.color);
     console.log ('cardBorderStyle color expression', cardBorderStyle.colorExpression);
  
     console.log('layout is', layout);
+  
+
     //const backgroundColor = getColorNew(refBackgroundColor, Theme, DEFAULTS.BACKGROUND_COLOR.color, colorType);
     //const backgroundColor = getColorBackground(refBackgroundColor, Theme, DEFAULTS.BACKGROUND_COLOR.color);
 

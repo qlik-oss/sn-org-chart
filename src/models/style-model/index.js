@@ -39,7 +39,7 @@ export default function createStyleModel({ layout, themeService }) {
       border: {
         getStyle: () => ({
           top: findComponent('card')?.card?.border?.top ?? layout.style.border.top ?? DEFAULTS.BORDER_TOP,
-          fullBoder: findComponent('card')?.card?.border?.fullBorder ?? layout.style.border.fullBorder ?? DEFAULTS.BORDER_FULL,
+          fullBorder: findComponent('card')?.card?.border?.fullBorder ?? layout.style.border.fullBorder ?? DEFAULTS.BORDER_FULL,
           colorType: findComponent('card')?.card?.border?.colorType ?? layout.style.border.colorType ?? DEFAULTS.BORDER_COLOR_TYPE,
           color: findComponent('card')?.card?.border?.color?.color ?? layout.style.border.color.color ?? DEFAULTS.BORDER_COLOR.color,
           colorExpression: findComponent('card')?.card?.border?.colorExpression ?? layout.style.border.colorExpression ?? '',
