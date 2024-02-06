@@ -57,7 +57,8 @@
     ],
     "rules": {
       "no-param-reassign": 0,
-      "no-unused-expressions": 0
+      "no-unused-expressions": 0,
+      "jest/unbound-method": 0
     }
   },
   "devDependencies": {
