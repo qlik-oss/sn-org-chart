@@ -23,7 +23,7 @@ export default function createStyleModel({ layout, themeService }) {
           fontSize: findComponent('label')?.label?.value?.fontSize ?? styles.label.value.fontSize,
           fontFamily: findComponent('label')?.label?.value?.fontFamily ?? styles.label.value.fontFamily,
           colorType: findComponent('label')?.label?.value?.colorType ?? layout.style.fontColor.colorType ?? DEFAULTS.FONT_COLOR_TYPE,
-          color: findComponent('label')?.label?.value?.color?.color ?? layout.style.fontColor.color.color ?? DEFAULTS.FONT_COLOR_DARK.color,
+          color: findComponent('label')?.label?.value?.color?.color ?? layout.style.fontColor.color.color ?? styles.label.value.color ?? DEFAULTS.FONT_COLOR_DARK.color,
           colorExpression: findComponent('label')?.label?.value?.colorExpression ?? layout.style.fontColor.colorExpression ?? '',
         }),
       },

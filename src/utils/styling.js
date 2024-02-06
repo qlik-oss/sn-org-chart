@@ -16,21 +16,6 @@ export function getColor(reference, Theme, defaultColor) {
   return color === "none" ? defaultColor : color;
 }
 
-export function getColorNew(reference, Theme, defaultColor, colorType) {
-  let color;
-  switch (colorType) {
-    case "byExpression":
-      color = colorUtils.resolveExpression(reference.colorExpression);
-      break;
-    case "colorPicker":
-      color = Theme.getColorPickerColor(reference.color);
-      break;
-    default:
-      color = defaultColor;
-  }
-  return color === "none" ? defaultColor : color;
-}
-
 
 export function getColorBackground(reference, Theme, defaultColor) {
   let color;
@@ -51,8 +36,25 @@ const findComponent = (key, layout) => {
   return layout.components?.find((o) => o.key === key) ?? undefined;
 };
 
+
+export function getColorStyling(refStyling, defaultColor) {
+  let color;
+  switch (refStyling.colorType) {
+    case "byExpression":
+      colorUtils.resolveExpression(refStyling.colorExpression);
+      break;
+    case "colorPicker":
+      color = refStyling.color;
+      break;
+    default:
+      color = defaultColor;
+  }
+  return color === "none" ? defaultColor : color;
+}
+
 const stylingUtils = {
   cardStyling: ({ Theme, layout, flags, styleModel }) => {
+
     const axisLabelStyle = styleModel.axis.label.getStyle();
     const labelValueStyle = styleModel.label.value.getStyle();
     const cardBackgrounStyle = styleModel.card.backgroundColor.getStyle();
@@ -80,13 +82,43 @@ const stylingUtils = {
     console.log ('cardBorderStyle color expression', cardBorderStyle.colorExpression);
  
     console.log('layout is', layout);
-  
 
-    //const backgroundColor = getColorNew(refBackgroundColor, Theme, DEFAULTS.BACKGROUND_COLOR.color, colorType);
-    //const backgroundColor = getColorBackground(refBackgroundColor, Theme, DEFAULTS.BACKGROUND_COLOR.color);
+    /*
+    return {
+      axisLabel: axisLabelStyle,
+      labelValue: {
+        fontFamily: axisLabelStyle.fontFamily,
+        fontSize: labelValueStyle.fontSize,
+        color: getColorStyling(labelValueStyle, 'default'),
+      },
+      cardBackgroundColor: getColorStyling(),
+      cardBorderColor: 
+    };
+
+
+    axisLabel
+      fontSize
+      fontFamily
+
+    labelValue
+      fontSize
+      fontFamily
+
+    cardBackground
+      color
+
+    cardBorder
+      top
+      fullBorder
+      color
+*/
+
 
     const backgroundColor = getColor(layout.style.backgroundColor, Theme, DEFAULTS.BACKGROUND_COLOR.color);
     const fontColor = getColor(layout.style.fontColor, Theme, "default");
+    //const fontColor = getColorStyling(labelValueStyle, "default");
+    console.log('new fontColor is', fontColor);
+
     const measureLabel = layout.qHyperCube.qMeasureInfo.length
       ? layout.qHyperCube.qMeasureInfo[0].qFallbackTitle
       : null;
@@ -102,6 +134,7 @@ const stylingUtils = {
       border,
       borderColor,
     };
+
 
   },
 };

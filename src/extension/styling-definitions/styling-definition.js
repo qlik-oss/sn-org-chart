@@ -84,7 +84,18 @@ function createStylingDefinition(theme, flags, translator) {
                     component: 'dropdown',
                     defaultValue: DEFAULTS.FONT_COLOR_TYPE,
                     options: colorOptions,
-                    //placeholder: 'properties.colorMode.primary',
+                    show:(data, args) => {
+                      //data.label.value.colorType = 'byExpression';
+                      console.log('data ',data);
+                      console.log('args ', args);
+                      return true;
+                    },
+                    /*
+                    change(data, handler, properties, args) {
+                      console.log('data ',data);
+                      console.log('args ',args);
+                    },
+                    */
                   },
                   colorPicker: {
                     component: 'color-picker',
@@ -93,7 +104,8 @@ function createStylingDefinition(theme, flags, translator) {
                     width: 3,
                     //translation: 'properties.color',
                     dualOutput: true,
-                    defaultValue: () => {
+                    defaultValue: (data) => {
+                      //console.log('data is', data);
                       return {
                         index: -1, 
                         color: theme.getStyle('object.orgChart', 'label.value', 'color') ?? DEFAULTS.FONT_COLOR_DARK,
@@ -219,9 +231,10 @@ function createStylingDefinition(theme, flags, translator) {
                     translation: 'properties.color',
                     dualOutput: true,
                     defaultValue: DEFAULTS.BORDER_COLOR,
-                    show: (data) =>
-                      bordersActive(data) &&
-                      (propertyResolver.getValue(data, 'card.border.colorType') ?? DEFAULTS.BORDER_COLOR_TYPE) === 'colorPicker',
+                    show: (data) => {
+                      return bordersActive(data) &&
+                        (propertyResolver.getValue(data, 'card.border.colorType') ?? DEFAULTS.BORDER_COLOR_TYPE) === 'colorPicker';
+                    },  
                   },
                 },
               },
