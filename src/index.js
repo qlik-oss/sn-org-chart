@@ -36,7 +36,7 @@ export default function supernova(env) {
   const { flags, theme } = env;
   return {
     qae: {
-      properties,
+      properties: properties(flags),
       data,
     },
     component: () => {

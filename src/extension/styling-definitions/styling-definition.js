@@ -86,6 +86,14 @@ function createStylingDefinition(theme, flags, translator) {
                     options: colorOptions,
                     show:(data, args) => {
                       //data.label.value.colorType = 'byExpression';
+                      
+                      const colorTypeStyle = args?.layout?.style?.fontColor?.colorType;
+                      const colorTypeComponent = data?.label?.value?.colorType;
+
+                      if (colorTypeStyle && !colorTypeComponent) {
+                        data.label.value.colorType = colorTypeStyle;
+                      }
+                   
                       console.log('data ',data);
                       console.log('args ', args);
                       return true;

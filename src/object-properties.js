@@ -5,68 +5,72 @@ import DEFAULTS from "./style-defaults";
  * @entry
  */
 
-const properties = {
-  qHyperCubeDef: {
-    qDimensions: [],
-    qMeasures: [],
-    qInitialDataFetch: [{ qWidth: 5, qHeight: 500 }],
-    qSuppressZero: false,
-    qSuppressMissing: true,
+const initialProperties = {
+  fontColor: {
+    colorType: DEFAULTS.FONT_COLOR_TYPE,
+    color: DEFAULTS.FONT_COLOR_DARK,
+    colorExpression: "",
   },
-  /**
-   * Show title for the visualization
-   * @type {boolean}
-   */
-  showTitles: true,
-  /**
-   * Visualization title
-   * @type {string}
-   */
-  title: "",
-  /**
-   * Visualization subtitle
-   * @type {string}
-   */
-  subtitle: "",
-  /**
-   * Visualization footnote
-   * @type {string}
-   */
-  footnote: "",
-  /**
-   * How the org chart is navigated
-   * @type {'expandAll'|'free'}
-   */
-  navigationMode: "free",
-  /**
-   * Resize and pan chart when a node's list of children is expanded
-   * @type {boolean}
-   */
-  resizeOnExpand: false,
-  /**
-   * Holds chart styling
-   * @type {Style}
-   */
-  style: {
-    fontColor: {
-      colorType: DEFAULTS.FONT_COLOR_TYPE,
-      color: DEFAULTS.FONT_COLOR_DARK,
-      colorExpression: "",
-    },
-    backgroundColor: {
-      colorType: DEFAULTS.BACKGROUND_COLOR_TYPE,
-      color: DEFAULTS.BACKGROUND_COLOR,
-      colorExpression: "",
-    },
-    border: {
-      top: DEFAULTS.BORDER_TOP,
-      fullBorder: DEFAULTS.BORDER_FULL,
-      colorType: DEFAULTS.BORDER_COLOR_TYPE,
-      color: DEFAULTS.BORDER_COLOR,
-      colorExpression: "",
-    },
+  backgroundColor: {
+    colorType: DEFAULTS.BACKGROUND_COLOR_TYPE,
+    color: DEFAULTS.BACKGROUND_COLOR,
+    colorExpression: "",
+  },
+  border: {
+    top: DEFAULTS.BORDER_TOP,
+    fullBorder: DEFAULTS.BORDER_FULL,
+    colorType: DEFAULTS.BORDER_COLOR_TYPE,
+    color: DEFAULTS.BORDER_COLOR,
+    colorExpression: "",
   },
 };
+
+const properties = (flags) => {
+ return {
+    qHyperCubeDef: {
+      qDimensions: [],
+      qMeasures: [],
+      qInitialDataFetch: [{ qWidth: 5, qHeight: 500 }],
+      qSuppressZero: false,
+      qSuppressMissing: true,
+    },
+    /**
+     * Show title for the visualization
+     * @type {boolean}
+     */
+    showTitles: true,
+    /**
+     * Visualization title
+     * @type {string}
+     */
+    title: "",
+    /**
+     * Visualization subtitle
+     * @type {string}
+     */
+    subtitle: "",
+    /**
+     * Visualization footnote
+     * @type {string}
+     */
+    footnote: "",
+    /**
+     * How the org chart is navigated
+     * @type {'expandAll'|'free'}
+     */
+    navigationMode: "free",
+    /**
+     * Resize and pan chart when a node's list of children is expanded
+     * @type {boolean}
+     */
+    resizeOnExpand: false,
+    /**
+     * Holds chart styling
+     * @type {Style}
+     */
+    style: !flags?.isEnabled('SENSECLIENT_IM_5036_VIZBUNDLE_STYLING') ? initialProperties : {},
+  };
+}
 
 /**
  * Holds styling options
