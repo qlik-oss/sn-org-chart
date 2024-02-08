@@ -2,6 +2,7 @@ import { fontResolver as createFontResolver } from 'qlik-chart-modules';
 import labelStylingDefinition from './styling-utils';
 import DEFAULTS from "../../style-defaults";
 import propertyResolver from "../../utils/property-resolver";
+import { color } from 'd3';
 
 
 const colorOptions = [
@@ -10,6 +11,24 @@ const colorOptions = [
   { value: 'byExpression', translation: 'properties.colorMode.byExpression' },
 ];
 
+const emptyTemplate = {
+  colorType: undefined,
+  color: undefined,
+  colorExpression: undefined,
+};  
+const dataTemplate = {
+  label: {
+    value: emptyTemplate,
+  },
+  card: {
+    backgroundColor: emptyTemplate,
+    border: {
+      top: undefined,
+      fullBorder: undefined,
+      ...emptyTemplate,
+    },
+  },
+};
 
 function createStylingDefinition(theme, flags, translator) {
   const fontResolver = createFontResolver({
@@ -85,25 +104,15 @@ function createStylingDefinition(theme, flags, translator) {
                     defaultValue: DEFAULTS.FONT_COLOR_TYPE,
                     options: colorOptions,
                     show:(data, args) => {
-                      //data.label.value.colorType = 'byExpression';
-                      
                       const colorTypeStyle = args?.layout?.style?.fontColor?.colorType;
                       const colorTypeComponent = data?.label?.value?.colorType;
-
                       if (colorTypeStyle && !colorTypeComponent) {
-                        data.label.value.colorType = colorTypeStyle;
+                        data.label = { ...dataTemplate.label, ...data.label };
+                        data.label.value =  args?.layout?.style?.fontColor;
+                        console.log('dataTemplate in fontocolor after merge', dataTemplate);
                       }
-                   
-                      console.log('data ',data);
-                      console.log('args ', args);
                       return true;
                     },
-                    /*
-                    change(data, handler, properties, args) {
-                      console.log('data ',data);
-                      console.log('args ',args);
-                    },
-                    */
                   },
                   colorPicker: {
                     component: 'color-picker',
@@ -113,13 +122,15 @@ function createStylingDefinition(theme, flags, translator) {
                     //translation: 'properties.color',
                     dualOutput: true,
                     defaultValue: (data) => {
-                      //console.log('data is', data);
+                      //console.log('fontColor data 2 IN', data);
                       return {
                         index: -1, 
                         color: theme.getStyle('object.orgChart', 'label.value', 'color') ?? DEFAULTS.FONT_COLOR_DARK,
                       };
                     },  
-                    show: (data) => (propertyResolver.getValue(data, 'label.value.colorType') ?? DEFAULTS.FONT_COLOR_TYPE) === 'colorPicker',
+                    show:(data, args) => {
+                      return (propertyResolver.getValue(data, 'label.value.colorType') ?? DEFAULTS.FONT_COLOR_TYPE) === 'colorPicker';
+                    }
                   },
                 },
               },
@@ -130,7 +141,9 @@ function createStylingDefinition(theme, flags, translator) {
                 //translation: 'Common.Expression',
                 expression: 'optional',
                 defaultValue: '',
-                show: (data) => (propertyResolver.getValue(data, 'label.value.colorType') ?? DEFAULTS.FONT_COLOR_TYPE) === 'byExpression',
+                show:(data, args) => {
+                  return (propertyResolver.getValue(data, 'label.value.colorType') ?? DEFAULTS.FONT_COLOR_TYPE) === 'byExpression';
+                }
               },
             },
           },
@@ -157,6 +170,16 @@ function createStylingDefinition(theme, flags, translator) {
                     component: 'dropdown',
                     defaultValue: DEFAULTS.BACKGROUND_COLOR_TYPE,
                     options: colorOptions,
+                    show:(data, args) => {
+                      const colorTypeStyle = args?.layout?.style?.backgroundColor?.colorType;
+                      const colorTypeComponent = data?.card?.backgroundColor?.colorType;
+                      if (colorTypeStyle && !colorTypeComponent) {
+                        console.log('En condicion backgroundColor 1');
+                        data.card = { ...dataTemplate.card, ...data.card };
+                        data.card.backgroundColor = args?.layout?.style?.backgroundColor;
+                      }
+                      return true;
+                    },
                   },
                   colorPicker: {
                     component: 'color-picker',
@@ -166,9 +189,7 @@ function createStylingDefinition(theme, flags, translator) {
                     //translation: 'properties.color',
                     dualOutput: true,
                     defaultValue: DEFAULTS.BACKGROUND_COLOR,
-                    show: (data) => {
-                      //console.log('data is ', data);
-                      //console.log('colorPicker is ', propertyResolver.getValue(data, 'card.backgroundColor.colorType') ?? DEFAULTS.BACKGROUND_COLOR_TYPE);
+                    show:(data, args) => {
                       return (propertyResolver.getValue(data, 'card.backgroundColor.colorType') ?? DEFAULTS.BACKGROUND_COLOR_TYPE) === 'colorPicker';
                     },  
                   },
@@ -181,8 +202,9 @@ function createStylingDefinition(theme, flags, translator) {
                 //translation: 'Common.Expression',
                 expression: 'optional',
                 defaultValue: '',
-                show: (data) =>
-                  (propertyResolver.getValue(data, 'card.backgroundColor.colorType') ?? DEFAULTS.BACKGROUND_COLOR_TYPE) === 'byExpression',
+                show:(data, args) => {
+                  return (propertyResolver.getValue(data, 'card.backgroundColor.colorType') ?? DEFAULTS.BACKGROUND_COLOR_TYPE) === 'byExpression';
+                },
               },
             },
           },
@@ -210,6 +232,17 @@ function createStylingDefinition(theme, flags, translator) {
                 ref: 'card.border.top',
                 translation: 'Object.OrgChart.TopBar',
                 defaultValue: DEFAULTS.BORDER_TOP,
+                show:(data, args) => {
+                  console.log('top data IN', data);
+                  const topStyle = args?.layout?.style?.border?.top;
+                  const topComponent = data?.card?.border?.top;
+                  if (topStyle && !topComponent) {
+                    data.card = { ...dataTemplate.card, ...data.card };
+                    data.card.border= args?.layout?.style?.border;
+                  }
+                  console.log('top data OUT', data);
+                  return true;
+                },
               },
               fullBorder: {
                 //type: 'boolean',
@@ -217,6 +250,17 @@ function createStylingDefinition(theme, flags, translator) {
                 ref: 'card.border.fullBorder',
                 translation: 'properties.border',
                 defaultValue: DEFAULTS.BORDER_FULL,
+                show:(data, args) => {
+                  console.log('fullBorder data IN', data);
+                  const fullBorderStyle = args?.layout?.style?.border?.fullBorder;
+                  const fullBorderComponent = data?.card?.border?.fullBorder;
+                  if (fullBorderStyle && !fullBorderComponent) {
+                    data.card = { ...dataTemplate.card, ...data.card };
+                    data.card.border= args?.layout?.style?.border;
+                  }
+                  console.log('fullBorder data OUT', data);
+                  return true;
+                },
               },
               fontColorWrapperItem: {
                 component: 'inline-wrapper',
@@ -229,7 +273,17 @@ function createStylingDefinition(theme, flags, translator) {
                     translation: 'properties.border.color',
                     defaultValue: DEFAULTS.BORDER_COLOR_TYPE,
                     options: colorOptions,
-                    show: (data) => bordersActive(data),
+                    show:(data, args) => {
+                      console.log('border coloType data IN', data);
+                      const colorTypeStyle = args?.layout?.style?.border?.colorType;
+                      const colorTypeComponent = data?.card?.border?.colorType;
+                      if (colorTypeStyle && !colorTypeComponent) {
+                        data.card = { ...dataTemplate.card, ...data.card };
+                        data.card.border= args?.layout?.style?.border;
+                      }
+                      console.log('border coloType data OUT', data);
+                      return bordersActive(data);
+                    },
                   },
                   colorPicker: {
                     component: 'color-picker',
@@ -239,7 +293,7 @@ function createStylingDefinition(theme, flags, translator) {
                     translation: 'properties.color',
                     dualOutput: true,
                     defaultValue: DEFAULTS.BORDER_COLOR,
-                    show: (data) => {
+                    show:(data, args) => {
                       return bordersActive(data) &&
                         (propertyResolver.getValue(data, 'card.border.colorType') ?? DEFAULTS.BORDER_COLOR_TYPE) === 'colorPicker';
                     },  
@@ -253,9 +307,10 @@ function createStylingDefinition(theme, flags, translator) {
                 translation: 'Common.Expression',
                 expression: 'optional',
                 defaultValue: '',
-                show: (data) =>
-                  bordersActive(data) &&
-                  (propertyResolver.getValue(data, 'card.border.colorType') ?? DEFAULTS.BORDER_COLOR_TYPE) === 'byExpression',
+                show:(data, args) => {
+                  return bordersActive(data) &&
+                    (propertyResolver.getValue(data, 'card.border.colorType') ?? DEFAULTS.BORDER_COLOR_TYPE) === 'byExpression';
+                },
              },
             },
           },
