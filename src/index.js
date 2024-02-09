@@ -80,18 +80,6 @@ export default function supernova(env) {
         newExpandedState.useTransitions = true;
         setExpandedState(newExpandedState);
       };
-
-      /*
-      const themeService = createThemeService({
-        Theme,
-        config: {
-          id: 'orgChart',
-          transform: [['label.value.fontSize', (v) => parseInt(v, 10)]],
-        },
-      });
-
-      const styleModel= createStyleModel({ layout, themeService });
-      */
       
       // Get and transform the data into a tree structure, get styling, reset active selections
       const [dataTree] = usePromise(() => {

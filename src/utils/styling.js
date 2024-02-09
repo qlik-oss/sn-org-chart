@@ -17,34 +17,14 @@ export function getColor(reference, Theme, defaultColor) {
 }
 
 
-export function getColorBackground(reference, Theme, defaultColor) {
+export function getColorStyling(reference, defaultColor) {
   let color;
   switch (reference.colorType) {
     case "byExpression":
       color = colorUtils.resolveExpression(reference.colorExpression);
       break;
     case "colorPicker":
-      color = Theme.getColorPickerColor(reference.color);
-      break;
-    default:
-      color = defaultColor;
-  }
-  return color === "none" ? defaultColor : color;
-}
-
-const findComponent = (key, layout) => {
-  return layout.components?.find((o) => o.key === key) ?? undefined;
-};
-
-
-export function getColorStyling(refStyling, defaultColor) {
-  let color;
-  switch (refStyling.colorType) {
-    case "byExpression":
-      colorUtils.resolveExpression(refStyling.colorExpression);
-      break;
-    case "colorPicker":
-      color = refStyling.color;
+      color = reference.color;
       break;
     default:
       color = defaultColor;
@@ -55,73 +35,45 @@ export function getColorStyling(refStyling, defaultColor) {
 const stylingUtils = {
   cardStyling: ({ Theme, layout, flags, styleModel }) => {
 
-    const axisLabelStyle = styleModel.axis.label.getStyle();
-    const labelValueStyle = styleModel.label.value.getStyle();
-    const cardBackgrounStyle = styleModel.card.backgroundColor.getStyle();
-    const cardBorderStyle = styleModel.card.border.getStyle();
-
-    console.log('************ in stylingUtils *****************');
-
-    console.log ('axisLabelStyle font size', axisLabelStyle.fontSize);
-    console.log ('axisLabelStyle font family', axisLabelStyle.fontFamily);
-
-    console.log ('labelValueStyle font size', labelValueStyle.fontSize);
-    console.log ('labelValueStyle font family', labelValueStyle.fontFamily);
-    console.log ('labelValueStyle color type', labelValueStyle.colorType);
-    console.log ('labelValueStyle color', labelValueStyle.color);
-    console.log ('labelValueStyle color expression', labelValueStyle.colorExpression);
-
-    console.log ('cardBackgrounStyle color type', cardBackgrounStyle.colorType);
-    console.log ('cardBackgrounStyle color', cardBackgrounStyle.color);
-    console.log ('cardBackgrounStyle color expression', cardBackgrounStyle.colorExpression);
-
-    console.log ('cardBorderStyle top', cardBorderStyle.top);
-    console.log ('cardBorderStyle full border', cardBorderStyle.fullBorder);
-    console.log ('cardBorderStyle color type', cardBorderStyle.colorType);
-    console.log ('cardBorderStyle color', cardBorderStyle.color);
-    console.log ('cardBorderStyle color expression', cardBorderStyle.colorExpression);
- 
-    console.log('layout is', layout);
-
-    /*
-    return {
-      axisLabel: axisLabelStyle,
-      labelValue: {
-        fontFamily: axisLabelStyle.fontFamily,
-        fontSize: labelValueStyle.fontSize,
-        color: getColorStyling(labelValueStyle, 'default'),
-      },
-      cardBackgroundColor: getColorStyling(),
-      cardBorderColor: 
-    };
-
-
-    axisLabel
-      fontSize
-      fontFamily
-
-    labelValue
-      fontSize
-      fontFamily
-
-    cardBackground
-      color
-
-    cardBorder
-      top
-      fullBorder
-      color
-*/
-
-
-    const backgroundColor = getColor(layout.style.backgroundColor, Theme, DEFAULTS.BACKGROUND_COLOR.color);
-    const fontColor = getColor(layout.style.fontColor, Theme, "default");
-    //const fontColor = getColorStyling(labelValueStyle, "default");
-    console.log('new fontColor is', fontColor);
-
     const measureLabel = layout.qHyperCube.qMeasureInfo.length
       ? layout.qHyperCube.qMeasureInfo[0].qFallbackTitle
       : null;
+
+    if (flags?.isEnabled('SENSECLIENT_IM_5036_VIZBUNDLE_STYLING')) {
+      const axisLabelStyle = styleModel.axis.label.getStyle();
+      const labelValueStyle = styleModel.label.value.getStyle();
+      const cardBackgroundStyle = styleModel.card.backgroundColor.getStyle();
+      const cardBorderStyle = styleModel.card.border.getStyle();
+
+      const border = { 
+        top: cardBorderStyle.top,
+        fullBorder: cardBorderStyle.fullBorder,
+        colorType: cardBorderStyle.colorType,
+      };
+
+      const backgroundColor = getColorStyling(cardBackgroundStyle, DEFAULTS.BACKGROUND_COLOR.color);
+      const fontColor = getColorStyling(labelValueStyle, "default");
+      const borderColor = cardBorderStyle.colorType !== "auto"
+        ? getColorStyling(cardBorderStyle, colorUtils.getDarkColor(backgroundColor))
+        : colorUtils.getDarkColor(backgroundColor);
+
+      const styling = {
+        cardTitle: axisLabelStyle,
+        cardBody: { 
+          fontSize: labelValueStyle.fontSize,
+          fontFamily: labelValueStyle.fontFamily,
+        },
+        backgroundColor,
+        fontColor,
+        measureLabel,
+        border,
+        borderColor,
+      };
+      return styling;
+    }
+
+    const backgroundColor = getColor(layout.style.backgroundColor, Theme, DEFAULTS.BACKGROUND_COLOR.color);
+    const fontColor = getColor(layout.style.fontColor, Theme, "default");
     const { border = { colorType: DEFAULTS.BORDER_COLOR_TYPE } } = layout.style;
     const borderColor =
       border.colorType !== "auto"
@@ -134,7 +86,6 @@ const stylingUtils = {
       border,
       borderColor,
     };
-
 
   },
 };

@@ -109,7 +109,6 @@ function createStylingDefinition(theme, flags, translator) {
                       if (colorTypeStyle && !colorTypeComponent) {
                         data.label = { ...dataTemplate.label, ...data.label };
                         data.label.value =  args?.layout?.style?.fontColor;
-                        console.log('dataTemplate in fontocolor after merge', dataTemplate);
                       }
                       return true;
                     },
@@ -122,7 +121,6 @@ function createStylingDefinition(theme, flags, translator) {
                     //translation: 'properties.color',
                     dualOutput: true,
                     defaultValue: (data) => {
-                      //console.log('fontColor data 2 IN', data);
                       return {
                         index: -1, 
                         color: theme.getStyle('object.orgChart', 'label.value', 'color') ?? DEFAULTS.FONT_COLOR_DARK,
@@ -174,7 +172,6 @@ function createStylingDefinition(theme, flags, translator) {
                       const colorTypeStyle = args?.layout?.style?.backgroundColor?.colorType;
                       const colorTypeComponent = data?.card?.backgroundColor?.colorType;
                       if (colorTypeStyle && !colorTypeComponent) {
-                        console.log('En condicion backgroundColor 1');
                         data.card = { ...dataTemplate.card, ...data.card };
                         data.card.backgroundColor = args?.layout?.style?.backgroundColor;
                       }
@@ -233,14 +230,12 @@ function createStylingDefinition(theme, flags, translator) {
                 translation: 'Object.OrgChart.TopBar',
                 defaultValue: DEFAULTS.BORDER_TOP,
                 show:(data, args) => {
-                  console.log('top data IN', data);
                   const topStyle = args?.layout?.style?.border?.top;
                   const topComponent = data?.card?.border?.top;
                   if (topStyle && !topComponent) {
                     data.card = { ...dataTemplate.card, ...data.card };
                     data.card.border= args?.layout?.style?.border;
                   }
-                  console.log('top data OUT', data);
                   return true;
                 },
               },
@@ -251,14 +246,12 @@ function createStylingDefinition(theme, flags, translator) {
                 translation: 'properties.border',
                 defaultValue: DEFAULTS.BORDER_FULL,
                 show:(data, args) => {
-                  console.log('fullBorder data IN', data);
                   const fullBorderStyle = args?.layout?.style?.border?.fullBorder;
                   const fullBorderComponent = data?.card?.border?.fullBorder;
                   if (fullBorderStyle && !fullBorderComponent) {
                     data.card = { ...dataTemplate.card, ...data.card };
                     data.card.border= args?.layout?.style?.border;
                   }
-                  console.log('fullBorder data OUT', data);
                   return true;
                 },
               },
@@ -274,14 +267,12 @@ function createStylingDefinition(theme, flags, translator) {
                     defaultValue: DEFAULTS.BORDER_COLOR_TYPE,
                     options: colorOptions,
                     show:(data, args) => {
-                      console.log('border coloType data IN', data);
                       const colorTypeStyle = args?.layout?.style?.border?.colorType;
                       const colorTypeComponent = data?.card?.border?.colorType;
                       if (colorTypeStyle && !colorTypeComponent) {
                         data.card = { ...dataTemplate.card, ...data.card };
                         data.card.border= args?.layout?.style?.border;
                       }
-                      console.log('border coloType data OUT', data);
                       return bordersActive(data);
                     },
                   },
