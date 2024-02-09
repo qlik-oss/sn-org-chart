@@ -39,7 +39,7 @@ const stylingUtils = {
       ? layout.qHyperCube.qMeasureInfo[0].qFallbackTitle
       : null;
 
-    if (flags?.isEnabled('SENSECLIENT_IM_5036_VIZBUNDLE_STYLING')) {
+    //if (flags?.isEnabled('SENSECLIENT_IM_5036_VIZBUNDLE_STYLING')) {
       const axisLabelStyle = styleModel.axis.label.getStyle();
       const labelValueStyle = styleModel.label.value.getStyle();
       const cardBackgroundStyle = styleModel.card.backgroundColor.getStyle();
@@ -70,8 +70,8 @@ const stylingUtils = {
         borderColor,
       };
       return styling;
-    }
-
+    //}
+    /*
     const backgroundColor = getColor(layout.style.backgroundColor, Theme, DEFAULTS.BACKGROUND_COLOR.color);
     const fontColor = getColor(layout.style.fontColor, Theme, "default");
     const { border = { colorType: DEFAULTS.BORDER_COLOR_TYPE } } = layout.style;
@@ -86,6 +86,7 @@ const stylingUtils = {
       border,
       borderColor,
     };
+    */
 
   },
 };
