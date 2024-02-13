@@ -4,6 +4,11 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+dependencies:
+  '@nebula.js/sn-org-chart':
+    specifier: ^1.1.1
+    version: 1.1.1(@nebula.js/stardust@4.9.0)
+
 devDependencies:
   '@babel/preset-env':
     specifier: 7.23.9
@@ -83,6 +88,9 @@ devDependencies:
   prettier:
     specifier: 3.2.4
     version: 3.2.4
+  qlik-chart-modules:
+    specifier: 0.59.0
+    version: 0.59.0
   shx:
     specifier: 0.3.4
     version: 0.3.4
@@ -2933,11 +2941,19 @@ packages:
       yargs: 17.7.2
     dev: true
 
+  /@nebula.js/sn-org-chart@1.1.1(@nebula.js/stardust@4.9.0):
+    resolution: {integrity: sha512-f9x/qKXWoqsBiIvn6Yew8vNk8mnXsVdk4Et7s8M9UNYe9Lj2gXg9M7onIg/2dy1hl/b8RuuHnbB3zU6IY0+LzQ==}
+    engines: {node: '>=18'}
+    peerDependencies:
+      '@nebula.js/stardust': '>=4.8.0'
+    dependencies:
+      '@nebula.js/stardust': 4.9.0
+    dev: false
+
   /@nebula.js/stardust@4.9.0:
     resolution: {integrity: sha512-4ASnZI8KLBxT3cBrvctQyQQZZmYuyV5zMErYRDR9si9CDa/toHuvzVRvX/IKOWbw3QNX3eiStcF8JWR5NRZLug==}
     dependencies:
       '@types/qlik-engineapi': 12.67.16
-    dev: true
 
   /@nicolo-ribaudo/chokidar-2@2.1.8-no-fsevents.3:
     resolution: {integrity: sha512-s88O1aVtXftvp5bCPB7WnmXc5IwOZZ7YPuwNPt+GtOOXpPvad1LfbmjYv+qII7zP6RU2QGnqve27dnLycEnyEQ==}
@@ -3529,7 +3545,6 @@ packages:
 
   /@types/qlik-engineapi@12.67.16:
     resolution: {integrity: sha512-NiwMX6zrV162lRcupTdrgoT2YtKZy97zJ70rRGLdJTWcaMOWUgAhM1ufzhmp3ir1KlNArI4Ds8ojfxA80SpwKQ==}
-    dev: true
 
   /@types/qs@6.9.11:
     resolution: {integrity: sha512-oGk0gmhnEJK4Yyk+oI7EfXsLayXatCWPHary1MtcmbAifkobT9cM9yutG/hZKIseOU0MqbIwQ/u2nn/Gb+ltuQ==}
@@ -10008,6 +10023,10 @@ packages:
 
   /pure-rand@6.0.4:
     resolution: {integrity: sha512-LA0Y9kxMYv47GIPJy6MI84fqTd2HmYZI83W/kM/SkKfDlajnZYfmXFTxkbY+xSBPkLJxltMa9hIkmdc29eguMA==}
+    dev: true
+
+  /qlik-chart-modules@0.59.0:
+    resolution: {integrity: sha512-ErnAjpIugAUzXPnRS4l+rxQghmMjd67Q3FeFyWVWT2WCZDMjsOw4a3hSUIN3h5OOwtzSBmw3jxdDqL8DmTMDjw==}
     dev: true
 
   /qs@6.11.0:

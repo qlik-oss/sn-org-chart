@@ -36,7 +36,8 @@
     "spec": "sy from-jsdoc -c ./spec-configs/props.conf.js",
     "start": "nebula serve --type sn-org-chart",
     "test:e2e": "playwright test",
-    "test:unit": "jest"
+    "test:unit": "jest",
+    "start:mfe": "nebula serve --mfe --type sn-org-chart"
   },
   "husky": {
     "hooks": {
@@ -103,7 +104,7 @@
   },
   "qext": {
     "name": "Org chart",
-    "icon": "extension",
+    "icon": "org-chart",
     "preview": "assets/preview.png"
   },
   "systemjs": "dist/sn-org-chart.systemjs.js",
