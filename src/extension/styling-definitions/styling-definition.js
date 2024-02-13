@@ -11,6 +11,7 @@ const colorOptions = [
   { value: 'byExpression', translation: 'properties.colorMode.byExpression' },
 ];
 
+/*
 const emptyTemplate = {
   colorType: undefined,
   color: undefined,
@@ -29,6 +30,33 @@ const dataTemplate = {
     },
   },
 };
+*/
+const dataTemplateLabel = {
+  label: {
+    value: {
+      colorType: undefined,
+      color: undefined,
+      colorExpression: undefined,
+    },
+  },
+};  
+const dataTemplateBackground = {
+  backgroundColor: {
+    colorType: undefined,
+    color: undefined,
+    colorExpression: undefined,
+  },
+};
+const dataTemplateBorder = {
+  border: {
+    top: undefined,
+    fullBorder: undefined,
+    colorType: undefined,
+    color: undefined,
+    colorExpression: undefined,
+  },
+};
+
 
 function createStylingDefinition(theme, flags, translator) {
   const fontResolver = createFontResolver({
@@ -42,8 +70,8 @@ function createStylingDefinition(theme, flags, translator) {
   });
 
   const bordersActive = (data) => {
-    return (propertyResolver.getValue(data, 'card.border.top') ?? DEFAULTS.BORDER_TOP) ||
-      (propertyResolver.getValue(data, 'card.border.fullBorder') ?? DEFAULTS.BORDER_FULL);
+    return (propertyResolver.getValue(data, 'border.top') ?? DEFAULTS.BORDER_TOP) ||
+      (propertyResolver.getValue(data, 'border.fullBorder') ?? DEFAULTS.BORDER_FULL);
   };
 
   return {
@@ -104,12 +132,25 @@ function createStylingDefinition(theme, flags, translator) {
                     defaultValue: DEFAULTS.FONT_COLOR_TYPE,
                     options: colorOptions,
                     show:(data, args) => {
+                      console.log('data IN label', data);
                       const colorTypeStyle = args?.layout?.style?.fontColor?.colorType;
                       const colorTypeComponent = data?.label?.value?.colorType;
+                      console.log('colorTypeStyle label', colorTypeStyle);
+                      console.log('colorTypeComponent label', colorTypeComponent);
                       if (colorTypeStyle && !colorTypeComponent) {
-                        data.label = { ...dataTemplate.label, ...data.label };
-                        data.label.value =  args?.layout?.style?.fontColor;
+                        /*
+                        const dataClone = structuredClone(data);
+                        const templateClone = structuredClone(dataTemplateLabel);
+                        dataClone.label = { ...templateClone.label, ...dataClone.label };
+                        console.log('dataClone', dataClone);
+                        console.log('templateClone', templateClone);
+                        dataClone.label.value =  args?.layout?.style?.fontColor;
+                        data.label = dataClone.label;
+                        */
+                        data.label = { ...dataTemplateLabel.label, ...data.label };
+                        data.label.value = args?.layout?.style?.fontColor;
                       }
+                      console.log('data OUT label', data);
                       return true;
                     },
                   },
@@ -155,13 +196,13 @@ function createStylingDefinition(theme, flags, translator) {
           backgroundColorItems: {
             component: 'items',
             ref: 'components',
-            key: 'card',
+            key: 'backgroundColor',
             items: {
               fontColorWrapperItem: {
                 component: 'inline-wrapper',
                 items: {
                   useColorExpression: {
-                    ref: 'card.backgroundColor.colorType',
+                    ref: 'backgroundColor.colorType',
                     width: 9,
                     //type: 'string',
                     //translation: 'Object.OrgChart.BackgroundColor',
@@ -169,25 +210,38 @@ function createStylingDefinition(theme, flags, translator) {
                     defaultValue: DEFAULTS.BACKGROUND_COLOR_TYPE,
                     options: colorOptions,
                     show:(data, args) => {
+                      console.log('data IN background', data);
                       const colorTypeStyle = args?.layout?.style?.backgroundColor?.colorType;
-                      const colorTypeComponent = data?.card?.backgroundColor?.colorType;
+                      const colorTypeComponent = data?.backgroundColor?.colorType;
+                      console.log('colorTypeStyle background', colorTypeStyle);
+                      console.log('colorTypeComponent background', colorTypeComponent);
                       if (colorTypeStyle && !colorTypeComponent) {
-                        data.card = { ...dataTemplate.card, ...data.card };
-                        data.card.backgroundColor = args?.layout?.style?.backgroundColor;
+                        /*
+                        const dataClone = structuredClone(data);
+                        const templateClone = structuredClone(dataTemplateBackground);
+                        dataClone.backgroundColor = { ...templateClone.backgroundColor, ...dataClone.backgroundColor };
+                        console.log('dataClone', dataClone);
+                        console.log('templateClone', templateClone);
+                        dataClone.backgroundColor =  args?.layout?.style?.backgroundColor;
+                        data.backgroundColor = dataClone.backgroundColor;
+                        */
+                        data.backgroundColor = { ...dataTemplateBackground.backgroundColor, ...data.backgroundColor};
+                        data.backgroundColor = args?.layout?.style?.backgroundColor;
                       }
+                      console.log('data OUT background', data);
                       return true;
                     },
                   },
                   colorPicker: {
                     component: 'color-picker',
                     type: 'object',
-                    ref: 'card.backgroundColor.color',
+                    ref: 'backgroundColor.color',
                     width: 3,
                     //translation: 'properties.color',
                     dualOutput: true,
                     defaultValue: DEFAULTS.BACKGROUND_COLOR,
                     show:(data, args) => {
-                      return (propertyResolver.getValue(data, 'card.backgroundColor.colorType') ?? DEFAULTS.BACKGROUND_COLOR_TYPE) === 'colorPicker';
+                      return (propertyResolver.getValue(data, 'backgroundColor.colorType') ?? DEFAULTS.BACKGROUND_COLOR_TYPE) === 'colorPicker';
                     },  
                   },
                 },
@@ -195,12 +249,12 @@ function createStylingDefinition(theme, flags, translator) {
               colorExpression: {
                 component: 'input-field-expression',
                 //type: 'string',
-                ref: 'card.backgroundColor.colorExpression',
+                ref: 'backgroundColor.colorExpression',
                 //translation: 'Common.Expression',
                 expression: 'optional',
                 defaultValue: '',
                 show:(data, args) => {
-                  return (propertyResolver.getValue(data, 'card.backgroundColor.colorType') ?? DEFAULTS.BACKGROUND_COLOR_TYPE) === 'byExpression';
+                  return (propertyResolver.getValue(data, 'backgroundColor.colorType') ?? DEFAULTS.BACKGROUND_COLOR_TYPE) === 'byExpression';
                 },
               },
             },
@@ -214,7 +268,7 @@ function createStylingDefinition(theme, flags, translator) {
           cardBorderItems: {
             component: 'items',
             ref: 'components',
-            key: 'card',
+            key: 'border',
             items: {
               /*
               appearanceHeader: {
@@ -226,34 +280,38 @@ function createStylingDefinition(theme, flags, translator) {
               topBar: {
                 //type: 'boolean',
                 component: 'checkbox',
-                ref: 'card.border.top',
+                ref: 'border.top',
                 translation: 'Object.OrgChart.TopBar',
                 defaultValue: DEFAULTS.BORDER_TOP,
                 show:(data, args) => {
-                  const topStyle = args?.layout?.style?.border?.top;
-                  const topComponent = data?.card?.border?.top;
+                  console.log('data IN border', data);
+                  const topStyle = args?.layout?.style?.border?.colorType;
+                  const topComponent = data?.border?.top || data?.border?.fullBorder || data?.border?.colorType;
+                  console.log('topStyle border', topStyle);
+                  console.log('topComponent border', topComponent);
                   if (topStyle && !topComponent) {
-                    data.card = { ...dataTemplate.card, ...data.card };
-                    data.card.border= args?.layout?.style?.border;
+                    /*
+                    const dataClone = structuredClone(data);
+                    const templateClone = structuredClone(dataTemplateBorder);
+                    dataClone.border = { ...templateClone.border, ...dataClone.border };
+                    console.log('dataClone', dataClone);
+                    console.log('templateClone', templateClone);
+                    dataClone.border =  args?.layout?.style?.border;
+                    data.border = dataClone.border;
+                    */
+                    data.border = { ...dataTemplateBorder.border, ...data.border };
+                    data.border= args?.layout?.style?.border;
                   }
+                  console.log('data OUT border', data);
                   return true;
                 },
               },
               fullBorder: {
                 //type: 'boolean',
                 component: 'checkbox',
-                ref: 'card.border.fullBorder',
+                ref: 'border.fullBorder',
                 translation: 'properties.border',
                 defaultValue: DEFAULTS.BORDER_FULL,
-                show:(data, args) => {
-                  const fullBorderStyle = args?.layout?.style?.border?.fullBorder;
-                  const fullBorderComponent = data?.card?.border?.fullBorder;
-                  if (fullBorderStyle && !fullBorderComponent) {
-                    data.card = { ...dataTemplate.card, ...data.card };
-                    data.card.border= args?.layout?.style?.border;
-                  }
-                  return true;
-                },
               },
               fontColorWrapperItem: {
                 component: 'inline-wrapper',
@@ -261,32 +319,26 @@ function createStylingDefinition(theme, flags, translator) {
                   colorType: {
                     component: 'dropdown',
                     type: 'string',
-                    ref: 'card.border.colorType',
+                    ref: 'border.colorType',
                     width: 9,
                     translation: 'properties.border.color',
                     defaultValue: DEFAULTS.BORDER_COLOR_TYPE,
                     options: colorOptions,
                     show:(data, args) => {
-                      const colorTypeStyle = args?.layout?.style?.border?.colorType;
-                      const colorTypeComponent = data?.card?.border?.colorType;
-                      if (colorTypeStyle && !colorTypeComponent) {
-                        data.card = { ...dataTemplate.card, ...data.card };
-                        data.card.border= args?.layout?.style?.border;
-                      }
                       return bordersActive(data);
                     },
                   },
                   colorPicker: {
                     component: 'color-picker',
                     type: 'object',
-                    ref: 'card.border.color',
+                    ref: 'border.color',
                     width: 3,
                     translation: 'properties.color',
                     dualOutput: true,
                     defaultValue: DEFAULTS.BORDER_COLOR,
                     show:(data, args) => {
                       return bordersActive(data) &&
-                        (propertyResolver.getValue(data, 'card.border.colorType') ?? DEFAULTS.BORDER_COLOR_TYPE) === 'colorPicker';
+                        (propertyResolver.getValue(data, 'border.colorType') ?? DEFAULTS.BORDER_COLOR_TYPE) === 'colorPicker';
                     },  
                   },
                 },
@@ -294,13 +346,13 @@ function createStylingDefinition(theme, flags, translator) {
               colorExpression: {
                 component: 'input-field-expression',
                 type: 'string',
-                ref: 'card.border.colorExpression',
+                ref: 'border.colorExpression',
                 translation: 'Common.Expression',
                 expression: 'optional',
                 defaultValue: '',
                 show:(data, args) => {
                   return bordersActive(data) &&
-                    (propertyResolver.getValue(data, 'card.border.colorType') ?? DEFAULTS.BORDER_COLOR_TYPE) === 'byExpression';
+                    (propertyResolver.getValue(data, 'border.colorType') ?? DEFAULTS.BORDER_COLOR_TYPE) === 'byExpression';
                 },
              },
             },

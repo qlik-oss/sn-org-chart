@@ -28,23 +28,21 @@ export default function createStyleModel({ layout, themeService }) {
         }),
       },
     },
-    card: {
-      backgroundColor: {
-        getStyle: () => ({
-          colorType: findComponent('card')?.card?.backgroundColor?.colorType ?? layout?.style?.backgroundColor?.colorType ?? DEFAULTS.BACKGROUND_COLOR_TYPE,
-          color: findComponent('card')?.card?.backgroundColor?.color?.color ?? layout?.style?.backgroundColor?.color?.color ?? DEFAULTS.BACKGROUND_COLOR.color,
-          colorExpression: findComponent('card')?.card?.backgroundColor?.colorExpression ?? layout?.style?.backgroundColor?.colorExpression  ?? '',
-        }),
-      },
-      border: {
-        getStyle: () => ({
-          top: findComponent('card')?.card?.border?.top ?? layout?.style?.border?.top ?? DEFAULTS.BORDER_TOP,
-          fullBorder: findComponent('card')?.card?.border?.fullBorder ?? layout?.style?.border?.fullBorder ?? DEFAULTS.BORDER_FULL,
-          colorType: findComponent('card')?.card?.border?.colorType ?? layout?.style?.border?.colorType ?? DEFAULTS.BORDER_COLOR_TYPE,
-          color: findComponent('card')?.card?.border?.color?.color ?? layout?.style?.border?.color?.color ?? DEFAULTS.BORDER_COLOR.color,
-          colorExpression: findComponent('card')?.card?.border?.colorExpression ?? layout?.style?.border?.colorExpression ?? '',
-        }),
-      },
+    backgroundColor: {
+      getStyle: () => ({
+        colorType: findComponent('backgroundColor')?.backgroundColor?.colorType ?? layout?.style?.backgroundColor?.colorType ?? DEFAULTS.BACKGROUND_COLOR_TYPE,
+        color: findComponent('backgroundColor')?.backgroundColor?.color?.color ?? layout?.style?.backgroundColor?.color?.color ?? DEFAULTS.BACKGROUND_COLOR.color,
+        colorExpression: findComponent('backgroundColor')?.backgroundColor?.colorExpression ?? layout?.style?.backgroundColor?.colorExpression  ?? '',
+      }),
+    },
+    border: {
+      getStyle: () => ({
+        top: findComponent('border')?.border?.top ?? layout?.style?.border?.top ?? DEFAULTS.BORDER_TOP,
+        fullBorder: findComponent('border')?.border?.fullBorder ?? layout?.style?.border?.fullBorder ?? DEFAULTS.BORDER_FULL,
+        colorType: findComponent('border')?.border?.colorType ?? layout?.style?.border?.colorType ?? DEFAULTS.BORDER_COLOR_TYPE,
+        color: findComponent('border')?.border?.color?.color ?? layout?.style?.border?.color?.color ?? DEFAULTS.BORDER_COLOR.color,
+        colorExpression: findComponent('border')?.border?.colorExpression ?? layout?.style?.border?.colorExpression ?? '',
+      }),
     },
   };
 }

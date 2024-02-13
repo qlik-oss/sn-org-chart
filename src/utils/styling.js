@@ -42,8 +42,8 @@ const stylingUtils = {
     //if (flags?.isEnabled('SENSECLIENT_IM_5036_VIZBUNDLE_STYLING')) {
       const axisLabelStyle = styleModel.axis.label.getStyle();
       const labelValueStyle = styleModel.label.value.getStyle();
-      const cardBackgroundStyle = styleModel.card.backgroundColor.getStyle();
-      const cardBorderStyle = styleModel.card.border.getStyle();
+      const cardBackgroundStyle = styleModel.backgroundColor.getStyle();
+      const cardBorderStyle = styleModel.border.getStyle();
 
       const border = { 
         top: cardBorderStyle.top,
