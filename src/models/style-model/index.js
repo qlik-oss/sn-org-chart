@@ -44,5 +44,11 @@ export default function createStyleModel({ layout, themeService }) {
         colorExpression: findComponent('border')?.border?.colorExpression ?? layout?.style?.border?.colorExpression ?? '',
       }),
     },
+    image: {
+      getStyle: () => ({
+        location: findComponent('image')?.image?.location ??  DEFAULTS.IMAGE_LOCATION,
+        alignment: findComponent('image')?.image?.alignment ?? DEFAULTS.IMAGE_ALIGNMENT,
+      }),
+    },
   };
 }

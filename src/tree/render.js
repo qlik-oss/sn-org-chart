@@ -95,6 +95,7 @@ export const createContainer = ({
   viewState,
   setContainerData,
   layout,
+  style
 }) => {
   element.innerHTML = "";
   element.className = "sn-org-chart";

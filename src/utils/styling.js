@@ -44,6 +44,9 @@ const stylingUtils = {
       const labelValueStyle = styleModel.label.value.getStyle();
       const cardBackgroundStyle = styleModel.backgroundColor.getStyle();
       const cardBorderStyle = styleModel.border.getStyle();
+      const imageStyle = styleModel.image.getStyle();
+
+      console.log('imageStyle is', imageStyle);
 
       const border = { 
         top: cardBorderStyle.top,
@@ -68,6 +71,8 @@ const stylingUtils = {
         measureLabel,
         border,
         borderColor,
+        location: imageStyle.location,
+        alignment: imageStyle.alignment,
       };
       return styling;
     //}

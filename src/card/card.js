@@ -33,6 +33,7 @@ export default (data, cardStyling, selectionObj) => {
   const titleStyle = `font-family:${cardStyling.cardTitle.fontFamily};font-size:${cardStyling.cardTitle.fontSize}`;
   const labelStyle = `font-family:${cardStyling.cardBody.fontFamily};font-size:${cardStyling.cardBody.fontSize}`;
   const attributes = data.attributes || {};
+
   let html = `<div class="sn-org-card-title" style="${titleStyle};">${encodeUtils.encodeTitle(attributes.label || data.id)}</div>`;
   if (attributes.subLabel) {
     html += `<div class="sn-org-card-label" style="${labelStyle};">${encodeUtils.encodeTitle(attributes.subLabel)}</div>`;
@@ -43,6 +44,44 @@ export default (data, cardStyling, selectionObj) => {
   } else if (attributes.extraLabel) {
     html += `<div class="sn-org-card-label" style="${labelStyle};">${encodeUtils.encodeTitle(attributes.extraLabel)}</div>`;
   }
+
+/*
+
+  let html = '';
+  if (attributes.image) {
+    let textBoxCss = [undefined, 'left', 'right'].includes(cardStyling.alignment) ? 'width: 85px;' : '';
+    textBoxCss += [undefined, 'left', 'right'].includes(cardStyling.alignment) && `padding-${cardStyling.alignment}: 5px`;
+    let textBox = `<div class="sn-org-textbox" style="${cardStyling.location === 'tooltip' ? '' : textBoxCss}">`;
+    textBox += `<div class="sn-org-card-title" style="${titleStyle};">${encodeUtils.encodeTitle(attributes.label || data.id)}</div>`;
+    if (attributes.subLabel) {
+      textBox += `<div class="sn-org-card-label" style="${labelStyle};">${encodeUtils.encodeTitle(attributes.subLabel)}</div>`;
+    }
+    if (cardStyling.location !== 'tooltip') {
+      const order = cardStyling.alignment === undefined || ['top', 'left'].includes(cardStyling.alignment) ? 0 : 2;
+      const height = [undefined, 'left', 'right'].includes(cardStyling.alignment) ? ' height: 50px' : '';
+      html += `<img src="${attributes.image}" class="sn-org-card-image" style="order: ${order};${height}" />`;
+    }
+    if (data.measure) {
+      const measureLabel = cardStyling.measureLabel ? `${cardStyling.measureLabel}: ` : '';
+      textBox += `<div class="sn-org-card-label" style="${labelStyle};">${encodeUtils.encodeTitle(measureLabel + data.measure)}</div>`;
+    } else if (attributes.extraLabel) {
+      textBox += `<div class="sn-org-card-label" style="${labelStyle};">${encodeUtils.encodeTitle(attributes.extraLabel)}</div>`;
+    }
+    html += textBox;
+  } else {
+    html = `<div class="sn-org-card-title" style="${titleStyle};">${encodeUtils.encodeTitle(attributes.label || data.id)}</div>`;
+    if (attributes.subLabel) {
+      html += `<div class="sn-org-card-label" style="${labelStyle};">${encodeUtils.encodeTitle(attributes.subLabel)}</div>`;
+    }
+    if (data.measure) {
+      const measureLabel = cardStyling.measureLabel ? `${cardStyling.measureLabel}: ` : "";
+      html += `<div class="sn-org-card-label" style="${labelStyle};">${encodeUtils.encodeTitle(measureLabel + data.measure)}</div>`;
+    } else if (attributes.extraLabel) {
+      html += `<div class="sn-org-card-label" style="${labelStyle};">${encodeUtils.encodeTitle(attributes.extraLabel)}</div>`;
+    }
+  }
+*/
+
   const isSelectedClass = isSelected ? " selected" : " not-selected";
   const selectedClass = api && api.isActive() ? isSelectedClass : "";
 

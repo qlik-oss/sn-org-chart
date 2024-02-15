@@ -5,6 +5,7 @@ const buttonHeight = 24;
 const constants = {
   cardWidth: 152,
   cardHeight: 64,
+  cardHeightLarge: 208,
   widthMargin: 32,
   heightMargin: buttonHeight + cardPadding * 2 + buttonMargin,
   buttonMargin,

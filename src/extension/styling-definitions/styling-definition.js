@@ -11,6 +11,19 @@ const colorOptions = [
   { value: 'byExpression', translation: 'properties.colorMode.byExpression' },
 ];
 
+const imageLocationOptions = [
+  { value: 'card', translation: 'Card only' },
+  { value: 'tooltip', translation: 'Tooltip only' },
+  { value: 'both', translation: 'Card and tooltip' },
+];
+
+const imageAlignmentOptions = [
+  { value: 'left', translation: 'Left' },
+  { value: 'right', translation: 'Right' },
+  { value: 'top', translation: 'Top' },
+  { value: 'bottom', translation: 'Bottom' },
+];
+
 /*
 const emptyTemplate = {
   colorType: undefined,
@@ -132,25 +145,12 @@ function createStylingDefinition(theme, flags, translator) {
                     defaultValue: DEFAULTS.FONT_COLOR_TYPE,
                     options: colorOptions,
                     show:(data, args) => {
-                      console.log('data IN label', data);
                       const colorTypeStyle = args?.layout?.style?.fontColor?.colorType;
                       const colorTypeComponent = data?.label?.value?.colorType;
-                      console.log('colorTypeStyle label', colorTypeStyle);
-                      console.log('colorTypeComponent label', colorTypeComponent);
                       if (colorTypeStyle && !colorTypeComponent) {
-                        /*
-                        const dataClone = structuredClone(data);
-                        const templateClone = structuredClone(dataTemplateLabel);
-                        dataClone.label = { ...templateClone.label, ...dataClone.label };
-                        console.log('dataClone', dataClone);
-                        console.log('templateClone', templateClone);
-                        dataClone.label.value =  args?.layout?.style?.fontColor;
-                        data.label = dataClone.label;
-                        */
                         data.label = { ...dataTemplateLabel.label, ...data.label };
                         data.label.value = args?.layout?.style?.fontColor;
                       }
-                      console.log('data OUT label', data);
                       return true;
                     },
                   },
@@ -210,25 +210,12 @@ function createStylingDefinition(theme, flags, translator) {
                     defaultValue: DEFAULTS.BACKGROUND_COLOR_TYPE,
                     options: colorOptions,
                     show:(data, args) => {
-                      console.log('data IN background', data);
                       const colorTypeStyle = args?.layout?.style?.backgroundColor?.colorType;
                       const colorTypeComponent = data?.backgroundColor?.colorType;
-                      console.log('colorTypeStyle background', colorTypeStyle);
-                      console.log('colorTypeComponent background', colorTypeComponent);
                       if (colorTypeStyle && !colorTypeComponent) {
-                        /*
-                        const dataClone = structuredClone(data);
-                        const templateClone = structuredClone(dataTemplateBackground);
-                        dataClone.backgroundColor = { ...templateClone.backgroundColor, ...dataClone.backgroundColor };
-                        console.log('dataClone', dataClone);
-                        console.log('templateClone', templateClone);
-                        dataClone.backgroundColor =  args?.layout?.style?.backgroundColor;
-                        data.backgroundColor = dataClone.backgroundColor;
-                        */
                         data.backgroundColor = { ...dataTemplateBackground.backgroundColor, ...data.backgroundColor};
                         data.backgroundColor = args?.layout?.style?.backgroundColor;
                       }
-                      console.log('data OUT background', data);
                       return true;
                     },
                   },
@@ -284,25 +271,12 @@ function createStylingDefinition(theme, flags, translator) {
                 translation: 'Object.OrgChart.TopBar',
                 defaultValue: DEFAULTS.BORDER_TOP,
                 show:(data, args) => {
-                  console.log('data IN border', data);
                   const topStyle = args?.layout?.style?.border?.colorType;
                   const topComponent = data?.border?.top || data?.border?.fullBorder || data?.border?.colorType;
-                  console.log('topStyle border', topStyle);
-                  console.log('topComponent border', topComponent);
                   if (topStyle && !topComponent) {
-                    /*
-                    const dataClone = structuredClone(data);
-                    const templateClone = structuredClone(dataTemplateBorder);
-                    dataClone.border = { ...templateClone.border, ...dataClone.border };
-                    console.log('dataClone', dataClone);
-                    console.log('templateClone', templateClone);
-                    dataClone.border =  args?.layout?.style?.border;
-                    data.border = dataClone.border;
-                    */
                     data.border = { ...dataTemplateBorder.border, ...data.border };
                     data.border= args?.layout?.style?.border;
                   }
-                  console.log('data OUT border', data);
                   return true;
                 },
               },
@@ -355,6 +329,34 @@ function createStylingDefinition(theme, flags, translator) {
                     (propertyResolver.getValue(data, 'border.colorType') ?? DEFAULTS.BORDER_COLOR_TYPE) === 'byExpression';
                 },
              },
+            },
+          },
+        },
+      },
+      imageSection: {
+        component: 'panel-section',
+        //translation: 'Object.OrgChart.ImageOptions',
+        label: 'Image options',
+        items: {
+          imageItems: {
+            component: 'items',
+            ref: 'components',
+            key: 'image',
+            items: {
+              topBar: {
+                component: 'dropdown',
+                ref: 'image.location',
+                translation: 'Location',
+                options: imageLocationOptions,
+                defaultValue: DEFAULTS.IMAGE_LOCATION,
+              },
+              fullBorder: {
+                component: 'dropdown',
+                ref: 'image.alignment',
+                translation: 'Alignment',
+                options: imageAlignmentOptions,
+                defaultValue: DEFAULTS.IMAGE_ALIGNMENT,
+              },
             },
           },
         },

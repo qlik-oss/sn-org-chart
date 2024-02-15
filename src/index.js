@@ -111,7 +111,8 @@ export default function supernova(env) {
 
       // Create d3 elements, calculate initial zoom and sets expandedState
       const fullReload = () => {
-        if (element && dataTree) {
+        console.log('antes de createContainer');
+        if (element && dataTree && styling) {
           const viewState = viewStateUtil.getViewState(options, layout);
           createContainer({
             element,
@@ -124,6 +125,7 @@ export default function supernova(env) {
             setExpandedState,
             setContainerData,
             layout,
+            styling,
           });
         }
       };
@@ -146,10 +148,6 @@ export default function supernova(env) {
       useEffect(() => {
         rePaint();
       }, [containerData, selectionObj.state]);
-
-
-
-
 
       useEffect(() => {
         fullReload();

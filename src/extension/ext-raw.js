@@ -61,7 +61,15 @@ const data = {
               id: "extraLabelExpression",
               tid: "extraLabelExpression",
             },
-
+            {
+              component: 'expression',
+              ref: 'qExpression',
+              //translation: 'Object.OrgChart.Images',
+              translation: 'Images',
+              defaultValue: '',
+              id: 'imageExpression',
+              tid: 'imageExpression',
+            },
             {
               component: "expression",
               ref: "qExpression",

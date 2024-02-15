@@ -6,6 +6,7 @@ const attributeIDs = {
   labelExpression: "label",
   subLabelExpression: "subLabel",
   extraLabelExpression: "extraLabel",
+  imageExpression: 'image',
 };
 const MAX_DATA = "max-data-limit";
 const NO_ROOT = "no_root";
