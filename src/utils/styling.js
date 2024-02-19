@@ -21,7 +21,9 @@ export function getColorStyling(reference, defaultColor) {
   let color;
   switch (reference.colorType) {
     case "byExpression":
+      console.log('reference.colorExpression in Styling',reference.colorExpression);
       color = colorUtils.resolveExpression(reference.colorExpression);
+      //color = reference.colorExpression;
       break;
     case "colorPicker":
       color = reference.color;
@@ -45,8 +47,6 @@ const stylingUtils = {
       const cardBackgroundStyle = styleModel.backgroundColor.getStyle();
       const cardBorderStyle = styleModel.border.getStyle();
       const imageStyle = styleModel.image.getStyle();
-
-      console.log('imageStyle is', imageStyle);
 
       const border = { 
         top: cardBorderStyle.top,

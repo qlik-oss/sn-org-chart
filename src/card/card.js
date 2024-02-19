@@ -34,6 +34,7 @@ export default (data, cardStyling, selectionObj) => {
   const labelStyle = `font-family:${cardStyling.cardBody.fontFamily};font-size:${cardStyling.cardBody.fontSize}`;
   const attributes = data.attributes || {};
 
+/*
   let html = `<div class="sn-org-card-title" style="${titleStyle};">${encodeUtils.encodeTitle(attributes.label || data.id)}</div>`;
   if (attributes.subLabel) {
     html += `<div class="sn-org-card-label" style="${labelStyle};">${encodeUtils.encodeTitle(attributes.subLabel)}</div>`;
@@ -44,8 +45,8 @@ export default (data, cardStyling, selectionObj) => {
   } else if (attributes.extraLabel) {
     html += `<div class="sn-org-card-label" style="${labelStyle};">${encodeUtils.encodeTitle(attributes.extraLabel)}</div>`;
   }
+*/
 
-/*
 
   let html = '';
   if (attributes.image) {
@@ -80,7 +81,7 @@ export default (data, cardStyling, selectionObj) => {
       html += `<div class="sn-org-card-label" style="${labelStyle};">${encodeUtils.encodeTitle(attributes.extraLabel)}</div>`;
     }
   }
-*/
+
 
   const isSelectedClass = isSelected ? " selected" : " not-selected";
   const selectedClass = api && api.isActive() ? isSelectedClass : "";
@@ -95,7 +96,9 @@ export default (data, cardStyling, selectionObj) => {
 
   const topBorder = top && !isSelected ? `3px solid ${borderColor}` : "";
   const borderStyle = fullBorder && !isSelected ? `1px solid ${borderColor}` : "";
-  let newCardHeight = constants.cardHeight;
+  //let newCardHeight = constants.cardHeight;
+  let newCardHeight = [undefined, 'left', 'right'].includes(cardStyling.alignment) ? constants.cardHeight : constants.cardHeightLarge;
+  const flex = attributes.image ? [undefined, 'left', 'right'].includes(cardStyling.alignment) ? 'display: flex; flex-direction: row;"' : 'display: flex; flex-direction: column;"' : '';
   if (isSelected) {
     newCardHeight -= 8;
   } else if (fullBorder) {
@@ -103,5 +106,6 @@ export default (data, cardStyling, selectionObj) => {
   } else if (top) {
     newCardHeight -= 3;
   }
-  return `<div class="sn-org-card-text${selectedClass}" style="background-color:${backgroundColor};color:${fontColor}; border:${borderStyle}; border-top:${topBorder}; height:${newCardHeight}px;">${html}</div>`;
+  //return `<div class="sn-org-card-text${selectedClass}" style="background-color:${backgroundColor};color:${fontColor}; border:${borderStyle}; border-top:${topBorder}; height:${newCardHeight}px;">${html}</div>`;
+  return `<div class="sn-org-card-text${selectedClass}" style="background-color:${backgroundColor};color:${fontColor}; border:${borderStyle}; border-top:${topBorder}; height:${newCardHeight}px;${flex}">${html}</div>`;
 };

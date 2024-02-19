@@ -25,25 +25,25 @@ const imageAlignmentOptions = [
 ];
 
 /*
-const emptyTemplate = {
-  colorType: undefined,
-  color: undefined,
-  colorExpression: undefined,
-};  
-const dataTemplate = {
-  label: {
-    value: emptyTemplate,
-  },
-  card: {
-    backgroundColor: emptyTemplate,
-    border: {
-      top: undefined,
-      fullBorder: undefined,
-      ...emptyTemplate,
-    },
-  },
-};
+const transformColorProperty = (property) => {
+  return {
+    colorType: property?.colorType,
+    color: property?.color,
+    colorExpression: property?.colorExpression?.qStringExpression?.qExpr,
+  };
+}
+
+const transformBorderProperty = (property) => {
+  return {
+    ... transformColorProperty(property),
+    top: property?.top,
+    fullBorder: property?.fullBorder,
+  };
+}
+
 */
+
+
 const dataTemplateLabel = {
   label: {
     value: {
@@ -144,12 +144,13 @@ function createStylingDefinition(theme, flags, translator) {
                     component: 'dropdown',
                     defaultValue: DEFAULTS.FONT_COLOR_TYPE,
                     options: colorOptions,
-                    show:(data, args) => {
-                      const colorTypeStyle = args?.layout?.style?.fontColor?.colorType;
+                    show:(data, handler) => {
+                      const clonedProperties = structuredClone(handler.properties);
+                      const colorTypeStyle = clonedProperties?.style?.fontColor?.colorType;
                       const colorTypeComponent = data?.label?.value?.colorType;
                       if (colorTypeStyle && !colorTypeComponent) {
                         data.label = { ...dataTemplateLabel.label, ...data.label };
-                        data.label.value = args?.layout?.style?.fontColor;
+                        data.label.value = clonedProperties?.style?.fontColor;
                       }
                       return true;
                     },
@@ -161,13 +162,13 @@ function createStylingDefinition(theme, flags, translator) {
                     width: 3,
                     //translation: 'properties.color',
                     dualOutput: true,
-                    defaultValue: (data) => {
+                    defaultValue: () => {
                       return {
                         index: -1, 
                         color: theme.getStyle('object.orgChart', 'label.value', 'color') ?? DEFAULTS.FONT_COLOR_DARK,
                       };
                     },  
-                    show:(data, args) => {
+                    show:(data) => {
                       return (propertyResolver.getValue(data, 'label.value.colorType') ?? DEFAULTS.FONT_COLOR_TYPE) === 'colorPicker';
                     }
                   },
@@ -180,7 +181,7 @@ function createStylingDefinition(theme, flags, translator) {
                 //translation: 'Common.Expression',
                 expression: 'optional',
                 defaultValue: '',
-                show:(data, args) => {
+                show:(data) => {
                   return (propertyResolver.getValue(data, 'label.value.colorType') ?? DEFAULTS.FONT_COLOR_TYPE) === 'byExpression';
                 }
               },
@@ -209,12 +210,13 @@ function createStylingDefinition(theme, flags, translator) {
                     component: 'dropdown',
                     defaultValue: DEFAULTS.BACKGROUND_COLOR_TYPE,
                     options: colorOptions,
-                    show:(data, args) => {
-                      const colorTypeStyle = args?.layout?.style?.backgroundColor?.colorType;
+                    show:(data, handler) => {
+                      const clonedProperties = structuredClone(handler.properties);
+                      const colorTypeStyle = clonedProperties?.style?.backgroundColor?.colorType;
                       const colorTypeComponent = data?.backgroundColor?.colorType;
                       if (colorTypeStyle && !colorTypeComponent) {
                         data.backgroundColor = { ...dataTemplateBackground.backgroundColor, ...data.backgroundColor};
-                        data.backgroundColor = args?.layout?.style?.backgroundColor;
+                        data.backgroundColor = clonedProperties?.style?.backgroundColor;
                       }
                       return true;
                     },
@@ -227,7 +229,7 @@ function createStylingDefinition(theme, flags, translator) {
                     //translation: 'properties.color',
                     dualOutput: true,
                     defaultValue: DEFAULTS.BACKGROUND_COLOR,
-                    show:(data, args) => {
+                    show:(data) => {
                       return (propertyResolver.getValue(data, 'backgroundColor.colorType') ?? DEFAULTS.BACKGROUND_COLOR_TYPE) === 'colorPicker';
                     },  
                   },
@@ -235,12 +237,12 @@ function createStylingDefinition(theme, flags, translator) {
               },
               colorExpression: {
                 component: 'input-field-expression',
-                //type: 'string',
+                type: 'string',
                 ref: 'backgroundColor.colorExpression',
                 //translation: 'Common.Expression',
                 expression: 'optional',
                 defaultValue: '',
-                show:(data, args) => {
+                show:(data) => {
                   return (propertyResolver.getValue(data, 'backgroundColor.colorType') ?? DEFAULTS.BACKGROUND_COLOR_TYPE) === 'byExpression';
                 },
               },
@@ -270,12 +272,13 @@ function createStylingDefinition(theme, flags, translator) {
                 ref: 'border.top',
                 translation: 'Object.OrgChart.TopBar',
                 defaultValue: DEFAULTS.BORDER_TOP,
-                show:(data, args) => {
-                  const topStyle = args?.layout?.style?.border?.colorType;
+                show:(data, handler) => {
+                  const clonedProperties = structuredClone(handler.properties);
+                  const topStyle = clonedProperties?.style?.border?.colorType;
                   const topComponent = data?.border?.top || data?.border?.fullBorder || data?.border?.colorType;
                   if (topStyle && !topComponent) {
                     data.border = { ...dataTemplateBorder.border, ...data.border };
-                    data.border= args?.layout?.style?.border;
+                    data.border = clonedProperties?.style?.border;
                   }
                   return true;
                 },
@@ -298,7 +301,7 @@ function createStylingDefinition(theme, flags, translator) {
                     translation: 'properties.border.color',
                     defaultValue: DEFAULTS.BORDER_COLOR_TYPE,
                     options: colorOptions,
-                    show:(data, args) => {
+                    show:(data) => {
                       return bordersActive(data);
                     },
                   },
@@ -310,7 +313,7 @@ function createStylingDefinition(theme, flags, translator) {
                     translation: 'properties.color',
                     dualOutput: true,
                     defaultValue: DEFAULTS.BORDER_COLOR,
-                    show:(data, args) => {
+                    show:(data) => {
                       return bordersActive(data) &&
                         (propertyResolver.getValue(data, 'border.colorType') ?? DEFAULTS.BORDER_COLOR_TYPE) === 'colorPicker';
                     },  
@@ -324,7 +327,7 @@ function createStylingDefinition(theme, flags, translator) {
                 translation: 'Common.Expression',
                 expression: 'optional',
                 defaultValue: '',
-                show:(data, args) => {
+                show:(data) => {
                   return bordersActive(data) &&
                     (propertyResolver.getValue(data, 'border.colorType') ?? DEFAULTS.BORDER_COLOR_TYPE) === 'byExpression';
                 },
