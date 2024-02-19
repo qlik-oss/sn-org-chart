@@ -144,7 +144,7 @@ function createStylingDefinition(theme, flags, translator) {
                     component: 'dropdown',
                     defaultValue: DEFAULTS.FONT_COLOR_TYPE,
                     options: colorOptions,
-                    show:(data, handler) => {
+                    show:(data, args, handler) => {
                       const clonedProperties = structuredClone(handler.properties);
                       const colorTypeStyle = clonedProperties?.style?.fontColor?.colorType;
                       const colorTypeComponent = data?.label?.value?.colorType;
@@ -210,7 +210,7 @@ function createStylingDefinition(theme, flags, translator) {
                     component: 'dropdown',
                     defaultValue: DEFAULTS.BACKGROUND_COLOR_TYPE,
                     options: colorOptions,
-                    show:(data, handler) => {
+                    show:(data, args, handler)  => {
                       const clonedProperties = structuredClone(handler.properties);
                       const colorTypeStyle = clonedProperties?.style?.backgroundColor?.colorType;
                       const colorTypeComponent = data?.backgroundColor?.colorType;
@@ -272,7 +272,7 @@ function createStylingDefinition(theme, flags, translator) {
                 ref: 'border.top',
                 translation: 'Object.OrgChart.TopBar',
                 defaultValue: DEFAULTS.BORDER_TOP,
-                show:(data, handler) => {
+                show:(data, args, handler)  => {
                   const clonedProperties = structuredClone(handler.properties);
                   const topStyle = clonedProperties?.style?.border?.colorType;
                   const topComponent = data?.border?.top || data?.border?.fullBorder || data?.border?.colorType;
