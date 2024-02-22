@@ -73,6 +73,7 @@ const stylingUtils = {
         borderColor,
         location: imageStyle.location,
         alignment: imageStyle.alignment,
+        shape: imageStyle.shape,
       };
       return styling;
     //}

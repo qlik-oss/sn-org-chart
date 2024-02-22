@@ -10,4 +10,5 @@ export default {
   BORDER_TOP: true,
   IMAGE_LOCATION: "both",
   IMAGE_ALIGNMENT: "left",
+  IMAGE_SHAPE: "rectangle",
 };

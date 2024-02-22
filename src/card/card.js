@@ -59,7 +59,10 @@ export default (data, cardStyling, selectionObj) => {
 
   let html = '';
   if (attributes.image && cardStyling.location !== 'tooltip') {
-    let textBoxCss = [undefined, 'left', 'right'].includes(cardStyling.alignment) ? `width: ${textDivWidhtH}; max-height: ${textDivHeightH}; height: fit-content;` : `width: ${textDivWidhtV}; height: ${textDivHeightV};`;
+    const textBoxHeight = ['top', 'bottom'].includes(cardStyling.alignment) && cardStyling.shape === 'round' ? '80px' : '60px';
+    console.log('textBoxHeight',textBoxHeight);
+
+    let textBoxCss = [undefined, 'left', 'right'].includes(cardStyling.alignment) ? `width: ${textDivWidhtH}; max-height: ${textBoxHeight}; height: fit-content;` : `width: ${textDivWidhtV}; height: ${textBoxHeight};`;
     textBoxCss += [undefined, 'left', 'right'].includes(cardStyling.alignment) && `padding-${cardStyling.alignment}: 5px; position: relative; top: 50%; transform: translate(0, -50%);`;
     let textBox = `<div class="sn-org-textbox" style="${textBoxCss}">`;
     textBox += `<div class="sn-org-card-title" style="${titleStyle};">${encodeUtils.encodeTitle(attributes.label || data.id)}</div>`;
@@ -69,11 +72,15 @@ export default (data, cardStyling, selectionObj) => {
 
     //image
     const order = cardStyling.alignment === undefined || ['top', 'left'].includes(cardStyling.alignment) ? 0 : 2;
-    const height = [undefined, 'left', 'right'].includes(cardStyling.alignment) ? ` height: ${imageHeightH}` : `height: ${imageHeightV}`;
-    const width = [undefined, 'left', 'right'].includes(cardStyling.alignment) ? ` width: ${imageWidthH}` : `width: ${imageWidthV}`;
+    //const height = [undefined, 'left', 'right'].includes(cardStyling.alignment) ? ` height: ${imageHeightH}` : `height: ${imageHeightV}`;
+    //const width = [undefined, 'left', 'right'].includes(cardStyling.alignment) ? ` width: ${imageWidthH}` : `width: ${imageWidthV}`;
+
+    const imageSize = ['top', 'bottom'].includes(cardStyling.alignment) ? cardStyling.shape === 'round' ? '110px' : '130px' : '50px';
+
     const align = [undefined, 'left', 'right'].includes(cardStyling.alignment) ? '' : ' margin: 0 auto;';
-    const shape = ' object-fit: cover; border-radius: 50%';
-    html += `<div style='order:${order};${align};'><img src="${attributes.image}" class="sn-org-card-image" style="${height};${width};${shape};"/></div>`;
+    const shape = cardStyling.shape === 'round' ? ' object-fit: cover; border-radius: 50%' : '';
+    //html += `<div style='order:${order};${align};'><img src="${attributes.image}" class="sn-org-card-image" style="${height};${width};${shape};"/></div>`;
+    html += `<div style='order:${order};${align};'><img src="${attributes.image}" class="sn-org-card-image" style="height: ${imageSize}; width: ${imageSize};${shape};"/></div>`;
 
 
     if (data.measure) {

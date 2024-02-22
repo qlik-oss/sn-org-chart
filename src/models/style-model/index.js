@@ -48,6 +48,7 @@ export default function createStyleModel({ layout, themeService }) {
       getStyle: () => ({
         location: findComponent('image')?.image?.location ??  DEFAULTS.IMAGE_LOCATION,
         alignment: findComponent('image')?.image?.alignment ?? DEFAULTS.IMAGE_ALIGNMENT,
+        shape: findComponent('image')?.image?.shape ?? DEFAULTS.IMAGE_SHAPE,
       }),
     },
   };

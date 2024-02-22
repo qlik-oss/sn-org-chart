@@ -24,6 +24,11 @@ const imageAlignmentOptions = [
   { value: 'bottom', translation: 'Bottom' },
 ];
 
+const imageShapeOptions = [
+  { value: 'rectangle', translation: 'Rectangle' },
+  { value: 'round', translation: 'Round' },
+];
+
 /*
 const transformColorProperty = (property) => {
   return {
@@ -346,19 +351,26 @@ function createStylingDefinition(theme, flags, translator) {
             ref: 'components',
             key: 'image',
             items: {
-              topBar: {
+              location: {
                 component: 'dropdown',
                 ref: 'image.location',
                 translation: 'Location',
                 options: imageLocationOptions,
                 defaultValue: DEFAULTS.IMAGE_LOCATION,
               },
-              fullBorder: {
+              alignment: {
                 component: 'dropdown',
                 ref: 'image.alignment',
                 translation: 'Alignment',
                 options: imageAlignmentOptions,
                 defaultValue: DEFAULTS.IMAGE_ALIGNMENT,
+              },
+              shape: {
+                component: 'dropdown',
+                ref: 'image.shape',
+                translation: 'Shape',
+                options: imageShapeOptions,
+                defaultValue: DEFAULTS.IMAGE_SHAPE,
               },
             },
           },
