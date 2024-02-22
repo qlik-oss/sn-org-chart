@@ -200,8 +200,7 @@ const getSettings = (translator, flags, anything) => {
           /* show: (data) => 
             propertyResolver.getValue(data, "style.backgroundColor.colorType") === "byExpression",
           */
-          show: (data, args) => {
-            console.log(args);
+          show: (data) => {
             return propertyResolver.getValue(data, "style.backgroundColor.colorType") === "byExpression";
           },
         },

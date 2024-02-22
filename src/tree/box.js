@@ -93,7 +93,8 @@ export default function box({
     .enter()
     .append("div")
     .attr("class", "sn-org-card")
-    .attr('style', (d) => `width:${cardWidth}px;height:${[undefined, 'left', 'right'].includes(styling.alignment) ? cardHeight : cardHeightLarge}px; top:${y(d)}px;left:${x(d)}px;`)
+    //.attr('style', (d) => `width:${cardWidth}px;height:${[undefined, 'left', 'right'].includes(styling.alignment) ? cardHeight : cardHeightLarge}px; top:${y(d)}px;left:${x(d)}px;`)
+    .attr('style', (d) => `width:${cardWidth}px;height:${[undefined, 'left', 'right'].includes(styling.alignment) || styling.location === 'tooltip' ? cardHeight : cardHeightLarge}px; top:${y(d)}px;left:${x(d)}px;`)
     .attr("id", (d) => d.data.id)
     .on("click", (event, node) => {
       if (!wrapperState.constraints.active && node.data.id !== "Root") {
@@ -131,7 +132,8 @@ export default function box({
       .attr(
         "style",
         (d) =>
-          `width:${buttonWidth}px;height:${buttonHeight}px;top:${y(d) + ([undefined, 'left', 'right'].includes(styling.alignment) ? cardHeight : cardHeightLarge) + cardPadding}px;left:${
+          //`width:${buttonWidth}px;height:${buttonHeight}px;top:${y(d) + ([undefined, 'left', 'right'].includes(styling.alignment) ? cardHeight : cardHeightLarge) + cardPadding}px;left:${
+          `width:${buttonWidth}px;height:${buttonHeight}px;top:${y(d) + ([undefined, 'left', 'right'].includes(styling.alignment) || styling.location === 'tooltip' ? cardHeight : cardHeightLarge) + cardPadding}px;left:${
             x(d) + (cardWidth - buttonWidth) / 2
           }px;`,
       )
