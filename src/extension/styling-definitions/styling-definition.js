@@ -321,7 +321,7 @@ function createStylingDefinition(theme, flags, translator) {
                     show:(data) => {
                       return bordersActive(data) &&
                         (propertyResolver.getValue(data, 'border.colorType') ?? DEFAULTS.BORDER_COLOR_TYPE) === 'colorPicker';
-                    },  
+                    },
                   },
                 },
               },
@@ -371,6 +371,16 @@ function createStylingDefinition(theme, flags, translator) {
                 translation: 'Shape',
                 options: imageShapeOptions,
                 defaultValue: DEFAULTS.IMAGE_SHAPE,
+              },
+              clip: {
+                //type: 'boolean',
+                component: 'checkbox',
+                ref: 'image.clip',
+                translation: 'Clip to fit',
+                defaultValue: DEFAULTS.IMAGE_CLIP,
+                show:(data) => {
+                  return (propertyResolver.getValue(data, 'image.shape') ?? DEFAULTS.IMAGE_SHAPE) === 'rectangle';
+                }
               },
             },
           },

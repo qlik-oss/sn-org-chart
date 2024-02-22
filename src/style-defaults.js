@@ -11,4 +11,5 @@ export default {
   IMAGE_LOCATION: "both",
   IMAGE_ALIGNMENT: "left",
   IMAGE_SHAPE: "rectangle",
+  IMAGE_CLIP: true,
 };

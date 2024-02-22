@@ -49,6 +49,7 @@ export default function createStyleModel({ layout, themeService }) {
         location: findComponent('image')?.image?.location ??  DEFAULTS.IMAGE_LOCATION,
         alignment: findComponent('image')?.image?.alignment ?? DEFAULTS.IMAGE_ALIGNMENT,
         shape: findComponent('image')?.image?.shape ?? DEFAULTS.IMAGE_SHAPE,
+        clip: findComponent('image')?.image?.clip ?? DEFAULTS.IMAGE_CLIP,
       }),
     },
   };

@@ -74,6 +74,7 @@ const stylingUtils = {
         location: imageStyle.location,
         alignment: imageStyle.alignment,
         shape: imageStyle.shape,
+        clip: imageStyle.clip,
       };
       return styling;
     //}

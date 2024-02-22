@@ -60,10 +60,10 @@ export default (data, cardStyling, selectionObj) => {
   let html = '';
   if (attributes.image && cardStyling.location !== 'tooltip') {
     const textBoxHeight = ['top', 'bottom'].includes(cardStyling.alignment) && cardStyling.shape === 'round' ? '80px' : '60px';
-    console.log('textBoxHeight',textBoxHeight);
 
     let textBoxCss = [undefined, 'left', 'right'].includes(cardStyling.alignment) ? `width: ${textDivWidhtH}; max-height: ${textBoxHeight}; height: fit-content;` : `width: ${textDivWidhtV}; height: ${textBoxHeight};`;
-    textBoxCss += [undefined, 'left', 'right'].includes(cardStyling.alignment) && `padding-${cardStyling.alignment}: 5px; position: relative; top: 50%; transform: translate(0, -50%);`;
+    //textBoxCss += [undefined, 'left', 'right'].includes(cardStyling.alignment) && `padding-${cardStyling.alignment}: 5px; position: relative; top: 50%; transform: translate(0, -50%);`;
+    textBoxCss += [undefined, 'left', 'right'].includes(cardStyling.alignment) ? `padding-${cardStyling.alignment}: 5px; position: relative; top: 50%; transform: translate(0, -50%);` : 'padding-left: 2px; ';
     let textBox = `<div class="sn-org-textbox" style="${textBoxCss}">`;
     textBox += `<div class="sn-org-card-title" style="${titleStyle};">${encodeUtils.encodeTitle(attributes.label || data.id)}</div>`;
     if (attributes.subLabel) {
@@ -78,9 +78,11 @@ export default (data, cardStyling, selectionObj) => {
     const imageSize = ['top', 'bottom'].includes(cardStyling.alignment) ? cardStyling.shape === 'round' ? '110px' : '130px' : '50px';
 
     const align = [undefined, 'left', 'right'].includes(cardStyling.alignment) ? '' : ' margin: 0 auto;';
-    const shape = cardStyling.shape === 'round' ? ' object-fit: cover; border-radius: 50%' : '';
+    //const shape = cardStyling.shape === 'round' ? ' object-fit: cover; border-radius: 50%' : '';
+    const shape = cardStyling.shape === 'rectangle' ? cardStyling.clip ? ' object-fit: cover;' : '' : ' object-fit: cover; border-radius: 50% ';
+    console.log('shape',shape);
     //html += `<div style='order:${order};${align};'><img src="${attributes.image}" class="sn-org-card-image" style="${height};${width};${shape};"/></div>`;
-    html += `<div style='order:${order};${align};'><img src="${attributes.image}" class="sn-org-card-image" style="height: ${imageSize}; width: ${imageSize};${shape};"/></div>`;
+    html += `<div style='order:${order};${align};'><img src="${attributes.image}" class="sn-org-card-image" style="height: ${imageSize}; width: ${imageSize}; ${shape}; "/></div>`;
 
 
     if (data.measure) {
@@ -104,46 +106,6 @@ export default (data, cardStyling, selectionObj) => {
       html += `<div class="sn-org-card-label" style="${labelStyle};">${encodeUtils.encodeTitle(attributes.extraLabel)}</div>`;
     }
   }
-
-  /*
-  let html = '';
-  if (attributes.image && cardStyling.location !== 'tooltip') {
-    let textBoxCss = [undefined, 'left', 'right'].includes(cardStyling.alignment) ? 'width: 85px; lenght: 60px;' : '';
-    textBoxCss += [undefined, 'left', 'right'].includes(cardStyling.alignment) && `padding-${cardStyling.alignment}: 5px`;
-    let textBox = `<div class="sn-org-textbox" style="${cardStyling.location === 'tooltip' ? '' : textBoxCss}">`;
-    textBox += `<div class="sn-org-card-title" style="${titleStyle};">${encodeUtils.encodeTitle(attributes.label || data.id)}</div>`;
-    if (attributes.subLabel) {
-      textBox += `<div class="sn-org-card-label" style="${labelStyle};">${encodeUtils.encodeTitle(attributes.subLabel)}</div>`;
-    }
-    if (cardStyling.location !== 'tooltip') {
-      const order = cardStyling.alignment === undefined || ['top', 'left'].includes(cardStyling.alignment) ? 0 : 2;
-      const height = [undefined, 'left', 'right'].includes(cardStyling.alignment) ? ' height: 50px' : 'height: 120px';
-      const width = [undefined, 'left', 'right'].includes(cardStyling.alignment) ? ' width: 50px' : 'width: 120px';
-      const align = [undefined, 'left', 'right'].includes(cardStyling.alignment) ? '' : ' display: flex; justify-content: center';
-      //html += `<img src="${attributes.image}" class="sn-org-card-image" style="order: ${order};${height}" />`;
-      html += `<img src="${attributes.image}" class="sn-org-card-image" style="order: ${order};${height};${width};${align}" />`;
-    }
-    if (data.measure) {
-      const measureLabel = cardStyling.measureLabel ? `${cardStyling.measureLabel}: ` : '';
-      textBox += `<div class="sn-org-card-label" style="${labelStyle};">${encodeUtils.encodeTitle(measureLabel + data.measure)}</div>`;
-    } else if (attributes.extraLabel) {
-      textBox += `<div class="sn-org-card-label" style="${labelStyle};">${encodeUtils.encodeTitle(attributes.extraLabel)}</div>`;
-    }
-    html += textBox;
-  } else {
-    html = `<div class="sn-org-textbox" style="height: 60px">`;
-    html += `<div class="sn-org-card-title" style="${titleStyle};">${encodeUtils.encodeTitle(attributes.label || data.id)}</div>`;
-    if (attributes.subLabel) {
-      html += `<div class="sn-org-card-label" style="${labelStyle};">${encodeUtils.encodeTitle(attributes.subLabel)}</div>`;
-    }
-    if (data.measure) {
-      const measureLabel = cardStyling.measureLabel ? `${cardStyling.measureLabel}: ` : "";
-      html += `<div class="sn-org-card-label" style="${labelStyle};">${encodeUtils.encodeTitle(measureLabel + data.measure)}</div>`;
-    } else if (attributes.extraLabel) {
-      html += `<div class="sn-org-card-label" style="${labelStyle};">${encodeUtils.encodeTitle(attributes.extraLabel)}</div>`;
-    }
-  }
-  */
 
   const isSelectedClass = isSelected ? " selected" : " not-selected";
   const selectedClass = api && api.isActive() ? isSelectedClass : "";
@@ -169,7 +131,7 @@ export default (data, cardStyling, selectionObj) => {
     newCardHeight -= 3;
   }
   //return `<div class="sn-org-card-text${selectedClass}" style="background-color:${backgroundColor};color:${fontColor}; border:${borderStyle}; border-top:${topBorder}; height:${newCardHeight}px;">${html}</div>`;
-  const htmlOutput = `<div class="sn-org-card-text${selectedClass}" style="background-color:${backgroundColor};color:${fontColor}; border:${borderStyle}; border-top:${topBorder}; height:${newCardHeight}px;${flex}">${html}</div></div>`;
-  console.log(htmlOutput);
+  //const htmlOutput = `<div class="sn-org-card-text${selectedClass}" style="background-color:${backgroundColor};color:${fontColor}; border:${borderStyle}; border-top:${topBorder}; height:${newCardHeight}px;${flex}">${html}</div></div>`;
+  //console.log(htmlOutput);
   return `<div class="sn-org-card-text${selectedClass}" style="background-color:${backgroundColor};color:${fontColor}; border:${borderStyle}; border-top:${topBorder}; height:${newCardHeight}px;${flex}">${html}</div></div>`;
 };
