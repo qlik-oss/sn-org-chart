@@ -6,7 +6,7 @@ export default function createStyleModel({ layout, themeService }) {
   const findComponent = (key) => {
     return layout.components?.find((o) => o.key === key) ?? undefined;
   };
-
+  
   return {
     axis: {
       label: {
@@ -50,6 +50,7 @@ export default function createStyleModel({ layout, themeService }) {
         alignment: findComponent('image')?.image?.alignment ?? DEFAULTS.IMAGE_ALIGNMENT,
         shape: findComponent('image')?.image?.shape ?? DEFAULTS.IMAGE_SHAPE,
         clip: findComponent('image')?.image?.clip ?? DEFAULTS.IMAGE_CLIP,
+        //outlineColor: findComponent('image')?.image?.outlineColor?.color ?? DEFAULTS.IMAGE_OUTLINE_COLOR.color,
       }),
     },
   };

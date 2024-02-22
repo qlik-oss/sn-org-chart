@@ -75,6 +75,7 @@ const stylingUtils = {
         alignment: imageStyle.alignment,
         shape: imageStyle.shape,
         clip: imageStyle.clip,
+        //outlineColor: imageStyle.outlineColor,
       };
       return styling;
     //}

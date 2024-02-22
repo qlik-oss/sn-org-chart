@@ -63,7 +63,8 @@ export default (data, cardStyling, selectionObj) => {
 
     let textBoxCss = [undefined, 'left', 'right'].includes(cardStyling.alignment) ? `width: ${textDivWidhtH}; max-height: ${textBoxHeight}; height: fit-content;` : `width: ${textDivWidhtV}; height: ${textBoxHeight};`;
     //textBoxCss += [undefined, 'left', 'right'].includes(cardStyling.alignment) && `padding-${cardStyling.alignment}: 5px; position: relative; top: 50%; transform: translate(0, -50%);`;
-    textBoxCss += [undefined, 'left', 'right'].includes(cardStyling.alignment) ? `padding-${cardStyling.alignment}: 5px; position: relative; top: 50%; transform: translate(0, -50%);` : 'padding-left: 2px; ';
+    textBoxCss += [undefined, 'left', 'right'].includes(cardStyling.alignment) ? `padding-${cardStyling.alignment}: 5px; position: relative; top: 50%; transform: translate(0, -50%);` : 'padding-left: 3px;';
+    textBoxCss += cardStyling.alignment === 'bottom' ? 'padding-top: 3px;': '';
     let textBox = `<div class="sn-org-textbox" style="${textBoxCss}">`;
     textBox += `<div class="sn-org-card-title" style="${titleStyle};">${encodeUtils.encodeTitle(attributes.label || data.id)}</div>`;
     if (attributes.subLabel) {
@@ -72,17 +73,15 @@ export default (data, cardStyling, selectionObj) => {
 
     //image
     const order = cardStyling.alignment === undefined || ['top', 'left'].includes(cardStyling.alignment) ? 0 : 2;
-    //const height = [undefined, 'left', 'right'].includes(cardStyling.alignment) ? ` height: ${imageHeightH}` : `height: ${imageHeightV}`;
-    //const width = [undefined, 'left', 'right'].includes(cardStyling.alignment) ? ` width: ${imageWidthH}` : `width: ${imageWidthV}`;
-
     const imageSize = ['top', 'bottom'].includes(cardStyling.alignment) ? cardStyling.shape === 'round' ? '110px' : '130px' : '50px';
 
     const align = [undefined, 'left', 'right'].includes(cardStyling.alignment) ? '' : ' margin: 0 auto;';
     //const shape = cardStyling.shape === 'round' ? ' object-fit: cover; border-radius: 50%' : '';
-    const shape = cardStyling.shape === 'rectangle' ? cardStyling.clip ? ' object-fit: cover;' : '' : ' object-fit: cover; border-radius: 50% ';
-    console.log('shape',shape);
+    const shape = cardStyling.shape === 'rectangle' ? cardStyling.clip ? ' object-fit: cover' : '' : ' object-fit: cover; border-radius: 50%';
+    //const outline = cardStyling.outlineColor !== 'none' ? `border: 2px solid ${cardStyling.outlineColor};` : '';
+    //console.log('shape',shape);
     //html += `<div style='order:${order};${align};'><img src="${attributes.image}" class="sn-org-card-image" style="${height};${width};${shape};"/></div>`;
-    html += `<div style='order:${order};${align};'><img src="${attributes.image}" class="sn-org-card-image" style="height: ${imageSize}; width: ${imageSize}; ${shape}; "/></div>`;
+    html += `<div style="order:${order};${align};"><img src="${attributes.image}" class="sn-org-card-image" style="height: ${imageSize}; width: ${imageSize}; ${shape}; "/></div>`;
 
 
     if (data.measure) {
@@ -122,7 +121,7 @@ export default (data, cardStyling, selectionObj) => {
   const borderStyle = fullBorder && !isSelected ? `1px solid ${borderColor}` : "";
   //let newCardHeight = constants.cardHeight;
   let newCardHeight = [undefined, 'left', 'right'].includes(cardStyling.alignment) || cardStyling.location === 'tooltip' ? constants.cardHeight : constants.cardHeightLarge;
-  const flex = attributes.image && cardStyling.location !== 'tooltip'? [undefined, 'left', 'right'].includes(cardStyling.alignment) ? 'display: flex; flex-direction: row;"' : 'display: flex; flex-direction: column;"' : 'display: flex;';
+  const flex = attributes.image && cardStyling.location !== 'tooltip'? [undefined, 'left', 'right'].includes(cardStyling.alignment) ? 'display: flex; flex-direction: row;' : 'display: flex; flex-direction: column;"' : 'display: flex;';
   if (isSelected) {
     newCardHeight -= 8;
   } else if (fullBorder) {

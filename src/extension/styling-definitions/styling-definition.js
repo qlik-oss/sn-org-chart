@@ -365,6 +365,15 @@ function createStylingDefinition(theme, flags, translator) {
                 options: imageAlignmentOptions,
                 defaultValue: DEFAULTS.IMAGE_ALIGNMENT,
               },
+              /*
+              outline: {
+                component: 'color-picker',
+                ref: 'image.outlineColor',
+                translation: 'Outline color',
+                disableNone: false,
+                defaultValue: DEFAULTS.IMAGE_OUTLINE_COLOR,
+              },
+              */
               shape: {
                 component: 'dropdown',
                 ref: 'image.shape',
