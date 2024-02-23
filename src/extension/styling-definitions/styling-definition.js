@@ -97,7 +97,8 @@ function createStylingDefinition(theme, flags, translator) {
     show: true,
     chartType: 'orgchart',
     translation: 'LayerStyleEditor.component.styling',
-    chartTitle: 'Object.OrgChart',
+    //chartTitle: 'Object.OrgChart',
+    chartTitle: 'Org chart',
     subtitle: 'LayerStyleEditor.component.styling',
     useGeneral: true,
     useBackground: true,
@@ -385,7 +386,7 @@ function createStylingDefinition(theme, flags, translator) {
                 //type: 'boolean',
                 component: 'checkbox',
                 ref: 'image.clip',
-                translation: 'Clip to fit',
+                translation: 'Fit to shape',
                 defaultValue: DEFAULTS.IMAGE_CLIP,
                 show:(data) => {
                   return (propertyResolver.getValue(data, 'image.shape') ?? DEFAULTS.IMAGE_SHAPE) === 'rectangle';

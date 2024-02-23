@@ -67,7 +67,7 @@ const data = (flags) => {
                 component: 'expression',
                 ref: 'qExpression',
                 //translation: 'Object.OrgChart.Images',
-                translation: 'Images',
+                translation: 'Image URL',
                 defaultValue: '',
                 id: 'imageExpression',
                 tid: 'imageExpression',
