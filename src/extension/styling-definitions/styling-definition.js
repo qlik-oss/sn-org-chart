@@ -29,26 +29,6 @@ const imageShapeOptions = [
   { value: 'round', translation: 'Round' },
 ];
 
-/*
-const transformColorProperty = (property) => {
-  return {
-    colorType: property?.colorType,
-    color: property?.color,
-    colorExpression: property?.colorExpression?.qStringExpression?.qExpr,
-  };
-}
-
-const transformBorderProperty = (property) => {
-  return {
-    ... transformColorProperty(property),
-    top: property?.top,
-    fullBorder: property?.fullBorder,
-  };
-}
-
-*/
-
-
 const dataTemplateLabel = {
   label: {
     value: {
@@ -265,13 +245,6 @@ function createStylingDefinition(theme, flags, translator) {
             ref: 'components',
             key: 'border',
             items: {
-              /*
-              appearanceHeader: {
-                component: 'text',
-                translation: 'Object.OrgChart.CardAppearance',
-                style: 'pp-nm-hcd__list-header',
-              },
-              */
               topBar: {
                 //type: 'boolean',
                 component: 'checkbox',
@@ -366,15 +339,6 @@ function createStylingDefinition(theme, flags, translator) {
                 options: imageAlignmentOptions,
                 defaultValue: DEFAULTS.IMAGE_ALIGNMENT,
               },
-              /*
-              outline: {
-                component: 'color-picker',
-                ref: 'image.outlineColor',
-                translation: 'Outline color',
-                disableNone: false,
-                defaultValue: DEFAULTS.IMAGE_OUTLINE_COLOR,
-              },
-              */
               shape: {
                 component: 'dropdown',
                 ref: 'image.shape',

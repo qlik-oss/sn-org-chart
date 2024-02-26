@@ -31,7 +31,6 @@ export const getInitialZoomState = (bBox, element, navigationMode, styling) => {
   const { width, height } = bBox;
   const { clientHeight, clientWidth } = element;
   const calcWidth = width + 2 * widthMargin;
-  //const calcHeight = height + (styling && [undefined, 'left', 'right'].includes(styling.alignment) ? cardHeight : cardHeightLarge);
   const calcHeight = height + (styling && [undefined, 'left', 'right'].includes(styling.alignment) || styling.location === 'tooltip' ? cardHeight : cardHeightLarge);
   const xZoom = Math.max(Math.min(calcWidth / clientWidth, maxZoom), minZoom);
   const yZoom = Math.max(Math.min(calcHeight / clientHeight, maxZoom), minZoom);
@@ -46,7 +45,6 @@ export const getInitialZoomState = (bBox, element, navigationMode, styling) => {
   // Zooming for y direction
   return {
     initialX: -bBox.x + (clientWidth * yZoom - width) / 2,
-    //initialY: (styling && [undefined, 'left', 'right'].includes(styling.alignment) ? cardHeight : cardHeightLarge) / 2,
     initialY: (styling && [undefined, 'left', 'right'].includes(styling.alignment) || styling.location === 'tooltip' ? cardHeight : cardHeightLarge) / 2,
     initialZoom: yZoom,
   };

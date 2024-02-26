@@ -55,7 +55,7 @@ export const filterTree = ({ topId, isExpanded, expandedChildren }, nodeTree, ex
   return subTree;
 };
 
-export const paintTree = ({ containerData, styling, setExpandedCallback, wrapperState, selectionObj, element }) => {
+export const paintTree = ({ containerData, styling, setExpandedCallback, wrapperState, selectionObj, element, flags }) => {
   const { svg, divBox, allNodes, positioning, tooltip } = containerData;
   const { navigationMode } = allNodes.data;
   divBox.selectAll("*").remove();
@@ -74,6 +74,7 @@ export const paintTree = ({ containerData, styling, setExpandedCallback, wrapper
     navigationMode,
     element,
     tooltip,
+    flags,
   });
   // Create the lines (links) between the nodes
   const node = svg.selectAll(".sn-org-paths").data(nodes).enter();

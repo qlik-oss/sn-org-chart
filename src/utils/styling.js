@@ -75,26 +75,9 @@ const stylingUtils = {
         alignment: imageStyle.alignment,
         shape: imageStyle.shape,
         clip: imageStyle.clip,
-        //outlineColor: imageStyle.outlineColor,
       };
       return styling;
     //}
-    /*
-    const backgroundColor = getColor(layout.style.backgroundColor, Theme, DEFAULTS.BACKGROUND_COLOR.color);
-    const fontColor = getColor(layout.style.fontColor, Theme, "default");
-    const { border = { colorType: DEFAULTS.BORDER_COLOR_TYPE } } = layout.style;
-    const borderColor =
-      border.colorType !== "auto"
-        ? getColor(border, Theme, colorUtils.getDarkColor(backgroundColor))
-        : colorUtils.getDarkColor(backgroundColor);
-    return {
-      backgroundColor,
-      fontColor,
-      measureLabel,
-      border,
-      borderColor,
-    };
-    */
 
   },
 };

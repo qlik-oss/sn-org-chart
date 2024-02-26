@@ -140,6 +140,7 @@ export default function supernova(env) {
             selectionObj,
             useTransitions: expandedState.useTransitions,
             element,
+            flags,
           });
         }
       };

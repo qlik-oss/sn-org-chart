@@ -12,5 +12,4 @@ export default {
   IMAGE_ALIGNMENT: "left",
   IMAGE_SHAPE: "rectangle",
   IMAGE_CLIP: true,
-  IMAGE_OUTLINE_COLOR: { index: -1, color: "none" },
 };

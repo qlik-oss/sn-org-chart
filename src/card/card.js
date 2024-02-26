@@ -25,7 +25,7 @@ export function getFontColor(cardStyling, backgroundColor) {
   return cardStyling.fontColor;
 }
 
-export default (data, cardStyling, selectionObj) => {
+export default (data, cardStyling, selectionObj, flags) => {
   const { api, state } = selectionObj;
   const isSelected = api && api.isActive() && state.indexOf(data.elemNo) !== -1;
   const backgroundColor = getBackgroundColor(data, cardStyling);
@@ -34,35 +34,11 @@ export default (data, cardStyling, selectionObj) => {
   const labelStyle = `font-family:${cardStyling.cardBody.fontFamily};font-size:${cardStyling.cardBody.fontSize}`;
   const attributes = data.attributes || {};
 
-/*
-  let html = `<div class="sn-org-card-title" style="${titleStyle};">${encodeUtils.encodeTitle(attributes.label || data.id)}</div>`;
-  if (attributes.subLabel) {
-    html += `<div class="sn-org-card-label" style="${labelStyle};">${encodeUtils.encodeTitle(attributes.subLabel)}</div>`;
-  }
-  if (data.measure) {
-    const measureLabel = cardStyling.measureLabel ? `${cardStyling.measureLabel}: ` : "";
-    html += `<div class="sn-org-card-label" style="${labelStyle};">${encodeUtils.encodeTitle(measureLabel + data.measure)}</div>`;
-  } else if (attributes.extraLabel) {
-    html += `<div class="sn-org-card-label" style="${labelStyle};">${encodeUtils.encodeTitle(attributes.extraLabel)}</div>`;
-  }
-*/
-
-  const imageWidthH = '50px';
-  const imageHeightH = '50px';
-  const textDivWidhtH = '85px';
-  const textDivHeightH = '60px';
-
-  const imageWidthV = '130px';
-  const imageHeightV = '130px';
-  const textDivWidhtV = '145px';
-  const textDivHeightV = '60px';
-
   let html = '';
   if (attributes.image && cardStyling.location !== 'tooltip') {
     const textBoxHeight = ['top', 'bottom'].includes(cardStyling.alignment) && cardStyling.shape === 'round' ? '80px' : '60px';
 
-    let textBoxCss = [undefined, 'left', 'right'].includes(cardStyling.alignment) ? `width: ${textDivWidhtH}; max-height: ${textBoxHeight}; height: fit-content;` : `width: ${textDivWidhtV}; height: ${textBoxHeight};`;
-    //textBoxCss += [undefined, 'left', 'right'].includes(cardStyling.alignment) && `padding-${cardStyling.alignment}: 5px; position: relative; top: 50%; transform: translate(0, -50%);`;
+    let textBoxCss = [undefined, 'left', 'right'].includes(cardStyling.alignment) ? `width: 85px; max-height: ${textBoxHeight}; height: fit-content;` : `width: 145px; height: ${textBoxHeight};`;
     textBoxCss += [undefined, 'left', 'right'].includes(cardStyling.alignment) ? `padding-${cardStyling.alignment}: 5px; position: relative; top: 50%; transform: translate(0, -50%);` : 'padding-left: 3px;';
     textBoxCss += cardStyling.alignment === 'bottom' ? 'padding-top: 3px;': '';
     let textBox = `<div class="sn-org-textbox" style="${textBoxCss}">`;
@@ -76,13 +52,8 @@ export default (data, cardStyling, selectionObj) => {
     const imageSize = ['top', 'bottom'].includes(cardStyling.alignment) ? cardStyling.shape === 'round' ? '110px' : '130px' : '50px';
 
     const align = [undefined, 'left', 'right'].includes(cardStyling.alignment) ? '' : ' margin: 0 auto;';
-    //const shape = cardStyling.shape === 'round' ? ' object-fit: cover; border-radius: 50%' : '';
     const shape = cardStyling.shape === 'rectangle' ? cardStyling.clip ? ' object-fit: cover' : '' : ' object-fit: cover; border-radius: 50%';
-    //const outline = cardStyling.outlineColor !== 'none' ? `border: 2px solid ${cardStyling.outlineColor};` : '';
-    //console.log('shape',shape);
-    //html += `<div style='order:${order};${align};'><img src="${attributes.image}" class="sn-org-card-image" style="${height};${width};${shape};"/></div>`;
     html += `<div style="order:${order};${align};"><img src="${attributes.image}" class="sn-org-card-image" style="height: ${imageSize}; width: ${imageSize}; ${shape}; "/></div>`;
-
 
     if (data.measure) {
       const measureLabel = cardStyling.measureLabel ? `${cardStyling.measureLabel}: ` : '';
@@ -93,7 +64,8 @@ export default (data, cardStyling, selectionObj) => {
     html += textBox;
 
   } else {
-    html = `<div class="sn-org-textbox" style="max-height: 60px; height: fit-content; position: relative; top: 50%; transform: translate(0, -50%); padding-left: 3px; ">`;
+    flags?.isEnabled('SENSECLIENT_IM_5036_VIZBUNDLE_STYLING') ? 
+      html += `<div class="sn-org-textbox" style="max-height: 60px; height: fit-content; position: relative; top: 50%; transform: translate(0, -50%); padding-left: 3px; ">` : '' ;
     html += `<div class="sn-org-card-title" style="${titleStyle};">${encodeUtils.encodeTitle(attributes.label || data.id)}</div>`;
     if (attributes.subLabel) {
       html += `<div class="sn-org-card-label" style="${labelStyle};">${encodeUtils.encodeTitle(attributes.subLabel)}</div>`;
@@ -119,9 +91,18 @@ export default (data, cardStyling, selectionObj) => {
 
   const topBorder = top && !isSelected ? `3px solid ${borderColor}` : "";
   const borderStyle = fullBorder && !isSelected ? `1px solid ${borderColor}` : "";
-  //let newCardHeight = constants.cardHeight;
   let newCardHeight = [undefined, 'left', 'right'].includes(cardStyling.alignment) || cardStyling.location === 'tooltip' ? constants.cardHeight : constants.cardHeightLarge;
-  const flex = attributes.image && cardStyling.location !== 'tooltip'? [undefined, 'left', 'right'].includes(cardStyling.alignment) ? 'display: flex; flex-direction: row;' : 'display: flex; flex-direction: column;"' : 'display: flex;';
+
+  //const flex = attributes.image && cardStyling.location !== 'tooltip'? [undefined, 'left', 'right'].includes(cardStyling.alignment) ? 'display: flex; flex-direction: row;' : 'display: flex; flex-direction: column;"' : 'display: flex;';
+
+  const flex = flags?.isEnabled('SENSECLIENT_IM_5036_VIZBUNDLE_STYLING') 
+    ? attributes.image && cardStyling.location !== 'tooltip'
+      ? [undefined, 'left', 'right'].includes(cardStyling.alignment) 
+        ? 'display: flex; flex-direction: row;'
+        : 'display: flex; flex-direction: column;"'
+      : 'display: flex;' 
+    : '';
+
   if (isSelected) {
     newCardHeight -= 8;
   } else if (fullBorder) {
@@ -130,7 +111,8 @@ export default (data, cardStyling, selectionObj) => {
     newCardHeight -= 3;
   }
   //return `<div class="sn-org-card-text${selectedClass}" style="background-color:${backgroundColor};color:${fontColor}; border:${borderStyle}; border-top:${topBorder}; height:${newCardHeight}px;">${html}</div>`;
-  //const htmlOutput = `<div class="sn-org-card-text${selectedClass}" style="background-color:${backgroundColor};color:${fontColor}; border:${borderStyle}; border-top:${topBorder}; height:${newCardHeight}px;${flex}">${html}</div></div>`;
-  //console.log(htmlOutput);
-  return `<div class="sn-org-card-text${selectedClass}" style="background-color:${backgroundColor};color:${fontColor}; border:${borderStyle}; border-top:${topBorder}; height:${newCardHeight}px;${flex}">${html}</div></div>`;
+
+  const htmlOutput = `<div class="sn-org-card-text${selectedClass}" style="background-color:${backgroundColor};color:${fontColor}; border:${borderStyle}; border-top:${topBorder}; height:${newCardHeight}px;${flex}">${html}</div></div>`
+
+  return htmlOutput;
 };
