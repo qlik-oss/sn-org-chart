@@ -38,8 +38,8 @@ export default (data, cardStyling, selectionObj, flags) => {
   if (attributes.image && cardStyling.location !== 'tooltip') {
     const textBoxHeight = ['top', 'bottom'].includes(cardStyling.alignment) && cardStyling.shape === 'round' ? '80px' : '60px';
 
-    let textBoxCss = [undefined, 'left', 'right'].includes(cardStyling.alignment) ? `width: 85px; max-height: ${textBoxHeight}; height: fit-content;` : `width: 145px; height: ${textBoxHeight};`;
-    textBoxCss += [undefined, 'left', 'right'].includes(cardStyling.alignment) ? `padding-${cardStyling.alignment}: 5px; position: relative; top: 50%; transform: translate(0, -50%);` : 'padding-left: 3px;';
+    let textBoxCss = [undefined, 'left', 'right'].includes(cardStyling.alignment) ? `width: 85px; max-height: ${textBoxHeight}; height: fit-content;` : `width: 145px; max-height: ${textBoxHeight};`;
+    textBoxCss += [undefined, 'left', 'right'].includes(cardStyling.alignment) ? `padding-${cardStyling.alignment}: 5px; position: relative; top: 50%; transform: translate(0, -50%);` : 'padding-left: 3px; margin-bottom: 3px; ';
     textBoxCss += cardStyling.alignment === 'bottom' ? 'padding-top: 3px;': '';
     let textBox = `<div class="sn-org-textbox" style="${textBoxCss}">`;
     textBox += `<div class="sn-org-card-title" style="${titleStyle};">${encodeUtils.encodeTitle(attributes.label || data.id)}</div>`;
@@ -50,7 +50,6 @@ export default (data, cardStyling, selectionObj, flags) => {
     //image
     const order = cardStyling.alignment === undefined || ['top', 'left'].includes(cardStyling.alignment) ? 0 : 2;
     const imageSize = ['top', 'bottom'].includes(cardStyling.alignment) ? cardStyling.shape === 'round' ? '110px' : '130px' : '50px';
-
     const align = [undefined, 'left', 'right'].includes(cardStyling.alignment) ? '' : ' margin: 0 auto;';
     const shape = cardStyling.shape === 'rectangle' ? cardStyling.clip ? ' object-fit: cover' : '' : ' object-fit: cover; border-radius: 50%';
     html += `<div style="order:${order};${align};"><img src="${attributes.image}" class="sn-org-card-image" style="height: ${imageSize}; width: ${imageSize}; ${shape}; "/></div>`;
