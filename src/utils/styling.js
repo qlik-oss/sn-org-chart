@@ -23,45 +23,43 @@ const stylingUtils = {
       ? layout.qHyperCube.qMeasureInfo[0].qFallbackTitle
       : null;
 
-    //if (flags?.isEnabled('SENSECLIENT_IM_5036_VIZBUNDLE_STYLING')) {
-      const axisLabelStyle = styleModel.axis.label.getStyle();
-      const labelValueStyle = styleModel.label.value.getStyle();
-      const cardBackgroundStyle = styleModel.backgroundColor.getStyle();
-      const cardBorderStyle = styleModel.border.getStyle();
-      const imageStyle = styleModel.image.getStyle();
+    const axisLabelStyle = styleModel.axis.label.getStyle();
+    const labelValueStyle = styleModel.label.value.getStyle();
+    const cardBackgroundStyle = styleModel.backgroundColor.getStyle();
+    const cardBorderStyle = styleModel.border.getStyle();
+    const imageStyle = styleModel.image.getStyle();
 
-      const border = { 
-        top: cardBorderStyle.top,
-        fullBorder: cardBorderStyle.fullBorder,
-        colorType: cardBorderStyle.colorType,
-      };
+    const border = { 
+      top: cardBorderStyle.top,
+      fullBorder: cardBorderStyle.fullBorder,
+      colorType: cardBorderStyle.colorType,
+    };
 
-      const backgroundColor = getColorStyling(cardBackgroundStyle, DEFAULTS.BACKGROUND_COLOR.color);
-      const fontColor = getColorStyling(labelValueStyle, "default");
-      const borderColor = cardBorderStyle.colorType !== "auto"
-        ? getColorStyling(cardBorderStyle, colorUtils.getDarkColor(backgroundColor))
-        : colorUtils.getDarkColor(backgroundColor);
+    const backgroundColor = getColorStyling(cardBackgroundStyle, DEFAULTS.BACKGROUND_COLOR.color);
+    const fontColor = getColorStyling(labelValueStyle, "default");
+    const borderColor = cardBorderStyle.colorType !== "auto"
+      ? getColorStyling(cardBorderStyle, colorUtils.getDarkColor(backgroundColor))
+      : colorUtils.getDarkColor(backgroundColor);
 
-      const styling = {
-        cardTitle: axisLabelStyle,
-        cardBody: { 
-          fontSize: labelValueStyle.fontSize,
-          fontFamily: labelValueStyle.fontFamily,
-        },
-        backgroundColor,
-        fontColor,
-        measureLabel,
-        border,
-        borderColor,
-        image: {
-          location: imageStyle.location,
-          alignment: imageStyle.alignment,
-          shape: imageStyle.shape,
-          clip: imageStyle.clip,
-        },
-      };
-      return styling;
-    //}
+    const styling = {
+      cardTitle: axisLabelStyle,
+      cardBody: { 
+        fontSize: labelValueStyle.fontSize,
+        fontFamily: labelValueStyle.fontFamily,
+      },
+      backgroundColor,
+      fontColor,
+      measureLabel,
+      border,
+      borderColor,
+      image: {
+        location: imageStyle.location,
+        alignment: imageStyle.alignment,
+        shape: imageStyle.shape,
+        clip: imageStyle.clip,
+      },
+    };
+    return styling;
 
   },
 };

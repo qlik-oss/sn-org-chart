@@ -16,8 +16,8 @@ const navigationOptions = [
 const bordersActive = (data) =>
   propertyResolver.getValue(data, "style.border.top") || propertyResolver.getValue(data, "style.border.fullBorder");
 
-const data = (flags) => {
-  return {
+const getData = (flags) => (
+  {
     uses: "data",
     items: {
       measures: {
@@ -93,8 +93,8 @@ const data = (flags) => {
         },
       },
     },
-  };
-};
+  }
+);
 
 const sorting = {
   uses: 'sorting',
@@ -196,9 +196,7 @@ const getSettings = (translator, flags, anything) => {
           translation: "Common.Expression",
           expression: "optional",
           defaultValue: "",
-          show: (data) => {
-            return propertyResolver.getValue(data, "style.backgroundColor.colorType") === "byExpression";
-          },
+          show: (data) => propertyResolver.getValue(data, "style.backgroundColor.colorType") === "byExpression",
         },
       },
     };
@@ -289,17 +287,16 @@ const getSettings = (translator, flags, anything) => {
       },
     };
   }
-
   return settings;
-};  
+};
 
-export default function ({ translator, flags, anything }) {
+export default function extDef({ translator, flags, anything }) {
   return {
     definition: {
       type: 'items',
       component: 'accordion',
       items: {
-        data: data(flags),
+        data: getData(flags),
         sorting,
         addOns,
         settings: getSettings(translator, flags, anything),

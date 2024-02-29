@@ -3,9 +3,7 @@ import DEFAULTS from "../../style-defaults";
 export default function createStyleModel({ layout, themeService }) {
   const themeStyle = themeService.getStyles();
 
-  const findComponent = (key) => {
-    return layout.components?.find((o) => o.key === key) ?? undefined;
-  };
+  const findComponent = (key) => layout.components?.find((o) => o.key === key) ?? undefined;
   
   return {
     axis: {

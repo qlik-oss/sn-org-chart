@@ -7,12 +7,12 @@ export function getPoints(d, topId, { depthSpacing, isVertical, x, y }, navigati
   const { cardWidth, cardHeight, cardHeightLarge, buttonHeight, cardPadding, buttonMargin } = constants;
   const actualCardHeight = [undefined, 'left', 'right'].includes(styling.image.alignment) || styling.image.location === 'tooltip' ? cardHeight : cardHeightLarge;
   const points = [];
-  const halfCard = { x: cardWidth / 2, y: cardHeight / 2 };
+  const halfCard = { x: cardWidth / 2, y: actualCardHeight / 2 };
   const start = { x: d.xActual, y: d.yActual };
 
   // TODO: fix so auto mode does not get a path to parent not showing
   if (d.parent && d.parent.data.id !== "Root") {
-    const halfCard = { x: cardWidth / 2, y: actualCardHeight / 2 };
+    const halfDepth = depthSpacing / 2;
     const yOffset = navigationMode === 'expandAll' ? actualCardHeight : actualCardHeight + cardPadding + buttonHeight;
     const end = { x: x(d.parent) + halfCard.x, y: y(d.parent) + yOffset };
 

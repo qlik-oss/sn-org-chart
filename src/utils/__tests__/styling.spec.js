@@ -1,12 +1,7 @@
 import stylingUtils, { getColorStyling } from "../styling";
 
-const palette = ["firstColor", "secondColor"];
 const defaultColor = "#e6e6e6";
-/*
-const Theme = {
-  getColorPickerColor: (color) => palette[color.index] || "none",
-};
-*/
+
 describe("styling", () => {
   describe("getColor", () => {
     let reference;
@@ -152,28 +147,18 @@ describe("styling", () => {
     });
 
     it("should return cardStyling with borderColor from color picker", () => {
-      //layout.style.border = { colorType: "colorPicker", color: { index: 1 } };
-      const fn = () => {
-        return {
-          top: true,
-          fullBorder: true,
-          colorType: 'colorPicker',
-          color: '#0000ff',
-          colorExpression: '',
-        };
-      };
+      const fn = () => ({
+        top: true,
+        fullBorder: true,
+        colorType: 'colorPicker',
+        color: '#0000ff',
+        colorExpression: '',
+      });
       styleModel.border.getStyle = fn;
       
       const result = stylingUtils.cardStyling({ layout, styleModel });
 
       expect(result).toEqual({
-        /*
-        backgroundColor: "#ffffff",
-        fontColor: "default",
-        measureLabel: "measureLabel",
-        border: { colorType: "colorPicker", color: { index: 1 } },
-        borderColor: "secondColor",
-        */
         cardTitle: {
           fontSize: "16",
           fontFamily: "Times New Roman",

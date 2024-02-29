@@ -25,6 +25,18 @@ export function getFontColor(cardStyling, backgroundColor) {
   return cardStyling.fontColor;
 }
 
+function isHorizontal(cardStyling) {
+  return [undefined, 'left', 'right'].includes(cardStyling.image.alignment);
+}
+
+function isVertical(cardStyling) {
+  return !isHorizontal(cardStyling);
+}
+
+function imageOnCard(cardStyling, attributes) {
+  return attributes.image && cardStyling.image.location !== 'tooltip';
+}
+
 export default (data, cardStyling, selectionObj, flags) => {
   const { api, state } = selectionObj;
   const isSelected = api && api.isActive() && state.indexOf(data.elemNo) !== -1;
@@ -35,11 +47,11 @@ export default (data, cardStyling, selectionObj, flags) => {
   const attributes = data.attributes || {};
 
   let html = '';
-  if (attributes.image && cardStyling.image.location !== 'tooltip' && flags?.isEnabled('SENSECLIENT_IM_5036_VIZBUNDLE_STYLING')) {
-    const textBoxHeight = ['top', 'bottom'].includes(cardStyling.image.alignment) && cardStyling.image.shape === 'round' ? '80px' : '60px';
+  if (attributes.image && cardStyling.image.location !== 'tooltip' /* && flags?.isEnabled('SENSECLIENT_IM_5036_VIZBUNDLE_STYLING') */) {
+    const textBoxHeight = isVertical(cardStyling) && cardStyling.image.shape === 'round' ? '80px' : '60px';
 
-    let textBoxCss = [undefined, 'left', 'right'].includes(cardStyling.image.alignment) ? `width: 85px; max-height: ${textBoxHeight}; height: fit-content;` : `width: 145px; max-height: ${textBoxHeight};`;
-    textBoxCss += [undefined, 'left', 'right'].includes(cardStyling.image.alignment) ? `padding-${cardStyling.image.alignment}: 5px; position: relative; top: 50%; transform: translate(0, -50%);` : 'padding-left: 3px; margin-bottom: 3px; ';
+    let textBoxCss = isHorizontal(cardStyling) ? `width: 85px; max-height: ${textBoxHeight}; height: fit-content;` : `width: 145px; max-height: ${textBoxHeight};`;
+    textBoxCss += isHorizontal(cardStyling) ? `padding-${cardStyling.image.alignment}: 5px; position: relative; top: 50%; transform: translate(0, -50%);` : 'padding-left: 3px; margin-bottom: 3px; ';
     textBoxCss += cardStyling.image.alignment === 'bottom' ? 'padding-top: 3px;': '';
     let textBox = `<div class="sn-org-textbox" style="${textBoxCss}">`;
     textBox += `<div class="sn-org-card-title" style="${titleStyle};">${encodeUtils.encodeTitle(attributes.label || data.id)}</div>`;
@@ -47,11 +59,30 @@ export default (data, cardStyling, selectionObj, flags) => {
       textBox += `<div class="sn-org-card-label" style="${labelStyle};">${encodeUtils.encodeTitle(attributes.subLabel)}</div>`;
     }
 
-    //images
+    // images
     const order = cardStyling.image.alignment === undefined || ['top', 'left'].includes(cardStyling.image.alignment) ? 0 : 2;
-    const imageSize = ['top', 'bottom'].includes(cardStyling.image.alignment) ? cardStyling.image.shape === 'round' ? '110px' : '130px' : '50px';
-    const align = [undefined, 'left', 'right'].includes(cardStyling.image.alignment) ? '' : ' margin: 0 auto;';
-    const shape = cardStyling.image.shape === 'rectangle' ? cardStyling.image.clip ? ' object-fit: cover' : '' : ' object-fit: cover; border-radius: 50%';
+    
+    // const imageSize = isVertical(cardStyling) ? cardStyling.image.shape === 'round' ? '110px' : '130px' : '50px';
+    let imageSize;
+    if (isHorizontal(cardStyling)) {
+      imageSize = '50px';
+    } else if (cardStyling.image.shape === 'round') {
+      imageSize = '110px';
+    } else {
+      imageSize = '130px';
+    }
+
+    const align = isHorizontal(cardStyling) ? '' : ' margin: 0 auto;';
+    // const shape = cardStyling.image.shape === 'rectangle' ? cardStyling.image.clip ? ' object-fit: cover' : '' : ' object-fit: cover; border-radius: 50%';
+    let shape;
+    if (cardStyling.image.shape === 'round') {
+      shape = ' object-fit: cover; border-radius: 50%';;
+    } else if (cardStyling.image.clip ) {
+      shape = ' object-fit: cover';
+    } else {
+      shape = '';
+    }
+    
     html += `<div style="order:${order};${align}"><img src="${attributes.image}" class="sn-org-card-image" style="height: ${imageSize}; width: ${imageSize}; ${shape}; "/></div>`;
 
     if (data.measure) {
@@ -60,7 +91,7 @@ export default (data, cardStyling, selectionObj, flags) => {
     } else if (attributes.extraLabel) {
       textBox += `<div class="sn-org-card-label" style="${labelStyle};">${encodeUtils.encodeTitle(attributes.extraLabel)}</div>`;
     }
-    html += textBox + '</div>';
+    html += `${textBox}</div>`;
 
   } else {
     flags?.isEnabled('SENSECLIENT_IM_5036_VIZBUNDLE_STYLING') ? 
@@ -91,15 +122,38 @@ export default (data, cardStyling, selectionObj, flags) => {
 
   const topBorder = top && !isSelected ? `3px solid ${borderColor}` : "";
   const borderStyle = fullBorder && !isSelected ? `1px solid ${borderColor}` : "";
-  let newCardHeight = [undefined, 'left', 'right'].includes(cardStyling.image.alignment) || cardStyling.image.location === 'tooltip' ? constants.cardHeight : constants.cardHeightLarge;
+  let newCardHeight = isHorizontal(cardStyling) || cardStyling.image.location === 'tooltip' ? constants.cardHeight : constants.cardHeightLarge;
 
+  /*
   const flex = flags?.isEnabled('SENSECLIENT_IM_5036_VIZBUNDLE_STYLING') 
     ? attributes.image && cardStyling.image.location !== 'tooltip'
-      ? [undefined, 'left', 'right'].includes(cardStyling.image.alignment) 
+      ? isHorizontal(cardStyling)
         ? 'display: flex; flex-direction: row;'
-        : 'display: flex; flex-direction: column;"'
+        : 'display: flex; flex-direction: column;'
       : 'display: flex;' 
     : '';
+  
+  const flex = imageOnCard(cardStyling, attributes) //image on card?
+    ? isHorizontal(cardStyling)
+      ? 'display: flex; flex-direction: row;'
+      : 'display: flex; flex-direction: column;'
+    : flags?.isEnabled('SENSECLIENT_IM_5036_VIZBUNDLE_STYLING') 
+      ? 'display: flex;'
+      : '';
+  */
+  let flex;
+  if (imageOnCard(cardStyling, attributes)) {
+    if (isHorizontal(cardStyling)) {
+      flex = 'display: flex; flex-direction: row;';
+    } else {
+      flex = 'display: flex; flex-direction: column;';
+    }
+  } else {
+    flex = '';
+    if (flags?.isEnabled('SENSECLIENT_IM_5036_VIZBUNDLE_STYLING')) {
+      flex = 'display: flex;'
+    }
+  }
 
   if (isSelected) {
     newCardHeight -= 8;

@@ -1,4 +1,4 @@
-function labelStylingDefinition(path, fontResolver, theme) {
+function labelStylingDefinition(path, fontResolver) {
   const pathFontFamily = `${path}.fontFamily`;
   const pathFontSize = `${path}.fontSize`;
 
@@ -6,22 +6,14 @@ function labelStylingDefinition(path, fontResolver, theme) {
     fontFamilyItem: {
       component: 'dropdown',
       ref: pathFontFamily,
-      options: () => {
-        return fontResolver.getOptions(pathFontFamily);
-      },
-      defaultValue: () => {
-        return fontResolver.getDefaultValue(pathFontFamily);
-      },
+      options: () => fontResolver.getOptions(pathFontFamily),
+      defaultValue: () => fontResolver.getDefaultValue(pathFontFamily),
     },
     fontSizeItem: {
       component: 'dropdown',
       ref: pathFontSize,
-      options: () => {
-        return fontResolver.getOptions(pathFontSize);
-      },
-      defaultValue: () => {
-        return fontResolver.getDefaultValue(pathFontSize);
-      },
+      options: () => fontResolver.getOptions(pathFontSize),
+      defaultValue: () => fontResolver.getDefaultValue(pathFontSize),
     },
   };
 }

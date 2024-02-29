@@ -43,9 +43,10 @@ export default function position(orientation, element, initialZoomState, navigat
   const { widthMargin, heightMargin, cardWidth, cardHeight, cardHeightLarge, cardPadding } = constants;
   let widthSpacing;
   let depthSpacing;
-
   let orientations;
-  const actualCardHeight = styling ? [undefined, 'left', 'right'].includes(styling.image.alignment) || styling.image.location === 'tooltip' ? cardHeight : cardHeightLarge : cardHeight;
+
+  const actualCardHeight = styling && !([undefined, 'left', 'right'].includes(styling.image.alignment) || styling.image.location === 'tooltip') ? cardHeightLarge : cardHeight;
+
   switch (orientation) {
     case "ttb":
       widthSpacing = cardWidth + widthMargin;

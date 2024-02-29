@@ -25,52 +25,50 @@ const initialProperties = {
   },
 };
 
-const properties = (flags) => {
- return {
-    qHyperCubeDef: {
-      qDimensions: [],
-      qMeasures: [],
-      qInitialDataFetch: [{ qWidth: 5, qHeight: 500 }],
-      qSuppressZero: false,
-      qSuppressMissing: true,
-    },
-    /**
-     * Show title for the visualization
-     * @type {boolean}
-     */
-    showTitles: true,
-    /**
-     * Visualization title
-     * @type {string}
-     */
-    title: "",
-    /**
-     * Visualization subtitle
-     * @type {string}
-     */
-    subtitle: "",
-    /**
-     * Visualization footnote
-     * @type {string}
-     */
-    footnote: "",
-    /**
-     * How the org chart is navigated
-     * @type {'expandAll'|'free'}
-     */
-    navigationMode: "free",
-    /**
-     * Resize and pan chart when a node's list of children is expanded
-     * @type {boolean}
-     */
-    resizeOnExpand: false,
-    /**
-     * Holds chart styling
-     * @type {Style}
-     */
-    style: !flags?.isEnabled('SENSECLIENT_IM_5036_VIZBUNDLE_STYLING') ? initialProperties : {},
-  };
-}
+const properties = (flags) => ({
+  qHyperCubeDef: {
+    qDimensions: [],
+    qMeasures: [],
+    qInitialDataFetch: [{ qWidth: 5, qHeight: 500 }],
+    qSuppressZero: false,
+    qSuppressMissing: true,
+  },
+  /**
+   * Show title for the visualization
+   * @type {boolean}
+   */
+  showTitles: true,
+  /**
+   * Visualization title
+   * @type {string}
+   */
+  title: "",
+  /**
+   * Visualization subtitle
+   * @type {string}
+   */
+  subtitle: "",
+  /**
+   * Visualization footnote
+   * @type {string}
+   */
+  footnote: "",
+  /**
+   * How the org chart is navigated
+   * @type {'expandAll'|'free'}
+   */
+  navigationMode: "free",
+  /**
+   * Resize and pan chart when a node's list of children is expanded
+   * @type {boolean}
+   */
+  resizeOnExpand: false,
+  /**
+   * Holds chart styling
+   * @type {Style}
+   */
+  style: !flags?.isEnabled('SENSECLIENT_IM_5036_VIZBUNDLE_STYLING') ? initialProperties : {},
+});
 
 /**
  * Holds styling options

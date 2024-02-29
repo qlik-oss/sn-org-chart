@@ -33,7 +33,7 @@ import { themeService as createThemeService } from 'qlik-chart-modules';
 
 
 export default function supernova(env) {
-  const { flags, theme } = env;
+  const { flags } = env;
   return {
     qae: {
       properties: properties(flags),

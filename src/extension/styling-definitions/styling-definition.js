@@ -66,10 +66,7 @@ function createStylingDefinition(theme, flags, translator) {
     },
   });
 
-  const bordersActive = (data) => {
-    return (propertyResolver.getValue(data, 'border.top') ?? DEFAULTS.BORDER_TOP) ||
-      (propertyResolver.getValue(data, 'border.fullBorder') ?? DEFAULTS.BORDER_FULL);
-  };
+  const bordersActive = (data) => (propertyResolver.getValue(data, 'border.top') ?? DEFAULTS.BORDER_TOP) || (propertyResolver.getValue(data, 'border.fullBorder') ?? DEFAULTS.BORDER_FULL);
 
   return {
     component: 'styling-panel',
@@ -89,7 +86,7 @@ function createStylingDefinition(theme, flags, translator) {
             component: 'items',
             ref: 'components',
             key: 'axis',
-            items: labelStylingDefinition('axis.label.name', fontResolver, theme),
+            items: labelStylingDefinition('axis.label.name', fontResolver),
           },
         },
       },
@@ -101,7 +98,7 @@ function createStylingDefinition(theme, flags, translator) {
             component: 'items',
             ref: 'components',
             key: 'label',
-            items: labelStylingDefinition('label.value', fontResolver, theme),
+            items: labelStylingDefinition('label.value', fontResolver),
           },
         },
       },
@@ -140,15 +137,11 @@ function createStylingDefinition(theme, flags, translator) {
                     ref: 'label.value.color',
                     width: 3,
                     dualOutput: true,
-                    defaultValue: () => {
-                      return {
-                        index: -1, 
-                        color: theme.getStyle('object.orgChart', 'label.value', 'color') ?? DEFAULTS.FONT_COLOR_DARK,
-                      };
-                    },  
-                    show:(data) => {
-                      return (propertyResolver.getValue(data, 'label.value.colorType') ?? DEFAULTS.FONT_COLOR_TYPE) === 'colorPicker';
-                    }
+                    defaultValue: () => ({
+                      index: -1, 
+                      color: theme.getStyle('object.orgChart', 'label.value', 'color') ?? DEFAULTS.FONT_COLOR_DARK,
+                    }),  
+                    show:(data) => (propertyResolver.getValue(data, 'label.value.colorType') ?? DEFAULTS.FONT_COLOR_TYPE) === 'colorPicker',
                   },
                 },
               },
@@ -158,9 +151,7 @@ function createStylingDefinition(theme, flags, translator) {
                 ref: 'label.value.colorExpression',
                 expression: 'optional',
                 defaultValue: '',
-                show:(data) => {
-                  return (propertyResolver.getValue(data, 'label.value.colorType') ?? DEFAULTS.FONT_COLOR_TYPE) === 'byExpression';
-                }
+                show:(data) => (propertyResolver.getValue(data, 'label.value.colorType') ?? DEFAULTS.FONT_COLOR_TYPE) === 'byExpression',
               },
             },
           },
@@ -202,9 +193,7 @@ function createStylingDefinition(theme, flags, translator) {
                     width: 3,
                     dualOutput: true,
                     defaultValue: DEFAULTS.BACKGROUND_COLOR,
-                    show:(data) => {
-                      return (propertyResolver.getValue(data, 'backgroundColor.colorType') ?? DEFAULTS.BACKGROUND_COLOR_TYPE) === 'colorPicker';
-                    },  
+                    show:(data) => (propertyResolver.getValue(data, 'backgroundColor.colorType') ?? DEFAULTS.BACKGROUND_COLOR_TYPE) === 'colorPicker',
                   },
                 },
               },
@@ -214,9 +203,7 @@ function createStylingDefinition(theme, flags, translator) {
                 ref: 'backgroundColor.colorExpression',
                 expression: 'optional',
                 defaultValue: '',
-                show:(data) => {
-                  return (propertyResolver.getValue(data, 'backgroundColor.colorType') ?? DEFAULTS.BACKGROUND_COLOR_TYPE) === 'byExpression';
-                },
+                show:(data) => (propertyResolver.getValue(data, 'backgroundColor.colorType') ?? DEFAULTS.BACKGROUND_COLOR_TYPE) === 'byExpression',
               },
             },
           },
@@ -264,9 +251,7 @@ function createStylingDefinition(theme, flags, translator) {
                     translation: 'properties.border.color',
                     defaultValue: DEFAULTS.BORDER_COLOR_TYPE,
                     options: colorOptions,
-                    show:(data) => {
-                      return bordersActive(data);
-                    },
+                    show:(data) => bordersActive(data),
                   },
                   colorPicker: {
                     component: 'color-picker',
@@ -275,10 +260,7 @@ function createStylingDefinition(theme, flags, translator) {
                     width: 3,
                     dualOutput: true,
                     defaultValue: DEFAULTS.BORDER_COLOR,
-                    show:(data) => {
-                      return bordersActive(data) &&
-                        (propertyResolver.getValue(data, 'border.colorType') ?? DEFAULTS.BORDER_COLOR_TYPE) === 'colorPicker';
-                    },
+                    show:(data) => bordersActive(data) && (propertyResolver.getValue(data, 'border.colorType') ?? DEFAULTS.BORDER_COLOR_TYPE) === 'colorPicker',
                   },
                 },
               },
@@ -288,10 +270,7 @@ function createStylingDefinition(theme, flags, translator) {
                 ref: 'border.colorExpression',
                 expression: 'optional',
                 defaultValue: '',
-                show:(data) => {
-                  return bordersActive(data) &&
-                    (propertyResolver.getValue(data, 'border.colorType') ?? DEFAULTS.BORDER_COLOR_TYPE) === 'byExpression';
-                },
+                show:(data) => bordersActive(data) && (propertyResolver.getValue(data, 'border.colorType') ?? DEFAULTS.BORDER_COLOR_TYPE) === 'byExpression',
              },
             },
           },
@@ -332,9 +311,7 @@ function createStylingDefinition(theme, flags, translator) {
                 ref: 'image.clip',
                 translation: 'Object.OrgChart.ImageFit',
                 defaultValue: DEFAULTS.IMAGE_CLIP,
-                show:(data) => {
-                  return (propertyResolver.getValue(data, 'image.shape') ?? DEFAULTS.IMAGE_SHAPE) === 'rectangle';
-                }
+                show:(data) => (propertyResolver.getValue(data, 'image.shape') ?? DEFAULTS.IMAGE_SHAPE) === 'rectangle',
               },
             },
           },
