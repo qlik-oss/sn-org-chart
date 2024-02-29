@@ -13,7 +13,6 @@ export default function createStyleModel({ layout, themeService }) {
         getStyle: () => ({
           fontSize: findComponent('axis')?.axis?.label?.name?.fontSize ?? themeStyle.axis.label.name.fontSize ?? '14px',
           fontFamily: findComponent('axis')?.axis?.label?.name?.fontFamily ?? themeStyle.axis.label.name.fontFamily,
-          //fill: findComponent('axis')?.axis?.label?.name?.color?.color ?? styles.axis.label.name.color,
         }),
       },
     },

@@ -20,7 +20,6 @@ export const getBBoxOfNodes = (nodes, styling) => {
     x: bbox.left,
     y: bbox.top - buttonHeight - buttonMargin,
     width: bbox.right - bbox.left + cardWidth,
-    //height: bbox.bottom - bbox.top + (styling && [undefined, 'left', 'right'].includes(styling.image.alignment) ? cardHeight : cardHeightLarge) + (buttonHeight + buttonMargin) * 2,
     height: bbox.bottom - bbox.top + (styling && [undefined, 'left', 'right'].includes(styling.image.alignment) || styling.image.location === 'tooltip' ? cardHeight : cardHeightLarge) + (buttonHeight + buttonMargin) * 2,
   };
 };

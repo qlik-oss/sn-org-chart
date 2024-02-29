@@ -93,9 +93,6 @@ export default (data, cardStyling, selectionObj, flags) => {
   const borderStyle = fullBorder && !isSelected ? `1px solid ${borderColor}` : "";
   let newCardHeight = [undefined, 'left', 'right'].includes(cardStyling.image.alignment) || cardStyling.image.location === 'tooltip' ? constants.cardHeight : constants.cardHeightLarge;
 
-  //const flex = attributes.image && cardStyling.image.location !== 'tooltip'? [undefined, 'left', 'right'].includes(cardStyling.image.alignment) ? 'display: flex; flex-direction: row;' : 'display: flex; flex-direction: column;"' : 'display: flex;';
-
-  
   const flex = flags?.isEnabled('SENSECLIENT_IM_5036_VIZBUNDLE_STYLING') 
     ? attributes.image && cardStyling.image.location !== 'tooltip'
       ? [undefined, 'left', 'right'].includes(cardStyling.image.alignment) 
@@ -111,7 +108,6 @@ export default (data, cardStyling, selectionObj, flags) => {
   } else if (top) {
     newCardHeight -= 3;
   }
-  //return `<div class="sn-org-card-text${selectedClass}" style="background-color:${backgroundColor};color:${fontColor}; border:${borderStyle}; border-top:${topBorder}; height:${newCardHeight}px;">${html}</div>`;
 
   return `<div class="sn-org-card-text${selectedClass}" style="background-color:${backgroundColor};color:${fontColor}; border:${borderStyle}; border-top:${topBorder}; height:${newCardHeight}px;${flex}">${html}</div>`;
 };

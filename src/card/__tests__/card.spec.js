@@ -112,11 +112,6 @@ describe("card", () => {
     it("should return html for node with only id", () => {
       data.attributes = null;
       const result = card(data, cardStyling, selections, flags);
-      /*
-      expect(result).toEqual(
-        '<div class="sn-org-card-text" style="background-color:#e6e6e6;color:#484848; border:1px solid #737373; border-top:3px solid #737373; height:60px;"><div class="sn-org-card-title">someId</div></div>',
-      );
-      */
       expect(result).toMatch('<div class="sn-org-card-text" style="background-color:#e6e6e6;color:#484848; border:1px solid #737373; border-top:3px solid #737373; height:60px;display: flex;">');
       expect(result).toMatch('<div class="sn-org-textbox" style="max-height: 60px; height: fit-content; position: relative; top: 50%; transform: translate(0, -50%); padding-left: 3px; ">');
       expect(result).toMatch('<div class="sn-org-card-title" style="font-family:Times New Roman;font-size:16;">someId</div></div></div>');
@@ -127,7 +122,6 @@ describe("card", () => {
     it("should return html for node with attribute label", () => {
       data.attributes.label = "this is the label";
       const result = card(data, cardStyling, selections, flags);
-      //expect(result).toMatch('<div class="sn-org-card-title">this is the label</div>');
       expect(result).toMatch('<div class="sn-org-card-title" style="font-family:Times New Roman;font-size:16;">this is the label</div>');
 
     });
@@ -135,8 +129,6 @@ describe("card", () => {
     it("should return html for node with id and subLabel", () => {
       data.attributes.subLabel = "subsub";
       const result = card(data, cardStyling, selections, flags);
-      //expect(result).toMatch('<div class="sn-org-card-title">someId</div>');
-      //expect(result).toMatch('<div class="sn-org-card-label">subsub</div>');
       expect(result).toMatch('<div class="sn-org-card-title" style="font-family:Times New Roman;font-size:16;">someId</div>');
       expect(result).toMatch('<div class="sn-org-card-label" style="font-family:Times New Roman;font-size:14;">subsub</div>');
     });  
@@ -146,11 +138,6 @@ describe("card", () => {
       data.attributes.subLabel = "subsub";
       data.attributes.extraLabel = "extra";
       const result = card(data, cardStyling, selections, flags);
-      /*
-      expect(result).toMatch('<div class="sn-org-card-title">this is the label</div>');
-      expect(result).toMatch('<div class="sn-org-card-label">subsub</div>');
-      expect(result).toMatch('<div class="sn-org-card-label">extra</div>');
-      */
       expect(result).toMatch('<div class="sn-org-card-title" style="font-family:Times New Roman;font-size:16;">this is the label</div>');
       expect(result).toMatch('<div class="sn-org-card-label" style="font-family:Times New Roman;font-size:14;">subsub</div>');
       expect(result).toMatch('<div class="sn-org-card-label" style="font-family:Times New Roman;font-size:14;">extra</div>');
@@ -163,11 +150,6 @@ describe("card", () => {
       data.attributes.extraLabel = "extra";
       data.measure = "measure";
       const result = card(data, cardStyling, selections, flags);
-      /*
-      expect(result).toMatch('<div class="sn-org-card-label">subsub</div>');
-      expect(result).not.toMatch('<div class="sn-org-card-label">extra</div>');
-      expect(result).toMatch('<div class="sn-org-card-label">measure</div>');
-      */
       expect(result).toMatch('<div class="sn-org-card-label" style="font-family:Times New Roman;font-size:14;">subsub</div>');
       expect(result).not.toMatch('<div class="sn-org-card-label" style="font-family:Times New Roman;font-size:14;">extra</div>');
       expect(result).toMatch('<div class="sn-org-card-label" style="font-family:Times New Roman;font-size:14;">measure</div>');
@@ -181,11 +163,6 @@ describe("card", () => {
       data.measure = "measure";
       cardStyling.measureLabel = "measureLabel";
       const result = card(data, cardStyling, selections, flags);
-      /*
-      expect(result).toMatch('<div class="sn-org-card-label">subsub</div>');
-      expect(result).not.toMatch('<div class="sn-org-card-label">extra</div>');
-      expect(result).toMatch('<div class="sn-org-card-label">measureLabel: measure</div>');
-      */
       expect(result).toMatch('<div class="sn-org-card-label" style="font-family:Times New Roman;font-size:14;">subsub</div>');
       expect(result).not.toMatch('<div class="sn-org-card-label" style="font-family:Times New Roman;font-size:14;">extra</div>');
       expect(result).toMatch('<div class="sn-org-card-label" style="font-family:Times New Roman;font-size:14;">measureLabel: measure</div>');
@@ -195,8 +172,6 @@ describe("card", () => {
     it("should return html for node with id and measure", () => {
       data.measure = "measure";
       const result = card(data, cardStyling, selections, flags);
-      //expect(result).toMatch('<div class="sn-org-card-title">someId</div>');
-      //expect(result).toMatch('<div class="sn-org-card-label">measure</div>');
       expect(result).toMatch('<div class="sn-org-card-title" style="font-family:Times New Roman;font-size:16;">someId</div>');
       expect(result).toMatch('<div class="sn-org-card-label" style="font-family:Times New Roman;font-size:14;">measure</div>');
     });
