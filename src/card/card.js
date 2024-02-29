@@ -35,24 +35,24 @@ export default (data, cardStyling, selectionObj, flags) => {
   const attributes = data.attributes || {};
 
   let html = '';
-  if (attributes.image && cardStyling.location !== 'tooltip') {
-    const textBoxHeight = ['top', 'bottom'].includes(cardStyling.alignment) && cardStyling.shape === 'round' ? '80px' : '60px';
+  if (attributes.image && cardStyling.image.location !== 'tooltip' && flags?.isEnabled('SENSECLIENT_IM_5036_VIZBUNDLE_STYLING')) {
+    const textBoxHeight = ['top', 'bottom'].includes(cardStyling.image.alignment) && cardStyling.image.shape === 'round' ? '80px' : '60px';
 
-    let textBoxCss = [undefined, 'left', 'right'].includes(cardStyling.alignment) ? `width: 85px; max-height: ${textBoxHeight}; height: fit-content;` : `width: 145px; max-height: ${textBoxHeight};`;
-    textBoxCss += [undefined, 'left', 'right'].includes(cardStyling.alignment) ? `padding-${cardStyling.alignment}: 5px; position: relative; top: 50%; transform: translate(0, -50%);` : 'padding-left: 3px; margin-bottom: 3px; ';
-    textBoxCss += cardStyling.alignment === 'bottom' ? 'padding-top: 3px;': '';
+    let textBoxCss = [undefined, 'left', 'right'].includes(cardStyling.image.alignment) ? `width: 85px; max-height: ${textBoxHeight}; height: fit-content;` : `width: 145px; max-height: ${textBoxHeight};`;
+    textBoxCss += [undefined, 'left', 'right'].includes(cardStyling.image.alignment) ? `padding-${cardStyling.image.alignment}: 5px; position: relative; top: 50%; transform: translate(0, -50%);` : 'padding-left: 3px; margin-bottom: 3px; ';
+    textBoxCss += cardStyling.image.alignment === 'bottom' ? 'padding-top: 3px;': '';
     let textBox = `<div class="sn-org-textbox" style="${textBoxCss}">`;
     textBox += `<div class="sn-org-card-title" style="${titleStyle};">${encodeUtils.encodeTitle(attributes.label || data.id)}</div>`;
     if (attributes.subLabel) {
       textBox += `<div class="sn-org-card-label" style="${labelStyle};">${encodeUtils.encodeTitle(attributes.subLabel)}</div>`;
     }
 
-    //image
-    const order = cardStyling.alignment === undefined || ['top', 'left'].includes(cardStyling.alignment) ? 0 : 2;
-    const imageSize = ['top', 'bottom'].includes(cardStyling.alignment) ? cardStyling.shape === 'round' ? '110px' : '130px' : '50px';
-    const align = [undefined, 'left', 'right'].includes(cardStyling.alignment) ? '' : ' margin: 0 auto;';
-    const shape = cardStyling.shape === 'rectangle' ? cardStyling.clip ? ' object-fit: cover' : '' : ' object-fit: cover; border-radius: 50%';
-    html += `<div style="order:${order};${align};"><img src="${attributes.image}" class="sn-org-card-image" style="height: ${imageSize}; width: ${imageSize}; ${shape}; "/></div>`;
+    //images
+    const order = cardStyling.image.alignment === undefined || ['top', 'left'].includes(cardStyling.image.alignment) ? 0 : 2;
+    const imageSize = ['top', 'bottom'].includes(cardStyling.image.alignment) ? cardStyling.image.shape === 'round' ? '110px' : '130px' : '50px';
+    const align = [undefined, 'left', 'right'].includes(cardStyling.image.alignment) ? '' : ' margin: 0 auto;';
+    const shape = cardStyling.image.shape === 'rectangle' ? cardStyling.image.clip ? ' object-fit: cover' : '' : ' object-fit: cover; border-radius: 50%';
+    html += `<div style="order:${order};${align}"><img src="${attributes.image}" class="sn-org-card-image" style="height: ${imageSize}; width: ${imageSize}; ${shape}; "/></div>`;
 
     if (data.measure) {
       const measureLabel = cardStyling.measureLabel ? `${cardStyling.measureLabel}: ` : '';
@@ -60,7 +60,7 @@ export default (data, cardStyling, selectionObj, flags) => {
     } else if (attributes.extraLabel) {
       textBox += `<div class="sn-org-card-label" style="${labelStyle};">${encodeUtils.encodeTitle(attributes.extraLabel)}</div>`;
     }
-    html += textBox;
+    html += textBox + '</div>';
 
   } else {
     flags?.isEnabled('SENSECLIENT_IM_5036_VIZBUNDLE_STYLING') ? 
@@ -75,6 +75,7 @@ export default (data, cardStyling, selectionObj, flags) => {
     } else if (attributes.extraLabel) {
       html += `<div class="sn-org-card-label" style="${labelStyle};">${encodeUtils.encodeTitle(attributes.extraLabel)}</div>`;
     }
+    html += flags?.isEnabled('SENSECLIENT_IM_5036_VIZBUNDLE_STYLING') ? '</div>' : '';
   }
 
   const isSelectedClass = isSelected ? " selected" : " not-selected";
@@ -90,13 +91,14 @@ export default (data, cardStyling, selectionObj, flags) => {
 
   const topBorder = top && !isSelected ? `3px solid ${borderColor}` : "";
   const borderStyle = fullBorder && !isSelected ? `1px solid ${borderColor}` : "";
-  let newCardHeight = [undefined, 'left', 'right'].includes(cardStyling.alignment) || cardStyling.location === 'tooltip' ? constants.cardHeight : constants.cardHeightLarge;
+  let newCardHeight = [undefined, 'left', 'right'].includes(cardStyling.image.alignment) || cardStyling.image.location === 'tooltip' ? constants.cardHeight : constants.cardHeightLarge;
 
-  //const flex = attributes.image && cardStyling.location !== 'tooltip'? [undefined, 'left', 'right'].includes(cardStyling.alignment) ? 'display: flex; flex-direction: row;' : 'display: flex; flex-direction: column;"' : 'display: flex;';
+  //const flex = attributes.image && cardStyling.image.location !== 'tooltip'? [undefined, 'left', 'right'].includes(cardStyling.image.alignment) ? 'display: flex; flex-direction: row;' : 'display: flex; flex-direction: column;"' : 'display: flex;';
 
+  
   const flex = flags?.isEnabled('SENSECLIENT_IM_5036_VIZBUNDLE_STYLING') 
-    ? attributes.image && cardStyling.location !== 'tooltip'
-      ? [undefined, 'left', 'right'].includes(cardStyling.alignment) 
+    ? attributes.image && cardStyling.image.location !== 'tooltip'
+      ? [undefined, 'left', 'right'].includes(cardStyling.image.alignment) 
         ? 'display: flex; flex-direction: row;'
         : 'display: flex; flex-direction: column;"'
       : 'display: flex;' 
@@ -111,7 +113,5 @@ export default (data, cardStyling, selectionObj, flags) => {
   }
   //return `<div class="sn-org-card-text${selectedClass}" style="background-color:${backgroundColor};color:${fontColor}; border:${borderStyle}; border-top:${topBorder}; height:${newCardHeight}px;">${html}</div>`;
 
-  const htmlOutput = `<div class="sn-org-card-text${selectedClass}" style="background-color:${backgroundColor};color:${fontColor}; border:${borderStyle}; border-top:${topBorder}; height:${newCardHeight}px;${flex}">${html}</div></div>`
-
-  return htmlOutput;
+  return `<div class="sn-org-card-text${selectedClass}" style="background-color:${backgroundColor};color:${fontColor}; border:${borderStyle}; border-top:${topBorder}; height:${newCardHeight}px;${flex}">${html}</div>`;
 };

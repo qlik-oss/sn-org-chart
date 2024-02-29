@@ -27,6 +27,16 @@ describe("path", () => {
     let expectedPoints;
     let topId;
     let navigationMode;
+    let styling;
+
+    beforeAll(() => {
+      styling = {
+        image: {
+          aliagnment: "left",
+          location: "card",
+        },
+      };
+    });
 
     beforeEach(() => {
       topId = "0";
@@ -67,7 +77,7 @@ describe("path", () => {
         { x: 76, y: 112 },
         { x: 76, y: 96 },
       ];
-      const points = getPoints(d, topId, positioning, navigationMode)[0];
+      const points = getPoints(d, topId, positioning, navigationMode, styling)[0];
       expect(points).toEqual(expectedPoints);
     });
 
@@ -80,7 +90,7 @@ describe("path", () => {
         { x: 76, y: 112 },
         { x: 76, y: 96 },
       ];
-      const points = getPoints(d, topId, positioning, navigationMode)[0];
+      const points = getPoints(d, topId, positioning, navigationMode, styling)[0];
       expect(points).toEqual(expectedPoints);
     });
 
@@ -93,7 +103,7 @@ describe("path", () => {
         { x: 76, y: 112 },
         { x: 76, y: 64 },
       ];
-      const points = getPoints(d, topId, positioning, navigationMode)[0];
+      const points = getPoints(d, topId, positioning, navigationMode, styling)[0];
       expect(points).toEqual(expectedPoints);
     });
 
@@ -103,7 +113,7 @@ describe("path", () => {
         { x: 76, y: 120 },
         { x: 76, y: 96 },
       ];
-      const points = getPoints(d, topId, positioning, navigationMode)[0];
+      const points = getPoints(d, topId, positioning, navigationMode, styling)[0];
       expect(points).toEqual(expectedPoints);
     });
 
@@ -113,7 +123,7 @@ describe("path", () => {
         { x: 376, y: 184 },
         { x: 376, y: 192 },
       ];
-      const points = getPoints(d, topId, positioning, navigationMode)[1];
+      const points = getPoints(d, topId, positioning, navigationMode, styling)[1];
       expect(points).toEqual(expectedPoints);
     });
 
@@ -124,13 +134,13 @@ describe("path", () => {
         { x: 376, y: 120 },
         { x: 376, y: 112 },
       ];
-      const points = getPoints(d, topId, positioning, navigationMode)[0];
+      const points = getPoints(d, topId, positioning, navigationMode, styling)[0];
       expect(points).toEqual(expectedPoints);
     });
 
     it("should return no points if no parent", () => {
       d.parent = undefined;
-      const points = getPoints(d, topId, positioning, navigationMode);
+      const points = getPoints(d, topId, positioning, navigationMode, styling);
       expect(points).toEqual([]);
     });
   });

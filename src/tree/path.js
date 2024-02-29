@@ -5,7 +5,7 @@ export function getPoints(d, topId, { depthSpacing, isVertical, x, y }, navigati
   
   // TODO: Generalize to make all directions work, currently on only ttb working
   const { cardWidth, cardHeight, cardHeightLarge, buttonHeight, cardPadding, buttonMargin } = constants;
-  const actualCardHeight = [undefined, 'left', 'right'].includes(styling.alignment) || styling.location === 'tooltip' ? cardHeight : cardHeightLarge;
+  const actualCardHeight = [undefined, 'left', 'right'].includes(styling.image.alignment) || styling.image.location === 'tooltip' ? cardHeight : cardHeightLarge;
   const points = [];
   const halfCard = { x: cardWidth / 2, y: cardHeight / 2 };
   const start = { x: d.xActual, y: d.yActual };

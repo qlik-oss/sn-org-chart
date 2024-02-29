@@ -30,9 +30,9 @@ export function getTooltipContent(d, styling) {
     d.data.measure ? `${styling.measureLabel ? `${styling.measureLabel}: ` : ""}${d.data.measure}` : "",
   );
   
-  const image = d.data.attributes.image && styling.location !== 'card' ? d.data.attributes.image : '';
-  const textStyling = image ? styling.alignment === undefined || styling.alignment !== 'right' ? 'style="padding-left:5px"' : 'style="padding-right:5px"' : '';
-  const imageStyling = styling.alignment === undefined || styling.alignment !== 'right' ? '' : 'style="order: 1"';
+  const image = d.data.attributes.image && styling.image.location !== 'card' ? d.data.attributes.image : '';
+  const textStyling = image ? styling.image.alignment === undefined || styling.image.alignment !== 'right' ? 'style="padding-left:5px"' : 'style="padding-right:5px"' : '';
+  const imageStyling = styling.image.alignment === undefined || styling.image.alignment !== 'right' ? '' : 'style="order: 1"';
   if (image) {
     return `<div class="sn-org-tooltip-inner"><img src="${image}" class="sn-org-tooltip-image" ${imageStyling} /><div class="sn-org-tooltip-text" ${textStyling}><div class="sn-org-tooltip-header">${label}</div>${subLabel}${extraLabel}${measure}</div></div>`;
   }

@@ -2,8 +2,6 @@ import { fontResolver as createFontResolver } from 'qlik-chart-modules';
 import labelStylingDefinition from './styling-utils';
 import DEFAULTS from "../../style-defaults";
 import propertyResolver from "../../utils/property-resolver";
-import { color } from 'd3';
-
 
 const colorOptions = [
   { value: 'auto', translation: 'Common.Auto' },
@@ -37,7 +35,8 @@ const dataTemplateLabel = {
       colorExpression: undefined,
     },
   },
-};  
+};
+
 const dataTemplateBackground = {
   backgroundColor: {
     colorType: undefined,
@@ -45,6 +44,7 @@ const dataTemplateBackground = {
     colorExpression: undefined,
   },
 };
+
 const dataTemplateBorder = {
   border: {
     top: undefined,
@@ -54,7 +54,6 @@ const dataTemplateBorder = {
     colorExpression: undefined,
   },
 };
-
 
 function createStylingDefinition(theme, flags, translator) {
   const fontResolver = createFontResolver({
@@ -77,15 +76,13 @@ function createStylingDefinition(theme, flags, translator) {
     show: true,
     chartType: 'orgchart',
     translation: 'LayerStyleEditor.component.styling',
-    //chartTitle: 'Object.OrgChart',
-    chartTitle: 'Org chart',
+    chartTitle: 'Object.OrgChart',
     subtitle: 'LayerStyleEditor.component.styling',
     useGeneral: true,
     useBackground: true,
     items: {
       axisLabelSection: {
-        //translation: 'properties.axis.label',
-        label: 'Title',
+        translation: 'Object.OrgChart.Title',
         component: 'panel-section',
         items: {
           axisLabelItems: {
@@ -97,8 +94,7 @@ function createStylingDefinition(theme, flags, translator) {
         },
       },
       labelSection: {
-        //translation: 'properties.value.label',
-        label: 'Body',
+        translation: 'Object.OrgChart.Body',
         component: 'panel-section',
         items: {
           labelItems: {
@@ -125,8 +121,6 @@ function createStylingDefinition(theme, flags, translator) {
                   useColorExpression: {
                     ref: 'label.value.colorType',
                     width: 9,
-                    //type: 'string',
-                    //translation: 'Object.OrgChart.FontColor',
                     component: 'dropdown',
                     defaultValue: DEFAULTS.FONT_COLOR_TYPE,
                     options: colorOptions,
@@ -143,10 +137,8 @@ function createStylingDefinition(theme, flags, translator) {
                   },
                   colorPicker: {
                     component: 'color-picker',
-                    //type: 'object',
                     ref: 'label.value.color',
                     width: 3,
-                    //translation: 'properties.color',
                     dualOutput: true,
                     defaultValue: () => {
                       return {
@@ -164,7 +156,6 @@ function createStylingDefinition(theme, flags, translator) {
                 component: 'input-field-expression',
                 type: 'string',
                 ref: 'label.value.colorExpression',
-                //translation: 'Common.Expression',
                 expression: 'optional',
                 defaultValue: '',
                 show:(data) => {
@@ -177,7 +168,6 @@ function createStylingDefinition(theme, flags, translator) {
       },
       backgroundColorSection: {
         component: 'panel-section',
-        //type: 'items',
         translation: 'Object.OrgChart.ColorLabelExpression',
         items: {
           backgroundColorItems: {
@@ -191,8 +181,6 @@ function createStylingDefinition(theme, flags, translator) {
                   useColorExpression: {
                     ref: 'backgroundColor.colorType',
                     width: 9,
-                    //type: 'string',
-                    //translation: 'Object.OrgChart.BackgroundColor',
                     component: 'dropdown',
                     defaultValue: DEFAULTS.BACKGROUND_COLOR_TYPE,
                     options: colorOptions,
@@ -212,7 +200,6 @@ function createStylingDefinition(theme, flags, translator) {
                     type: 'object',
                     ref: 'backgroundColor.color',
                     width: 3,
-                    //translation: 'properties.color',
                     dualOutput: true,
                     defaultValue: DEFAULTS.BACKGROUND_COLOR,
                     show:(data) => {
@@ -225,7 +212,6 @@ function createStylingDefinition(theme, flags, translator) {
                 component: 'input-field-expression',
                 type: 'string',
                 ref: 'backgroundColor.colorExpression',
-                //translation: 'Common.Expression',
                 expression: 'optional',
                 defaultValue: '',
                 show:(data) => {
@@ -246,7 +232,6 @@ function createStylingDefinition(theme, flags, translator) {
             key: 'border',
             items: {
               topBar: {
-                //type: 'boolean',
                 component: 'checkbox',
                 ref: 'border.top',
                 translation: 'Object.OrgChart.TopBar',
@@ -263,7 +248,6 @@ function createStylingDefinition(theme, flags, translator) {
                 },
               },
               fullBorder: {
-                //type: 'boolean',
                 component: 'checkbox',
                 ref: 'border.fullBorder',
                 translation: 'properties.border',
@@ -289,7 +273,6 @@ function createStylingDefinition(theme, flags, translator) {
                     type: 'object',
                     ref: 'border.color',
                     width: 3,
-                    translation: 'properties.color',
                     dualOutput: true,
                     defaultValue: DEFAULTS.BORDER_COLOR,
                     show:(data) => {
@@ -303,7 +286,6 @@ function createStylingDefinition(theme, flags, translator) {
                 component: 'input-field-expression',
                 type: 'string',
                 ref: 'border.colorExpression',
-                translation: 'Common.Expression',
                 expression: 'optional',
                 defaultValue: '',
                 show:(data) => {
@@ -317,8 +299,7 @@ function createStylingDefinition(theme, flags, translator) {
       },
       imageSection: {
         component: 'panel-section',
-        //translation: 'Object.OrgChart.ImageOptions',
-        label: 'Image options',
+        translation: 'Object.OrgChart.ImageOptions',
         items: {
           imageItems: {
             component: 'items',
@@ -328,29 +309,28 @@ function createStylingDefinition(theme, flags, translator) {
               location: {
                 component: 'dropdown',
                 ref: 'image.location',
-                translation: 'Location',
+                translation: 'Object.OrgChart.ImageLocation',
                 options: imageLocationOptions,
                 defaultValue: DEFAULTS.IMAGE_LOCATION,
               },
               alignment: {
                 component: 'dropdown',
                 ref: 'image.alignment',
-                translation: 'Alignment',
+                translation: 'Object.OrgChart.ImageAlignment',
                 options: imageAlignmentOptions,
                 defaultValue: DEFAULTS.IMAGE_ALIGNMENT,
               },
               shape: {
                 component: 'dropdown',
                 ref: 'image.shape',
-                translation: 'Shape',
+                translation: 'Object.OrgChart.ImageShape',
                 options: imageShapeOptions,
                 defaultValue: DEFAULTS.IMAGE_SHAPE,
               },
               clip: {
-                //type: 'boolean',
                 component: 'checkbox',
                 ref: 'image.clip',
-                translation: 'Fit to shape',
+                translation: 'Object.OrgChart.ImageFit',
                 defaultValue: DEFAULTS.IMAGE_CLIP,
                 show:(data) => {
                   return (propertyResolver.getValue(data, 'image.shape') ?? DEFAULTS.IMAGE_SHAPE) === 'rectangle';

@@ -1,6 +1,17 @@
 import { applyTransform, getBBoxOfNodes, getInitialZoomState, getSnapshotZoom, getTranslations } from "../transform";
 
 describe("transform", () => {
+  let styling;
+
+  beforeAll(() => {
+    styling = {
+      image: {
+        alignment: "left",
+        location: "card",
+      },
+    };
+  });
+
   describe("getBBoxOfNodes", () => {
     const nodes = [
       { xActual: 0, yActual: 0 },
@@ -9,7 +20,7 @@ describe("transform", () => {
     ];
 
     it("should return correct bBox", () => {
-      const bbox = getBBoxOfNodes(nodes);
+      const bbox = getBBoxOfNodes(nodes, styling);
       const expected = {
         x: -200,
         y: -140,
@@ -69,26 +80,26 @@ describe("transform", () => {
 
     it("should zoom in x direction", () => {
       bBox.width = 1936;
-      const result = getInitialZoomState(bBox, element, navigationMode);
+      const result = getInitialZoomState(bBox, element, navigationMode, styling);
       expect(result).toEqual({ initialX: 32, initialY: 500, initialZoom: 2 });
     });
 
     it("should zoom in y direction", () => {
       bBox.height = 1936;
-      const result = getInitialZoomState(bBox, element, navigationMode);
+      const result = getInitialZoomState(bBox, element, navigationMode, styling);
       expect(result).toEqual({ initialX: 500, initialY: 32, initialZoom: 2 });
     });
 
     it("should limit zoom to max zoom", () => {
       bBox.height = 10000000;
-      const result = getInitialZoomState(bBox, element, navigationMode);
+      const result = getInitialZoomState(bBox, element, navigationMode, styling);
       expect(result).toEqual({ initialX: 2500, initialY: 32, initialZoom: 6 });
     });
 
     it("should not limit zoom to max zoom in expandAll mode", () => {
       bBox.height = 99999936;
       navigationMode = "expandAll";
-      const result = getInitialZoomState(bBox, element, navigationMode);
+      const result = getInitialZoomState(bBox, element, navigationMode, styling);
       expect(result).toEqual({
         initialX: 49999500,
         initialY: 32,

@@ -44,6 +44,10 @@ describe("tooltip", () => {
       };
       styling = {
         measureLabel: "",
+        image: {
+          alignment: "left",
+          location: "both",
+        },
       };
     });
 

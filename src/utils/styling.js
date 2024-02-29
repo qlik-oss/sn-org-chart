@@ -1,6 +1,7 @@
 import DEFAULTS from "../style-defaults";
 import colorUtils from "./color-utils";
 
+/*
 export function getColor(reference, Theme, defaultColor) {
   let color;
   switch (reference.colorType) {
@@ -15,13 +16,12 @@ export function getColor(reference, Theme, defaultColor) {
   }
   return color === "none" ? defaultColor : color;
 }
-
+*/
 
 export function getColorStyling(reference, defaultColor) {
   let color;
   switch (reference.colorType) {
     case "byExpression":
-      console.log('reference.colorExpression in Styling',reference.colorExpression);
       color = colorUtils.resolveExpression(reference.colorExpression);
       //color = reference.colorExpression;
       break;
@@ -35,7 +35,7 @@ export function getColorStyling(reference, defaultColor) {
 }
 
 const stylingUtils = {
-  cardStyling: ({ Theme, layout, flags, styleModel }) => {
+  cardStyling: ({ layout, styleModel }) => {
 
     const measureLabel = layout.qHyperCube.qMeasureInfo.length
       ? layout.qHyperCube.qMeasureInfo[0].qFallbackTitle
@@ -71,10 +71,12 @@ const stylingUtils = {
         measureLabel,
         border,
         borderColor,
-        location: imageStyle.location,
-        alignment: imageStyle.alignment,
-        shape: imageStyle.shape,
-        clip: imageStyle.clip,
+        image: {
+          location: imageStyle.location,
+          alignment: imageStyle.alignment,
+          shape: imageStyle.shape,
+          clip: imageStyle.clip,
+        },
       };
       return styling;
     //}

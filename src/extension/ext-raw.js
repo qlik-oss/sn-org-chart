@@ -66,8 +66,7 @@ const data = (flags) => {
               {
                 component: 'expression',
                 ref: 'qExpression',
-                //translation: 'Object.OrgChart.Images',
-                translation: 'Image URL',
+                translation: 'Object.OrgChart.ImageUrl',
                 defaultValue: '',
                 id: 'imageExpression',
                 tid: 'imageExpression',
@@ -197,9 +196,6 @@ const getSettings = (translator, flags, anything) => {
           translation: "Common.Expression",
           expression: "optional",
           defaultValue: "",
-          /* show: (data) => 
-            propertyResolver.getValue(data, "style.backgroundColor.colorType") === "byExpression",
-          */
           show: (data) => {
             return propertyResolver.getValue(data, "style.backgroundColor.colorType") === "byExpression";
           },

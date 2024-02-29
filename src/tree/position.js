@@ -32,7 +32,7 @@ export const depthTranslation = (d, depthSpacing, axis, initialZoomState, naviga
   const initialY = (initialZoomState && initialZoomState.initialY) || 0;
 
   if (d.parent && d.parent.data.id !== "Root" && navigationMode !== "expandAll" && haveNoChildren(d.parent.children)) {
-    d[axis] = d.parent.y + depthSpacing + d.data.childNumber * (([undefined, 'left', 'right'].includes(styling.alignment) || styling.location === 'tooltip' ? cardHeight : cardHeightLarge) + leafMargin) + initialY;
+    d[axis] = d.parent.y + depthSpacing + d.data.childNumber * (([undefined, 'left', 'right'].includes(styling.image.alignment) || styling.image.location === 'tooltip' ? cardHeight : cardHeightLarge) + leafMargin) + initialY;
   } else {
     d[axis] = d.y + initialY;
   }
@@ -45,7 +45,7 @@ export default function position(orientation, element, initialZoomState, navigat
   let depthSpacing;
 
   let orientations;
-  const actualCardHeight = styling ? [undefined, 'left', 'right'].includes(styling.alignment) || styling.location === 'tooltip' ? cardHeight : cardHeightLarge : cardHeight;
+  const actualCardHeight = styling ? [undefined, 'left', 'right'].includes(styling.image.alignment) || styling.image.location === 'tooltip' ? cardHeight : cardHeightLarge : cardHeight;
   switch (orientation) {
     case "ttb":
       widthSpacing = cardWidth + widthMargin;
