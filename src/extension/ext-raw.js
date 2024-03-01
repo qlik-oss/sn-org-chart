@@ -1,6 +1,6 @@
 import DEFAULTS from "../style-defaults";
 import propertyResolver from "../utils/property-resolver";
-import createStylingDefinition from './styling-definitions/styling-definition';
+import createStylingDefinition from "./styling-definitions/styling-definition";
 
 const colorOptions = [
   { value: "auto", translation: "Common.Auto" },
@@ -16,88 +16,89 @@ const navigationOptions = [
 const bordersActive = (data) =>
   propertyResolver.getValue(data, "style.border.top") || propertyResolver.getValue(data, "style.border.fullBorder");
 
-const getData = (flags) => (
-  {
-    uses: "data",
-    items: {
-      measures: {
-        disabledRef: "",
-      },
-      dimensions: {
-        disabledRef: "",
-        items: {
-          dimensionLimits: {
-            show: false,
+const getData = (flags) => ({
+  uses: "data",
+  items: {
+    measures: {
+      disabledRef: "",
+    },
+    dimensions: {
+      disabledRef: "",
+      items: {
+        dimensionLimits: {
+          show: false,
+        },
+        attributes: {
+          component: "attribute-expression-reference",
+          defaultValue: [],
+          show: (dim, handler) => {
+            const dims = handler.getDimensions();
+            return dims[0] === dim;
           },
-          attributes: {
-            component: "attribute-expression-reference",
-            defaultValue: [],
-            show: (dim, handler) => {
-              const dims = handler.getDimensions();
-              return dims[0] === dim;
+          ref: "qAttributeExpressions",
+          items: [
+            {
+              component: "expression",
+              ref: "qExpression",
+              translation: "Object.OrgChart.LabelExpression",
+              defaultValue: "",
+              id: "labelExpression",
+              tid: "labelExpression",
             },
-            ref: "qAttributeExpressions",
-            items: [
-              {
-                component: "expression",
-                ref: "qExpression",
-                translation: "Object.OrgChart.LabelExpression",
-                defaultValue: "",
-                id: "labelExpression",
-                tid: "labelExpression",
-              },
-              {
-                component: "expression",
-                ref: "qExpression",
-                translation: "Object.OrgChart.SubLabelExpression",
-                defaultValue: "",
-                id: "subLabelExpression",
-                tid: "subLabelExpression",
-              },
-              {
-                component: "expression",
-                ref: "qExpression",
-                translation: "Object.OrgChart.ExtraLabelExpression",
-                defaultValue: "",
-                id: "extraLabelExpression",
-                tid: "extraLabelExpression",
-              },
-              ... flags?.isEnabled('SENSECLIENT_IM_5036_VIZBUNDLE_STYLING') ? [
-              {
-                component: 'expression',
-                ref: 'qExpression',
-                translation: 'Object.OrgChart.ImageUrl',
-                defaultValue: '',
-                id: 'imageExpression',
-                tid: 'imageExpression',
-              }] : [],
-              {
-                component: "expression",
-                ref: "qExpression",
-                translation: "Object.OrgChart.ColorLabelExpression",
-                defaultValue: "",
-                id: "colorByExpression",
-                tid: "nodeColorByExpression",
-              },
-            ],
-          },
-          desc: {
-            show: (dim, handler) => {
-              const dims = handler.getDimensions();
-              return dims[0] === dim;
+            {
+              component: "expression",
+              ref: "qExpression",
+              translation: "Object.OrgChart.SubLabelExpression",
+              defaultValue: "",
+              id: "subLabelExpression",
+              tid: "subLabelExpression",
             },
-            component: "text",
-            translation: "Object.OrgChart.ExtraLabelDesc",
-            style: "hint",
+            {
+              component: "expression",
+              ref: "qExpression",
+              translation: "Object.OrgChart.ExtraLabelExpression",
+              defaultValue: "",
+              id: "extraLabelExpression",
+              tid: "extraLabelExpression",
+            },
+            ...(flags?.isEnabled("SENSECLIENT_IM_5036_VIZBUNDLE_STYLING")
+              ? [
+                  {
+                    component: "expression",
+                    ref: "qExpression",
+                    translation: "Object.OrgChart.ImageUrl",
+                    defaultValue: "",
+                    id: "imageExpression",
+                    tid: "imageExpression",
+                  },
+                ]
+              : []),
+            {
+              component: "expression",
+              ref: "qExpression",
+              translation: "Object.OrgChart.ColorLabelExpression",
+              defaultValue: "",
+              id: "colorByExpression",
+              tid: "nodeColorByExpression",
+            },
+          ],
+        },
+        desc: {
+          show: (dim, handler) => {
+            const dims = handler.getDimensions();
+            return dims[0] === dim;
           },
+          component: "text",
+          translation: "Object.OrgChart.ExtraLabelDesc",
+          style: "hint",
         },
       },
     },
-  }
-);
+  },
+});
 
 const sorting = {
-  uses: 'sorting',
+  uses: "sorting",
 };
 
 const addOns = {
@@ -135,7 +136,7 @@ const getSettings = (translator, flags, anything) => {
         translation: "properties.presentation",
         type: "items",
         items: {
-          ...(flags?.isEnabled('SENSECLIENT_IM_5036_VIZBUNDLE_STYLING') && {
+          ...(flags?.isEnabled("SENSECLIENT_IM_5036_VIZBUNDLE_STYLING") && {
             orgChartStyling: createStylingDefinition(theme, flags, translator),
           }),
           navigation: {
@@ -166,8 +167,7 @@ const getSettings = (translator, flags, anything) => {
     },
   };
 
-  if (!flags?.isEnabled('SENSECLIENT_IM_5036_VIZBUNDLE_STYLING')) {
-
+  if (!flags?.isEnabled("SENSECLIENT_IM_5036_VIZBUNDLE_STYLING")) {
     settings.items.styling.items.backgroundColor = {
       type: "items",
       items: {
@@ -186,8 +186,7 @@ const getSettings = (translator, flags, anything) => {
           translation: "properties.color",
           dualOutput: true,
           defaultValue: DEFAULTS.BACKGROUND_COLOR,
-          show: (data) =>
-            propertyResolver.getValue(data, "style.backgroundColor.colorType") === "colorPicker",
+          show: (data) => propertyResolver.getValue(data, "style.backgroundColor.colorType") === "colorPicker",
         },
         colorExpression: {
           component: "string",
@@ -270,8 +269,7 @@ const getSettings = (translator, flags, anything) => {
           dualOutput: true,
           defaultValue: DEFAULTS.BORDER_COLOR,
           show: (data) =>
-            bordersActive(data) &&
-            propertyResolver.getValue(data, "style.border.colorType") === "colorPicker",
+            bordersActive(data) && propertyResolver.getValue(data, "style.border.colorType") === "colorPicker",
         },
         colorExpression: {
           component: "string",
@@ -281,8 +279,7 @@ const getSettings = (translator, flags, anything) => {
           expression: "optional",
           defaultValue: "",
           show: (data) =>
-            bordersActive(data) &&
-            propertyResolver.getValue(data, "style.border.colorType") === "byExpression",
+            bordersActive(data) && propertyResolver.getValue(data, "style.border.colorType") === "byExpression",
         },
       },
     };
@@ -293,8 +290,8 @@ const getSettings = (translator, flags, anything) => {
 export default function extDef({ translator, flags, anything }) {
   return {
     definition: {
-      type: 'items',
-      component: 'accordion',
+      type: "items",
+      component: "accordion",
       items: {
         data: getData(flags),
         sorting,

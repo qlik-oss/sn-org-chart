@@ -26,7 +26,7 @@ export function getFontColor(cardStyling, backgroundColor) {
 }
 
 function isHorizontal(cardStyling) {
-  return [undefined, 'left', 'right'].includes(cardStyling.image.alignment);
+  return [undefined, "left", "right"].includes(cardStyling.image.alignment);
 }
 
 function isVertical(cardStyling) {
@@ -34,7 +34,7 @@ function isVertical(cardStyling) {
 }
 
 function imageOnCard(cardStyling, attributes) {
-  return attributes.image && cardStyling.image.location !== 'tooltip';
+  return attributes.image && cardStyling.image.location !== "tooltip";
 }
 
 export default (data, cardStyling, selectionObj, flags) => {
@@ -46,13 +46,20 @@ export default (data, cardStyling, selectionObj, flags) => {
   const labelStyle = `font-family:${cardStyling.cardBody.fontFamily};font-size:${cardStyling.cardBody.fontSize}`;
   const attributes = data.attributes || {};
 
-  let html = '';
-  if (attributes.image && cardStyling.image.location !== 'tooltip' /* && flags?.isEnabled('SENSECLIENT_IM_5036_VIZBUNDLE_STYLING') */) {
-    const textBoxHeight = isVertical(cardStyling) && cardStyling.image.shape === 'round' ? '80px' : '60px';
+  let html = "";
+  if (
+    attributes.image &&
+    cardStyling.image.location !== "tooltip" /* && flags?.isEnabled('SENSECLIENT_IM_5036_VIZBUNDLE_STYLING') */
+  ) {
+    const textBoxHeight = isVertical(cardStyling) && cardStyling.image.shape === "round" ? "80px" : "60px";
 
-    let textBoxCss = isHorizontal(cardStyling) ? `width: 85px; max-height: ${textBoxHeight}; height: fit-content;` : `width: 145px; max-height: ${textBoxHeight};`;
-    textBoxCss += isHorizontal(cardStyling) ? `padding-${cardStyling.image.alignment}: 5px; position: relative; top: 50%; transform: translate(0, -50%);` : 'padding-left: 3px; margin-bottom: 3px; ';
-    textBoxCss += cardStyling.image.alignment === 'bottom' ? 'padding-top: 3px;': '';
+    let textBoxCss = isHorizontal(cardStyling)
+      ? `width: 85px; max-height: ${textBoxHeight}; height: fit-content;`
+      : `width: 145px; max-height: ${textBoxHeight};`;
+    textBoxCss += isHorizontal(cardStyling)
+      ? `padding-${cardStyling.image.alignment}: 5px; position: relative; top: 50%; transform: translate(0, -50%);`
+      : "padding-left: 3px; margin-bottom: 3px; ";
+    textBoxCss += cardStyling.image.alignment === "bottom" ? "padding-top: 3px;" : "";
     let textBox = `<div class="sn-org-textbox" style="${textBoxCss}">`;
     textBox += `<div class="sn-org-card-title" style="${titleStyle};">${encodeUtils.encodeTitle(attributes.label || data.id)}</div>`;
     if (attributes.subLabel) {
@@ -60,42 +67,43 @@ export default (data, cardStyling, selectionObj, flags) => {
     }
 
     // images
-    const order = cardStyling.image.alignment === undefined || ['top', 'left'].includes(cardStyling.image.alignment) ? 0 : 2;
-    
+    const order =
+      cardStyling.image.alignment === undefined || ["top", "left"].includes(cardStyling.image.alignment) ? 0 : 2;
+
     // const imageSize = isVertical(cardStyling) ? cardStyling.image.shape === 'round' ? '110px' : '130px' : '50px';
     let imageSize;
     if (isHorizontal(cardStyling)) {
-      imageSize = '50px';
-    } else if (cardStyling.image.shape === 'round') {
-      imageSize = '110px';
+      imageSize = "50px";
+    } else if (cardStyling.image.shape === "round") {
+      imageSize = "110px";
     } else {
-      imageSize = '130px';
+      imageSize = "130px";
     }
 
-    const align = isHorizontal(cardStyling) ? '' : ' margin: 0 auto;';
+    const align = isHorizontal(cardStyling) ? "" : " margin: 0 auto;";
     // const shape = cardStyling.image.shape === 'rectangle' ? cardStyling.image.clip ? ' object-fit: cover' : '' : ' object-fit: cover; border-radius: 50%';
     let shape;
-    if (cardStyling.image.shape === 'round') {
-      shape = ' object-fit: cover; border-radius: 50%';;
-    } else if (cardStyling.image.clip ) {
-      shape = ' object-fit: cover';
+    if (cardStyling.image.shape === "round") {
+      shape = " object-fit: cover; border-radius: 50%";
+    } else if (cardStyling.image.clip) {
+      shape = " object-fit: cover";
     } else {
-      shape = '';
+      shape = "";
     }
-    
+
     html += `<div style="order:${order};${align}"><img src="${attributes.image}" class="sn-org-card-image" style="height: ${imageSize}; width: ${imageSize}; ${shape}; "/></div>`;
 
     if (data.measure) {
-      const measureLabel = cardStyling.measureLabel ? `${cardStyling.measureLabel}: ` : '';
+      const measureLabel = cardStyling.measureLabel ? `${cardStyling.measureLabel}: ` : "";
       textBox += `<div class="sn-org-card-label" style="${labelStyle};">${encodeUtils.encodeTitle(measureLabel + data.measure)}</div>`;
     } else if (attributes.extraLabel) {
       textBox += `<div class="sn-org-card-label" style="${labelStyle};">${encodeUtils.encodeTitle(attributes.extraLabel)}</div>`;
     }
     html += `${textBox}</div>`;
-
   } else {
-    flags?.isEnabled('SENSECLIENT_IM_5036_VIZBUNDLE_STYLING') ? 
-      html += `<div class="sn-org-textbox" style="max-height: 60px; height: fit-content; position: relative; top: 50%; transform: translate(0, -50%); padding-left: 3px; ">` : '' ;
+    flags?.isEnabled("SENSECLIENT_IM_5036_VIZBUNDLE_STYLING")
+      ? (html += `<div class="sn-org-textbox" style="max-height: 60px; height: fit-content; position: relative; top: 50%; transform: translate(0, -50%); padding-left: 3px; ">`)
+      : "";
     html += `<div class="sn-org-card-title" style="${titleStyle};">${encodeUtils.encodeTitle(attributes.label || data.id)}</div>`;
     if (attributes.subLabel) {
       html += `<div class="sn-org-card-label" style="${labelStyle};">${encodeUtils.encodeTitle(attributes.subLabel)}</div>`;
@@ -106,7 +114,7 @@ export default (data, cardStyling, selectionObj, flags) => {
     } else if (attributes.extraLabel) {
       html += `<div class="sn-org-card-label" style="${labelStyle};">${encodeUtils.encodeTitle(attributes.extraLabel)}</div>`;
     }
-    html += flags?.isEnabled('SENSECLIENT_IM_5036_VIZBUNDLE_STYLING') ? '</div>' : '';
+    html += flags?.isEnabled("SENSECLIENT_IM_5036_VIZBUNDLE_STYLING") ? "</div>" : "";
   }
 
   const isSelectedClass = isSelected ? " selected" : " not-selected";
@@ -122,7 +130,10 @@ export default (data, cardStyling, selectionObj, flags) => {
 
   const topBorder = top && !isSelected ? `3px solid ${borderColor}` : "";
   const borderStyle = fullBorder && !isSelected ? `1px solid ${borderColor}` : "";
-  let newCardHeight = isHorizontal(cardStyling) || cardStyling.image.location === 'tooltip' ? constants.cardHeight : constants.cardHeightLarge;
+  let newCardHeight =
+    isHorizontal(cardStyling) || cardStyling.image.location === "tooltip"
+      ? constants.cardHeight
+      : constants.cardHeightLarge;
 
   /*
   const flex = flags?.isEnabled('SENSECLIENT_IM_5036_VIZBUNDLE_STYLING') 
@@ -144,14 +155,14 @@ export default (data, cardStyling, selectionObj, flags) => {
   let flex;
   if (imageOnCard(cardStyling, attributes)) {
     if (isHorizontal(cardStyling)) {
-      flex = 'display: flex; flex-direction: row;';
+      flex = "display: flex; flex-direction: row;";
     } else {
-      flex = 'display: flex; flex-direction: column;';
+      flex = "display: flex; flex-direction: column;";
     }
   } else {
-    flex = '';
-    if (flags?.isEnabled('SENSECLIENT_IM_5036_VIZBUNDLE_STYLING')) {
-      flex = 'display: flex;'
+    flex = "";
+    if (flags?.isEnabled("SENSECLIENT_IM_5036_VIZBUNDLE_STYLING")) {
+      flex = "display: flex;";
     }
   }
 

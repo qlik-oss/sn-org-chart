@@ -28,7 +28,6 @@ describe("styling", () => {
       const result = getColorStyling(reference, defaultColor);
       expect(result).toEqual("#face10");
     });
-
   });
 
   describe("cardStyling", () => {
@@ -104,10 +103,11 @@ describe("styling", () => {
         backgroundColor: "#ccffff",
         fontColor: "#404040",
         measureLabel: "measureLabel",
-        border: { 
+        border: {
           top: true,
           fullBorder: true,
-          colorType: "auto" },
+          colorType: "auto",
+        },
         borderColor: "#668080",
         image: {
           location: "card",
@@ -132,10 +132,11 @@ describe("styling", () => {
         backgroundColor: "#ccffff",
         fontColor: "#404040",
         measureLabel: null,
-        border: { 
+        border: {
           top: true,
           fullBorder: true,
-          colorType: "auto" },
+          colorType: "auto",
+        },
         borderColor: "#668080",
         image: {
           location: "card",
@@ -150,12 +151,12 @@ describe("styling", () => {
       const fn = () => ({
         top: true,
         fullBorder: true,
-        colorType: 'colorPicker',
-        color: '#0000ff',
-        colorExpression: '',
+        colorType: "colorPicker",
+        color: "#0000ff",
+        colorExpression: "",
       });
       styleModel.border.getStyle = fn;
-      
+
       const result = stylingUtils.cardStyling({ layout, styleModel });
 
       expect(result).toEqual({
@@ -170,10 +171,11 @@ describe("styling", () => {
         backgroundColor: "#ccffff",
         fontColor: "#404040",
         measureLabel: "measureLabel",
-        border: { 
+        border: {
           top: true,
           fullBorder: true,
-          colorType: "colorPicker" },
+          colorType: "colorPicker",
+        },
         borderColor: "#0000ff",
         image: {
           location: "card",

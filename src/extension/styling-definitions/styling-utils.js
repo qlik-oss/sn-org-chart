@@ -4,13 +4,13 @@ function labelStylingDefinition(path, fontResolver) {
 
   return {
     fontFamilyItem: {
-      component: 'dropdown',
+      component: "dropdown",
       ref: pathFontFamily,
       options: () => fontResolver.getOptions(pathFontFamily),
       defaultValue: () => fontResolver.getDefaultValue(pathFontFamily),
     },
     fontSizeItem: {
-      component: 'dropdown',
+      component: "dropdown",
       ref: pathFontSize,
       options: () => fontResolver.getOptions(pathFontSize),
       defaultValue: () => fontResolver.getDefaultValue(pathFontSize),

@@ -18,7 +18,6 @@ export function getColorStyling(reference, defaultColor) {
 
 const stylingUtils = {
   cardStyling: ({ layout, styleModel }) => {
-
     const measureLabel = layout.qHyperCube.qMeasureInfo.length
       ? layout.qHyperCube.qMeasureInfo[0].qFallbackTitle
       : null;
@@ -29,7 +28,7 @@ const stylingUtils = {
     const cardBorderStyle = styleModel.border.getStyle();
     const imageStyle = styleModel.image.getStyle();
 
-    const border = { 
+    const border = {
       top: cardBorderStyle.top,
       fullBorder: cardBorderStyle.fullBorder,
       colorType: cardBorderStyle.colorType,
@@ -37,13 +36,14 @@ const stylingUtils = {
 
     const backgroundColor = getColorStyling(cardBackgroundStyle, DEFAULTS.BACKGROUND_COLOR.color);
     const fontColor = getColorStyling(labelValueStyle, "default");
-    const borderColor = cardBorderStyle.colorType !== "auto"
-      ? getColorStyling(cardBorderStyle, colorUtils.getDarkColor(backgroundColor))
-      : colorUtils.getDarkColor(backgroundColor);
+    const borderColor =
+      cardBorderStyle.colorType !== "auto"
+        ? getColorStyling(cardBorderStyle, colorUtils.getDarkColor(backgroundColor))
+        : colorUtils.getDarkColor(backgroundColor);
 
     const styling = {
       cardTitle: axisLabelStyle,
-      cardBody: { 
+      cardBody: {
         fontSize: labelValueStyle.fontSize,
         fontFamily: labelValueStyle.fontFamily,
       },
@@ -60,7 +60,6 @@ const stylingUtils = {
       },
     };
     return styling;
-
   },
 };
 

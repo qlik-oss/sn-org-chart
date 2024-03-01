@@ -67,7 +67,7 @@ const properties = (flags) => ({
    * Holds chart styling
    * @type {Style}
    */
-  style: !flags?.isEnabled('SENSECLIENT_IM_5036_VIZBUNDLE_STYLING') ? initialProperties : {},
+  style: !flags?.isEnabled("SENSECLIENT_IM_5036_VIZBUNDLE_STYLING") ? initialProperties : {},
 });
 
 /**

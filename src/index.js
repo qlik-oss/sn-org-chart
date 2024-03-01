@@ -12,9 +12,11 @@ import {
   useTheme,
   useTranslator,
 } from "@nebula.js/stardust";
+import { themeService as createThemeService } from "qlik-chart-modules";
 import data from "./data";
 import ext from "./extension/ext";
 import autoRegister from "./locale/src/translations";
+import createStyleModel from "./models/style-model";
 import properties from "./object-properties";
 import selectionHandler from "./selections-handler";
 import snapshot from "./snapshot";
@@ -28,9 +30,6 @@ import { applyTransform, getSnapshotZoom } from "./tree/transform";
 import stylingUtils from "./utils/styling";
 import treeTransform from "./utils/tree-utils";
 import viewStateUtil from "./utils/viewstate-utils";
-import createStyleModel from './models/style-model';
-import { themeService as createThemeService } from 'qlik-chart-modules';
-
 
 export default function supernova(env) {
   const { flags } = env;
@@ -80,10 +79,9 @@ export default function supernova(env) {
         newExpandedState.useTransitions = true;
         setExpandedState(newExpandedState);
       };
-      
+
       // Get and transform the data into a tree structure, get styling, reset active selections
       const [dataTree] = usePromise(() => {
-
         if (!layout) {
           return Promise.resolve();
         }
@@ -91,11 +89,11 @@ export default function supernova(env) {
         const themeService = createThemeService({
           theme: Theme,
           config: {
-            id: 'orgChart',
+            id: "orgChart",
           },
         });
-        
-        const styleModel= createStyleModel({ layout, themeService });
+
+        const styleModel = createStyleModel({ layout, themeService });
 
         const viewState = viewStateUtil.getViewState(options, layout);
         viewState && viewState.expandedState && setExpandedState(viewState.expandedState);

@@ -15,7 +15,13 @@ describe("position", () => {
     };
 
     it("should return position object", () => {
-      const { depthSpacing, isVertical, x, y } = position(orientation, element, initialZoomState, navigationMode, styling);
+      const { depthSpacing, isVertical, x, y } = position(
+        orientation,
+        element,
+        initialZoomState,
+        navigationMode,
+        styling,
+      );
       expect(depthSpacing).toEqual(120);
       expect(isVertical).toEqual(true);
       expect(x).toBeInstanceOf(Function);

@@ -29,19 +29,20 @@ export function getTooltipContent(d, styling) {
   const measure = encodeUtils.encodeTitle(
     d.data.measure ? `${styling.measureLabel ? `${styling.measureLabel}: ` : ""}${d.data.measure}` : "",
   );
-  
-  const image = d.data.attributes.image && styling.image.location !== 'card' ? d.data.attributes.image : '';
+
+  const image = d.data.attributes.image && styling.image.location !== "card" ? d.data.attributes.image : "";
 
   let textStyling;
   if (!image) {
-    textStyling = '';
-  } else if ([undefined, 'right'].includes(styling.image.alignment)) {
+    textStyling = "";
+  } else if ([undefined, "right"].includes(styling.image.alignment)) {
     textStyling = 'style="padding-left:5px"';
   } else {
     textStyling = 'style="padding-right:5px"';
   }
 
-  const imageStyling = styling.image.alignment === undefined || styling.image.alignment !== 'right' ? '' : 'style="order: 1"';
+  const imageStyling =
+    styling.image.alignment === undefined || styling.image.alignment !== "right" ? "" : 'style="order: 1"';
   if (image) {
     return `<div class="sn-org-tooltip-inner"><img src="${image}" class="sn-org-tooltip-image" ${imageStyling} /><div class="sn-org-tooltip-text" ${textStyling}><div class="sn-org-tooltip-header">${label}</div>${subLabel}${extraLabel}${measure}</div></div>`;
   }

@@ -20,7 +20,14 @@ export const getBBoxOfNodes = (nodes, styling) => {
     x: bbox.left,
     y: bbox.top - buttonHeight - buttonMargin,
     width: bbox.right - bbox.left + cardWidth,
-    height: bbox.bottom - bbox.top + (styling && [undefined, 'left', 'right'].includes(styling.image.alignment) || styling.image.location === 'tooltip' ? cardHeight : cardHeightLarge) + (buttonHeight + buttonMargin) * 2,
+    height:
+      bbox.bottom -
+      bbox.top +
+      ((styling && [undefined, "left", "right"].includes(styling.image.alignment)) ||
+      styling.image.location === "tooltip"
+        ? cardHeight
+        : cardHeightLarge) +
+      (buttonHeight + buttonMargin) * 2,
   };
 };
 
@@ -30,7 +37,11 @@ export const getInitialZoomState = (bBox, element, navigationMode, styling) => {
   const { width, height } = bBox;
   const { clientHeight, clientWidth } = element;
   const calcWidth = width + 2 * widthMargin;
-  const calcHeight = height + (styling && [undefined, 'left', 'right'].includes(styling.image.alignment) || styling.image.location === 'tooltip' ? cardHeight : cardHeightLarge);
+  const calcHeight =
+    height +
+    ((styling && [undefined, "left", "right"].includes(styling.image.alignment)) || styling.image.location === "tooltip"
+      ? cardHeight
+      : cardHeightLarge);
   const xZoom = Math.max(Math.min(calcWidth / clientWidth, maxZoom), minZoom);
   const yZoom = Math.max(Math.min(calcHeight / clientHeight, maxZoom), minZoom);
   if (xZoom > yZoom) {
@@ -44,7 +55,11 @@ export const getInitialZoomState = (bBox, element, navigationMode, styling) => {
   // Zooming for y direction
   return {
     initialX: -bBox.x + (clientWidth * yZoom - width) / 2,
-    initialY: (styling && [undefined, 'left', 'right'].includes(styling.image.alignment) || styling.image.location === 'tooltip' ? cardHeight : cardHeightLarge) / 2,
+    initialY:
+      ((styling && [undefined, "left", "right"].includes(styling.image.alignment)) ||
+      styling.image.location === "tooltip"
+        ? cardHeight
+        : cardHeightLarge) / 2,
     initialZoom: yZoom,
   };
 };

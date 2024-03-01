@@ -55,7 +55,15 @@ export const filterTree = ({ topId, isExpanded, expandedChildren }, nodeTree, ex
   return subTree;
 };
 
-export const paintTree = ({ containerData, styling, setExpandedCallback, wrapperState, selectionObj, element, flags }) => {
+export const paintTree = ({
+  containerData,
+  styling,
+  setExpandedCallback,
+  wrapperState,
+  selectionObj,
+  element,
+  flags,
+}) => {
   const { svg, divBox, allNodes, positioning, tooltip } = containerData;
   const { navigationMode } = allNodes.data;
   divBox.selectAll("*").remove();
@@ -96,7 +104,7 @@ export const createContainer = ({
   viewState,
   setContainerData,
   layout,
-  styling
+  styling,
 }) => {
   element.innerHTML = "";
   element.className = "sn-org-chart";
@@ -141,7 +149,7 @@ export const createContainer = ({
         viewState,
         setContainerData,
         layout,
-        styling
+        styling,
       });
     })
     .html(homeIcon)
@@ -190,7 +198,9 @@ export const createContainer = ({
   });
   const bBox = getBBoxOfNodes(renderNodes, styling);
   const initialZoomState =
-    viewState && viewState.initialZoom ? viewState.initialZoom : getInitialZoomState(bBox, element, navigationMode, styling);
+    viewState && viewState.initialZoom
+      ? viewState.initialZoom
+      : getInitialZoomState(bBox, element, navigationMode, styling);
   setInitialZoom(initialZoomState);
   positioning = position("ttb", element, initialZoomState, navigationMode, styling);
   setZooming({

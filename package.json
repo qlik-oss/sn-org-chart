@@ -35,9 +35,9 @@
     "sense": "nebula sense --ext ./src/extension/ext-raw.js --meta ./src/extension/meta.json",
     "spec": "sy from-jsdoc -c ./spec-configs/props.conf.js",
     "start": "nebula serve --type sn-org-chart",
+    "start:mfe": "nebula serve --mfe --type sn-org-chart",
     "test:e2e": "playwright test",
-    "test:unit": "jest",
-    "start:mfe": "nebula serve --mfe --type sn-org-chart"
+    "test:unit": "jest"
   },
   "husky": {
     "hooks": {
@@ -89,10 +89,10 @@
     "lint-staged": "15.2.2",
     "mocha-junit-reporter": "2.2.1",
     "prettier": "3.2.5",
+    "qlik-chart-modules": "0.67.0",
     "shx": "0.3.4",
     "typescript": "5.3.3",
-    "yargs": "17.7.2",
-    "qlik-chart-modules": "0.67.0"
+    "yargs": "17.7.2"
   },
   "peerDependencies": {
     "@nebula.js/stardust": ">=4.11.0"
