@@ -9,62 +9,60 @@
     "x-qlik-visibility": "public"
   },
   "entries": {
-    "properties": {
+    "initialProperties": {
       "extends": [
         {
           "type": "EngineAPI.GenericObjectProperties"
         }
       ],
-      "kind": "object",
-      "entries": {
-        "showTitles": {
-          "description": "Show title for the visualization",
-          "defaultValue": true,
-          "type": "boolean"
-        },
-        "title": {
-          "description": "Visualization title",
-          "defaultValue": "",
-          "type": "string"
-        },
-        "subtitle": {
-          "description": "Visualization subtitle",
-          "defaultValue": "",
-          "type": "string"
-        },
-        "footnote": {
-          "description": "Visualization footnote",
-          "defaultValue": "",
-          "type": "string"
-        },
-        "navigationMode": {
-          "description": "How the org chart is navigated",
-          "defaultValue": "free",
-          "kind": "union",
-          "items": [
-            {
-              "kind": "literal",
-              "value": "'expandAll'"
-            },
-            {
-              "kind": "literal",
-              "value": "'free'"
-            }
-          ]
-        },
-        "resizeOnExpand": {
-          "description": "Resize and pan chart when a node's list of children is expanded",
-          "defaultValue": false,
-          "type": "boolean"
-        },
-        "style": {
-          "description": "Holds chart styling",
-          "type": "#/definitions/Style"
-        }
-      }
+      "kind": "object"
     }
   },
   "definitions": {
+    "showTitles": {
+      "description": "Show title for the visualization",
+      "defaultValue": true,
+      "type": "boolean"
+    },
+    "title": {
+      "description": "Visualization title",
+      "defaultValue": "",
+      "type": "string"
+    },
+    "subtitle": {
+      "description": "Visualization subtitle",
+      "defaultValue": "",
+      "type": "string"
+    },
+    "footnote": {
+      "description": "Visualization footnote",
+      "defaultValue": "",
+      "type": "string"
+    },
+    "navigationMode": {
+      "description": "How the org chart is navigated",
+      "defaultValue": "free",
+      "kind": "union",
+      "items": [
+        {
+          "kind": "literal",
+          "value": "'expandAll'"
+        },
+        {
+          "kind": "literal",
+          "value": "'free'"
+        }
+      ]
+    },
+    "resizeOnExpand": {
+      "description": "Resize and pan chart when a node's list of children is expanded",
+      "defaultValue": false,
+      "type": "boolean"
+    },
+    "style": {
+      "description": "Holds chart styling",
+      "type": "#/definitions/Style"
+    },
     "Style": {
       "description": "Holds styling options",
       "kind": "alias",
