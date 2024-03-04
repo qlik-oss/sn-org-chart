@@ -5,26 +5,6 @@ import DEFAULTS from "./style-defaults";
  * @entry
  */
 
-const initialProperties = {
-  fontColor: {
-    colorType: DEFAULTS.FONT_COLOR_TYPE,
-    color: DEFAULTS.FONT_COLOR_DARK,
-    colorExpression: "",
-  },
-  backgroundColor: {
-    colorType: DEFAULTS.BACKGROUND_COLOR_TYPE,
-    color: DEFAULTS.BACKGROUND_COLOR,
-    colorExpression: "",
-  },
-  border: {
-    top: DEFAULTS.BORDER_TOP,
-    fullBorder: DEFAULTS.BORDER_FULL,
-    colorType: DEFAULTS.BORDER_COLOR_TYPE,
-    color: DEFAULTS.BORDER_COLOR,
-    colorExpression: "",
-  },
-};
-
 const properties = (flags) => ({
   qHyperCubeDef: {
     qDimensions: [],
@@ -67,7 +47,28 @@ const properties = (flags) => ({
    * Holds chart styling
    * @type {Style}
    */
-  style: !flags?.isEnabled("SENSECLIENT_IM_5036_VIZBUNDLE_STYLING") ? initialProperties : {},
+  //style: !flags?.isEnabled("SENSECLIENT_IM_5036_VIZBUNDLE_STYLING") ? initialProperties : {},
+  style: {
+    fontColor: {
+      colorType: DEFAULTS.FONT_COLOR_TYPE,
+      color: DEFAULTS.FONT_COLOR_DARK,
+      colorExpression: "",
+    },
+    backgroundColor: {
+      colorType: DEFAULTS.BACKGROUND_COLOR_TYPE,
+      color: DEFAULTS.BACKGROUND_COLOR,
+      colorExpression: "",
+    },
+    border: {
+      top: DEFAULTS.BORDER_TOP,
+      fullBorder: DEFAULTS.BORDER_FULL,
+      colorType: DEFAULTS.BORDER_COLOR_TYPE,
+      color: DEFAULTS.BORDER_COLOR,
+      colorExpression: "",
+    },
+  },
+  components: [],
+
 });
 
 /**

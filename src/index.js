@@ -93,7 +93,7 @@ export default function supernova(env) {
           },
         });
 
-        const styleModel = createStyleModel({ layout, themeService });
+        const styleModel = createStyleModel({ layout, themeService, flags });
 
         const viewState = viewStateUtil.getViewState(options, layout);
         viewState && viewState.expandedState && setExpandedState(viewState.expandedState);

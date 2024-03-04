@@ -123,16 +123,6 @@ function createStylingDefinition(theme, flags, translator) {
                     component: "dropdown",
                     defaultValue: DEFAULTS.FONT_COLOR_TYPE,
                     options: colorOptions,
-                    show: (data, args, handler) => {
-                      const clonedProperties = structuredClone(handler.properties);
-                      const colorTypeStyle = clonedProperties?.style?.fontColor?.colorType;
-                      const colorTypeComponent = data?.label?.value?.colorType;
-                      if (colorTypeStyle && !colorTypeComponent) {
-                        data.label = { ...dataTemplateLabel.label, ...data.label };
-                        data.label.value = clonedProperties?.style?.fontColor;
-                      }
-                      return true;
-                    },
                   },
                   colorPicker: {
                     component: "color-picker",
@@ -181,16 +171,6 @@ function createStylingDefinition(theme, flags, translator) {
                     component: "dropdown",
                     defaultValue: DEFAULTS.BACKGROUND_COLOR_TYPE,
                     options: colorOptions,
-                    show: (data, args, handler) => {
-                      const clonedProperties = structuredClone(handler.properties);
-                      const colorTypeStyle = clonedProperties?.style?.backgroundColor?.colorType;
-                      const colorTypeComponent = data?.backgroundColor?.colorType;
-                      if (colorTypeStyle && !colorTypeComponent) {
-                        data.backgroundColor = { ...dataTemplateBackground.backgroundColor, ...data.backgroundColor };
-                        data.backgroundColor = clonedProperties?.style?.backgroundColor;
-                      }
-                      return true;
-                    },
                   },
                   colorPicker: {
                     component: "color-picker",
@@ -233,16 +213,6 @@ function createStylingDefinition(theme, flags, translator) {
                 ref: "border.top",
                 translation: "Object.OrgChart.TopBar",
                 defaultValue: DEFAULTS.BORDER_TOP,
-                show: (data, args, handler) => {
-                  const clonedProperties = structuredClone(handler.properties);
-                  const topStyle = clonedProperties?.style?.border?.colorType;
-                  const topComponent = data?.border?.top || data?.border?.fullBorder || data?.border?.colorType;
-                  if (topStyle && !topComponent) {
-                    data.border = { ...dataTemplateBorder.border, ...data.border };
-                    data.border = clonedProperties?.style?.border;
-                  }
-                  return true;
-                },
               },
               fullBorder: {
                 component: "checkbox",
