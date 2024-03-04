@@ -5,7 +5,7 @@ import DEFAULTS from "./style-defaults";
  * @entry
  */
 
-const properties = () => ({
+const properties = {
   qHyperCubeDef: {
     qDimensions: [],
     qMeasures: [],
@@ -67,7 +67,7 @@ const properties = () => ({
     },
   },
   components: [],
-});
+};
 
 /**
  * Holds styling options
