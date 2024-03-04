@@ -1,7 +1,7 @@
 import DEFAULTS from "../style-defaults";
 import propertyResolver from "../utils/property-resolver";
-import createStylingDefinition from "./styling-definitions/styling-definition";
 import migrateStyle from "./styling-definitions/migration";
+import createStylingDefinition from "./styling-definitions/styling-definition";
 
 const colorOptions = [
   { value: "auto", translation: "Common.Auto" },
@@ -308,10 +308,8 @@ export default function extDef({ translator, flags, anything }) {
     },
     migrate: {
       properties(properties) {
-        return flags?.isEnabled("SENSECLIENT_IM_5036_VIZBUNDLE_STYLING") 
-          ? migrateStyle(properties)
-          : properties;
-      }
+        return flags?.isEnabled("SENSECLIENT_IM_5036_VIZBUNDLE_STYLING") ? migrateStyle(properties) : properties;
+      },
     },
   };
 }

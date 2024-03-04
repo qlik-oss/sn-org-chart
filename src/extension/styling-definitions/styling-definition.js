@@ -27,34 +27,6 @@ const imageShapeOptions = [
   { value: "round", translation: "Round" },
 ];
 
-const dataTemplateLabel = {
-  label: {
-    value: {
-      colorType: undefined,
-      color: undefined,
-      colorExpression: undefined,
-    },
-  },
-};
-
-const dataTemplateBackground = {
-  backgroundColor: {
-    colorType: undefined,
-    color: undefined,
-    colorExpression: undefined,
-  },
-};
-
-const dataTemplateBorder = {
-  border: {
-    top: undefined,
-    fullBorder: undefined,
-    colorType: undefined,
-    color: undefined,
-    colorExpression: undefined,
-  },
-};
-
 function createStylingDefinition(theme, flags, translator) {
   const fontResolver = createFontResolver({
     theme,

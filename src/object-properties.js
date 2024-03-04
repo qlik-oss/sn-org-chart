@@ -5,7 +5,7 @@ import DEFAULTS from "./style-defaults";
  * @entry
  */
 
-const properties = (flags) => ({
+const properties = () => ({
   qHyperCubeDef: {
     qDimensions: [],
     qMeasures: [],
@@ -47,7 +47,6 @@ const properties = (flags) => ({
    * Holds chart styling
    * @type {Style}
    */
-  //style: !flags?.isEnabled("SENSECLIENT_IM_5036_VIZBUNDLE_STYLING") ? initialProperties : {},
   style: {
     fontColor: {
       colorType: DEFAULTS.FONT_COLOR_TYPE,
@@ -68,7 +67,6 @@ const properties = (flags) => ({
     },
   },
   components: [],
-
 });
 
 /**
