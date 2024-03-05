@@ -1,6 +1,7 @@
 import { select, zoom, zoomIdentity } from "d3";
 import constants from "./size-constants";
 import { closeTooltip } from "./tooltip";
+import { isSmallCard } from "../utils/tree-utils";
 
 export const getBBoxOfNodes = (nodes, styling) => {
   const { cardWidth, cardHeight, cardHeightLarge, buttonHeight, buttonMargin } = constants;
@@ -23,10 +24,7 @@ export const getBBoxOfNodes = (nodes, styling) => {
     height:
       bbox.bottom -
       bbox.top +
-      ((styling && [undefined, "left", "right"].includes(styling.image.alignment)) ||
-      styling.image.location === "tooltip"
-        ? cardHeight
-        : cardHeightLarge) +
+      ((styling && isSmallCard(styling)) ? cardHeight : cardHeightLarge) +
       (buttonHeight + buttonMargin) * 2,
   };
 };
@@ -37,11 +35,7 @@ export const getInitialZoomState = (bBox, element, navigationMode, styling) => {
   const { width, height } = bBox;
   const { clientHeight, clientWidth } = element;
   const calcWidth = width + 2 * widthMargin;
-  const calcHeight =
-    height +
-    ((styling && [undefined, "left", "right"].includes(styling.image.alignment)) || styling.image.location === "tooltip"
-      ? cardHeight
-      : cardHeightLarge);
+  const calcHeight = height + ((styling && isSmallCard(styling)) ? cardHeight : cardHeightLarge);
   const xZoom = Math.max(Math.min(calcWidth / clientWidth, maxZoom), minZoom);
   const yZoom = Math.max(Math.min(calcHeight / clientHeight, maxZoom), minZoom);
   if (xZoom > yZoom) {
@@ -55,11 +49,7 @@ export const getInitialZoomState = (bBox, element, navigationMode, styling) => {
   // Zooming for y direction
   return {
     initialX: -bBox.x + (clientWidth * yZoom - width) / 2,
-    initialY:
-      ((styling && [undefined, "left", "right"].includes(styling.image.alignment)) ||
-      styling.image.location === "tooltip"
-        ? cardHeight
-        : cardHeightLarge) / 2,
+    initialY: ((styling && isSmallCard(styling)) ? cardHeight : cardHeightLarge) / 2,
     initialZoom: yZoom,
   };
 };

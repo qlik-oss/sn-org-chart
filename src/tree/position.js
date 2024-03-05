@@ -1,4 +1,4 @@
-import { haveNoChildren } from "../utils/tree-utils";
+import { haveNoChildren, isSmallCard } from "../utils/tree-utils";
 import constants from "./size-constants";
 
 export const widthTranslation = (d, widthSpacing, element, axis, initialZoomState, navigationMode) => {
@@ -35,11 +35,7 @@ export const depthTranslation = (d, depthSpacing, axis, initialZoomState, naviga
     d[axis] =
       d.parent.y +
       depthSpacing +
-      d.data.childNumber *
-        (([undefined, "left", "right"].includes(styling.image.alignment) || styling.image.location === "tooltip"
-          ? cardHeight
-          : cardHeightLarge) +
-          leafMargin) +
+      d.data.childNumber * (((styling && isSmallCard(styling)) ? cardHeight : cardHeightLarge) + leafMargin) +
       initialY;
   } else {
     d[axis] = d.y + initialY;
@@ -53,10 +49,7 @@ export default function position(orientation, element, initialZoomState, navigat
   let depthSpacing;
   let orientations;
 
-  const actualCardHeight =
-    styling && !([undefined, "left", "right"].includes(styling.image.alignment) || styling.image.location === "tooltip")
-      ? cardHeightLarge
-      : cardHeight;
+  const actualCardHeight = (styling && !isSmallCard(styling)) ? cardHeightLarge : cardHeight;
 
   switch (orientation) {
     case "ttb":
