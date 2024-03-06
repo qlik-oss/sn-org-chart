@@ -1,14 +1,14 @@
 import DEFAULTS from "../style-defaults";
 import colorUtils from "./color-utils";
 
-export function getColorStyling(reference, defaultColor) {
+export function getColor(reference, Theme, defaultColor) {
   let color;
   switch (reference.colorType) {
     case "byExpression":
       color = colorUtils.resolveExpression(reference.colorExpression);
       break;
     case "colorPicker":
-      color = reference.color;
+      color = Theme.getColorPickerColor(reference.color);
       break;
     default:
       color = defaultColor;
@@ -17,7 +17,7 @@ export function getColorStyling(reference, defaultColor) {
 }
 
 const stylingUtils = {
-  cardStyling: ({ layout, styleModel }) => {
+  cardStyling: ({ Theme, layout, styleModel }) => {
     const measureLabel = layout.qHyperCube.qMeasureInfo.length
       ? layout.qHyperCube.qMeasureInfo[0].qFallbackTitle
       : null;
@@ -34,11 +34,11 @@ const stylingUtils = {
       colorType: cardBorderStyle.colorType,
     };
 
-    const backgroundColor = getColorStyling(cardBackgroundStyle, DEFAULTS.BACKGROUND_COLOR.color);
-    const fontColor = getColorStyling(labelValueStyle, "default");
+    const backgroundColor = getColor(cardBackgroundStyle, Theme, DEFAULTS.BACKGROUND_COLOR.color);
+    const fontColor = getColor(labelValueStyle, Theme, "default");
     const borderColor =
       cardBorderStyle.colorType !== "auto"
-        ? getColorStyling(cardBorderStyle, colorUtils.getDarkColor(backgroundColor))
+        ? getColor(cardBorderStyle, Theme, colorUtils.getDarkColor(backgroundColor))
         : colorUtils.getDarkColor(backgroundColor);
 
     const styling = {

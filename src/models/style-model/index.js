@@ -40,9 +40,9 @@ export default function createStyleModel({ layout, themeService, flags }) {
           ),
           color: resolveStyle(
             "label",
-            findComponent("label")?.label?.value?.color?.color,
-            layout?.style?.fontColor?.color?.color,
-            themeStyle.label.value.color,
+            findComponent("label")?.label?.value?.color,
+            layout?.style?.fontColor?.color,
+            DEFAULTS.FONT_COLOR_DARK,
           ),
           colorExpression: resolveStyle(
             "label",
@@ -63,9 +63,9 @@ export default function createStyleModel({ layout, themeService, flags }) {
         ),
         color: resolveStyle(
           "backgroundColor",
-          findComponent("backgroundColor")?.backgroundColor?.color?.color,
-          layout?.style?.backgroundColor?.color?.color,
-          DEFAULTS.BACKGROUND_COLOR.color,
+          findComponent("backgroundColor")?.backgroundColor?.color,
+          layout?.style?.backgroundColor?.color,
+          DEFAULTS.BACKGROUND_COLOR,
         ),
         colorExpression: resolveStyle(
           "backgroundColor",
@@ -97,9 +97,9 @@ export default function createStyleModel({ layout, themeService, flags }) {
         ),
         color: resolveStyle(
           "border",
-          findComponent("border")?.border?.color?.color,
-          layout?.style?.border?.color?.color,
-          DEFAULTS.BORDER_COLOR.color,
+          findComponent("border")?.border?.color,
+          layout?.style?.border?.color,
+          DEFAULTS.BORDER_COLOR,
         ),
         colorExpression: resolveStyle(
           "border",

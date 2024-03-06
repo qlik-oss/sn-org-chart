@@ -100,7 +100,7 @@ export default function supernova(env) {
         viewState && viewState.transform && setTransform(viewState.transform);
 
         return treeTransform({ layout, model, translator }).then((transformed) => {
-          setStyling(stylingUtils.cardStyling({ layout, styleModel }));
+          setStyling(stylingUtils.cardStyling({ Theme, layout, styleModel }));
           selectionObj.setState([]);
           // Resolving the promise to indicate readiness for printing
           return transformed;
