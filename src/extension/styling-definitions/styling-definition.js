@@ -37,7 +37,7 @@ function createStylingDefinition(theme, flags, translator) {
       paths: ["axis.label.name", "label.value"],
     },
   });
-
+ 
   const bordersActive = (data) =>
     (propertyResolver.getValue(data, "border.top") ?? DEFAULTS.BORDER_TOP) ||
     (propertyResolver.getValue(data, "border.fullBorder") ?? DEFAULTS.BORDER_FULL);
@@ -101,13 +101,10 @@ function createStylingDefinition(theme, flags, translator) {
                     ref: "label.value.color",
                     width: 3,
                     dualOutput: true,
-                    defaultValue: () => ({
-                      index: -1,
-                      color: theme.getStyle("object.orgChart", "label.value", "color") ?? DEFAULTS.FONT_COLOR_DARK,
-                    }),
+                    defaultValue: DEFAULTS.FONT_COLOR_DARK,
                     show: (data) =>
                       (propertyResolver.getValue(data, "label.value.colorType") ?? DEFAULTS.FONT_COLOR_TYPE) ===
-                      "colorPicker",
+                        "colorPicker",
                   },
                 },
               },
@@ -119,7 +116,7 @@ function createStylingDefinition(theme, flags, translator) {
                 defaultValue: "",
                 show: (data) =>
                   (propertyResolver.getValue(data, "label.value.colorType") ?? DEFAULTS.FONT_COLOR_TYPE) ===
-                  "byExpression",
+                    "byExpression",
               },
             },
           },
@@ -165,7 +162,7 @@ function createStylingDefinition(theme, flags, translator) {
                 defaultValue: "",
                 show: (data) =>
                   (propertyResolver.getValue(data, "backgroundColor.colorType") ?? DEFAULTS.BACKGROUND_COLOR_TYPE) ===
-                  "byExpression",
+                    "byExpression",
               },
             },
           },
