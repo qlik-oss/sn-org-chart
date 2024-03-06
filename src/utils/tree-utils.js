@@ -154,7 +154,7 @@ export function haveNoChildren(nodes) {
   return true;
 }
 
-export function isSmallCard (styling) {
+export function isSmallCard(styling) {
   return [undefined, "left", "right"].includes(styling.image.alignment) || styling.image.location === "tooltip";
 }
 

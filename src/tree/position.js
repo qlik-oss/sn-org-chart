@@ -35,7 +35,7 @@ export const depthTranslation = (d, depthSpacing, axis, initialZoomState, naviga
     d[axis] =
       d.parent.y +
       depthSpacing +
-      d.data.childNumber * (((styling && isSmallCard(styling)) ? cardHeight : cardHeightLarge) + leafMargin) +
+      d.data.childNumber * ((styling && isSmallCard(styling) ? cardHeight : cardHeightLarge) + leafMargin) +
       initialY;
   } else {
     d[axis] = d.y + initialY;
@@ -49,7 +49,7 @@ export default function position(orientation, element, initialZoomState, navigat
   let depthSpacing;
   let orientations;
 
-  const actualCardHeight = (styling && !isSmallCard(styling)) ? cardHeightLarge : cardHeight;
+  const actualCardHeight = styling && !isSmallCard(styling) ? cardHeightLarge : cardHeight;
 
   switch (orientation) {
     case "ttb":

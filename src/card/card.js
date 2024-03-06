@@ -37,6 +37,26 @@ function imageOnCard(cardStyling, attributes) {
   return attributes.image && cardStyling.image.location !== "tooltip";
 }
 
+function defineImageSize(cardStyling) {
+  if (isHorizontal(cardStyling)) {
+    return "50px";
+  }
+  if (cardStyling.image.shape === "round") {
+    return "110px";
+  }
+  return "130px";
+}
+
+function defineShapeFit(cardStyling) {
+  if (cardStyling.image.shape === "round") {
+    return " object-fit: cover; border-radius: 50%";
+  }
+  if (cardStyling.image.clip) {
+    return " object-fit: cover";
+  }
+  return "";
+}
+
 export default (data, cardStyling, selectionObj, flags) => {
   const { api, state } = selectionObj;
   const isSelected = api && api.isActive() && state.indexOf(data.elemNo) !== -1;
@@ -47,10 +67,7 @@ export default (data, cardStyling, selectionObj, flags) => {
   const attributes = data.attributes || {};
 
   let html = "";
-  if (
-    attributes.image &&
-    cardStyling.image.location !== "tooltip" /* && flags?.isEnabled('SENSECLIENT_IM_5036_VIZBUNDLE_STYLING') */
-  ) {
+  if (imageOnCard(cardStyling, attributes)) {
     const textBoxHeight = isVertical(cardStyling) && cardStyling.image.shape === "round" ? "80px" : "60px";
 
     let textBoxCss = isHorizontal(cardStyling)
@@ -69,29 +86,10 @@ export default (data, cardStyling, selectionObj, flags) => {
     // images
     const order =
       cardStyling.image.alignment === undefined || ["top", "left"].includes(cardStyling.image.alignment) ? 0 : 2;
-
-    // const imageSize = isVertical(cardStyling) ? cardStyling.image.shape === 'round' ? '110px' : '130px' : '50px';
-    let imageSize;
-    if (isHorizontal(cardStyling)) {
-      imageSize = "50px";
-    } else if (cardStyling.image.shape === "round") {
-      imageSize = "110px";
-    } else {
-      imageSize = "130px";
-    }
-
     const align = isHorizontal(cardStyling) ? "" : " margin: 0 auto;";
-    // const shape = cardStyling.image.shape === 'rectangle' ? cardStyling.image.clip ? ' object-fit: cover' : '' : ' object-fit: cover; border-radius: 50%';
-    let shape;
-    if (cardStyling.image.shape === "round") {
-      shape = " object-fit: cover; border-radius: 50%";
-    } else if (cardStyling.image.clip) {
-      shape = " object-fit: cover";
-    } else {
-      shape = "";
-    }
-
-    html += `<div style="order:${order};${align}"><img src="${attributes.image}" class="sn-org-card-image" style="height: ${imageSize}; width: ${imageSize}; ${shape}; "/></div>`;
+    const imageSize = defineImageSize(cardStyling);
+    const shapeFit = defineShapeFit(cardStyling);
+    html += `<div style="order:${order};${align}"><img src="${attributes.image}" class="sn-org-card-image" style="height: ${imageSize}; width: ${imageSize}; ${shapeFit}; "/></div>`;
 
     if (data.measure) {
       const measureLabel = cardStyling.measureLabel ? `${cardStyling.measureLabel}: ` : "";
@@ -101,9 +99,9 @@ export default (data, cardStyling, selectionObj, flags) => {
     }
     html += `${textBox}</div>`;
   } else {
-    flags?.isEnabled("SENSECLIENT_IM_5036_VIZBUNDLE_STYLING")
-      ? (html += `<div class="sn-org-textbox" style="max-height: 60px; height: fit-content; position: relative; top: 50%; transform: translate(0, -50%); padding-left: 3px; ">`)
-      : "";
+    html += flags?.isEnabled("SENSECLIENT_IM_5036_VIZBUNDLE_STYLING")
+      ? `<div class="sn-org-textbox" style="max-height: 60px; height: fit-content; position: relative; top: 50%; transform: translate(0, -50%); padding-left: 3px; ">`
+      : `<div class="sn-org-textbox">`;
     html += `<div class="sn-org-card-title" style="${titleStyle};">${encodeUtils.encodeTitle(attributes.label || data.id)}</div>`;
     if (attributes.subLabel) {
       html += `<div class="sn-org-card-label" style="${labelStyle};">${encodeUtils.encodeTitle(attributes.subLabel)}</div>`;
@@ -114,7 +112,7 @@ export default (data, cardStyling, selectionObj, flags) => {
     } else if (attributes.extraLabel) {
       html += `<div class="sn-org-card-label" style="${labelStyle};">${encodeUtils.encodeTitle(attributes.extraLabel)}</div>`;
     }
-    html += flags?.isEnabled("SENSECLIENT_IM_5036_VIZBUNDLE_STYLING") ? "</div>" : "";
+    html += "</div>";
   }
 
   const isSelectedClass = isSelected ? " selected" : " not-selected";
@@ -135,23 +133,6 @@ export default (data, cardStyling, selectionObj, flags) => {
       ? constants.cardHeight
       : constants.cardHeightLarge;
 
-  /*
-  const flex = flags?.isEnabled('SENSECLIENT_IM_5036_VIZBUNDLE_STYLING') 
-    ? attributes.image && cardStyling.image.location !== 'tooltip'
-      ? isHorizontal(cardStyling)
-        ? 'display: flex; flex-direction: row;'
-        : 'display: flex; flex-direction: column;'
-      : 'display: flex;' 
-    : '';
-  
-  const flex = imageOnCard(cardStyling, attributes) //image on card?
-    ? isHorizontal(cardStyling)
-      ? 'display: flex; flex-direction: row;'
-      : 'display: flex; flex-direction: column;'
-    : flags?.isEnabled('SENSECLIENT_IM_5036_VIZBUNDLE_STYLING') 
-      ? 'display: flex;'
-      : '';
-  */
   let flex;
   if (imageOnCard(cardStyling, attributes)) {
     if (isHorizontal(cardStyling)) {
@@ -174,5 +155,6 @@ export default (data, cardStyling, selectionObj, flags) => {
     newCardHeight -= 3;
   }
 
-  return `<div class="sn-org-card-text${selectedClass}" style="background-color:${backgroundColor};color:${fontColor}; border:${borderStyle}; border-top:${topBorder}; height:${newCardHeight}px;${flex}">${html}</div>`;
+  const htmlOutput = `<div class="sn-org-card-text${selectedClass}" style="background-color:${backgroundColor};color:${fontColor}; border:${borderStyle}; border-top:${topBorder}; height:${newCardHeight}px;${flex}">${html}</div>`;
+  return htmlOutput;
 };

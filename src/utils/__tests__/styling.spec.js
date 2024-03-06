@@ -1,6 +1,10 @@
-import stylingUtils, { getColorStyling } from "../styling";
+import stylingUtils, { getColor } from "../styling";
 
+const palette = ["firstColor", "secondColor"];
 const defaultColor = "#e6e6e6";
+const Theme = {
+  getColorPickerColor: (color) => palette[color.index] || "none",
+};
 
 describe("styling", () => {
   describe("getColor", () => {
@@ -9,24 +13,31 @@ describe("styling", () => {
       reference = {
         colorType: "auto",
         colorExpression: "pink",
-        color: "#face10",
+        color: { index: 1 },
       };
     });
     it("should return default color", () => {
-      const result = getColorStyling(reference, defaultColor);
+      const result = getColor(reference, Theme, defaultColor);
       expect(result).toEqual(defaultColor);
     });
 
     it("should return color from expression", () => {
       reference.colorType = "byExpression";
-      const result = getColorStyling(reference, defaultColor);
+      const result = getColor(reference, Theme, defaultColor);
       expect(result).toEqual("rgba(255,192,203,1)");
     });
 
     it("should return color from colorPicker", () => {
       reference.colorType = "colorPicker";
-      const result = getColorStyling(reference, defaultColor);
-      expect(result).toEqual("#face10");
+      const result = getColor(reference, Theme, defaultColor);
+      expect(result).toEqual("secondColor");
+    });
+
+    it("should return default color from colorPicker", () => {
+      reference.colorType = "colorPicker";
+      reference.color.index = 10;
+      const result = getColor(reference, Theme, defaultColor);
+      expect(result).toEqual("#e6e6e6");
     });
   });
 
@@ -90,7 +101,7 @@ describe("styling", () => {
       };
     });
     it("should return cardStyling", () => {
-      const result = stylingUtils.cardStyling({ layout, styleModel });
+      const result = stylingUtils.cardStyling({ Theme, layout, styleModel });
       expect(result).toEqual({
         cardTitle: {
           fontSize: "16",
@@ -100,15 +111,15 @@ describe("styling", () => {
           fontSize: "14",
           fontFamily: "Times New Roman",
         },
-        backgroundColor: "#ccffff",
-        fontColor: "#404040",
+        backgroundColor: "#ffffff",
+        fontColor: "default",
         measureLabel: "measureLabel",
         border: {
           top: true,
           fullBorder: true,
           colorType: "auto",
         },
-        borderColor: "#668080",
+        borderColor: "#808080",
         image: {
           location: "card",
           alignment: "left",
@@ -119,7 +130,7 @@ describe("styling", () => {
     });
     it("should return cardStyling with no measureLabel", () => {
       layout.qHyperCube.qMeasureInfo = [];
-      const result = stylingUtils.cardStyling({ layout, styleModel });
+      const result = stylingUtils.cardStyling({ Theme, layout, styleModel });
       expect(result).toEqual({
         cardTitle: {
           fontSize: "16",
@@ -129,15 +140,15 @@ describe("styling", () => {
           fontSize: "14",
           fontFamily: "Times New Roman",
         },
-        backgroundColor: "#ccffff",
-        fontColor: "#404040",
+        backgroundColor: "#ffffff",
+        fontColor: "default",
         measureLabel: null,
         border: {
           top: true,
           fullBorder: true,
           colorType: "auto",
         },
-        borderColor: "#668080",
+        borderColor: "#808080",
         image: {
           location: "card",
           alignment: "left",
@@ -152,12 +163,12 @@ describe("styling", () => {
         top: true,
         fullBorder: true,
         colorType: "colorPicker",
-        color: "#0000ff",
+        color: { index: 1 },
         colorExpression: "",
       });
       styleModel.border.getStyle = fn;
 
-      const result = stylingUtils.cardStyling({ layout, styleModel });
+      const result = stylingUtils.cardStyling({ Theme, layout, styleModel });
 
       expect(result).toEqual({
         cardTitle: {
@@ -168,15 +179,15 @@ describe("styling", () => {
           fontSize: "14",
           fontFamily: "Times New Roman",
         },
-        backgroundColor: "#ccffff",
-        fontColor: "#404040",
+        backgroundColor: "#ffffff",
+        fontColor: "default",
         measureLabel: "measureLabel",
         border: {
           top: true,
           fullBorder: true,
           colorType: "colorPicker",
         },
-        borderColor: "#0000ff",
+        borderColor: "secondColor",
         image: {
           location: "card",
           alignment: "left",
