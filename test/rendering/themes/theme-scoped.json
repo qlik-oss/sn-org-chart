@@ -1,0 +1,133 @@
+{
+  "_inherit": false,
+  "color": "#ffffff",
+  "fontSize": "20px",
+  "fontFamily": "Arial",
+  "backgroundColor": "#272822",
+  "object": {
+    "axis": {
+      "label": {
+        "name": {
+          "color": "black",
+          "fontSize": "30px"
+        }
+      },
+      "line": {
+        "major": {
+          "color": "black"
+        },
+        "minor": {
+          "color": "black"
+        }
+      },
+      "title": {
+        "color": "black",
+        "fontSize": "30px"
+      }
+    },
+    "grid": {
+      "line": {
+        "major": {
+          "color": "black"
+        },
+        "minor": {
+          "color": "black"
+        },
+        "highContrast": {
+          "color": "black"
+        }
+      }
+    },
+    "label": {
+      "name": {
+        "color": "black",
+        "fontSize": "30px"
+      },
+      "value": {
+        "color": "black",
+        "fontSize": "30px"
+      }
+    },
+    "referenceLine": {
+      "label": {
+        "name": {
+          "color": "black",
+          "fontSize": "30px"
+        }
+      },
+      "outOfBounds": {
+        "backgroundColor": "black",
+        "color": "black",
+        "fontSize": "30px"
+      }
+    },
+    "scatterPlot": {
+      "axis": {
+        "label": {
+          "name": {
+            "color": "#66d9ef",
+            "fontSize": "12px",
+            "fontFamily": "Arial"
+          }
+        },
+        "line": {
+          "major": {
+            "color": "#17616F"
+          },
+          "minor": {
+            "color": "green"
+          }
+        },
+        "title": {
+          "color": "#fd971f",
+          "fontSize": "15px",
+          "fontFamily": "Arial"
+        }
+      },
+      "grid": {
+        "line": {
+          "major": {
+            "color": "#5D5F5B"
+          },
+          "minor": {
+            "color": "#444541"
+          },
+          "highContrast": {
+            "color": "#ff005d"
+          }
+        }
+      },
+      "label": {
+        "name": {
+          "color": "#8db837",
+          "fontSize": "12px",
+          "fontFamily": "Arial"
+        },
+        "value": {
+          "color": "#f92672",
+          "fontSize": "12px",
+          "fontFamily": "Arial"
+        }
+      },
+      "referenceLine": {
+        "label": {
+          "name": {
+            "color": "black",
+            "fontSize": "15px"
+          }
+        },
+        "outOfBounds": {
+          "backgroundColor": "#66d9ef",
+          "color": "black",
+          "fontSize": "13px"
+        }
+      }
+    }
+  },
+  "dataColors": {
+    "primaryColor": "#a6e22e",
+    "othersColor": "#a5a5a5",
+    "errorColor": "#ff4444",
+    "nullColor": "#d2d2d2"
+  }
+}
