@@ -1,17 +1,17 @@
-import themeGlobal from './theme-global.json';
-import themeScoped from './theme-scoped.json';
+import themeGlobal from "./theme-global.json";
+import themeScoped from "./theme-scoped.json";
 
 export default [
   {
-    id: 'light',
-    theme: { fontFamily: 'Arial' },
+    id: "light",
+    theme: { fontFamily: "Arial" },
   },
   {
-    id: 'theme-global',
+    id: "theme-global",
     theme: themeGlobal,
   },
   {
-    id: 'theme-scoped',
+    id: "theme-scoped",
     theme: themeScoped,
   },
 ];

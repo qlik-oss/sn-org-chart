@@ -1,5 +1,5 @@
 const config = {
-  reporter: [['list'], ['html', { outputFolder: './test/rendering/__artifacts__/html_report' }]],
+  reporter: [["list"], ["html", { outputFolder: "./test/rendering/__artifacts__/html_report" }]],
   testDir: "./test/rendering",
   testMatch: /.*\.spec\.js/,
   webServer: {

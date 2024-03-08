@@ -392,14 +392,14 @@ export default () => ({
           {
             key: "label",
             label: {
-               value: {
+              value: {
                 colorType: "colorPicker",
                 color: {
                   index: -1,
                   color: "#f043bd",
-                }
-              }
-            }
+                },
+              },
+            },
           },
           {
             key: "backgroundColor",
@@ -408,10 +408,10 @@ export default () => ({
               color: {
                 index: 8,
                 color: "#8a85c6",
-                alpha: 1
+                alpha: 1,
               },
-              colorExpression: ""
-            }
+              colorExpression: "",
+            },
           },
           {
             key: "border",
@@ -421,20 +421,20 @@ export default () => ({
               colorType: "auto",
               color: {
                 index: -1,
-                color: "#737373"
+                color: "#737373",
               },
-              colorExpression: ""
-            }
+              colorExpression: "",
+            },
           },
           {
-            key: "general"
+            key: "general",
           },
           {
-            key: "axis"
+            key: "axis",
           },
           {
-            key: "image"
-          }
+            key: "image",
+          },
         ],
         visualization: "sn-org-chart",
         version: "0.15.0",

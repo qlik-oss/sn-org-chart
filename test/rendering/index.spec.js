@@ -1,36 +1,36 @@
-import fs from 'fs';
-import path from 'path';
-import serve from '@nebula.js/cli-serve';
-import { test, expect, chromium } from '@playwright/test';
-import themes from './themes';
-import createNebulaRoutes from '../utils/routes';
+import serve from "@nebula.js/cli-serve";
+import { chromium, expect, test } from "@playwright/test";
+import fs from "fs";
+import path from "path";
+import createNebulaRoutes from "../utils/routes";
+import themes from "./themes";
 
 const paths = {
-  artifacts: path.join(__dirname, '__artifacts__'),
-  fixtures: path.join(__dirname, '__fixtures__'),
+  artifacts: path.join(__dirname, "__artifacts__"),
+  fixtures: path.join(__dirname, "__fixtures__"),
 };
 
 const styles = [
-  { fixture: 'theming_global', styles: [['.njs-viz', 'background', '#272822']] },
-  { fixture: 'theming_scoped', styles: [['.njs-viz', 'background', '#272822']] },
+  { fixture: "theming_global", styles: [[".njs-viz", "background", "#272822"]] },
+  { fixture: "theming_scoped", styles: [[".njs-viz", "background", "#272822"]] },
 ];
 
-test.describe('Rendering', () => {
+test.describe("Rendering", () => {
   let s;
   let route;
   let page;
 
   test.beforeAll(async () => {
     s = await serve({
-      entry: path.resolve(__dirname, '../../'),
-      type: 'sn-org-chart',
+      entry: path.resolve(__dirname, "../../"),
+      type: "sn-org-chart",
       open: false,
       build: false,
       themes,
       flags: {
         SENSECLIENT_IM_5036_VIZBUNDLE_STYLING: true,
       },
-      fixturePath: 'test/rendering/__fixtures__',
+      fixturePath: "test/rendering/__fixtures__",
     });
 
     route = createNebulaRoutes(s.url);
@@ -45,15 +45,15 @@ test.describe('Rendering', () => {
     await s.close();
   });
 
-  test.describe('rendering', () => {
+  test.describe("rendering", () => {
     fs.readdirSync(paths.fixtures).forEach((file) => {
-      const name = file.replace('.fix.js', '');
+      const name = file.replace(".fix.js", "");
       const fixturePath = `./${file}`;
 
       test(name, async () => {
         const renderUrl = await route.renderFixture(fixturePath);
 
-        await page.goto(renderUrl, { waitUntil: 'networkidle' });
+        await page.goto(renderUrl, { waitUntil: "networkidle" });
 
         const element = await page.waitForSelector('.njs-viz[data-render-count="1"]', {
           visible: true,
