@@ -62,17 +62,17 @@
     }
   },
   "devDependencies": {
-    "@babel/preset-env": "7.23.9",
+    "@babel/preset-env": "7.24.0",
     "@commitlint/cli": "18.6.1",
     "@commitlint/config-conventional": "18.6.2",
-    "@nebula.js/cli": "4.11.0",
-    "@nebula.js/cli-build": "4.11.0",
-    "@nebula.js/cli-sense": "4.11.0",
-    "@nebula.js/cli-serve": "4.11.0",
-    "@nebula.js/stardust": "4.11.0",
-    "@playwright/test": "1.41.2",
-    "@qlik/eslint-config": "0.7.11",
-    "@qlik/prettier-config": "0.4.10",
+    "@nebula.js/cli": "4.12.0",
+    "@nebula.js/cli-build": "4.12.0",
+    "@nebula.js/cli-sense": "4.12.0",
+    "@nebula.js/cli-serve": "4.12.0",
+    "@nebula.js/stardust": "4.12.0",
+    "@playwright/test": "1.42.1",
+    "@qlik/eslint-config": "0.7.12",
+    "@qlik/prettier-config": "0.4.11",
     "@scriptappy/cli": "0.10.0",
     "@scriptappy/from-jsdoc": "0.19.0",
     "babel-plugin-dynamic-import-node": "2.3.3",
@@ -94,7 +94,7 @@
     "qlik-chart-modules": "0.59.0"
   },
   "peerDependencies": {
-    "@nebula.js/stardust": ">=4.11.0"
+    "@nebula.js/stardust": ">=4.12.0"
   },
   "engines": {
     "node": ">=18"
