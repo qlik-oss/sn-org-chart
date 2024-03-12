@@ -388,6 +388,54 @@ export default () => ({
             colorExpression: "",
           },
         },
+        components: [
+          {
+            key: "label",
+            label: {
+              value: {
+                colorType: "colorPicker",
+                color: {
+                  index: -1,
+                  color: "#f043bd",
+                },
+              },
+            },
+          },
+          {
+            key: "backgroundColor",
+            backgroundColor: {
+              colorType: "colorPicker",
+              color: {
+                index: 8,
+                color: "#8a85c6",
+                alpha: 1,
+              },
+              colorExpression: "",
+            },
+          },
+          {
+            key: "border",
+            border: {
+              top: true,
+              fullBorder: true,
+              colorType: "auto",
+              color: {
+                index: -1,
+                color: "#737373",
+              },
+              colorExpression: "",
+            },
+          },
+          {
+            key: "general",
+          },
+          {
+            key: "axis",
+          },
+          {
+            key: "image",
+          },
+        ],
         visualization: "sn-org-chart",
         version: "0.15.0",
         extensionMeta: {

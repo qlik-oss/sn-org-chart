@@ -66,6 +66,7 @@ const properties = {
       colorExpression: "",
     },
   },
+  components: [],
 };
 
 /**

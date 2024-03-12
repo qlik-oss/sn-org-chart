@@ -51,19 +51,29 @@
         }
       }
 
-      .sn-org-card-title {
-        font-size: 14px;
-        font-weight: bold;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
+      .sn-org-card-image {
+        padding: 5px 0px;
+        object-fit: contain;
       }
 
-      .sn-org-card-label {
-        font-size: 11px;
-        white-space: nowrap;
+      .sn-org-textbox {
+        order: 1;
         overflow: hidden;
-        text-overflow: ellipsis;
+
+        .sn-org-card-title {
+          font-size: 14px;
+          font-weight: bold;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+
+        .sn-org-card-label {
+          font-size: 11px;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
       }
     }
   }

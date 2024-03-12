@@ -69,9 +69,10 @@ export default function box({
   navigationMode,
   element,
   tooltip,
+  flags,
 }) {
   const { x, y } = positioning;
-  const { cardWidth, cardHeight, buttonWidth, buttonHeight, cardPadding, rootDiameter } = constants;
+  const { cardWidth, cardHeight, cardHeightLarge, buttonWidth, buttonHeight, cardPadding, rootDiameter } = constants;
   const { topId } = wrapperState.expandedState;
   const topNode = nodes.find((node) => node.data.id === topId);
   const ancestorIds = topNode && topNode.parent ? topNode.parent.ancestors().map((anc) => anc.data.id) : [];
@@ -93,7 +94,11 @@ export default function box({
     .enter()
     .append("div")
     .attr("class", "sn-org-card")
-    .attr("style", (d) => `width:${cardWidth}px;height:${cardHeight}px; top:${y(d)}px;left:${x(d)}px;`)
+    .attr(
+      "style",
+      (d) =>
+        `width:${cardWidth}px;height:${[undefined, "left", "right"].includes(styling.image.alignment) || styling.image.location === "tooltip" ? cardHeight : cardHeightLarge}px; top:${y(d)}px;left:${x(d)}px;`,
+    )
     .attr("id", (d) => d.data.id)
     .on("click", (event, node) => {
       if (!wrapperState.constraints.active && node.data.id !== "Root") {
@@ -101,7 +106,7 @@ export default function box({
         selections.select(node, selectionObj);
       }
     })
-    .html((d) => card(d.data, styling, selectionObj))
+    .html((d) => card(d.data, styling, selectionObj, flags))
     .on("mouseenter", (event, d) => {
       if (!touchmode && !wrapperState.constraints.active && event.buttons === 0) {
         openTooltip(tooltip, d, element.clientHeight, styling, x, y, wrapperState.transform);
@@ -131,7 +136,7 @@ export default function box({
       .attr(
         "style",
         (d) =>
-          `width:${buttonWidth}px;height:${buttonHeight}px;top:${y(d) + cardHeight + cardPadding}px;left:${
+          `width:${buttonWidth}px;height:${buttonHeight}px;top:${y(d) + ([undefined, "left", "right"].includes(styling.image.alignment) || styling.image.location === "tooltip" ? cardHeight : cardHeightLarge) + cardPadding}px;left:${
             x(d) + (cardWidth - buttonWidth) / 2
           }px;`,
       )

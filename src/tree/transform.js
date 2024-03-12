@@ -1,9 +1,10 @@
 import { select, zoom, zoomIdentity } from "d3";
+import { isSmallCard } from "../utils/tree-utils";
 import constants from "./size-constants";
 import { closeTooltip } from "./tooltip";
 
-export const getBBoxOfNodes = (nodes) => {
-  const { cardWidth, cardHeight, buttonHeight, buttonMargin } = constants;
+export const getBBoxOfNodes = (nodes, styling) => {
+  const { cardWidth, cardHeight, cardHeightLarge, buttonHeight, buttonMargin } = constants;
   const bbox = {
     left: Infinity,
     top: Infinity,
@@ -20,17 +21,21 @@ export const getBBoxOfNodes = (nodes) => {
     x: bbox.left,
     y: bbox.top - buttonHeight - buttonMargin,
     width: bbox.right - bbox.left + cardWidth,
-    height: bbox.bottom - bbox.top + cardHeight + (buttonHeight + buttonMargin) * 2,
+    height:
+      bbox.bottom -
+      bbox.top +
+      (styling && isSmallCard(styling) ? cardHeight : cardHeightLarge) +
+      (buttonHeight + buttonMargin) * 2,
   };
 };
 
-export const getInitialZoomState = (bBox, element, navigationMode) => {
-  const { widthMargin, cardHeight, minZoom } = constants;
+export const getInitialZoomState = (bBox, element, navigationMode, styling) => {
+  const { widthMargin, cardHeight, cardHeightLarge, minZoom } = constants;
   const maxZoom = navigationMode === "expandAll" ? Infinity : constants.maxZoom;
   const { width, height } = bBox;
   const { clientHeight, clientWidth } = element;
   const calcWidth = width + 2 * widthMargin;
-  const calcHeight = height + cardHeight;
+  const calcHeight = height + (styling && isSmallCard(styling) ? cardHeight : cardHeightLarge);
   const xZoom = Math.max(Math.min(calcWidth / clientWidth, maxZoom), minZoom);
   const yZoom = Math.max(Math.min(calcHeight / clientHeight, maxZoom), minZoom);
   if (xZoom > yZoom) {
@@ -44,7 +49,7 @@ export const getInitialZoomState = (bBox, element, navigationMode) => {
   // Zooming for y direction
   return {
     initialX: -bBox.x + (clientWidth * yZoom - width) / 2,
-    initialY: cardHeight / 2,
+    initialY: (styling && isSmallCard(styling) ? cardHeight : cardHeightLarge) / 2,
     initialZoom: yZoom,
   };
 };
@@ -151,9 +156,9 @@ export const getSnapshotZoom = (rect, viewState, initialTransform) => {
   return zoomIdentity.translate(newX, newY).scale(newZoom);
 };
 
-export default function transform(nodes, width, height, svg, divBox, useTransitions) {
+export default function transform(nodes, width, height, svg, divBox, useTransitions, styling) {
   // Zooming and positioning of the tree
-  const bBox = getBBoxOfNodes(nodes);
+  const bBox = getBBoxOfNodes(nodes, styling);
   const { divTranslation, scaleFactor } = getTranslations(bBox, height, width);
 
   svg.attr("style", `transform: scale(${1 / scaleFactor}) translate(${divTranslation});`);

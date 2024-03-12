@@ -55,7 +55,15 @@ export const filterTree = ({ topId, isExpanded, expandedChildren }, nodeTree, ex
   return subTree;
 };
 
-export const paintTree = ({ containerData, styling, setExpandedCallback, wrapperState, selectionObj, element }) => {
+export const paintTree = ({
+  containerData,
+  styling,
+  setExpandedCallback,
+  wrapperState,
+  selectionObj,
+  element,
+  flags,
+}) => {
   const { svg, divBox, allNodes, positioning, tooltip } = containerData;
   const { navigationMode } = allNodes.data;
   divBox.selectAll("*").remove();
@@ -74,10 +82,11 @@ export const paintTree = ({ containerData, styling, setExpandedCallback, wrapper
     navigationMode,
     element,
     tooltip,
+    flags,
   });
   // Create the lines (links) between the nodes
   const node = svg.selectAll(".sn-org-paths").data(nodes).enter();
-  createPaths(node, positioning, wrapperState.expandedState.topId, navigationMode);
+  createPaths(node, positioning, wrapperState.expandedState.topId, navigationMode, styling);
   // Scale and translate only needed when user cannot zoom
   // if (navigationMode !== 'free') {
   //   transform(nodes, width, height, svg, divBox, useTransitions);
@@ -95,11 +104,12 @@ export const createContainer = ({
   viewState,
   setContainerData,
   layout,
+  styling,
 }) => {
   element.innerHTML = "";
   element.className = "sn-org-chart";
   const { navigationMode } = layout;
-  let positioning = position("ttb", element, {}, navigationMode);
+  let positioning = position("ttb", element, {}, navigationMode, styling);
   const { width, height } = element.getBoundingClientRect();
 
   const zoomWrapper = select(element)
@@ -139,6 +149,7 @@ export const createContainer = ({
         viewState,
         setContainerData,
         layout,
+        styling,
       });
     })
     .html(homeIcon)
@@ -185,11 +196,13 @@ export const createContainer = ({
       positioning.y(node);
     }
   });
-  const bBox = getBBoxOfNodes(renderNodes);
+  const bBox = getBBoxOfNodes(renderNodes, styling);
   const initialZoomState =
-    viewState && viewState.initialZoom ? viewState.initialZoom : getInitialZoomState(bBox, element, navigationMode);
+    viewState && viewState.initialZoom
+      ? viewState.initialZoom
+      : getInitialZoomState(bBox, element, navigationMode, styling);
   setInitialZoom(initialZoomState);
-  positioning = position("ttb", element, initialZoomState, navigationMode);
+  positioning = position("ttb", element, initialZoomState, navigationMode, styling);
   setZooming({
     containerData: {
       svg,

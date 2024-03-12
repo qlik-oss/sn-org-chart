@@ -6,6 +6,7 @@ const attributeIDs = {
   labelExpression: "label",
   subLabelExpression: "subLabel",
   extraLabelExpression: "extraLabel",
+  imageExpression: "image",
 };
 const MAX_DATA = "max-data-limit";
 const NO_ROOT = "no_root";
@@ -151,6 +152,10 @@ export function haveNoChildren(nodes) {
   }
 
   return true;
+}
+
+export function isSmallCard(styling) {
+  return [undefined, "left", "right"].includes(styling.image.alignment) || styling.image.location === "tooltip";
 }
 
 export function createNodes(matrix, attributeIndecies, status, navigationMode, translator) {

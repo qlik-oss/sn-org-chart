@@ -8,4 +8,8 @@ export default {
   BORDER_COLOR: { index: -1, color: "#737373" },
   BORDER_FULL: true,
   BORDER_TOP: true,
+  IMAGE_LOCATION: "both",
+  IMAGE_ALIGNMENT: "left",
+  IMAGE_SHAPE: "rectangle",
+  IMAGE_CLIP: true,
 };

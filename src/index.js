@@ -12,9 +12,11 @@ import {
   useTheme,
   useTranslator,
 } from "@nebula.js/stardust";
+import { themeService as createThemeService } from "qlik-chart-modules";
 import data from "./data";
 import ext from "./extension/ext";
 import autoRegister from "./locale/src/translations";
+import createStyleModel from "./models/style-model";
 import properties from "./object-properties";
 import selectionHandler from "./selections-handler";
 import snapshot from "./snapshot";
@@ -30,6 +32,7 @@ import treeTransform from "./utils/tree-utils";
 import viewStateUtil from "./utils/viewstate-utils";
 
 export default function supernova(env) {
+  const { flags } = env;
   return {
     qae: {
       properties,
@@ -82,12 +85,22 @@ export default function supernova(env) {
         if (!layout) {
           return Promise.resolve();
         }
+
+        const themeService = createThemeService({
+          theme: Theme,
+          config: {
+            id: "orgChart",
+          },
+        });
+
+        const styleModel = createStyleModel({ layout, themeService, flags });
+
         const viewState = viewStateUtil.getViewState(options, layout);
         viewState && viewState.expandedState && setExpandedState(viewState.expandedState);
         viewState && viewState.transform && setTransform(viewState.transform);
 
         return treeTransform({ layout, model, translator }).then((transformed) => {
-          setStyling(stylingUtils.cardStyling({ Theme, layout }));
+          setStyling(stylingUtils.cardStyling({ Theme, layout, styleModel }));
           selectionObj.setState([]);
           // Resolving the promise to indicate readiness for printing
           return transformed;
@@ -96,7 +109,7 @@ export default function supernova(env) {
 
       // Create d3 elements, calculate initial zoom and sets expandedState
       const fullReload = () => {
-        if (element && dataTree) {
+        if (element && dataTree && styling) {
           const viewState = viewStateUtil.getViewState(options, layout);
           createContainer({
             element,
@@ -109,6 +122,7 @@ export default function supernova(env) {
             setExpandedState,
             setContainerData,
             layout,
+            styling,
           });
         }
       };
@@ -124,6 +138,7 @@ export default function supernova(env) {
             selectionObj,
             useTransitions: expandedState.useTransitions,
             element,
+            flags,
           });
         }
       };
