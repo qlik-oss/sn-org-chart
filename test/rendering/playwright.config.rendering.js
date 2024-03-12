@@ -1,6 +1,7 @@
 const config = {
   reporter: [["list"], ["html", { outputFolder: "./__artifacts__/html_report" }]],
   testDir: "./",
+  outputDir: "./artifacts/",
   forbidOnly: !!process.env.CI,
   timeout: 60000,
   quiet: true,
