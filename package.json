@@ -1,110 +1,110 @@
 {
-    "name": "@nebula.js/sn-org-chart",
-    "version": "1.1.1",
-    "description": "Org chart supernova",
-    "keywords": [
-      "qlik",
-      "nebula",
-      "supernova"
+  "name": "@nebula.js/sn-org-chart",
+  "version": "1.1.1",
+  "description": "Org chart supernova",
+  "keywords": [
+    "qlik",
+    "nebula",
+    "supernova"
+  ],
+  "bugs": {
+    "url": "https://github.com/qlik-oss/sn-org-chart/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/qlik-oss/sn-org-chart.git"
+  },
+  "license": "MIT",
+  "author": "QlikTech International AB",
+  "main": "dist/sn-org-chart.js",
+  "files": [
+    "dist",
+    "api-specifications",
+    "core",
+    "sn-org-chart-ext"
+  ],
+  "scripts": {
+    "build": "pnpm locale:generate && node ./tools/build.js --core --ext",
+    "build:dev": "pnpm locale:generate && node ./tools/build.js --core --ext --mode development",
+    "build:watch": "pnpm locale:generate && node ./tools/build.js --ext --mode development -w",
+    "format": "prettier --write '**'",
+    "format:check": "prettier --check '**'",
+    "lint": "pnpm locale:generate && eslint src",
+    "locale:generate": "node src/locale/scripts/generate-all.mjs",
+    "locale:verify": "node src/locale/tools/verify-translations.js",
+    "sense": "nebula sense --ext ./src/extension/ext-raw.js --meta ./src/extension/meta.json",
+    "spec": "sy from-jsdoc -c ./spec-configs/props.conf.js",
+    "start": "nebula serve --type sn-org-chart",
+    "test:e2e": "playwright test",
+    "test:unit": "jest"
+  },
+  "husky": {
+    "hooks": {
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS && lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{js, jsx}": [
+      "eslint",
+      "prettier --check src/**"
+    ]
+  },
+  "prettier": "@qlik/prettier-config",
+  "eslintConfig": {
+    "extends": [
+      "@qlik/eslint-config",
+      "@qlik/eslint-config/jest"
     ],
-    "bugs": {
-      "url": "https://github.com/qlik-oss/sn-org-chart/issues"
-    },
-    "repository": {
-      "type": "git",
-      "url": "https://github.com/qlik-oss/sn-org-chart.git"
-    },
-    "license": "MIT",
-    "author": "QlikTech International AB",
-    "main": "dist/sn-org-chart.js",
-    "files": [
-      "dist",
-      "api-specifications",
-      "core",
-      "sn-org-chart-ext"
-    ],
-    "scripts": {
-      "build": "pnpm locale:generate && node ./tools/build.js --core --ext",
-      "build:dev": "pnpm locale:generate && node ./tools/build.js --core --ext --mode development",
-      "build:watch": "pnpm locale:generate && node ./tools/build.js --ext --mode development -w",
-      "format": "prettier --write '**'",
-      "format:check": "prettier --check '**'",
-      "lint": "pnpm locale:generate && eslint src",
-      "locale:generate": "node src/locale/scripts/generate-all.mjs",
-      "locale:verify": "node src/locale/tools/verify-translations.js",
-      "sense": "nebula sense --ext ./src/extension/ext-raw.js --meta ./src/extension/meta.json",
-      "spec": "sy from-jsdoc -c ./spec-configs/props.conf.js",
-      "start": "nebula serve --type sn-org-chart",
-      "test:e2e": "playwright test",
-      "test:unit": "jest"
-    },
-    "husky": {
-      "hooks": {
-        "commit-msg": "commitlint -E HUSKY_GIT_PARAMS && lint-staged"
-      }
-    },
-    "lint-staged": {
-      "*.{js, jsx}": [
-        "eslint",
-        "prettier --check src/**"
-      ]
-    },
-    "prettier": "@qlik/prettier-config",
-    "eslintConfig": {
-      "extends": [
-        "@qlik/eslint-config",
-        "@qlik/eslint-config/jest"
-      ],
-      "rules": {
-        "no-param-reassign": 0,
-        "no-unused-expressions": 0,
-        "jest/unbound-method": 0
-      }
-    },
-    "devDependencies": {
-      "@babel/preset-env": "7.24.0",
-      "@commitlint/cli": "19.0.3",
-      "@commitlint/config-conventional": "19.0.3",
-      "@nebula.js/cli": "4.13.0",
-      "@nebula.js/cli-build": "4.13.0",
-      "@nebula.js/cli-sense": "4.13.0",
-      "@nebula.js/cli-serve": "4.13.0",
-      "@nebula.js/stardust": "4.13.0",
-      "@playwright/test": "1.42.1",
-      "@qlik/eslint-config": "0.7.12",
-      "@qlik/prettier-config": "0.4.11",
-      "@scriptappy/cli": "0.10.0",
-      "@scriptappy/from-jsdoc": "0.19.0",
-      "babel-plugin-dynamic-import-node": "2.3.3",
-      "d3": "7.8.5",
-      "eslint": "8.57.0",
-      "fs-extra": "11.2.0",
-      "globby": "14.0.1",
-      "husky": "9.0.11",
-      "jest": "29.7.0",
-      "jest-environment-jsdom": "29.7.0",
-      "jest-junit": "16.0.0",
-      "less": "4.2.0",
-      "lint-staged": "15.2.2",
-      "mocha-junit-reporter": "2.2.1",
-      "prettier": "3.2.5",
-      "shx": "0.3.4",
-      "typescript": "5.4.2",
-      "yargs": "17.7.2"
-    },
-    "peerDependencies": {
-      "@nebula.js/stardust": ">=4.13.0"
-    },
-    "engines": {
-      "node": ">=18"
-    },
-    "publishConfig": {
-      "access": "public"
-    },
-    "qext": {
-      "name": "Org chart",
-      "icon": "extension",
-      "preview": "assets/preview.png"
-    },
-    "systemjs": "dist/sn-org-chart.systemjs.js"
-  }
+    "rules": {
+      "no-param-reassign": 0,
+      "no-unused-expressions": 0,
+      "jest/unbound-method": 0
+    }
+  },
+  "devDependencies": {
+    "@babel/preset-env": "7.24.0",
+    "@commitlint/cli": "19.0.3",
+    "@commitlint/config-conventional": "19.0.3",
+    "@nebula.js/cli": "4.13.0",
+    "@nebula.js/cli-build": "4.13.0",
+    "@nebula.js/cli-sense": "4.13.0",
+    "@nebula.js/cli-serve": "4.13.0",
+    "@nebula.js/stardust": "4.13.0",
+    "@playwright/test": "1.42.1",
+    "@qlik/eslint-config": "0.7.12",
+    "@qlik/prettier-config": "0.4.11",
+    "@scriptappy/cli": "0.10.0",
+    "@scriptappy/from-jsdoc": "0.19.0",
+    "babel-plugin-dynamic-import-node": "2.3.3",
+    "d3": "7.8.5",
+    "eslint": "8.57.0",
+    "fs-extra": "11.2.0",
+    "globby": "14.0.1",
+    "husky": "9.0.11",
+    "jest": "29.7.0",
+    "jest-environment-jsdom": "29.7.0",
+    "jest-junit": "16.0.0",
+    "less": "4.2.0",
+    "lint-staged": "15.2.2",
+    "mocha-junit-reporter": "2.2.1",
+    "prettier": "3.2.5",
+    "shx": "0.3.4",
+    "typescript": "5.4.2",
+    "yargs": "17.7.2"
+  },
+  "peerDependencies": {
+    "@nebula.js/stardust": ">=4.13.0"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "qext": {
+    "name": "Org chart",
+    "icon": "extension",
+    "preview": "assets/preview.png"
+  },
+  "systemjs": "dist/sn-org-chart.systemjs.js"
+}
