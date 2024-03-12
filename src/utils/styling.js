@@ -26,12 +26,6 @@ const stylingUtils = {
     const cardBackgroundStyle = styleModel.backgroundColor.getStyle();
     const cardBorderStyle = styleModel.border.getStyle();
 
-    const border = {
-      top: cardBorderStyle.top,
-      fullBorder: cardBorderStyle.fullBorder,
-      colorType: cardBorderStyle.colorType,
-    };
-
     const backgroundColor = getColor(cardBackgroundStyle, Theme, DEFAULTS.BACKGROUND_COLOR.color);
     const fontColor = getColor(labelValueStyle, Theme, "default");
 
@@ -49,7 +43,7 @@ const stylingUtils = {
       backgroundColor,
       fontColor,
       measureLabel,
-      border,
+      border: cardBorderStyle,
       borderColor,
     };
     return styling;
