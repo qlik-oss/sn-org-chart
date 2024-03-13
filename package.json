@@ -37,7 +37,7 @@
     "start": "nebula serve --type sn-org-chart",
     "start:mfe": "nebula serve --mfe --type sn-org-chart",
     "test:e2e": "playwright test",
-    "test:rendering": "playwright test --config=./test/rendering/playwright.config.rendering.js",
+    "test:rendering": "playwright test --config=./playwright.config.js",
     "test:unit": "jest"
   },
   "husky": {

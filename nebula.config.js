@@ -3,6 +3,9 @@ module.exports = {
   build: {},
   serve: {
     open: false,
+    flags: {
+      SENSECLIENT_IM_5036_VIZBUNDLE_STYLING: true,
+    },
     snapshots: [
       {
         key: "basic",
