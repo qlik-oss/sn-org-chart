@@ -90,6 +90,10 @@ export default function supernova(env) {
           theme: Theme,
           config: {
             id: "orgChart",
+            resolve: [
+              ["object.orgChart", "axis.label.name", "fontSize", "14px"],
+              ["object.orgChart", "label.value", "fontSize", "11px"],
+            ],
           },
         });
 

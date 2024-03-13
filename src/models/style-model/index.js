@@ -22,7 +22,12 @@ export default function createStyleModel({ layout, themeService, flags }) {
     axis: {
       label: {
         getStyle: () => ({
-          fontSize: findComponent("axis")?.axis?.label?.name?.fontSize ?? themeStyle.axis.label.name.fontSize ?? "14px",
+          fontSize: resolveStyle(
+            "axis",
+            findComponent("axis")?.axis?.label?.name?.fontSize,
+            "14px",
+            themeStyle.axis.label.name.fontSize,
+          ),
           fontFamily: findComponent("axis")?.axis?.label?.name?.fontFamily ?? themeStyle.axis.label.name.fontFamily,
         }),
       },
@@ -30,7 +35,12 @@ export default function createStyleModel({ layout, themeService, flags }) {
     label: {
       value: {
         getStyle: () => ({
-          fontSize: findComponent("label")?.label?.value?.fontSize ?? themeStyle.label.value.fontSize ?? "11px",
+          fontSize: resolveStyle(
+            "label",
+            findComponent("label")?.label?.value?.fontSize,
+            "11px",
+            themeStyle.label.value.fontSize,
+          ),
           fontFamily: findComponent("label")?.label?.value?.fontFamily ?? themeStyle.label.value.fontFamily,
           colorType: resolveStyle(
             "label",
