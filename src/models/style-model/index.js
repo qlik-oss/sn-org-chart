@@ -9,7 +9,7 @@ export default function createStyleModel({ layout, themeService, flags }) {
     if (!flags?.isEnabled("SENSECLIENT_IM_5036_VIZBUNDLE_STYLING") || component === undefined) {
       return styleValue;
     }
-    return componentValue || defaultValue;
+    return componentValue ?? defaultValue;
   };
 
   const axisComponent = findComponent("axis");
