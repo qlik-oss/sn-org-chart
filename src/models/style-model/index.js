@@ -5,30 +5,29 @@ export default function createStyleModel({ layout, themeService, flags }) {
 
   const findComponent = (key) => layout.components?.find((o) => o.key === key) ?? undefined;
 
-  const resolveStyle = (key, componentValue, styleValue, defaultValue) => {
-    if (!flags?.isEnabled("SENSECLIENT_IM_5036_VIZBUNDLE_STYLING")) {
+  const resolveStyle = (component, componentValue, styleValue, defaultValue) => {
+    if (!flags?.isEnabled("SENSECLIENT_IM_5036_VIZBUNDLE_STYLING") || component === undefined) {
       return styleValue;
     }
-    if (findComponent(key)) {
-      if (componentValue != null) {
-        return componentValue;
-      }
-      return defaultValue;
-    }
-    return styleValue;
+    return componentValue || defaultValue;
   };
+
+  const axisComponent = findComponent("axis");
+  const labelComponent = findComponent("label");
+  const backgroundComponent = findComponent("backgroundColor");
+  const borderComponent = findComponent("border");
 
   return {
     axis: {
       label: {
         getStyle: () => ({
           fontSize: resolveStyle(
-            "axis",
-            findComponent("axis")?.axis?.label?.name?.fontSize,
+            axisComponent,
+            axisComponent?.axis?.label?.name?.fontSize,
             "14px",
             themeStyle.axis.label.name.fontSize,
           ),
-          fontFamily: findComponent("axis")?.axis?.label?.name?.fontFamily ?? themeStyle.axis.label.name.fontFamily,
+          fontFamily: axisComponent?.axis?.label?.name?.fontFamily ?? themeStyle.axis.label.name.fontFamily,
         }),
       },
     },
@@ -36,27 +35,27 @@ export default function createStyleModel({ layout, themeService, flags }) {
       value: {
         getStyle: () => ({
           fontSize: resolveStyle(
-            "label",
-            findComponent("label")?.label?.value?.fontSize,
+            labelComponent,
+            labelComponent?.label?.value?.fontSize,
             "11px",
             themeStyle.label.value.fontSize,
           ),
-          fontFamily: findComponent("label")?.label?.value?.fontFamily ?? themeStyle.label.value.fontFamily,
+          fontFamily: labelComponent?.label?.value?.fontFamily ?? themeStyle.label.value.fontFamily,
           colorType: resolveStyle(
-            "label",
-            findComponent("label")?.label?.value?.colorType,
+            labelComponent,
+            labelComponent?.label?.value?.colorType,
             layout?.style?.fontColor?.colorType,
             DEFAULTS.FONT_COLOR_TYPE,
           ),
           color: resolveStyle(
-            "label",
-            findComponent("label")?.label?.value?.color,
+            labelComponent,
+            labelComponent?.label?.value?.color,
             layout?.style?.fontColor?.color,
             DEFAULTS.FONT_COLOR_DARK,
           ),
           colorExpression: resolveStyle(
-            "label",
-            findComponent("label")?.label?.value?.colorExpression,
+            labelComponent,
+            labelComponent?.label?.value?.colorExpression,
             layout?.style?.fontColor?.colorExpression,
             "",
           ),
@@ -66,20 +65,20 @@ export default function createStyleModel({ layout, themeService, flags }) {
     backgroundColor: {
       getStyle: () => ({
         colorType: resolveStyle(
-          "backgroundColor",
-          findComponent("backgroundColor")?.backgroundColor?.colorType,
+          backgroundComponent,
+          backgroundComponent?.backgroundColor?.colorType,
           layout?.style?.backgroundColor?.colorType,
           DEFAULTS.BACKGROUND_COLOR_TYPE,
         ),
         color: resolveStyle(
-          "backgroundColor",
-          findComponent("backgroundColor")?.backgroundColor?.color,
+          backgroundComponent,
+          backgroundComponent?.backgroundColor?.color,
           layout?.style?.backgroundColor?.color,
           DEFAULTS.BACKGROUND_COLOR,
         ),
         colorExpression: resolveStyle(
-          "backgroundColor",
-          findComponent("backgroundColor")?.backgroundColor?.colorExpression,
+          backgroundComponent,
+          backgroundComponent?.backgroundColor?.colorExpression,
           layout?.style?.backgroundColor?.colorExpression,
           "",
         ),
@@ -88,32 +87,32 @@ export default function createStyleModel({ layout, themeService, flags }) {
     border: {
       getStyle: () => ({
         top: resolveStyle(
-          "border",
-          findComponent("border")?.border?.top,
+          borderComponent,
+          borderComponent?.border?.top,
           layout?.style?.border?.top,
           DEFAULTS.BORDER_TOP,
         ),
         fullBorder: resolveStyle(
-          "border",
-          findComponent("border")?.border?.fullBorder,
+          borderComponent,
+          borderComponent?.border?.fullBorder,
           layout?.style?.border?.fullBorder,
           DEFAULTS.BORDER_FULL,
         ),
         colorType: resolveStyle(
-          "border",
-          findComponent("border")?.border?.colorType,
+          borderComponent,
+          borderComponent?.border?.colorType,
           layout?.style?.border?.colorType,
           DEFAULTS.BORDER_COLOR_TYPE,
         ),
         color: resolveStyle(
-          "border",
-          findComponent("border")?.border?.color,
+          borderComponent,
+          borderComponent?.border?.color,
           layout?.style?.border?.color,
           DEFAULTS.BORDER_COLOR,
         ),
         colorExpression: resolveStyle(
-          "border",
-          findComponent("border")?.border?.colorExpression,
+          borderComponent,
+          borderComponent?.border?.colorExpression,
           layout?.style?.border?.colorExpression,
           "",
         ),
