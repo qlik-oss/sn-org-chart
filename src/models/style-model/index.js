@@ -6,7 +6,7 @@ export default function createStyleModel({ layout, themeService, flags }) {
   const findComponent = (key) => layout.components?.find((o) => o.key === key) ?? undefined;
 
   const resolveStyle = (component, componentValue, styleValue, defaultValue) => {
-    if (!flags?.isEnabled("SENSECLIENT_IM_5036_VIZBUNDLE_STYLING") || component === undefined) {
+    if (!flags?.isEnabled("IM_5036_ORGCHART_STYLING") || component === undefined) {
       return styleValue;
     }
     return componentValue ?? defaultValue;

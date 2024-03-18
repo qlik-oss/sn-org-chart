@@ -4,7 +4,7 @@ module.exports = {
   serve: {
     open: false,
     flags: {
-      SENSECLIENT_IM_5036_VIZBUNDLE_STYLING: true,
+      IM_5036_ORGCHART_STYLING: true,
     },
     snapshots: [
       {

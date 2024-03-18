@@ -125,7 +125,7 @@ const getSettings = (translator, flags, anything) => {
         translation: "properties.presentation",
         type: "items",
         items: {
-          ...(flags?.isEnabled("SENSECLIENT_IM_5036_VIZBUNDLE_STYLING") && {
+          ...(flags?.isEnabled("IM_5036_ORGCHART_STYLING") && {
             orgChartStyling: createStylingDefinition(theme, flags, translator),
           }),
           navigation: {
@@ -156,7 +156,7 @@ const getSettings = (translator, flags, anything) => {
     },
   };
 
-  if (!flags?.isEnabled("SENSECLIENT_IM_5036_VIZBUNDLE_STYLING")) {
+  if (!flags?.isEnabled("IM_5036_ORGCHART_STYLING")) {
     settings.items.styling.items.backgroundColor = {
       type: "items",
       items: {
@@ -296,7 +296,7 @@ export default function extDef({ translator, flags, anything }) {
     },
     migrate: {
       properties(properties) {
-        return flags?.isEnabled("SENSECLIENT_IM_5036_VIZBUNDLE_STYLING") ? migrateStyle(properties) : properties;
+        return flags?.isEnabled("IM_5036_ORGCHART_STYLING") ? migrateStyle(properties) : properties;
       },
     },
   };
