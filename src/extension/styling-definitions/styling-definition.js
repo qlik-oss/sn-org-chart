@@ -20,8 +20,7 @@ function createStylingDefinition(theme, flags, translator) {
   });
 
   const bordersActive = (data) =>
-    (data.border?.top ?? DEFAULTS.BORDER_TOP) ||
-    (data.border?.fullBorder ?? DEFAULTS.BORDER_FULL);
+    (data.border?.top ?? DEFAULTS.BORDER_TOP) || (data.border?.fullBorder ?? DEFAULTS.BORDER_FULL);
 
   return {
     component: "styling-panel",
@@ -83,8 +82,7 @@ function createStylingDefinition(theme, flags, translator) {
                     width: 3,
                     dualOutput: true,
                     defaultValue: DEFAULTS.FONT_COLOR_DARK,
-                    show: (data) =>
-                      (data.label?.value?.colorType ?? DEFAULTS.FONT_COLOR_TYPE) === "colorPicker",
+                    show: (data) => (data.label?.value?.colorType ?? DEFAULTS.FONT_COLOR_TYPE) === "colorPicker",
                   },
                 },
               },
@@ -94,8 +92,7 @@ function createStylingDefinition(theme, flags, translator) {
                 ref: "label.value.colorExpression",
                 expression: "optional",
                 defaultValue: "",
-                show: (data) =>
-                  (data.label?.value?.colorType ?? DEFAULTS.FONT_COLOR_TYPE) === "byExpression",
+                show: (data) => (data.label?.value?.colorType ?? DEFAULTS.FONT_COLOR_TYPE) === "byExpression",
               },
             },
           },
@@ -138,8 +135,7 @@ function createStylingDefinition(theme, flags, translator) {
                 ref: "backgroundColor.colorExpression",
                 expression: "optional",
                 defaultValue: "",
-                show: (data) =>
-                  (data.backgroundColor?.colorType ?? DEFAULTS.BACKGROUND_COLOR_TYPE) === "byExpression",
+                show: (data) => (data.backgroundColor?.colorType ?? DEFAULTS.BACKGROUND_COLOR_TYPE) === "byExpression",
               },
             },
           },
@@ -187,8 +183,7 @@ function createStylingDefinition(theme, flags, translator) {
                     dualOutput: true,
                     defaultValue: DEFAULTS.BORDER_COLOR,
                     show: (data) =>
-                      bordersActive(data) &&
-                      (data.border?.colorType ?? DEFAULTS.BORDER_COLOR_TYPE) === "colorPicker",
+                      bordersActive(data) && (data.border?.colorType ?? DEFAULTS.BORDER_COLOR_TYPE) === "colorPicker",
                   },
                 },
               },
@@ -199,8 +194,7 @@ function createStylingDefinition(theme, flags, translator) {
                 expression: "optional",
                 defaultValue: "",
                 show: (data) =>
-                  bordersActive(data) &&
-                  (data.border?.colorType ?? DEFAULTS.BORDER_COLOR_TYPE) === "byExpression",
+                  bordersActive(data) && (data.border?.colorType ?? DEFAULTS.BORDER_COLOR_TYPE) === "byExpression",
               },
             },
           },

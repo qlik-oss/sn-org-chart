@@ -5,7 +5,7 @@ export default function migrateStyle(properties) {
     key: "label",
     label: {
       value: {
-       ...properties.style?.fontColor,
+        ...properties.style?.fontColor,
       },
     },
   };
