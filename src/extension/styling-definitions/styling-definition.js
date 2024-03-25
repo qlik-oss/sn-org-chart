@@ -1,6 +1,5 @@
 import { fontResolver as createFontResolver } from "qlik-chart-modules";
 import DEFAULTS from "../../style-defaults";
-import propertyResolver from "../../utils/property-resolver";
 import labelStylingDefinition from "./styling-utils";
 
 const colorOptions = [
@@ -21,8 +20,8 @@ function createStylingDefinition(theme, flags, translator) {
   });
 
   const bordersActive = (data) =>
-    (propertyResolver.getValue(data, "border.top") ?? DEFAULTS.BORDER_TOP) ||
-    (propertyResolver.getValue(data, "border.fullBorder") ?? DEFAULTS.BORDER_FULL);
+    (data.border?.top ?? DEFAULTS.BORDER_TOP) ||
+    (data.border?.fullBorder ?? DEFAULTS.BORDER_FULL);
 
   return {
     component: "styling-panel",
@@ -85,8 +84,7 @@ function createStylingDefinition(theme, flags, translator) {
                     dualOutput: true,
                     defaultValue: DEFAULTS.FONT_COLOR_DARK,
                     show: (data) =>
-                      (propertyResolver.getValue(data, "label.value.colorType") ?? DEFAULTS.FONT_COLOR_TYPE) ===
-                      "colorPicker",
+                      (data.label?.value?.colorType ?? DEFAULTS.FONT_COLOR_TYPE) === "colorPicker",
                   },
                 },
               },
@@ -97,8 +95,7 @@ function createStylingDefinition(theme, flags, translator) {
                 expression: "optional",
                 defaultValue: "",
                 show: (data) =>
-                  (propertyResolver.getValue(data, "label.value.colorType") ?? DEFAULTS.FONT_COLOR_TYPE) ===
-                  "byExpression",
+                  (data.label?.value?.colorType ?? DEFAULTS.FONT_COLOR_TYPE) === "byExpression",
               },
             },
           },
@@ -131,8 +128,7 @@ function createStylingDefinition(theme, flags, translator) {
                     dualOutput: true,
                     defaultValue: DEFAULTS.BACKGROUND_COLOR,
                     show: (data) =>
-                      (propertyResolver.getValue(data, "backgroundColor.colorType") ??
-                        DEFAULTS.BACKGROUND_COLOR_TYPE) === "colorPicker",
+                      (data.backgroundColor?.colorType ?? DEFAULTS.BACKGROUND_COLOR_TYPE) === "colorPicker",
                   },
                 },
               },
@@ -143,8 +139,7 @@ function createStylingDefinition(theme, flags, translator) {
                 expression: "optional",
                 defaultValue: "",
                 show: (data) =>
-                  (propertyResolver.getValue(data, "backgroundColor.colorType") ?? DEFAULTS.BACKGROUND_COLOR_TYPE) ===
-                  "byExpression",
+                  (data.backgroundColor?.colorType ?? DEFAULTS.BACKGROUND_COLOR_TYPE) === "byExpression",
               },
             },
           },
@@ -171,7 +166,7 @@ function createStylingDefinition(theme, flags, translator) {
                 translation: "properties.border",
                 defaultValue: DEFAULTS.BORDER_FULL,
               },
-              fontColorWrapperItem: {
+              borderColorWrapperItem: {
                 component: "inline-wrapper",
                 items: {
                   colorType: {
@@ -193,8 +188,7 @@ function createStylingDefinition(theme, flags, translator) {
                     defaultValue: DEFAULTS.BORDER_COLOR,
                     show: (data) =>
                       bordersActive(data) &&
-                      (propertyResolver.getValue(data, "border.colorType") ?? DEFAULTS.BORDER_COLOR_TYPE) ===
-                        "colorPicker",
+                      (data.border?.colorType ?? DEFAULTS.BORDER_COLOR_TYPE) === "colorPicker",
                   },
                 },
               },
@@ -206,8 +200,7 @@ function createStylingDefinition(theme, flags, translator) {
                 defaultValue: "",
                 show: (data) =>
                   bordersActive(data) &&
-                  (propertyResolver.getValue(data, "border.colorType") ?? DEFAULTS.BORDER_COLOR_TYPE) ===
-                    "byExpression",
+                  (data.border?.colorType ?? DEFAULTS.BORDER_COLOR_TYPE) === "byExpression",
               },
             },
           },
