@@ -1,41 +1,32 @@
 export default function migrateStyle(properties) {
+  if (properties.components && properties.components.length > 0) return properties;
+
   const dataTemplateLabel = {
+    key: "label",
     label: {
       value: {
-        colorType: undefined,
-        color: undefined,
-        colorExpression: undefined,
+       ...properties.style?.fontColor,
       },
     },
   };
 
   const dataTemplateBackground = {
+    key: "backgroundColor",
     backgroundColor: {
-      colorType: undefined,
-      color: undefined,
-      colorExpression: undefined,
+      ...properties.style?.backgroundColor,
     },
   };
 
   const dataTemplateBorder = {
+    key: "border",
     border: {
-      top: undefined,
-      fullBorder: undefined,
-      colorType: undefined,
-      color: undefined,
-      colorExpression: undefined,
+      ...properties.style?.border,
     },
   };
 
-  if (!properties.components || properties.components.length === 0) {
-    Object.assign(dataTemplateLabel.label.value, properties.style?.fontColor);
-    Object.assign(dataTemplateBackground.backgroundColor, properties.style?.backgroundColor);
-    Object.assign(dataTemplateBorder.border, properties.style?.border);
-    const labelComponent = { key: "label", ...dataTemplateLabel };
-    const bgColorComponent = { key: "backgroundColor", ...dataTemplateBackground };
-    const borderComponent = { key: "border", ...dataTemplateBorder };
-    if (!properties.components) properties.components = [];
-    properties.components.push(labelComponent, bgColorComponent, borderComponent);
-  }
+  if (!properties.components) properties.components = [];
+
+  properties.components.push(dataTemplateLabel, dataTemplateBackground, dataTemplateBorder);
+
   return properties;
 }
