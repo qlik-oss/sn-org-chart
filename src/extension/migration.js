@@ -1,5 +1,5 @@
 export default function migrateStyle(properties) {
-  if (properties.components && properties.components.length > 0) return properties;
+  if (properties.components?.length > 0) return properties;
 
   const dataTemplateLabel = {
     key: "label",
@@ -24,9 +24,7 @@ export default function migrateStyle(properties) {
     },
   };
 
-  if (!properties.components) properties.components = [];
-
-  properties.components.push(dataTemplateLabel, dataTemplateBackground, dataTemplateBorder);
+  properties.components = [dataTemplateLabel, dataTemplateBackground, dataTemplateBorder];
 
   return properties;
 }
