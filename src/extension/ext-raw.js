@@ -1,6 +1,6 @@
 import DEFAULTS from "../style-defaults";
 import propertyResolver from "../utils/property-resolver";
-import migrateStyle from "./styling-definitions/migration";
+import migrateStyle from "./migration";
 import createStylingDefinition from "./styling-definitions/styling-definition";
 
 const colorOptions = [
@@ -17,7 +17,7 @@ const navigationOptions = [
 const bordersActive = (data) =>
   propertyResolver.getValue(data, "style.border.top") || propertyResolver.getValue(data, "style.border.fullBorder");
 
-const getData = () => ({
+const getData = {
   uses: "data",
   items: {
     measures: {
@@ -84,7 +84,7 @@ const getData = () => ({
       },
     },
   },
-});
+};
 
 const sorting = {
   uses: "sorting",
@@ -282,7 +282,7 @@ export default function extDef({ translator, flags, anything }) {
       type: "items",
       component: "accordion",
       items: {
-        data: getData(flags),
+        data: getData,
         sorting,
         addOns,
         settings: getSettings(translator, flags, anything),
