@@ -1,5 +1,5 @@
 import extDef from "./ext-raw";
 
-export default function ext(/* env */) {
-  return extDef;
+export default function ext(env) {
+  return extDef(env);
 }
