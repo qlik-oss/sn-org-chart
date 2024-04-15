@@ -34,7 +34,7 @@ const stylingUtils = {
         ? getColor(cardBorderStyle, Theme, colorUtils.getDarkColor(backgroundColor))
         : colorUtils.getDarkColor(backgroundColor);
 
-    const styling = {
+    return {
       cardTitle: axisLabelStyle,
       cardBody: {
         fontSize: labelValueStyle.fontSize,
@@ -46,8 +46,7 @@ const stylingUtils = {
       border: cardBorderStyle,
       borderColor,
     };
-    return styling;
-  },
+  }
 };
 
 export default stylingUtils;
