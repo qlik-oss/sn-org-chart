@@ -46,7 +46,7 @@ const stylingUtils = {
       border: cardBorderStyle,
       borderColor,
     };
-  }
+  },
 };
 
 export default stylingUtils;
