@@ -30,6 +30,7 @@ import { applyTransform, getSnapshotZoom } from "./tree/transform";
 import stylingUtils from "./utils/styling";
 import treeTransform from "./utils/tree-utils";
 import viewStateUtil from "./utils/viewstate-utils";
+import DEFAULTS from "./style-defaults";
 
 export default function supernova(env) {
   const { flags } = env;
@@ -91,8 +92,8 @@ export default function supernova(env) {
           config: {
             id: "orgChart",
             resolve: [
-              ["object.orgChart", "axis.label.name", "fontSize", "14px"],
-              ["object.orgChart", "label.value", "fontSize", "11px"],
+              ["object.orgChart", "axis.label.name", "fontSize", DEFAULTS.CARD_TITLE_FONTSIZE],
+              ["object.orgChart", "label.value", "fontSize", DEFAULTS.CARD_BODY_FONTSIZE],
             ],
           },
         });

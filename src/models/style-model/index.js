@@ -24,7 +24,7 @@ export default function createStyleModel({ layout, themeService, flags }) {
           fontSize: resolveStyle(
             axisComponent,
             axisComponent?.axis?.label?.name?.fontSize,
-            "14px",
+            DEFAULTS.CARD_TITLE_FONTSIZE,
             themeStyle.axis.label.name.fontSize,
           ),
           fontFamily: axisComponent?.axis?.label?.name?.fontFamily ?? themeStyle.axis.label.name.fontFamily,
@@ -37,7 +37,7 @@ export default function createStyleModel({ layout, themeService, flags }) {
           fontSize: resolveStyle(
             labelComponent,
             labelComponent?.label?.value?.fontSize,
-            "11px",
+            DEFAULTS.CARD_BODY_FONTSIZE,
             themeStyle.label.value.fontSize,
           ),
           fontFamily: labelComponent?.label?.value?.fontFamily ?? themeStyle.label.value.fontFamily,

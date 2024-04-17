@@ -1,4 +1,6 @@
 export default {
+  CARD_TITLE_FONTSIZE: "14px",
+  CARD_BODY_FONTSIZE: "11px",
   FONT_COLOR_TYPE: "auto",
   FONT_COLOR_DARK: { index: -1, color: "#484848" },
   FONT_COLOR_LIGHT: { index: -1, color: "#e6e6e6" },
