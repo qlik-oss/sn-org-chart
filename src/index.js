@@ -20,6 +20,7 @@ import createStyleModel from "./models/style-model";
 import properties from "./object-properties";
 import selectionHandler from "./selections-handler";
 import snapshot from "./snapshot";
+import DEFAULTS from "./style-defaults";
 import "./styles/home-button.less";
 import "./styles/nodes.less";
 import "./styles/paths.less";
@@ -30,7 +31,6 @@ import { applyTransform, getSnapshotZoom } from "./tree/transform";
 import stylingUtils from "./utils/styling";
 import treeTransform from "./utils/tree-utils";
 import viewStateUtil from "./utils/viewstate-utils";
-import DEFAULTS from "./style-defaults";
 
 export default function supernova(env) {
   const { flags } = env;
