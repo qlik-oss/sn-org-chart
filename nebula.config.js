@@ -3,6 +3,9 @@ module.exports = {
   build: {},
   serve: {
     open: false,
+    flags: {
+      IM_5036_ORGCHART_STYLING: true,
+    },
     snapshots: [
       {
         key: "basic",

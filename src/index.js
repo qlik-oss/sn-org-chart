@@ -12,12 +12,15 @@ import {
   useTheme,
   useTranslator,
 } from "@nebula.js/stardust";
+import { themeService as createThemeService } from "qlik-chart-modules";
 import data from "./data";
 import ext from "./extension/ext";
 import autoRegister from "./locale/src/translations";
+import createStyleModel from "./models/style-model";
 import properties from "./object-properties";
 import selectionHandler from "./selections-handler";
 import snapshot from "./snapshot";
+import DEFAULTS from "./style-defaults";
 import "./styles/home-button.less";
 import "./styles/nodes.less";
 import "./styles/paths.less";
@@ -30,6 +33,7 @@ import treeTransform from "./utils/tree-utils";
 import viewStateUtil from "./utils/viewstate-utils";
 
 export default function supernova(env) {
+  const { flags } = env;
   return {
     qae: {
       properties,
@@ -82,12 +86,26 @@ export default function supernova(env) {
         if (!layout) {
           return Promise.resolve();
         }
+
+        const themeService = createThemeService({
+          theme: Theme,
+          config: {
+            id: "orgChart",
+            resolve: [
+              ["object.orgChart", "axis.label.name", "fontSize", DEFAULTS.CARD_TITLE_FONTSIZE],
+              ["object.orgChart", "label.value", "fontSize", DEFAULTS.CARD_BODY_FONTSIZE],
+            ],
+          },
+        });
+
+        const styleModel = createStyleModel({ layout, themeService, flags });
+
         const viewState = viewStateUtil.getViewState(options, layout);
         viewState && viewState.expandedState && setExpandedState(viewState.expandedState);
         viewState && viewState.transform && setTransform(viewState.transform);
 
         return treeTransform({ layout, model, translator }).then((transformed) => {
-          setStyling(stylingUtils.cardStyling({ Theme, layout }));
+          setStyling(stylingUtils.cardStyling({ Theme, layout, styleModel }));
           selectionObj.setState([]);
           // Resolving the promise to indicate readiness for printing
           return transformed;

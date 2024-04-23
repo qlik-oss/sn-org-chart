@@ -17,22 +17,33 @@ export function getColor(reference, Theme, defaultColor) {
 }
 
 const stylingUtils = {
-  cardStyling: ({ Theme, layout }) => {
-    const backgroundColor = getColor(layout.style.backgroundColor, Theme, DEFAULTS.BACKGROUND_COLOR.color);
-    const fontColor = getColor(layout.style.fontColor, Theme, "default");
+  cardStyling: ({ Theme, layout, styleModel }) => {
     const measureLabel = layout.qHyperCube.qMeasureInfo.length
       ? layout.qHyperCube.qMeasureInfo[0].qFallbackTitle
       : null;
-    const { border = { colorType: DEFAULTS.BORDER_COLOR_TYPE } } = layout.style;
+    const axisLabelStyle = styleModel.axis.label.getStyle();
+    const labelValueStyle = styleModel.label.value.getStyle();
+    const cardBackgroundStyle = styleModel.backgroundColor.getStyle();
+    const cardBorderStyle = styleModel.border.getStyle();
+
+    const backgroundColor = getColor(cardBackgroundStyle, Theme, DEFAULTS.BACKGROUND_COLOR.color);
+    const fontColor = getColor(labelValueStyle, Theme, "default");
+
     const borderColor =
-      border.colorType !== "auto"
-        ? getColor(border, Theme, colorUtils.getDarkColor(backgroundColor))
+      cardBorderStyle.colorType !== "auto"
+        ? getColor(cardBorderStyle, Theme, colorUtils.getDarkColor(backgroundColor))
         : colorUtils.getDarkColor(backgroundColor);
+
     return {
+      cardTitle: axisLabelStyle,
+      cardBody: {
+        fontSize: labelValueStyle.fontSize,
+        fontFamily: labelValueStyle.fontFamily,
+      },
       backgroundColor,
       fontColor,
       measureLabel,
-      border,
+      border: cardBorderStyle,
       borderColor,
     };
   },

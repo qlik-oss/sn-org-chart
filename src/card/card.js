@@ -30,17 +30,22 @@ export default (data, cardStyling, selectionObj) => {
   const isSelected = api && api.isActive() && state.indexOf(data.elemNo) !== -1;
   const backgroundColor = getBackgroundColor(data, cardStyling);
   const fontColor = resolveColor(getFontColor(cardStyling, backgroundColor));
+  const titleStyle = `font-family:${cardStyling.cardTitle.fontFamily};font-size:${cardStyling.cardTitle.fontSize}`;
+  const labelStyle = `font-family:${cardStyling.cardBody.fontFamily};font-size:${cardStyling.cardBody.fontSize}`;
   const attributes = data.attributes || {};
-  let html = `<div class="sn-org-card-title">${encodeUtils.encodeTitle(attributes.label || data.id)}</div>`;
+
+  let html = `<div class="sn-org-textbox">`;
+  html += `<div class="sn-org-card-title" style="${titleStyle};">${encodeUtils.encodeTitle(attributes.label || data.id)}</div>`;
   if (attributes.subLabel) {
-    html += `<div class="sn-org-card-label">${encodeUtils.encodeTitle(attributes.subLabel)}</div>`;
+    html += `<div class="sn-org-card-label" style="${labelStyle};">${encodeUtils.encodeTitle(attributes.subLabel)}</div>`;
   }
   if (data.measure) {
     const measureLabel = cardStyling.measureLabel ? `${cardStyling.measureLabel}: ` : "";
-    html += `<div class="sn-org-card-label">${encodeUtils.encodeTitle(measureLabel + data.measure)}</div>`;
+    html += `<div class="sn-org-card-label" style="${labelStyle};">${encodeUtils.encodeTitle(measureLabel + data.measure)}</div>`;
   } else if (attributes.extraLabel) {
-    html += `<div class="sn-org-card-label">${encodeUtils.encodeTitle(attributes.extraLabel)}</div>`;
+    html += `<div class="sn-org-card-label" style="${labelStyle};">${encodeUtils.encodeTitle(attributes.extraLabel)}</div>`;
   }
+  html += "</div>";
   const isSelectedClass = isSelected ? " selected" : " not-selected";
   const selectedClass = api && api.isActive() ? isSelectedClass : "";
 
@@ -62,5 +67,7 @@ export default (data, cardStyling, selectionObj) => {
   } else if (top) {
     newCardHeight -= 3;
   }
-  return `<div class="sn-org-card-text${selectedClass}" style="background-color:${backgroundColor};color:${fontColor}; border:${borderStyle}; border-top:${topBorder}; height:${newCardHeight}px;">${html}</div>`;
+  const flex = "display: flex;";
+  const htmlOut = `<div class="sn-org-card-text${selectedClass}" style="background-color:${backgroundColor};color:${fontColor}; border:${borderStyle}; border-top:${topBorder}; height:${newCardHeight}px; ${flex}">${html}</div>`;
+  return htmlOut;
 };
